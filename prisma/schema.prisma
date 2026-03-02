@@ -44,6 +44,13 @@ model Student {
   idDocument          String?
   address             String?
   company             String?
+  status              String   @default("Ativo")
+  validity            String?
+  nationality         String?
+  photo               String?
+  clientType          String   @default("Particular")
+  companyId           String?
+  course              String?
   role                String   @default("STUDENT")
   accessGeneratedAt   DateTime?
   createdAt           DateTime @default(now())
@@ -57,7 +64,14 @@ model Trainer {
   username          String?  @unique
   passwordHash      String?
   phone             String?
-  specialization    String?
+  specialty         String?
+  students          Int      @default(0)
+  status            String   @default("Ativo")
+  idDocument        String?
+  validity          String?
+  photo             String?
+  address           String?
+  nationality       String?
   role              String   @default("TRAINER")
   accessGeneratedAt DateTime?
   createdAt         DateTime @default(now())
@@ -117,17 +131,24 @@ model Inscription {
 }
 
 model Matriculation {
-  id          String   @id @default(cuid())
-  studentId   String
-  studentName String?
-  courseId    String?
-  courseTitle String?
-  classroomId String?
-  status      String   @default("ACTIVE")
-  startDate   String?
-  endDate     String?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id            String   @id @default(cuid())
+  studentId     String
+  studentName   String?
+  course        String?
+  courseId      String?
+  courseTitle   String?
+  classroom     String?
+  classroomId   String?
+  trainer       String?
+  schedule      String?
+  duration      String?
+  paymentStatus String?  @default("Pendente")
+  amountDue     Int?     @default(0)
+  status        String   @default("ACTIVE")
+  startDate     String?
+  endDate       String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 }
 
 model Certificate {
@@ -148,15 +169,17 @@ model Certificate {
 }
 
 model Company {
-  id          String   @id @default(cuid())
-  name        String
-  email       String?
-  phone       String?
-  address     String?
-  nif         String?
-  description String?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id            String   @id @default(cuid())
+  name          String
+  email         String?
+  phone         String?
+  address       String?
+  nif           String?
+  description   String?
+  contactPerson String?
+  logo          String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 }
 
 model ActivityLog {
