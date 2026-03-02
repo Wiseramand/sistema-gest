@@ -5,6 +5,7 @@ import { useState, useEffect } from 'react';
 interface Material {
   name: string;
   url: string;
+  category?: string;
 }
 
 interface Course {
@@ -27,7 +28,8 @@ export default function CoursesPage() {
     description: '',
     duration: '',
     status: 'Inscrições Abertas',
-    materialName: ''
+    materialName: '',
+    materialCategory: 'Manuais'
   });
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [uploading, setUploading] = useState(false);
@@ -55,11 +57,12 @@ export default function CoursesPage() {
         description: course.description || '',
         duration: course.duration,
         status: course.status,
-        materialName: ''
+        materialName: '',
+        materialCategory: 'Manuais'
       });
     } else {
       setEditingCourse(null);
-      setFormData({ title: '', description: '', duration: '', status: 'Inscrições Abertas', materialName: '' });
+      setFormData({ title: '', description: '', duration: '', status: 'Inscrições Abertas', materialName: '', materialCategory: 'Manuais' });
     }
     setSelectedFile(null);
     setIsModalOpen(true);
@@ -79,7 +82,11 @@ export default function CoursesPage() {
         const resUp = await fetch('/api/upload', { method: 'POST', body: upData });
         if (resUp.ok) {
           const { url: fileUrl } = await resUp.json();
-          finalMaterials.push({ name: formData.materialName, url: fileUrl });
+          finalMaterials.push({
+            name: formData.materialName,
+            url: fileUrl,
+            category: formData.materialCategory
+          });
         }
       } catch (err) {
         console.error('Upload error:', err);
@@ -256,15 +263,40 @@ export default function CoursesPage() {
                     {uploading && <small className="upload-status">⏳ A enviar ficheiro...</small>}
                   </div>
 
+                  <div className="field">
+                    <label>Categoria do Material</label>
+                    <select
+                      value={formData.materialCategory}
+                      onChange={(e) => setFormData({ ...formData, materialCategory: e.target.value })}
+                    >
+                      <option value="Manuais">📘 Manuais / Documentos</option>
+                      <option value="Vídeos">🎥 Vídeos / Aulas Gravadas</option>
+                      <option value="Exercícios">📝 Exercícios / Avaliações</option>
+                      <option value="Complementar">🔗 Material Complementar</option>
+                    </select>
+                  </div>
+
                   {editingCourse?.materials && editingCourse.materials.length > 0 && (
                     <div className="materials-list">
                       <p className="materials-list-label">Materiais Existentes:</p>
-                      {editingCourse.materials.map((m, i) => (
-                        <div key={i} className="material-row">
-                          <span>📄 {m.name}</span>
-                          <button type="button" className="remove-mat" onClick={() => removeMaterial(i)}>×</button>
-                        </div>
-                      ))}
+                      {['Manuais', 'Vídeos', 'Exercícios', 'Complementar'].map(cat => {
+                        const catMaterials = editingCourse.materials.filter(m => (m.category || 'Manuais') === cat);
+                        if (catMaterials.length === 0) return null;
+                        return (
+                          <div key={cat} className="category-group" style={{ marginBottom: '1rem' }}>
+                            <div style={{ fontSize: '0.7rem', fontWeight: 900, color: '#94a3b8', textTransform: 'uppercase', marginBottom: '0.5rem' }}>{cat}</div>
+                            {catMaterials.map((m) => {
+                              const idx = editingCourse.materials.findIndex(mat => mat.url === m.url);
+                              return (
+                                <div key={idx} className="material-row">
+                                  <span>{cat === 'Vídeos' ? '🎥' : '📄'} {m.name}</span>
+                                  <button type="button" className="remove-mat" onClick={() => removeMaterial(idx)}>×</button>
+                                </div>
+                              );
+                            })}
+                          </div>
+                        );
+                      })}
                     </div>
                   )}
                 </div>

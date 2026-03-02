@@ -16,7 +16,12 @@ interface Course { id: string; title: string; status: string; }
 
 export default function CertificatesPage() {
     const { data: session } = useSession();
+    const [mounted, setMounted] = useState(false);
     const isSuperAdmin = (session?.user as any)?.role === 'SUPER_ADMIN';
+
+    useEffect(() => {
+        setMounted(true);
+    }, []);
 
     const [certs, setCerts] = useState<Certificate[]>([]);
     const [courses, setCourses] = useState<Course[]>([]);
@@ -296,12 +301,14 @@ export default function CertificatesPage() {
                                             <div className="cert-bottom-info">
                                                 <div className="cert-id-print">ID do Certificado: {viewingCert.id}</div>
                                                 <div className="cert-qrcode">
-                                                    <QRCodeSVG
-                                                        value={`${typeof window !== 'undefined' ? window.location.origin : ''}/verify/${viewingCert.id}`}
-                                                        size={60}
-                                                        level="M"
-                                                        includeMargin={true}
-                                                    />
+                                                    {mounted && (
+                                                        <QRCodeSVG
+                                                            value={`${window.location.origin}/verify/${viewingCert.id}`}
+                                                            size={60}
+                                                            level="M"
+                                                            includeMargin={true}
+                                                        />
+                                                    )}
                                                     <div className="qr-text">Escaneie para validar</div>
                                                 </div>
                                             </div>

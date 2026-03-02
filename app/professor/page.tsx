@@ -15,7 +15,7 @@ interface Course {
     description: string;
     duration: string;
     status: string;
-    materials: { name: string, url: string }[];
+    materials: { name: string, url: string, category?: string }[];
     studentsList?: Student[];
     startDate?: string;
     schedule?: string;
@@ -57,7 +57,7 @@ export default function ProfessorDashboard() {
 
     // Attendance State
     const [attendanceDate, setAttendanceDate] = useState(() => new Date().toISOString().split('T')[0]);
-    const [attendanceRecords, setAttendanceRecords] = useState<Record<string, 'PRESENT' | 'ABSENT' | 'LATE'>>({});
+    const [attendanceRecords, setAttendanceRecords] = useState<Record<string, { status: string, participated: boolean }>>({});
     const [savingAttendance, setSavingAttendance] = useState(false);
 
     useEffect(() => {
@@ -121,17 +121,20 @@ export default function ProfessorDashboard() {
                 const res = await fetch(`/api/attendance?course=${encodeURIComponent(selectedCourse.title)}&date=${attendanceDate}`);
                 const data = await res.json();
                 if (data && data.length > 0) {
-                    const recordMap: Record<string, 'PRESENT' | 'ABSENT' | 'LATE'> = {};
+                    const recordMap: Record<string, { status: string, participated: boolean }> = {};
                     data[0].records.forEach((r: any) => {
-                        recordMap[r.studentId] = r.status;
+                        recordMap[r.studentId] = {
+                            status: r.status,
+                            participated: !!r.participated
+                        };
                     });
-                    setAttendanceRecords(recordMap);
+                    setAttendanceRecords(recordMap as any);
                 } else {
-                    const defaultMap: Record<string, 'PRESENT' | 'ABSENT' | 'LATE'> = {};
+                    const defaultMap: Record<string, { status: string, participated: boolean }> = {};
                     selectedCourse.studentsList?.forEach(s => {
-                        defaultMap[s.id] = 'PRESENT';
+                        defaultMap[s.id] = { status: 'PRESENT', participated: false };
                     });
-                    setAttendanceRecords(defaultMap);
+                    setAttendanceRecords(defaultMap as any);
                 }
             } catch (err) { console.error(err); }
         };
@@ -145,7 +148,8 @@ export default function ProfessorDashboard() {
             const records = selectedCourse.studentsList?.map(s => ({
                 studentId: s.id,
                 studentName: s.name,
-                status: attendanceRecords[s.id] || 'PRESENT'
+                status: (attendanceRecords[s.id] as any)?.status || 'PRESENT',
+                participated: (attendanceRecords[s.id] as any)?.participated || false
             })) || [];
 
             const res = await fetch('/api/attendance', {
@@ -288,6 +292,7 @@ export default function ProfessorDashboard() {
                                                 <th className="center">Presente</th>
                                                 <th className="center">Ausente</th>
                                                 <th className="center">Atrasado</th>
+                                                <th className="center">Participou?</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -298,25 +303,30 @@ export default function ProfessorDashboard() {
                                                         <input
                                                             type="radio"
                                                             name={`att-${s.id}`}
-                                                            checked={attendanceRecords[s.id] === 'PRESENT' || !attendanceRecords[s.id]}
-                                                            onChange={() => setAttendanceRecords({ ...attendanceRecords, [s.id]: 'PRESENT' })}
+                                                            checked={(attendanceRecords[s.id] as any)?.status === 'PRESENT' || !(attendanceRecords[s.id] as any)?.status}
+                                                            onChange={() => setAttendanceRecords({ ...attendanceRecords, [s.id]: { ...(attendanceRecords[s.id] as any), status: 'PRESENT' } })}
                                                         />
                                                     </td>
                                                     <td className="center">
                                                         <input
                                                             type="radio"
                                                             name={`att-${s.id}`}
-                                                            checked={attendanceRecords[s.id] === 'ABSENT'}
-                                                            onChange={() => setAttendanceRecords({ ...attendanceRecords, [s.id]: 'ABSENT' })}
+                                                            checked={(attendanceRecords[s.id] as any)?.status === 'ABSENT'}
+                                                            onChange={() => setAttendanceRecords({ ...attendanceRecords, [s.id]: { ...(attendanceRecords[s.id] as any), status: 'ABSENT' } })}
                                                         />
                                                     </td>
                                                     <td className="center">
                                                         <input
                                                             type="radio"
                                                             name={`att-${s.id}`}
-                                                            checked={attendanceRecords[s.id] === 'LATE'}
-                                                            onChange={() => setAttendanceRecords({ ...attendanceRecords, [s.id]: 'LATE' })}
+                                                            checked={(attendanceRecords[s.id] as any)?.status === 'LATE'}
+                                                            onChange={() => setAttendanceRecords({ ...attendanceRecords, [s.id]: { ...(attendanceRecords[s.id] as any), status: 'LATE' } })}
                                                         />
+                                                    </td>
+                                                    <td className="center">
+                                                        <div className="participation-star" onClick={() => setAttendanceRecords({ ...attendanceRecords, [s.id]: { ...(attendanceRecords[s.id] as any), participated: !(attendanceRecords[s.id] as any)?.participated } })}>
+                                                            {(attendanceRecords[s.id] as any)?.participated ? '⭐' : '☆'}
+                                                        </div>
                                                     </td>
                                                 </tr>
                                             ))}
@@ -345,15 +355,26 @@ export default function ProfessorDashboard() {
 
                                 <div className="tab-section">
                                     <h3>Materiais de Apoio</h3>
-                                    <div className="materials-grid">
-                                        {selectedCourse.materials?.map((m, i) => (
-                                            <div key={i} className="material-card">
-                                                <span className="file-icon">📄</span>
-                                                <span className="file-name">{m.name}</span>
-                                                <button onClick={() => setReadingMaterial(m)} className="btn-link">Ler no Sistema</button>
-                                            </div>
-                                        ))}
-                                        {selectedCourse.materials?.length === 0 && <p className="empty-msg">Nenhum material anexado a este curso.</p>}
+                                    <div className="professor-materials-list">
+                                        {['Manuais', 'Vídeos', 'Exercícios', 'Complementar'].map(cat => {
+                                            const catMaterials = selectedCourse.materials?.filter(m => (m.category || 'Manuais') === cat) || [];
+                                            if (catMaterials.length === 0) return null;
+                                            return (
+                                                <div key={cat} className="professor-category-group" style={{ marginBottom: '1.5rem' }}>
+                                                    <p style={{ fontSize: '0.7rem', fontWeight: 900, color: '#94a3b8', textTransform: 'uppercase', marginBottom: '0.75rem', letterSpacing: '0.05em' }}>{cat}</p>
+                                                    <div className="materials-grid">
+                                                        {catMaterials.map((m, i) => (
+                                                            <div key={i} className="material-card">
+                                                                <span className="file-icon">{cat === 'Vídeos' ? '🎥' : '📄'}</span>
+                                                                <span className="file-name">{m.name}</span>
+                                                                <button onClick={() => setReadingMaterial(m as any)} className="btn-link">Visualizar</button>
+                                                            </div>
+                                                        ))}
+                                                    </div>
+                                                </div>
+                                            );
+                                        })}
+                                        {(!selectedCourse.materials || selectedCourse.materials.length === 0) && <p className="empty-msg">Nenhum material anexado a este curso.</p>}
                                     </div>
                                 </div>
                             </div>
@@ -465,6 +486,8 @@ export default function ProfessorDashboard() {
         .btn-save-attendance:hover:not(:disabled) { background: #02569b; }
         .btn-save-attendance:disabled { opacity: 0.7; cursor: not-allowed; }
         .center { text-align: center !important; }
+        .participation-star { font-size: 1.25rem; cursor: pointer; user-select: none; transition: 0.2s; }
+        .participation-star:hover { transform: scale(1.2); }
 
         .student-table { width: 100%; border-collapse: collapse; }
         .student-table th { text-align: left; padding: 0.75rem; border-bottom: 2px solid #edf2f7; font-size: 0.8rem; color: var(--gray-medium); }

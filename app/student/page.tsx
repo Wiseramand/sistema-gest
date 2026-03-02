@@ -6,6 +6,7 @@ import { useSession } from 'next-auth/react';
 interface Material {
     name: string;
     url: string;
+    category?: string;
 }
 
 interface Enrollment {
@@ -201,15 +202,27 @@ export default function StudentDashboard() {
                                     )}
 
                                     <div className="materials-section">
-                                        <h4>Materiais de Estudo</h4>
+                                        <h4>📚 Materiais e Recursos</h4>
                                         <div className="material-list">
-                                            {en.materials?.map((m, i) => (
-                                                <div key={i} className="student-material-item">
-                                                    <span>{m.name}</span>
-                                                    <button className="btn-read" onClick={() => setReadingMaterial(m)}>Ler no Sistema</button>
-                                                </div>
-                                            ))}
-                                            {en.materials?.length === 0 && <p className="empty">Nenhum material disponível ainda.</p>}
+                                            {['Manuais', 'Vídeos', 'Exercícios', 'Complementar'].map(cat => {
+                                                const catMaterials = en.materials?.filter(m => (m.category || 'Manuais') === cat) || [];
+                                                if (catMaterials.length === 0) return null;
+                                                return (
+                                                    <div key={cat} className="student-category-group" style={{ marginBottom: '1rem' }}>
+                                                        <p style={{ fontSize: '0.65rem', fontWeight: 900, color: '#94a3b8', textTransform: 'uppercase', marginBottom: '0.5rem', letterSpacing: '0.05em' }}>{cat}</p>
+                                                        {catMaterials.map((m, i) => (
+                                                            <div key={i} className="student-material-item">
+                                                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                                                                    <span style={{ fontSize: '1rem' }}>{cat === 'Vídeos' ? '🎥' : '📄'}</span>
+                                                                    <span>{m.name}</span>
+                                                                </div>
+                                                                <button className="btn-read" onClick={() => setReadingMaterial(m)}>Estudar</button>
+                                                            </div>
+                                                        ))}
+                                                    </div>
+                                                );
+                                            })}
+                                            {(!en.materials || en.materials.length === 0) && <p className="empty">Nenhum material disponível ainda.</p>}
                                         </div>
                                     </div>
                                 </div>

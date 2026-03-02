@@ -100,10 +100,16 @@ function AttendanceListContent() {
 
             <div className="print-document">
                 <div className="document-header">
-                    <div className="logo-placeholder">⚓ MARÍTIMO</div>
+                    <div className="logo-group">
+                        <div className="maritime-logo" style={{ fontSize: '2rem' }}>⚓</div>
+                        <div className="logo-text" style={{ display: 'flex', flexDirection: 'column' }}>
+                            <span className="main-logo" style={{ fontSize: '1.2rem', fontWeight: 900, color: '#1e3a8a', letterSpacing: '2px' }}>MARÍTIMO</span>
+                            <span className="sub-logo" style={{ fontSize: '0.7rem', fontWeight: 700, color: '#64748b' }}>Training Center</span>
+                        </div>
+                    </div>
                     <div className="header-text">
-                        <h1>Lista de Presença</h1>
-                        <h2>{courseTitle}</h2>
+                        <h1 style={{ fontSize: '1.25rem', margin: 0 }}>Lista de Presença & Participação</h1>
+                        <p style={{ margin: '0.25rem 0 0', fontSize: '0.75rem', color: '#64748b' }}>{courseTitle}</p>
                     </div>
                 </div>
 
@@ -142,12 +148,21 @@ function AttendanceListContent() {
                                     <td className="name-cell">{student.name}</td>
                                     {attendanceDates.length > 0 ? (
                                         attendanceDates.map(date => {
-                                            const status = attendanceData[student.id]?.[date];
+                                            const record = attendanceData[student.id]?.[date] as any;
                                             let display = '';
-                                            if (status === 'PRESENT') display = 'P';
-                                            else if (status === 'ABSENT') display = 'F';
-                                            else if (status === 'LATE') display = 'A';
-                                            return <td key={date} style={{ textAlign: 'center', fontWeight: 'bold', color: status === 'ABSENT' ? 'red' : status === 'LATE' ? 'orange' : 'inherit' }}>{display}</td>;
+                                            let color = 'inherit';
+
+                                            if (typeof record === 'string') {
+                                                if (record === 'PRESENT') display = 'P';
+                                                else if (record === 'ABSENT') { display = 'F'; color = 'red'; }
+                                                else if (record === 'LATE') { display = 'A'; color = 'orange'; }
+                                            } else if (record && typeof record === 'object') {
+                                                if (record.status === 'PRESENT') display = record.participated ? 'P*' : 'P';
+                                                else if (record.status === 'ABSENT') { display = 'F'; color = 'red'; }
+                                                else if (record.status === 'LATE') { display = 'A'; color = 'orange'; }
+                                            }
+
+                                            return <td key={date} style={{ textAlign: 'center', fontWeight: 'bold', color }}>{display}</td>;
                                         })
                                     ) : (
                                         <>
@@ -175,6 +190,10 @@ function AttendanceListContent() {
                         ))}
                     </tbody>
                 </table>
+
+                <div className="attendance-legend" style={{ fontSize: '0.7rem', color: '#64748b', marginBottom: '2rem' }}>
+                    <strong>Legenda:</strong> P = Presente | F = Falta | A = Atraso | P* = Presente com Participação Ativa
+                </div>
 
                 <div className="document-footer">
                     <div className="signature-area">
@@ -367,7 +386,7 @@ function AttendanceListContent() {
                     .attendance-table th { background-color: #f1f5f9 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
                 }
             `}</style>
-        </div>
+        </div >
     );
 }
 
