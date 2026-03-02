@@ -82,10 +82,16 @@ export default function MatriculationPage() {
         e.preventDefault();
         if (!selectedStudent) return;
         try {
+            const tObj = data.trainers.find(t => t.name === formData.trainer);
             const res = await fetch('/api/matriculations', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ studentId: selectedStudent.id, studentName: selectedStudent.name, ...formData })
+                body: JSON.stringify({
+                    studentId: selectedStudent.id,
+                    studentName: selectedStudent.name,
+                    trainerId: tObj?.id || '',
+                    ...formData
+                })
             });
             if (res.ok) {
                 setIsModalOpen(false);

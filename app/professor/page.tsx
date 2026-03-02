@@ -66,9 +66,10 @@ export default function ProfessorDashboard() {
             setLoading(true);
             try {
                 // 1. Fetch all courses assigned to this professor
+                const userId = (session?.user as any)?.id;
                 const resC = await fetch('/api/courses');
                 const allCourses = await resC.json();
-                const profCourses = allCourses.filter((c: any) => c.trainer === session.user?.name);
+                const profCourses = allCourses.filter((c: any) => c.trainerId === userId || c.trainer === session.user?.name);
 
                 // 2. Fetch matriculations to get student lists for these courses
                 const resM = await fetch('/api/matriculations');
@@ -216,9 +217,13 @@ export default function ProfessorDashboard() {
                                     onClick={() => setSelectedCourse(course)}
                                 >
                                     <strong>{course.title}</strong>
-                                    <span>{course.studentsList?.length || 0} alunos matriculados</span>
+                                    <span>{course.studentsList?.length || 0} alunos ativos</span>
                                 </div>
                             ))}
+                            <div className="total-stats" style={{ marginTop: '2rem', padding: '1rem', background: 'var(--navy-deep)', color: 'white', borderRadius: '12px' }}>
+                                <small style={{ opacity: 0.8, textTransform: 'uppercase', fontSize: '0.7rem', fontWeight: 800 }}>Total de Alunos Sob Sua Responsabilidade</small>
+                                <div style={{ fontSize: '1.5rem', fontWeight: 800 }}>{courses.reduce((acc, c) => acc + (c.studentsList?.length || 0), 0)} Alunos</div>
+                            </div>
                             {courses.length === 0 && <p className="empty-msg">Nenhum curso atribuído no momento.</p>}
                         </div>
                     )}

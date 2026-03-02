@@ -61,9 +61,10 @@ export default function StudentDashboard() {
             setLoading(true);
             try {
                 // 1. Fetch matriculations for this student
+                const userId = (session?.user as any)?.id;
                 const resM = await fetch('/api/matriculations');
                 const allMatrics = await resM.json();
-                const studentMatrics = allMatrics.filter((m: any) => m.studentName === session.user?.name);
+                const studentMatrics = allMatrics.filter((m: any) => m.studentId === userId || m.studentName === session.user?.name);
 
                 // 2. Fetch course details to get materials
                 const resC = await fetch('/api/courses');
@@ -72,7 +73,7 @@ export default function StudentDashboard() {
                 // 3. Fetch certificates for this student
                 const resCerts = await fetch('/api/certificates');
                 const allCerts = await resCerts.json();
-                const studentCerts = allCerts.filter((c: any) => c.studentName === session.user?.name && c.status === 'APROVADO');
+                const studentCerts = allCerts.filter((c: any) => (c.studentId === userId || c.studentName === session.user?.name) && c.status === 'APROVADO');
 
                 const data = studentMatrics.map((m: any) => {
                     const courseInfo = allCourses.find((c: any) => c.title === m.course);
@@ -162,7 +163,10 @@ export default function StudentDashboard() {
                         </div>
                     )}
                 </div>
-                <button className="btn-profile" onClick={() => setIsProfileModalOpen(true)}>⚙️ Editar Perfil</button>
+                <div className="header-actions-group" style={{ display: 'flex', gap: '1rem' }}>
+                    <button className="btn-feedback" onClick={() => window.location.href = '/student/feedback'}>⭐ Dar Feedback</button>
+                    <button className="btn-profile" onClick={() => setIsProfileModalOpen(true)}>⚙️ Editar Perfil</button>
+                </div>
             </div>
 
             {loading ? <p>Carregando seu portal...</p> : (
@@ -289,6 +293,8 @@ export default function StudentDashboard() {
 
         .btn-profile { background: white; border: 1.5px solid #e2e8f0; color: #475569; padding: 0.75rem 1.25rem; border-radius: 12px; font-weight: 700; cursor: pointer; transition: 0.2s; font-size: 0.9rem; }
         .btn-profile:hover { background: #f8fafc; border-color: var(--ocean-blue); color: var(--ocean-blue); }
+        .btn-feedback { background: var(--sand-gold); border: none; color: var(--navy-deep); padding: 0.75rem 1.25rem; border-radius: 12px; font-weight: 800; cursor: pointer; transition: 0.2s; font-size: 0.9rem; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        .btn-feedback:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(0,0,0,0.15); }
         
         .enrollment-section h2 { font-size: 1.5rem; margin-bottom: 2rem; color: var(--navy-medium); border-bottom: 2px solid #edf2f7; padding-bottom: 1rem; }
         

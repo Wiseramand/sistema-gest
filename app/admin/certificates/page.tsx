@@ -297,7 +297,7 @@ export default function CertificatesPage() {
                                                 <div className="cert-id-print">ID do Certificado: {viewingCert.id}</div>
                                                 <div className="cert-qrcode">
                                                     <QRCodeSVG
-                                                        value={`${typeof window !== 'undefined' ? window.location.origin : ''}/certificates/validate/${viewingCert.id}`}
+                                                        value={`${typeof window !== 'undefined' ? window.location.origin : ''}/verify/${viewingCert.id}`}
                                                         size={60}
                                                         level="M"
                                                         includeMargin={true}
