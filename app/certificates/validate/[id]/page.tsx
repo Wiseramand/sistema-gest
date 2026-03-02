@@ -1,4 +1,4 @@
-import { db } from '@/lib/db';
+import { db } from '../../../../lib/db';
 import { notFound } from 'next/navigation';
 import CertificateView from './CertificateView';
 
