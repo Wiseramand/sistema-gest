@@ -49,7 +49,11 @@ export default function StudentFeedbackPage() {
             const res = await fetch('/api/feedbacks', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(formData)
+                body: JSON.stringify({
+                    ...formData,
+                    studentId: (session?.user as any)?.id,
+                    studentName: session?.user?.name
+                })
             });
 
             if (res.ok) {

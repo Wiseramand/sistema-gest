@@ -83,6 +83,9 @@ export default function MatriculationPage() {
         if (!selectedStudent) return;
         try {
             const tObj = data.trainers.find(t => t.name === formData.trainer);
+            const cObj = data.courses.find(c => c.title === formData.course);
+            const clObj = data.classrooms.find(cl => cl.name === formData.classroom);
+
             const res = await fetch('/api/matriculations', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -90,6 +93,8 @@ export default function MatriculationPage() {
                     studentId: selectedStudent.id,
                     studentName: selectedStudent.name,
                     trainerId: tObj?.id || '',
+                    courseId: cObj?.id || '',
+                    classroomId: clObj?.id || '',
                     ...formData
                 })
             });
