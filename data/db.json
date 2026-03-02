@@ -1,0 +1,596 @@
+{
+  "users": [
+    {
+      "id": "user_admin",
+      "name": "Super Admin",
+      "email": "admin@maritimo.com",
+      "role": "SUPER_ADMIN",
+      "password": "$2b$10$wYGBAnmQWrUzzJTGgRv/nu5JHB1Yknk.voF8lQe83RXyZhLF.wQF.",
+      "createdAt": "2026-02-21T14:50:37.413Z"
+    },
+    {
+      "id": "super_codepro_1",
+      "name": "CodePro Super Admin",
+      "email": "codepro@maritmo.com",
+      "role": "SUPER_ADMIN",
+      "password": "$2b$10$bK3g5X1Ktz/WK06.KNFc0e9vud3WwRBJQ3kULOUT6YGq4RkUC.qNi",
+      "createdAt": "2026-02-21T17:03:39.294Z"
+    },
+    {
+      "id": "super_codepro_2",
+      "name": "CodePro Super Admin",
+      "email": "codepro@maritimo.com",
+      "role": "SUPER_ADMIN",
+      "password": "$2b$10$bK3g5X1Ktz/WK06.KNFc0e9vud3WwRBJQ3kULOUT6YGq4RkUC.qNi",
+      "createdAt": "2026-02-21T17:03:39.309Z"
+    },
+    {
+      "id": "user_professor",
+      "name": "Dr. Ocean",
+      "email": "professor@maritimo.com",
+      "role": "PROFESSOR",
+      "password": "$2b$10$DIsXBzeYbJ0cfp2ilaiPq.Ut9YMgz5BdAmmaXtf7a5HxFUrPSE87y",
+      "createdAt": "2026-02-21T14:50:37.413Z"
+    },
+    {
+      "id": "user_student",
+      "name": "João Silva",
+      "email": "aluno@maritimo.com",
+      "role": "STUDENT",
+      "password": "$2b$10$CYpOdbIGdW2zPvLa6uSFZu/9SjokPXv6UZFy2V7EnfwI.rsZGBSM2",
+      "createdAt": "2026-02-21T14:50:37.413Z"
+    }
+  ],
+  "courses": [
+    {
+      "id": "1",
+      "title": "Navegação Costeira",
+      "duration": "40h",
+      "trainer": "Capitão Ricardo Gomes",
+      "students": 12,
+      "status": "Em andamento",
+      "description": "",
+      "materials": []
+    },
+    {
+      "id": "2",
+      "title": "Segurança em Alto Mar",
+      "duration": "20h",
+      "trainer": "Mestre Afonso Neves",
+      "students": 25,
+      "status": "Inscrições Abertas",
+      "description": "",
+      "materials": []
+    },
+    {
+      "id": "3",
+      "title": "Manutenção de Motores",
+      "duration": "60h",
+      "trainer": "Eng. Carlos Porto",
+      "students": 8,
+      "status": "Em andamento",
+      "description": "",
+      "materials": []
+    }
+  ],
+  "trainers": [
+    {
+      "id": "1",
+      "name": "Capitão Ricardo Gomes",
+      "specialty": "Navegação Costeira",
+      "students": 45,
+      "status": "Ativo",
+      "fullName": "Capitão Ricardo Gomes",
+      "idDocument": "",
+      "validity": "",
+      "photo": "",
+      "address": "",
+      "nationality": "",
+      "phone": "",
+      "email": "",
+      "username": "capitao.gomes54",
+      "passwordHash": "$2b$04$6TeosAZ8GAYetadsj5W/H.Rwg9GzV4otkjjt69dPTOm6Cz0WlfH6y",
+      "role": "TRAINER",
+      "accessGeneratedAt": "2026-02-27T20:59:34.225Z"
+    },
+    {
+      "id": "2",
+      "name": "Mestre Afonso Neves",
+      "specialty": "Segurança e Salvamento",
+      "students": 50,
+      "status": "Ativo",
+      "fullName": "Mestre Afonso Neves",
+      "idDocument": "",
+      "validity": "",
+      "photo": "",
+      "address": "",
+      "nationality": "",
+      "phone": "",
+      "email": "",
+      "username": "mestre.neves48",
+      "passwordHash": "$2b$04$/IFF8F22FquuQCuYYGoqd.tEOriEBXUkgi/inSGi/ORa2/Il1dIYu",
+      "role": "TRAINER",
+      "accessGeneratedAt": "2026-02-27T20:16:56.123Z"
+    },
+    {
+      "id": "3",
+      "name": "Dr. Ocean",
+      "specialty": "Ciências Náuticas",
+      "students": 30,
+      "status": "Ativo",
+      "fullName": "Dr. Ocean",
+      "idDocument": "",
+      "validity": "",
+      "photo": "",
+      "address": "",
+      "nationality": "",
+      "phone": "",
+      "email": ""
+    }
+  ],
+  "classrooms": [
+    {
+      "id": "1",
+      "name": "Sala Atlântico",
+      "capacity": 30,
+      "location": "Bloco A, Piso 1",
+      "availability": "Ocupada"
+    },
+    {
+      "id": "2",
+      "name": "Sala Índico",
+      "capacity": 25,
+      "location": "Bloco A, Piso 2",
+      "availability": "Disponível"
+    }
+  ],
+  "students": [
+    {
+      "id": "S1",
+      "name": "João Silva",
+      "email": "aluno@maritimo.com",
+      "phone": "1199999999",
+      "course": "Navegação Costeira",
+      "status": "Ativo",
+      "createdAt": "2026-02-21T14:50:36.840Z",
+      "idDocument": "",
+      "validity": "",
+      "nationality": "",
+      "photo": "",
+      "username": "joao.silva49",
+      "passwordHash": "$2b$04$belxxf1C1xu9B7A/0ypyZe85o3cYryP9ZUhtcgjnRVJD5ISDJjhQm",
+      "role": "STUDENT",
+      "accessGeneratedAt": "2026-02-21T20:58:38.950Z"
+    },
+    {
+      "name": "Maria Souza",
+      "email": "maria@teste.com",
+      "phone": "1188888888",
+      "course": "Segurança em Alto Mar",
+      "status": "Ativo",
+      "idDocument": "",
+      "validity": "",
+      "nationality": "",
+      "photo": "",
+      "id": "1771694558870",
+      "createdAt": "2026-02-21T17:22:38.870Z",
+      "username": "maria.souza20",
+      "passwordHash": "$2b$10$nkrK6EW5WgQqeUFq5dIVAeHV9Y7S9tAF8Ew38AvGg2ZjctuIrmUfa",
+      "role": "STUDENT",
+      "accessGeneratedAt": "2026-02-21T17:32:03.561Z"
+    },
+    {
+      "name": "Adao Ferando",
+      "email": "adao12@gmail.com",
+      "phone": "940786513",
+      "status": "Ativo",
+      "idDocument": "6547354UE088",
+      "validity": "2029-07-21",
+      "nationality": "Angolana",
+      "photo": "/uploads/1772311253742-002.jpg",
+      "clientType": "Empresa",
+      "companyId": "1771704110741",
+      "id": "1771704222554",
+      "createdAt": "2026-02-21T20:03:42.554Z",
+      "username": "adao.ferando92",
+      "passwordHash": "$2b$04$TutYuWnI74MXmuj9s0JLP.z47iRqjTNQ6MP3ruy708cmcAsulkd/S",
+      "role": "STUDENT",
+      "accessGeneratedAt": "2026-02-27T20:18:49.009Z",
+      "updatedAt": "2026-02-28T20:40:54.024Z"
+    },
+    {
+      "name": "Maria Souza",
+      "email": "maria@maritimo.com",
+      "phone": "123456789",
+      "course": "navegacao",
+      "status": "Ativo",
+      "idDocument": "",
+      "validity": "",
+      "nationality": "",
+      "photo": "",
+      "id": "1771704928537",
+      "createdAt": "2026-02-21T20:15:28.537Z"
+    },
+    {
+      "name": "Castro Manuel",
+      "email": "manuelcast@gmail.com",
+      "phone": "244943342176",
+      "course": "Segurança em Alto Mar",
+      "status": "Ativo",
+      "idDocument": "",
+      "validity": "",
+      "nationality": "",
+      "photo": "",
+      "id": "1772092325464",
+      "createdAt": "2026-02-26T07:52:05.464Z"
+    }
+  ],
+  "enrollments": [],
+  "inscriptions": [
+    {
+      "id": "1771693915148",
+      "name": "Manuel Texeira",
+      "email": "manuelt12@gmail.com",
+      "phone": "937456987",
+      "course": "Segurança em Alto Mar",
+      "message": "Gostaria de Fazer esta formação com urgencia",
+      "createdAt": "2026-02-21T17:11:55.149Z",
+      "status": "PENDING"
+    }
+  ],
+  "matriculations": [
+    {
+      "studentId": "S1",
+      "studentName": "João Silva",
+      "course": "Navegação Costeira",
+      "classroom": "Sala Atlântico",
+      "trainer": "Capitão Ricardo Gomes",
+      "schedule": "09:00",
+      "duration": "5 DIAS",
+      "startDate": "2026-03-02",
+      "paymentStatus": "Pendente",
+      "amountDue": 0,
+      "id": "1771690571394",
+      "createdAt": "2026-02-21T16:16:11.394Z"
+    },
+    {
+      "studentId": "1771694558870",
+      "studentName": "Maria Souza",
+      "course": "Segurança em Alto Mar",
+      "classroom": "Sala Índico",
+      "trainer": "Mestre Afonso Neves",
+      "schedule": "09:00 - 15:00",
+      "duration": "5 Dias",
+      "startDate": "2026-02-23",
+      "paymentStatus": "Pago Total",
+      "amountDue": 0,
+      "id": "1771695503670",
+      "createdAt": "2026-02-21T17:38:23.670Z"
+    },
+    {
+      "studentId": "S1",
+      "studentName": "João Silva",
+      "course": "Manutenção de Motores",
+      "classroom": "Sala Atlântico",
+      "trainer": "Dr. Ocean",
+      "schedule": "09:00",
+      "duration": "5 dias",
+      "startDate": "2026-03-04",
+      "paymentStatus": "Pago Total",
+      "amountDue": 0,
+      "id": "1771700344741",
+      "createdAt": "2026-02-21T18:59:04.741Z"
+    },
+    {
+      "studentId": "1771704222554",
+      "studentName": "Adao Ferando",
+      "course": "Navegação Costeira",
+      "classroom": "Sala Atlântico",
+      "trainer": "Capitão Ricardo Gomes",
+      "schedule": "09:00 - 15:00",
+      "duration": "5 Dias",
+      "startDate": "2026-02-24",
+      "paymentStatus": "Pago Total",
+      "amountDue": 0,
+      "id": "1771704292414",
+      "createdAt": "2026-02-21T20:04:52.414Z"
+    },
+    {
+      "studentId": "1772092325464",
+      "studentName": "Castro Manuel",
+      "course": "Navegação Costeira",
+      "classroom": "Sala Atlântico",
+      "trainer": "Capitão Ricardo Gomes",
+      "schedule": "09:00 - 15:00",
+      "duration": "3 Dias",
+      "startDate": "2026-02-26",
+      "paymentStatus": "Pago Total",
+      "amountDue": 0,
+      "id": "1772092419274",
+      "createdAt": "2026-02-26T07:53:39.274Z"
+    }
+  ],
+  "certificates": [
+    {
+      "id": "cert_1771705147083_5drsb",
+      "studentId": "S1",
+      "studentName": "João Silva",
+      "courseTitle": "Navegação Costeira",
+      "matriculationId": "1771690571394",
+      "status": "APROVADO",
+      "generatedAt": "2026-02-21T20:19:07.084Z",
+      "approvedAt": "2026-02-27T19:59:59.995Z",
+      "approvedBy": "CodePro Super Admin",
+      "rejectedAt": null,
+      "rejectionReason": null
+    },
+    {
+      "id": "cert_1771705147084_0btvz",
+      "studentId": "1771704222554",
+      "studentName": "Adao Ferando",
+      "courseTitle": "Navegação Costeira",
+      "matriculationId": "1771704292414",
+      "status": "PENDENTE",
+      "generatedAt": "2026-02-21T20:19:07.084Z",
+      "approvedAt": null,
+      "approvedBy": null,
+      "rejectedAt": null,
+      "rejectionReason": null
+    },
+    {
+      "id": "cert_1771705189072_lr62q",
+      "studentId": "1771694558870",
+      "studentName": "Maria Souza",
+      "courseTitle": "Segurança em Alto Mar",
+      "matriculationId": "1771695503670",
+      "status": "PENDENTE",
+      "generatedAt": "2026-02-21T20:19:49.072Z",
+      "approvedAt": null,
+      "approvedBy": null,
+      "rejectedAt": null,
+      "rejectionReason": null
+    },
+    {
+      "id": "cert_1772220719489_d5l81",
+      "studentId": "S1",
+      "studentName": "João Silva",
+      "courseTitle": "Navegação Costeira",
+      "matriculationId": "1771690571394",
+      "status": "PENDENTE",
+      "generatedAt": "2026-02-27T19:31:59.489Z",
+      "validUntil": "2031-02-26T19:31:59.489Z",
+      "approvedAt": null,
+      "approvedBy": null,
+      "rejectedAt": null,
+      "rejectionReason": null
+    },
+    {
+      "id": "cert_1772220719489_6t7mi",
+      "studentId": "1771704222554",
+      "studentName": "Adao Ferando",
+      "courseTitle": "Navegação Costeira",
+      "matriculationId": "1771704292414",
+      "status": "PENDENTE",
+      "generatedAt": "2026-02-27T19:31:59.489Z",
+      "validUntil": "2031-02-26T19:31:59.489Z",
+      "approvedAt": null,
+      "approvedBy": null,
+      "rejectedAt": null,
+      "rejectionReason": null
+    },
+    {
+      "id": "cert_1772220719489_4xzgt",
+      "studentId": "1772092325464",
+      "studentName": "Castro Manuel",
+      "courseTitle": "Navegação Costeira",
+      "matriculationId": "1772092419274",
+      "status": "PENDENTE",
+      "generatedAt": "2026-02-27T19:31:59.489Z",
+      "validUntil": "2031-02-26T19:31:59.489Z",
+      "approvedAt": null,
+      "approvedBy": null,
+      "rejectedAt": null,
+      "rejectionReason": null
+    }
+  ],
+  "adminUsers": [
+    {
+      "id": "admin_1771693614423",
+      "name": "Fernando Mlanue",
+      "email": "admin1@martimo.com",
+      "role": "ADMIN",
+      "responsibilities": [
+        "inscriptions",
+        "matriculations",
+        "courses"
+      ],
+      "username": "fernando.mlanue28",
+      "passwordHash": "$2b$10$CJ3RHweM9qRKlzJ/R3c0Nenkvv27VdXsvmUnx8ZxN5duLjHQpf1Zi",
+      "createdAt": "2026-02-21T17:06:54.423Z",
+      "updatedAt": "2026-02-21T18:50:13.117Z"
+    }
+  ],
+  "companies": [
+    {
+      "name": "Sonangol",
+      "nif": "56347843",
+      "address": "Cidade de Luanda",
+      "contactPerson": "Manuel Figuera",
+      "phone": "934567887",
+      "email": "manuel.figuera@sonangol.com",
+      "logo": "/uploads/1771704110408-images.png",
+      "id": "1771704110741",
+      "createdAt": "2026-02-21T20:01:50.741Z"
+    }
+  ],
+  "activityLogs": [
+    {
+      "userId": "super_codepro_2",
+      "userName": "CodePro Super Admin",
+      "role": "SUPER_ADMIN",
+      "action": "CREATE",
+      "details": "Criou um novo item em students",
+      "targetType": "student",
+      "targetId": "1772092325464",
+      "timestamp": "2026-02-26T07:52:05.483Z",
+      "id": "1772092325483",
+      "createdAt": "2026-02-26T07:52:05.483Z"
+    },
+    {
+      "userId": "super_codepro_2",
+      "userName": "CodePro Super Admin",
+      "role": "SUPER_ADMIN",
+      "action": "DELETE",
+      "details": "Removeu um item de inscriptions",
+      "targetType": "inscription",
+      "targetId": "1772092219770",
+      "timestamp": "2026-02-26T07:52:07.166Z",
+      "id": "1772092327166",
+      "createdAt": "2026-02-26T07:52:07.166Z"
+    },
+    {
+      "userId": "super_codepro_2",
+      "userName": "CodePro Super Admin",
+      "role": "SUPER_ADMIN",
+      "action": "CREATE",
+      "details": "Criou um novo item em matriculations",
+      "targetType": "matriculation",
+      "targetId": "1772092419274",
+      "timestamp": "2026-02-26T07:53:39.285Z",
+      "id": "1772092419285",
+      "createdAt": "2026-02-26T07:53:39.285Z"
+    },
+    {
+      "userId": "super_codepro_2",
+      "userName": "CodePro Super Admin",
+      "role": "SUPER_ADMIN",
+      "action": "CREATE_CERTIFICATES",
+      "details": "Gerou 3 certificados para o curso Navegação Costeira",
+      "targetType": "certificate",
+      "timestamp": "2026-02-27T19:31:59.515Z",
+      "id": "1772220719515",
+      "createdAt": "2026-02-27T19:31:59.515Z"
+    },
+    {
+      "userId": "super_codepro_2",
+      "userName": "CodePro Super Admin",
+      "role": "SUPER_ADMIN",
+      "action": "APPROVE_CERTIFICATE",
+      "details": "Aprovou o certificado cert_1771705147083_5drsb",
+      "targetType": "certificate",
+      "targetId": "cert_1771705147083_5drsb",
+      "timestamp": "2026-02-27T20:00:00.053Z",
+      "id": "1772222400053",
+      "createdAt": "2026-02-27T20:00:00.053Z"
+    },
+    {
+      "userId": "super_codepro_2",
+      "userName": "CodePro Super Admin",
+      "role": "SUPER_ADMIN",
+      "action": "UPLOAD",
+      "details": "Fez upload do ficheiro: 002.jpg",
+      "targetType": "file",
+      "targetId": "1772311253742-002.jpg",
+      "timestamp": "2026-02-28T20:40:53.872Z",
+      "id": "1772311253875",
+      "createdAt": "2026-02-28T20:40:53.875Z"
+    },
+    {
+      "userId": "super_codepro_2",
+      "userName": "CodePro Super Admin",
+      "role": "SUPER_ADMIN",
+      "action": "UPDATE",
+      "details": "Editou um item em students",
+      "targetType": "student",
+      "targetId": "1771704222554",
+      "timestamp": "2026-02-28T20:40:54.046Z",
+      "id": "1772311254046",
+      "createdAt": "2026-02-28T20:40:54.046Z"
+    }
+  ],
+  "materials": [
+    {
+      "title": "Gas",
+      "description": "",
+      "type": "LINK",
+      "url": "https://www.youtube.com/watch?v=hl2LDTyTcSk",
+      "access": "ALL",
+      "uploadedBy": "super_codepro_2",
+      "uploadedByName": "CodePro Super Admin",
+      "id": "1772223289769",
+      "createdAt": "2026-02-27T20:14:49.769Z"
+    }
+  ],
+  "chatMessages": [
+    {
+      "text": "Boa Tarde",
+      "recipientId": "admin",
+      "senderId": "1771704222554",
+      "senderName": "Adao Ferando",
+      "senderRole": "STUDENT",
+      "timestamp": "2026-02-27T20:20:06.465Z",
+      "id": "1772223606468",
+      "createdAt": "2026-02-27T20:20:06.468Z"
+    },
+    {
+      "text": "gostaria de saber quando a materia do curso estará disponivel?",
+      "recipientId": "admin",
+      "senderId": "1771704222554",
+      "senderName": "Adao Ferando",
+      "senderRole": "STUDENT",
+      "timestamp": "2026-02-27T20:20:26.775Z",
+      "id": "1772223626778",
+      "createdAt": "2026-02-27T20:20:26.778Z"
+    },
+    {
+      "text": "ok, vamos ver isso ainda hoje",
+      "recipientId": "1771704222554",
+      "senderId": "super_codepro_2",
+      "senderName": "CodePro Super Admin",
+      "senderRole": "SUPER_ADMIN",
+      "timestamp": "2026-02-27T20:21:17.699Z",
+      "id": "1772223677701",
+      "createdAt": "2026-02-27T20:21:17.701Z"
+    },
+    {
+      "text": "Senhor fernando",
+      "recipientId": "1771704222554",
+      "senderId": "super_codepro_2",
+      "senderName": "CodePro Super Admin",
+      "senderRole": "SUPER_ADMIN",
+      "timestamp": "2026-02-27T20:21:21.472Z",
+      "id": "1772223681475",
+      "createdAt": "2026-02-27T20:21:21.475Z"
+    }
+  ],
+  "feedbacks": [
+    {
+      "studentId": "1771704222554",
+      "studentName": "Adao Ferando",
+      "courseId": null,
+      "courseTitle": "Navegação Costeira",
+      "institutionRating": 4,
+      "trainerRating": 3,
+      "courseRating": 3,
+      "comments": "Muito bom",
+      "id": "1772226867912",
+      "createdAt": "2026-02-27T21:14:27.912Z"
+    }
+  ],
+  "attendances": [
+    {
+      "id": "1772226602640",
+      "courseId": "Segurança em Alto Mar",
+      "date": "2026-02-27",
+      "trainerId": "2",
+      "records": [
+        {
+          "studentId": "1771694558870",
+          "studentName": "Maria Souza",
+          "status": "PRESENT"
+        }
+      ],
+      "createdAt": "2026-02-27T21:10:02.640Z"
+    }
+  ]
+}
