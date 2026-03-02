@@ -226,9 +226,9 @@ model Feedback {
   studentName         String?
   courseId            String?
   courseTitle         String
-  institutionFeedback Int
-  trainerFeedback     Int
-  courseFeedback      Int
+  institutionFeedback String?
+  trainerFeedback     String?
+  courseFeedback      String?
   comments            String?
   createdAt           DateTime @default(now())
   updatedAt           DateTime @updatedAt

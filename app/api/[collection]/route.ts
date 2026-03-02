@@ -5,12 +5,21 @@ import { authOptions } from '../../../lib/auth';
 import { logActivity } from '../../../lib/logger';
 
 function getModelName(collection: string) {
-    let name = collection;
-    if (collection.endsWith('ies')) name = collection.slice(0, -3) + 'y';
-    else if (collection.endsWith('s')) name = collection.slice(0, -1);
-
-    // Capitalize first letter to match Prisma PascalCase models
-    return name.charAt(0).toUpperCase() + name.slice(1);
+    const mapping: { [key: string]: string } = {
+        'students': 'student',
+        'trainers': 'trainer',
+        'courses': 'course',
+        'classrooms': 'classroom',
+        'inscriptions': 'inscription',
+        'matriculations': 'matriculation',
+        'companies': 'company',
+        'feedbacks': 'feedback',
+        'activity-logs': 'activityLog',
+        'attendance': 'attendance',
+        'materials': 'material',
+        'adminusers': 'adminUser'
+    };
+    return mapping[collection] || collection.replace(/s$/, '');
 }
 
 export async function GET(
