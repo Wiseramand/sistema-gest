@@ -5,9 +5,12 @@ import { authOptions } from '../../../../lib/auth';
 import { logActivity } from '../../../../lib/logger';
 
 function getModelName(collection: string) {
-    if (collection.endsWith('ies')) return collection.slice(0, -3) + 'y';
-    if (collection.endsWith('s')) return collection.slice(0, -1);
-    return collection;
+    let name = collection;
+    if (collection.endsWith('ies')) name = collection.slice(0, -3) + 'y';
+    else if (collection.endsWith('s')) name = collection.slice(0, -1);
+
+    // Capitalize first letter to match Prisma PascalCase models
+    return name.charAt(0).toUpperCase() + name.slice(1);
 }
 
 export async function GET(
@@ -34,55 +37,91 @@ export async function PATCH(
     request: Request,
     { params }: { params: Promise<{ collection: string; id: string }> }
 ) {
-    const { collection, id } = await params;
-    const model = (db as any)[getModelName(collection)];
+    let collectionName = 'unknown';
+    let itemId = 'unknown';
+    try {
+        const { collection, id } = await params;
+        collectionName = collection;
+        itemId = id;
+        const model = (db as any)[getModelName(collection)];
 
-    if (!model) return NextResponse.json({ error: `Collection '${collection}' not found` }, { status: 404 });
+        if (!model) return NextResponse.json({ error: `Collection '${collection}' not found` }, { status: 404 });
 
-    const body = await request.json();
-    const updatedItem = await model.update({ where: { id }, data: body });
+        const body = await request.json();
+        const sanitizedData = { ...body };
+        // Remove id and materialName as they shouldn't be in the update data
+        delete sanitizedData.id;
+        if (collection === 'courses') {
+            delete (sanitizedData as any).materialName;
+        }
 
-    // Log the activity
-    const session = await getServerSession(authOptions);
-    if (session?.user) {
-        await logActivity(
-            (session.user as any).id,
-            session.user.name || 'Unknown',
-            (session.user as any).role,
-            'UPDATE',
-            `Editou um item em ${collection}`,
-            getModelName(collection),
-            id
-        );
+        const updatedItem = await model.update({
+            where: { id },
+            data: sanitizedData
+        });
+
+        // Log the activity
+        try {
+            const session = await getServerSession(authOptions);
+            if (session?.user) {
+                await logActivity(
+                    (session.user as any).id,
+                    session.user.name || 'Unknown',
+                    (session.user as any).role,
+                    'UPDATE',
+                    `Editou um item em ${collection}`,
+                    getModelName(collection),
+                    id
+                );
+            }
+        } catch (logError) {
+            console.error('Activity Log Error (Non-blocking):', logError);
+        }
+
+        return NextResponse.json(updatedItem);
+    } catch (error: any) {
+        console.error(`API PATCH [${collectionName}/${itemId}] Error:`, error);
+        return NextResponse.json({ error: 'Internal Server Error', details: error.message }, { status: 500 });
     }
-
-    return NextResponse.json(updatedItem);
 }
 
 export async function DELETE(
     request: Request,
     { params }: { params: Promise<{ collection: string; id: string }> }
 ) {
-    const { collection, id } = await params;
-    const model = (db as any)[getModelName(collection)];
+    let collectionName = 'unknown';
+    let itemId = 'unknown';
+    try {
+        const { collection, id } = await params;
+        collectionName = collection;
+        itemId = id;
+        const model = (db as any)[getModelName(collection)];
 
-    if (!model) return NextResponse.json({ error: `Collection '${collection}' not found` }, { status: 404 });
+        if (!model) return NextResponse.json({ error: `Collection '${collection}' not found` }, { status: 404 });
 
-    await model.delete({ where: { id } });
+        await model.delete({ where: { id } });
 
-    // Log the activity
-    const session = await getServerSession(authOptions);
-    if (session?.user) {
-        await logActivity(
-            (session.user as any).id,
-            session.user.name || 'Unknown',
-            (session.user as any).role,
-            'DELETE',
-            `Removeu um item de ${collection}`,
-            getModelName(collection),
-            id
-        );
+        // Log the activity
+        try {
+            const session = await getServerSession(authOptions);
+            if (session?.user) {
+                await logActivity(
+                    (session.user as any).id,
+                    session.user.name || 'Unknown',
+                    (session.user as any).role,
+                    'DELETE',
+                    `Removeu um item de ${collection}`,
+                    getModelName(collection),
+                    id
+                );
+            }
+        } catch (logError) {
+            console.error('Activity Log Error (Non-blocking):', logError);
+        }
+
+        return NextResponse.json({ success: true });
+    } catch (error: any) {
+        console.error(`API DELETE [${collectionName}/${itemId}] Error:`, error);
+        return NextResponse.json({ error: 'Internal Server Error', details: error.message }, { status: 500 });
     }
-
-    return NextResponse.json({ success: true });
 }
