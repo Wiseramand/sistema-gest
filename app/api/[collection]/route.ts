@@ -5,9 +5,12 @@ import { authOptions } from '../../../lib/auth';
 import { logActivity } from '../../../lib/logger';
 
 function getModelName(collection: string) {
-    if (collection.endsWith('ies')) return collection.slice(0, -3) + 'y';
-    if (collection.endsWith('s')) return collection.slice(0, -1);
-    return collection;
+    let name = collection;
+    if (collection.endsWith('ies')) name = collection.slice(0, -3) + 'y';
+    else if (collection.endsWith('s')) name = collection.slice(0, -1);
+
+    // Capitalize first letter to match Prisma PascalCase models
+    return name.charAt(0).toUpperCase() + name.slice(1);
 }
 
 export async function GET(
