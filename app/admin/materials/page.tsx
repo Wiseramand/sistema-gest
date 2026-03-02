@@ -121,7 +121,7 @@ export default function AdminMaterialsPage() {
         if (!confirm('Tem certeza que deseja apagar este material?')) return;
 
         try {
-            const res = await fetch(`/api/[collection]/[id]?collection=materials&id=${id}`, {
+            const res = await fetch(`/api/materials/${id}`, {
                 method: 'DELETE',
             });
             if (res.ok) {

@@ -23,7 +23,12 @@ export async function GET(request: Request) {
             );
         }
 
-        return NextResponse.json(filteredMaterials);
+        const results = filteredMaterials.map((m: any) => ({
+            ...m,
+            title: m.name
+        }));
+
+        return NextResponse.json(results);
     } catch (error: any) {
         return NextResponse.json({ error: 'Failed to fetch materials' }, { status: 500 });
     }
@@ -39,9 +44,12 @@ export async function POST(request: Request) {
         }
 
         const body = await request.json();
+        const { title, ...rest } = body;
+
         const newMaterial = await db.material.create({
             data: {
-                ...body,
+                ...rest,
+                name: title,
                 uploadedBy: user.id,
                 uploadedByName: user.name
             }

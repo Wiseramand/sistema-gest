@@ -19,7 +19,7 @@ export async function logActivity(
                 details,
                 targetType,
                 targetId,
-                timestamp: new Date().toISOString()
+                timestamp: new Date()
             }
         });
     } catch (error) {

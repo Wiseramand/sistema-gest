@@ -44,15 +44,22 @@ export async function GET(request: NextRequest) {
             return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
         }
 
-        const allMessages = await db.chatMessage.findMany();
+        const allMessages = await db.chatMessage.findMany({
+            orderBy: { timestamp: 'asc' }
+        });
 
         // Filter messages:
         // - Admins see all.
-        // - Students/Professors/Trainers see only messages where they are sender or recipient.
+        // - Students/Professors see:
+        //   1. Messages they sent.
+        //   2. Messages sent to them (specifically by their ID).
+        //   3. Messages sent to 'admin' IF they are the sender (to see their own outgoing support requests).
         let filteredMessages = allMessages;
         if (user.role !== 'SUPER_ADMIN' && user.role !== 'ADMIN') {
             filteredMessages = allMessages.filter((m: any) =>
-                m.senderId === user.id || m.recipientId === user.id
+                m.senderId === user.id ||
+                m.recipientId === user.id ||
+                (m.recipientId === 'admin' && m.senderId === user.id)
             );
         }
 
@@ -79,7 +86,7 @@ export async function POST(request: NextRequest) {
                 senderId: user.id,
                 senderName: user.name,
                 senderRole: user.role,
-                timestamp: new Date().toISOString()
+                timestamp: new Date()
             }
         });
 

@@ -54,7 +54,7 @@ export default function AdminChatPage() {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    text: replyText,
+                    content: replyText,
                     recipientId: selectedUser.id,
                 }),
             });
@@ -70,21 +70,21 @@ export default function AdminChatPage() {
 
     // Identify unique users who have sent messages to admin or received messages from admin
     const conversations = messages.reduce((acc: any, msg) => {
-        const otherUserId = msg.senderId === 'admin' ? msg.recipientId : msg.senderId;
-        const otherUserName = msg.senderId === 'admin' ? 'Usuário' : msg.senderName;
+        const otherUserId = (msg.senderRole === 'ADMIN' || msg.senderRole === 'SUPER_ADMIN') ? msg.recipientId : msg.senderId;
+        const otherUserName = (msg.senderRole === 'ADMIN' || msg.senderRole === 'SUPER_ADMIN') ? 'Usuário' : msg.senderName;
 
-        if (otherUserId === 'admin') return acc; // Skip admin-to-admin if any
+        if (otherUserId === 'admin' || !otherUserId) return acc; // Skip invalid or self-sent to 'admin' placeholder
 
         if (!acc[otherUserId]) {
             acc[otherUserId] = {
                 id: otherUserId,
                 name: otherUserName,
-                lastMessage: msg.text,
+                lastMessage: (msg as any).content || (msg as any).text,
                 timestamp: msg.timestamp,
                 role: msg.senderId === 'admin' ? '' : msg.senderRole
             };
         } else if (new Date(msg.timestamp) > new Date(acc[otherUserId].timestamp)) {
-            acc[otherUserId].lastMessage = msg.text;
+            acc[otherUserId].lastMessage = (msg as any).content || (msg as any).text;
             acc[otherUserId].timestamp = msg.timestamp;
         }
         return acc;
@@ -136,7 +136,7 @@ export default function AdminChatPage() {
                             {activeMessages.map((m) => (
                                 <div key={m.id} className={`message-wrapper ${m.senderRole === 'ADMIN' || m.senderRole === 'SUPER_ADMIN' ? 'own' : 'other'}`}>
                                     <div className="message-bubble">
-                                        <p className="text">{m.text}</p>
+                                        <p className="text">{(m as any).content || (m as any).text}</p>
                                         <span className="time">{new Date(m.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
                                     </div>
                                 </div>

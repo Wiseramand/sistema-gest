@@ -52,7 +52,7 @@ export default function ProfessorChatPage() {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    text: newMessage,
+                    content: newMessage,
                     recipientId: 'admin', // Default to admin for support
                 }),
             });
@@ -83,7 +83,7 @@ export default function ProfessorChatPage() {
                         <div key={m.id} className={`message-wrapper ${m.senderId === userId ? 'own' : 'other'}`}>
                             <div className="message-bubble">
                                 <span className="sender">{m.senderName}</span>
-                                <p className="text">{m.text}</p>
+                                <p className="text">{(m as any).content || (m as any).text}</p>
                                 <span className="time">{new Date(m.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
                             </div>
                         </div>
