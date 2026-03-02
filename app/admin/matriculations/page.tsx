@@ -105,10 +105,12 @@ export default function MatriculationPage() {
                 setFormData({ course: '', classroom: '', trainer: '', schedule: '', duration: '', startDate: '', paymentStatus: 'Pendente', amountDue: 0 });
                 fetchData();
             } else {
-                alert('Erro ao criar matrícula. Verifique a ligação à API.');
+                const errorData = await res.json();
+                alert(`Erro ao criar matrícula: ${errorData.error || 'Verifique a ligação à API.'}\n${errorData.details || ''}`);
             }
-        } catch (error) {
+        } catch (error: any) {
             console.error(error);
+            alert(`Erro na submissão: ${error.message}`);
         }
     };
 

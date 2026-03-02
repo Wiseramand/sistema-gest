@@ -25,12 +25,13 @@ export async function DELETE(
         });
 
         // 3. Update Trainer count
-        if (mat.trainerId || (mat as any).trainerId) {
+        if ((mat as any).trainerId) {
+            const tId = (mat as any).trainerId;
             const trainerMatrics = await db.matriculation.count({
-                where: { trainerId: mat.trainerId || (mat as any).trainerId, status: 'ACTIVE' } as any
+                where: { trainerId: tId, status: 'ACTIVE' } as any
             });
             await db.trainer.update({
-                where: { id: mat.trainerId },
+                where: { id: tId },
                 data: { students: trainerMatrics }
             }).catch(e => console.error('Failed to update trainer count:', e));
         }
@@ -38,7 +39,7 @@ export async function DELETE(
         // 4. Update Course count
         if (mat.courseId) {
             const courseMatrics = await db.matriculation.count({
-                where: { courseId: mat.courseId, status: 'ACTIVE' }
+                where: { courseId: mat.courseId, status: 'ACTIVE' } as any
             });
             await db.course.update({
                 where: { id: mat.courseId },
@@ -84,7 +85,7 @@ export async function PATCH(
             for (const item of syncList) {
                 if (!item.id) continue;
                 const count = await db.matriculation.count({
-                    where: { [item.type + 'Id']: item.id, status: 'ACTIVE' }
+                    where: { [item.type + 'Id']: item.id, status: 'ACTIVE' } as any
                 });
                 await (db as any)[item.type].update({
                     where: { id: item.id },
