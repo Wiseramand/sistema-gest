@@ -140,6 +140,7 @@ model Matriculation {
   classroom     String?
   classroomId   String?
   trainer       String?
+  trainerId     String?
   schedule      String?
   duration      String?
   paymentStatus String?  @default("Pendente")

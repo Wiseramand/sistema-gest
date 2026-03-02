@@ -15,7 +15,17 @@ interface Course {
   duration: string;
   students: number;
   status: string;
+  category?: string;
+  trainerId?: string;
+  trainerName?: string;
+  startDate?: string;
+  endDate?: string;
   materials: Material[];
+}
+
+interface Trainer {
+  id: string;
+  name: string;
 }
 
 export default function CoursesPage() {
@@ -23,11 +33,16 @@ export default function CoursesPage() {
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingCourse, setEditingCourse] = useState<Course | null>(null);
+  const [trainers, setTrainers] = useState<Trainer[]>([]);
   const [formData, setFormData] = useState({
     title: '',
     description: '',
     duration: '',
     status: 'Inscrições Abertas',
+    category: 'Formação Técnica',
+    trainerId: '',
+    startDate: '',
+    endDate: '',
     materialName: '',
     materialCategory: 'Manuais'
   });
@@ -37,11 +52,14 @@ export default function CoursesPage() {
   const fetchData = async () => {
     setLoading(true);
     try {
-      const res = await fetch('/api/courses');
-      const data = await res.json();
-      setCourses(Array.isArray(data) ? data : []);
+      const [resC, resT] = await Promise.all([
+        fetch('/api/courses').then(r => r.json()),
+        fetch('/api/trainers').then(r => r.json())
+      ]);
+      setCourses(Array.isArray(resC) ? resC : []);
+      setTrainers(Array.isArray(resT) ? resT : []);
     } catch (error) {
-      console.error('Error fetching courses:', error);
+      console.error('Error fetching data:', error);
     } finally {
       setLoading(false);
     }
@@ -57,12 +75,27 @@ export default function CoursesPage() {
         description: course.description || '',
         duration: course.duration,
         status: course.status,
+        category: course.category || 'Formação Técnica',
+        trainerId: course.trainerId || '',
+        startDate: course.startDate || '',
+        endDate: course.endDate || '',
         materialName: '',
         materialCategory: 'Manuais'
       });
     } else {
       setEditingCourse(null);
-      setFormData({ title: '', description: '', duration: '', status: 'Inscrições Abertas', materialName: '', materialCategory: 'Manuais' });
+      setFormData({
+        title: '',
+        description: '',
+        duration: '',
+        status: 'Inscrições Abertas',
+        category: 'Formação Técnica',
+        trainerId: '',
+        startDate: '',
+        endDate: '',
+        materialName: '',
+        materialCategory: 'Manuais'
+      });
     }
     setSelectedFile(null);
     setIsModalOpen(true);
@@ -95,7 +128,13 @@ export default function CoursesPage() {
       }
     }
 
-    const courseData = { ...formData, students: editingCourse?.students || 0, materials: finalMaterials };
+    const trainer = trainers.find(t => t.id === formData.trainerId);
+    const courseData = {
+      ...formData,
+      trainerName: trainer?.name || '',
+      students: editingCourse?.students || 0,
+      materials: finalMaterials
+    };
 
     try {
       const res = await fetch(url, { method, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(courseData) });
@@ -226,12 +265,52 @@ export default function CoursesPage() {
                     />
                   </div>
                   <div className="field">
-                    <label>Status</label>
-                    <select value={formData.status} onChange={(e) => setFormData({ ...formData, status: e.target.value })}>
-                      <option value="Inscrições Abertas">Inscrições Abertas</option>
-                      <option value="Em andamento">Em andamento</option>
-                      <option value="Finalizado">Finalizado</option>
-                    </select>
+                    <label>Categoria do Curso</label>
+                    <input
+                      type="text"
+                      value={formData.category}
+                      onChange={(e) => setFormData({ ...formData, category: e.target.value })}
+                      placeholder="Ex: Formação Técnica"
+                    />
+                  </div>
+                </div>
+
+                <div className="field">
+                  <label>Status</label>
+                  <select value={formData.status} onChange={(e) => setFormData({ ...formData, status: e.target.value })}>
+                    <option value="Inscrições Abertas">Inscrições Abertas</option>
+                    <option value="Em andamento">Em andamento</option>
+                    <option value="Finalizado">Finalizado</option>
+                  </select>
+                </div>
+
+                <div className="field">
+                  <label>Formador Responsável (Para o Portal do Formador)</label>
+                  <select
+                    value={formData.trainerId}
+                    onChange={(e) => setFormData({ ...formData, trainerId: e.target.value })}
+                  >
+                    <option value="">Selecione um formador...</option>
+                    {trainers.map(t => <option key={t.id} value={t.id}>{t.name}</option>)}
+                  </select>
+                </div>
+
+                <div className="field-row">
+                  <div className="field">
+                    <label>Data de Início Estimada</label>
+                    <input
+                      type="date"
+                      value={formData.startDate}
+                      onChange={(e) => setFormData({ ...formData, startDate: e.target.value })}
+                    />
+                  </div>
+                  <div className="field">
+                    <label>Data de Fim Estimada</label>
+                    <input
+                      type="date"
+                      value={formData.endDate}
+                      onChange={(e) => setFormData({ ...formData, endDate: e.target.value })}
+                    />
                   </div>
                 </div>
               </div>

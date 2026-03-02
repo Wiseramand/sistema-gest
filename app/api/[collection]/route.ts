@@ -49,6 +49,7 @@ export async function POST(
     { params }: { params: Promise<{ collection: string }> }
 ) {
     let collectionName = 'unknown';
+    let body: any; // Declare body here to be accessible in the outer catch block
     try {
         const { collection } = await params;
         collectionName = collection;
@@ -56,7 +57,11 @@ export async function POST(
 
         if (!model) return NextResponse.json({ error: `Collection '${collection}' not found` }, { status: 404 });
 
-        const body = await request.json();
+        try {
+            body = await request.json();
+        } catch (e) {
+            return NextResponse.json({ error: 'Invalid JSON body' }, { status: 400 });
+        }
 
         // Sanitize data for specific models if needed
         const sanitizedData = { ...body };
@@ -65,6 +70,7 @@ export async function POST(
         // Remove materialName which is a UI-only field in Courses
         if (collection === 'courses') {
             delete (sanitizedData as any).materialName;
+            delete (sanitizedData as any).trainerId;
         }
 
         const newItem = await model.create({ data: sanitizedData });
@@ -93,7 +99,8 @@ export async function POST(
         return NextResponse.json({
             error: 'Internal Server Error',
             details: error.message,
-            targetCollection: collectionName
+            targetCollection: collectionName,
+            payload: typeof body !== 'undefined' ? body : 'Not parsed'
         }, { status: 500 });
     }
 }
