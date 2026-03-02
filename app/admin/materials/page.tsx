@@ -42,6 +42,7 @@ export default function AdminMaterialsPage() {
     const [loading, setLoading] = useState(true);
     const [uploading, setUploading] = useState(false);
     const [showModal, setShowModal] = useState(false);
+    const [editingMaterial, setEditingMaterial] = useState<Material | null>(null);
     const [readingMaterial, setReadingMaterial] = useState<Material | null>(null);
 
     // Form states
@@ -68,6 +69,28 @@ export default function AdminMaterialsPage() {
         }
     }
 
+    function handleOpenEdit(m: Material) {
+        setEditingMaterial(m);
+        setTitle(m.title);
+        setDescription(m.description || '');
+        setType(m.type);
+        setUrl(m.url);
+        setAccess(m.access);
+        setFile(null);
+        setShowModal(true);
+    }
+
+    function handleOpenCreate() {
+        setEditingMaterial(null);
+        setTitle('');
+        setDescription('');
+        setType('FILE');
+        setUrl('');
+        setAccess('ALL');
+        setFile(null);
+        setShowModal(true);
+    }
+
     async function handleUpload(e: React.FormEvent) {
         e.preventDefault();
         setUploading(true);
@@ -90,8 +113,8 @@ export default function AdminMaterialsPage() {
                 }
             }
 
-            const res = await fetch('/api/materials', {
-                method: 'POST',
+            const res = await fetch(editingMaterial ? `/api/materials/${editingMaterial.id}` : '/api/materials', {
+                method: editingMaterial ? 'PATCH' : 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     title,
@@ -136,7 +159,7 @@ export default function AdminMaterialsPage() {
         <div className="materials-container">
             <div className="header-actions">
                 <h1>Gestão de Materiais e Media</h1>
-                <button className="add-btn" onClick={() => setShowModal(true)}>+ Novo Conteúdo</button>
+                <button className="add-btn" onClick={handleOpenCreate}>+ Novo Conteúdo</button>
             </div>
 
             {loading ? (
@@ -158,8 +181,11 @@ export default function AdminMaterialsPage() {
                                 </div>
                                 <div className="meta">
                                     <span>{new Date(m.createdAt).toLocaleDateString()}</span>
-                                    <button onClick={() => setReadingMaterial(m)} className="view-btn">Ver no Sistema</button>
-                                    <button onClick={() => handleDelete(m.id)} className="delete-btn">🗑️</button>
+                                    <div style={{ display: 'flex', gap: '0.5rem' }}>
+                                        <button onClick={() => setReadingMaterial(m)} className="view-btn">Ver</button>
+                                        <button onClick={() => handleOpenEdit(m)} className="edit-btn">✏️</button>
+                                        <button onClick={() => handleDelete(m.id)} className="delete-btn">🗑️</button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -171,7 +197,7 @@ export default function AdminMaterialsPage() {
             {showModal && (
                 <div className="modal-overlay">
                     <div className="modal">
-                        <h2>Adicionar Novo Conteúdo</h2>
+                        <h2>{editingMaterial ? 'Editar Conteúdo' : 'Adicionar Novo Conteúdo'}</h2>
                         <form onSubmit={handleUpload}>
                             <div className="form-group">
                                 <label>Título</label>
@@ -191,8 +217,8 @@ export default function AdminMaterialsPage() {
 
                             {type === 'FILE' ? (
                                 <div className="form-group">
-                                    <label>Ficheiro</label>
-                                    <input type="file" required onChange={(e) => setFile(e.target.files?.[0] || null)} />
+                                    <label>Ficheiro {editingMaterial && '(Deixe vazio para manter o atual)'}</label>
+                                    <input type="file" required={!editingMaterial} onChange={(e) => setFile(e.target.files?.[0] || null)} />
                                 </div>
                             ) : (
                                 <div className="form-group">
@@ -259,9 +285,11 @@ export default function AdminMaterialsPage() {
                 .badge.students { background: #dcfce7; color: #166534; }
 
                 .meta { display: flex; align-items: center; justify-content: space-between; font-size: 0.8rem; color: #94a3b8; }
-                .view-btn { background: #f1f5f9; color: #334155; padding: 0.4rem 0.8rem; border-radius: 6px; text-decoration: none; font-weight: 600; }
-                .delete-btn { background: none; border: none; cursor: pointer; font-size: 1.1rem; padding: 0.2rem; filter: grayscale(1); }
-                .delete-btn:hover { filter: grayscale(0); }
+                .view-btn { background: #f1f5f9; color: #334155; padding: 0.4rem 0.8rem; border-radius: 6px; text-decoration: none; font-weight: 600; font-size: 0.75rem; border: none; cursor: pointer; }
+                .edit-btn { background: none; border: none; cursor: pointer; font-size: 1.1rem; padding: 0.2rem; filter: grayscale(1); transition: 0.2s; }
+                .edit-btn:hover { filter: grayscale(0); transform: scale(1.1); }
+                .delete-btn { background: none; border: none; cursor: pointer; font-size: 1.1rem; padding: 0.2rem; filter: grayscale(1); transition: 0.2s; }
+                .delete-btn:hover { filter: grayscale(0); transform: scale(1.1); }
 
                 .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; z-index: 1000; }
                 .modal { background: white; padding: 2.5rem; border-radius: 20px; width: 100%; max-width: 500px; }

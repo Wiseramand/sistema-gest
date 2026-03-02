@@ -17,10 +17,12 @@ interface Course { id: string; title: string; status: string; }
 export default function CertificatesPage() {
     const { data: session } = useSession();
     const [mounted, setMounted] = useState(false);
+    const [origin, setOrigin] = useState('');
     const isSuperAdmin = (session?.user as any)?.role === 'SUPER_ADMIN';
 
     useEffect(() => {
         setMounted(true);
+        setOrigin(window.location.origin);
     }, []);
 
     const [certs, setCerts] = useState<Certificate[]>([]);
@@ -301,11 +303,11 @@ export default function CertificatesPage() {
                                             <div className="cert-bottom-info">
                                                 <div className="cert-id-print">ID do Certificado: {viewingCert.id}</div>
                                                 <div className="cert-qrcode">
-                                                    {mounted && (
+                                                    {mounted && origin && (
                                                         <QRCodeSVG
-                                                            value={`${window.location.origin}/verify/${viewingCert.id}`}
-                                                            size={60}
-                                                            level="M"
+                                                            value={`${origin}/verify/${viewingCert.id}`}
+                                                            size={80}
+                                                            level="H"
                                                             includeMargin={true}
                                                         />
                                                     )}
@@ -433,11 +435,11 @@ export default function CertificatesPage() {
                 .btn-close-cert:hover { background: #e2e8f0; }
 
                 @media print {
-                    body * { visibility: hidden; }
-                    .cert-mockup, .cert-mockup * { visibility: visible; }
-                    .cert-mockup { position: fixed; left: 0; top: 0; width: 100%; height: 100%; border: none; box-shadow: none; padding: 0; }
-                    .certificate-modal { width: 100%; max-width: none; padding: 0; margin: 0; }
-                    .cert-modal-actions, .overlay { display: none !important; }
+                    :global(body) { background: white !important; }
+                    :global(.sidebar), :global(.admin-header), .page-top, .gen-panel, .stats-row, .table-wrap, .cert-modal-actions { display: none !important; }
+                    .overlay { background: white !important; backdrop-filter: none !important; position: static !important; padding: 0 !important; }
+                    .certificate-modal { box-shadow: none !important; width: 100% !important; max-width: none !important; padding: 0 !important; margin: 0 !important; }
+                    .cert-mockup { border: none !important; box-shadow: none !important; width: 100% !important; padding: 0 !important; }
                 }
 
                 .overlay { position: fixed; inset: 0; background: rgba(0,20,50,0.5); backdrop-filter: blur(8px); display: flex; align-items: center; justify-content: center; z-index: 1000; padding: 1rem; }
