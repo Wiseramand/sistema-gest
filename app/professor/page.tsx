@@ -20,8 +20,15 @@ interface Course {
     startDate?: string;
     schedule?: string;
 }
+function isVideoFile(url: string) {
+    if (!url) return false;
+    const videoExtensions = ['.mp4', '.webm', '.ogg', '.mov'];
+    return videoExtensions.some(ext => url.toLowerCase().endsWith(ext));
+}
+
 function getEmbedUrl(url: string) {
     if (!url) return '';
+    if (url.startsWith('/uploads/')) return url;
     try {
         const urlObj = new URL(url);
         if (urlObj.hostname.includes('youtube.com') || urlObj.hostname.includes('youtu.be')) {
@@ -436,7 +443,11 @@ export default function ProfessorDashboard() {
                                 <button className="close-btn" onClick={() => setReadingMaterial(null)}>&times;</button>
                             </div>
                             <div className="reader-content">
-                                <iframe src={getEmbedUrl(readingMaterial.url)} className="material-iframe" />
+                                {isVideoFile(readingMaterial.url) ? (
+                                    <video src={readingMaterial.url} controls controlsList="nodownload" className="material-video" style={{ width: '100%', height: '100%', borderRadius: '8px', background: '#000' }} />
+                                ) : (
+                                    <iframe src={getEmbedUrl(readingMaterial.url)} className="material-iframe" />
+                                )}
                             </div>
                         </div>
                     </div>

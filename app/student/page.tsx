@@ -20,8 +20,15 @@ interface Enrollment {
     trainer: string;
     materials?: Material[];
 }
+function isVideoFile(url: string) {
+    if (!url) return false;
+    const videoExtensions = ['.mp4', '.webm', '.ogg', '.mov'];
+    return videoExtensions.some(ext => url.toLowerCase().endsWith(ext));
+}
+
 function getEmbedUrl(url: string) {
     if (!url) return '';
+    if (url.startsWith('/uploads/')) return url; // Don't modify local uploads
     try {
         const urlObj = new URL(url);
         if (urlObj.hostname.includes('youtube.com') || urlObj.hostname.includes('youtu.be')) {
@@ -241,12 +248,24 @@ export default function StudentDashboard() {
                                 </div>
                                 <div className="reader-body">
                                     <div className="placeholder-viewer">
-                                        <div className="viewer-msg">
-                                            <span className="icon">👁️</span>
-                                            <p>Visualização Segura Ativada</p>
-                                            <small>O download está desabilitado para este material.</small>
-                                        </div>
-                                        <iframe src={getEmbedUrl(readingMaterial.url)} className="material-iframe" />
+                                        {isVideoFile(readingMaterial.url) ? (
+                                            <video
+                                                src={readingMaterial.url}
+                                                controls
+                                                controlsList="nodownload"
+                                                className="material-video"
+                                                style={{ width: '100%', borderRadius: '8px', maxHeight: '70vh', background: '#000' }}
+                                            />
+                                        ) : (
+                                            <>
+                                                <div className="viewer-msg">
+                                                    <span className="icon">👁️</span>
+                                                    <p>Visualização Segura Ativada</p>
+                                                    <small>O download está desabilitado para este material.</small>
+                                                </div>
+                                                <iframe src={getEmbedUrl(readingMaterial.url)} className="material-iframe" />
+                                            </>
+                                        )}
                                     </div>
                                 </div>
                                 <div className="reader-footer">
