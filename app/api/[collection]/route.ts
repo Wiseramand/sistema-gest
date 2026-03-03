@@ -70,7 +70,6 @@ export async function POST(
         // Remove materialName which is a UI-only field in Courses
         if (collection === 'courses') {
             delete (sanitizedData as any).materialName;
-            delete (sanitizedData as any).trainerId;
         }
 
         const newItem = await model.create({ data: sanitizedData });

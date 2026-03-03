@@ -76,18 +76,18 @@ export default function ProfessorDashboard() {
                 const userId = (session?.user as any)?.id;
                 const resC = await fetch('/api/courses');
                 const allCourses = await resC.json();
-                const profCourses = allCourses.filter((c: any) => c.trainerId === userId || c.trainer === session.user?.name);
+                const profCourses = allCourses.filter((c: any) => (c.trainerId && c.trainerId === userId) || c.trainer === session.user?.name);
 
                 // 2. Fetch matriculations to get student lists for these courses
                 const resM = await fetch('/api/matriculations');
                 const allMatriculations = await resM.json();
 
                 const enrichedCourses = profCourses.map((c: Course) => {
-                    const courseMatrics = allMatriculations.filter((m: any) => m.course === c.title);
+                    const courseMatrics = allMatriculations.filter((m: any) => m.courseId === c.id || m.course === c.title);
                     return {
                         ...c,
                         studentsList: courseMatrics.map((m: any) => ({ id: m.studentId, name: m.studentName })),
-                        startDate: courseMatrics[0]?.startDate || 'A definir',
+                        startDate: courseMatrics[0]?.startDate || c.startDate || 'A definir',
                         schedule: courseMatrics[0]?.schedule || 'A definir'
                     };
                 });

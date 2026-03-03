@@ -320,7 +320,7 @@ export default function CoursesPage() {
                 <div className="section-label">2. Materiais de Estudo</div>
 
                 <div className="materials-box">
-                  <p className="materials-hint">Adicione documentos PDF ou Word para os alunos consultarem.</p>
+                  <p className="materials-hint">Adicione Manuais (PDF/Word) ou Vídeos (.mp4) para os alunos.</p>
 
                   <div className="field">
                     <label>Nome do Material</label>
@@ -332,10 +332,10 @@ export default function CoursesPage() {
                     />
                   </div>
                   <div className="field">
-                    <label>Ficheiro (PDF/Word)</label>
+                    <label>Ficheiro (Doc ou Vídeo)</label>
                     <input
                       type="file"
-                      accept=".pdf,.doc,.docx"
+                      accept=".pdf,.doc,.docx,.mp4,.webm"
                       onChange={(e) => setSelectedFile(e.target.files?.[0] || null)}
                       className="file-input"
                     />
