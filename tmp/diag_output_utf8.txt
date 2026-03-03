@@ -1,0 +1,16 @@
+﻿--- DIAGNOSTIC START ---
+Found 1 trainers.
+Trainer ID: cmm9od8mn000010pjw18qsmns, Name: Manuel Fernando Gomes
+
+Found 2 courses.
+Course: Oil and Gas Marine Terminals, Trainer ID: null, Trainer Name: null
+Materials: []...
+Course: Marine and Offshore Vessel Operations for Oil & Gas, Trainer ID: null, Trainer Name: null
+Materials: []...
+
+Found 4 matriculations.
+Matriculation: Student Mavula Muinda, Course Oil and Gas Marine Terminals, CourseID MISSING
+Matriculation: Student Joaquim Moirais, Course Oil and Gas Marine Terminals, CourseID MISSING
+Matriculation: Student Joaquim Moirais, Course Marine and Offshore Vessel Operations for Oil & Gas, CourseID cmm9og6pa0002ms66xyi7f78b
+Matriculation: Student Daniel Anfoso, Course Marine and Offshore Vessel Operations for Oil & Gas, CourseID cmm9og6pa0002ms66xyi7f78b
+--- DIAGNOSTIC END ---

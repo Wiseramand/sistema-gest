@@ -15,8 +15,10 @@ interface Material {
 }
 function isVideoFile(url: string) {
     if (!url) return false;
-    const videoExtensions = ['.mp4', '.webm', '.ogg', '.mov'];
-    return videoExtensions.some(ext => url.toLowerCase().endsWith(ext));
+    // Don't treat external video platforms (YouTube/Drive) as raw video files
+    if (url.includes('youtube.com') || url.includes('youtu.be') || url.includes('drive.google.com')) return false;
+    const videoRegex = /\.(mp4|webm|ogg|mov|m4v)(\?.*)?$/i;
+    return videoRegex.test(url);
 }
 
 function getEmbedUrl(url: string) {
@@ -24,6 +26,8 @@ function getEmbedUrl(url: string) {
     if (url.startsWith('/uploads/')) return url;
     try {
         const urlObj = new URL(url);
+
+        // YouTube Support
         if (urlObj.hostname.includes('youtube.com') || urlObj.hostname.includes('youtu.be')) {
             if (urlObj.hostname === 'youtu.be') {
                 return `https://www.youtube.com/embed${urlObj.pathname}`;
@@ -37,6 +41,16 @@ function getEmbedUrl(url: string) {
                 if (videoId) return `https://www.youtube.com/embed/${videoId}`;
             }
         }
+
+        // Google Drive Support
+        if (urlObj.hostname.includes('drive.google.com')) {
+            if (urlObj.pathname.includes('/file/d/')) {
+                const parts = urlObj.pathname.split('/');
+                const fileId = parts[parts.indexOf('d') + 1];
+                return `https://drive.google.com/file/d/${fileId}/preview`;
+            }
+        }
+
         return url;
     } catch (e) {
         return url;

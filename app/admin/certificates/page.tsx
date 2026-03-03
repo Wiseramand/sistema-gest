@@ -302,10 +302,10 @@ export default function CertificatesPage() {
                                             </div>
                                             <div className="cert-bottom-info">
                                                 <div className="cert-id-print">ID do Certificado: {viewingCert.id}</div>
-                                                <div className="cert-qrcode">
-                                                    {mounted && origin && (
+                                                <div className="cert-qrcode" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                                                    {mounted && (
                                                         <QRCodeSVG
-                                                            value={`${origin}/verify/${viewingCert.id}`}
+                                                            value={`${origin || (typeof window !== 'undefined' ? window.location.origin : '')}/verify/${viewingCert.id}`}
                                                             size={80}
                                                             level="H"
                                                             includeMargin={true}
@@ -440,7 +440,9 @@ export default function CertificatesPage() {
                     .overlay { background: white !important; backdrop-filter: none !important; position: static !important; padding: 0 !important; }
                     .certificate-modal { box-shadow: none !important; width: 100% !important; max-width: none !important; padding: 0 !important; margin: 0 !important; }
                     .cert-mockup { border: none !important; box-shadow: none !important; width: 100% !important; padding: 0 !important; }
-                }
++                    .cert-qrcode { display: block !important; visibility: visible !important; opacity: 1 !important; height: auto !important; width: auto !important; }
++                    .cert-qrcode svg { display: block !important; visibility: visible !important; }
+                 }
 
                 .overlay { position: fixed; inset: 0; background: rgba(0,20,50,0.5); backdrop-filter: blur(8px); display: flex; align-items: center; justify-content: center; z-index: 1000; padding: 1rem; }
                 .small-modal { background: white; width: 100%; max-width: 480px; border-radius: 16px; padding: 2rem; box-shadow: 0 20px 50px rgba(0,0,0,0.25); }
