@@ -301,17 +301,17 @@ export default function CertificatesPage() {
                                                 </div>
                                             </div>
                                             <div className="cert-bottom-info">
-                                                <div className="cert-id-print">ID do Certificado: {viewingCert.id}</div>
-                                                <div className="cert-qrcode" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                                                <div className="cert-id-print">ID: {viewingCert.id}</div>
+                                                <div className="cert-qr-container">
                                                     {mounted && (
                                                         <QRCodeSVG
                                                             value={`${origin || (typeof window !== 'undefined' ? window.location.origin : '')}/verify/${viewingCert.id}`}
-                                                            size={80}
+                                                            size={90}
                                                             level="H"
-                                                            includeMargin={true}
+                                                            includeMargin={false}
                                                         />
                                                     )}
-                                                    <div className="qr-text">Escaneie para validar</div>
+                                                    <div className="qr-text">VALIDAÇÃO DIGITAL</div>
                                                 </div>
                                             </div>
                                         </div>
@@ -423,10 +423,10 @@ export default function CertificatesPage() {
                 .seal-outer { width: 80px; height: 80px; border: 4px solid var(--sand-gold); border-radius: 50%; display: flex; align-items: center; justify-content: center; background: rgba(234, 179, 8, 0.1); transform: rotate(-10deg); }
                 .seal-inner { font-size: 0.6rem; font-weight: 900; color: var(--sand-gold); text-align: center; }
 
-                .cert-bottom-info { display: flex; justify-content: space-between; align-items: flex-end; width: 100%; margin-top: 1rem; }
-                .cert-id-print { font-size: 0.65rem; color: #aaa; }
-                .cert-qrcode { display: flex; flex-direction: column; align-items: center; gap: 0.25rem; }
-                .qr-text { font-size: 0.45rem; color: #666; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+                .cert-bottom-info { display: flex; justify-content: space-between; align-items: flex-end; width: 100%; border-top: 1px solid #eee; padding-top: 1rem; margin-top: 1rem; }
+                .cert-id-print { font-size: 0.65rem; color: #888; font-weight: 700; font-family: monospace; }
+                .cert-qr-container { display: flex; flex-direction: column; align-items: center; gap: 0.35rem; padding: 5px; background: white; border: 1px solid #f1f5f9; }
+                .qr-text { font-size: 0.45rem; color: var(--navy-deep); font-weight: 900; text-transform: uppercase; letter-spacing: 1px; }
 
                 .cert-modal-actions { display: flex; justify-content: center; gap: 1.5rem; margin-top: 2rem; }
                 .btn-print { background: var(--ocean-blue); color: white; border: none; padding: 0.85rem 2rem; border-radius: 50px; font-weight: 700; cursor: pointer; transition: 0.2s; box-shadow: 0 4px 12px rgba(0, 116, 217, 0.2); }

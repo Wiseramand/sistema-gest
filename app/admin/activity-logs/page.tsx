@@ -22,6 +22,12 @@ export default function ActivityLogsPage() {
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 15;
 
+    // Filters
+    const [filters, setFilters] = useState({
+        date: '',
+        user: ''
+    });
+
     useEffect(() => {
         const fetchLogs = async () => {
             try {
@@ -64,8 +70,14 @@ export default function ActivityLogsPage() {
         return 'badge-default';
     };
 
-    const totalPages = Math.ceil(logs.length / itemsPerPage);
-    const paginatedLogs = logs.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+    const filteredLogs = logs.filter(log => {
+        const matchUser = filters.user ? log.userName.toLowerCase().includes(filters.user.toLowerCase()) : true;
+        const matchDate = filters.date ? log.timestamp.startsWith(filters.date) : true;
+        return matchUser && matchDate;
+    });
+
+    const totalPages = Math.ceil(filteredLogs.length / itemsPerPage);
+    const paginatedLogs = filteredLogs.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
     return (
         <div className="activity-logs-container">
@@ -80,6 +92,26 @@ export default function ActivityLogsPage() {
                 >
                     <span>🖨️</span> Imprimir Relatório
                 </button>
+            </div>
+
+            <div className="filter-bar">
+                <div className="filter-item">
+                    <label>Filtrar por Usuário</label>
+                    <input
+                        type="text"
+                        placeholder="Nome do administrador..."
+                        value={filters.user}
+                        onChange={e => { setFilters({ ...filters, user: e.target.value }); setCurrentPage(1); }}
+                    />
+                </div>
+                <div className="filter-item">
+                    <label>Filtrar por Data</label>
+                    <input
+                        type="date"
+                        value={filters.date}
+                        onChange={e => { setFilters({ ...filters, date: e.target.value }); setCurrentPage(1); }}
+                    />
+                </div>
             </div>
 
             <div className="card log-table-card">
@@ -154,6 +186,19 @@ export default function ActivityLogsPage() {
                     flex-direction: column;
                     gap: 1.5rem;
                 }
+
+                .filter-bar {
+                    display: flex;
+                    gap: 1.5rem;
+                    background: white;
+                    padding: 1.25rem;
+                    border-radius: 12px;
+                    border: 1px solid #e2e8f0;
+                }
+                .filter-item { display: flex; flex-direction: column; gap: 0.4rem; flex: 1; }
+                .filter-item label { font-size: 0.7rem; font-weight: 800; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; }
+                .filter-item input { padding: 0.6rem 1rem; border-radius: 8px; border: 1.5px solid #e2e8f0; font-size: 0.85rem; background: #f8fafc; outline: none; }
+                .filter-item input:focus { border-color: var(--ocean-blue); background: white; }
 
                 .page-header {
                     display: flex;

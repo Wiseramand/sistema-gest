@@ -24,6 +24,12 @@ export default function AdminClassesPage() {
     const [classes, setClasses] = useState<ClassGroup[]>([]);
     const [loading, setLoading] = useState(true);
     const [selectedClass, setSelectedClass] = useState<ClassGroup | null>(null);
+    const [filters, setFilters] = useState({
+        course: '',
+        trainer: '',
+        startDate: '',
+        classroom: ''
+    });
 
     const fetchData = async () => {
         setLoading(true);
@@ -68,6 +74,14 @@ export default function AdminClassesPage() {
         }
     };
 
+    const filteredClasses = classes.filter(cls => {
+        const matchCourse = filters.course ? cls.course.toLowerCase().includes(filters.course.toLowerCase()) : true;
+        const matchTrainer = filters.trainer ? cls.trainer.toLowerCase().includes(filters.trainer.toLowerCase()) : true;
+        const matchDate = filters.startDate ? cls.startDate.includes(filters.startDate) : true;
+        const matchRoom = filters.classroom ? cls.classroom.toLowerCase().includes(filters.classroom.toLowerCase()) : true;
+        return matchCourse && matchTrainer && matchDate && matchRoom;
+    });
+
     useEffect(() => {
         fetchData();
     }, []);
@@ -107,11 +121,50 @@ export default function AdminClassesPage() {
                 </div>
             </div>
 
+            {/* Filters */}
+            <div className="filter-bar">
+                <div className="filter-item">
+                    <label>Curso</label>
+                    <input
+                        type="text"
+                        placeholder="Filtrar curso..."
+                        value={filters.course}
+                        onChange={e => setFilters({ ...filters, course: e.target.value })}
+                    />
+                </div>
+                <div className="filter-item">
+                    <label>Formador</label>
+                    <input
+                        type="text"
+                        placeholder="Filtrar formador..."
+                        value={filters.trainer}
+                        onChange={e => setFilters({ ...filters, trainer: e.target.value })}
+                    />
+                </div>
+                <div className="filter-item">
+                    <label>Data de Início</label>
+                    <input
+                        type="date"
+                        value={filters.startDate}
+                        onChange={e => setFilters({ ...filters, startDate: e.target.value })}
+                    />
+                </div>
+                <div className="filter-item">
+                    <label>Sala</label>
+                    <input
+                        type="text"
+                        placeholder="Filtrar sala..."
+                        value={filters.classroom}
+                        onChange={e => setFilters({ ...filters, classroom: e.target.value })}
+                    />
+                </div>
+            </div>
+
             {loading ? (
                 <div className="loader">A carregar turmas...</div>
             ) : (
                 <div className="classes-grid">
-                    {classes.map((cls) => (
+                    {filteredClasses.map((cls) => (
                         <div key={cls.id} className="class-card card" onClick={() => setSelectedClass(cls)}>
                             <div className="card-header">
                                 <span className="course-name">{cls.course}</span>
@@ -213,9 +266,15 @@ export default function AdminClassesPage() {
 
             <style jsx>{`
                 .page-wrapper { padding: 0.5rem; }
-                .page-top { margin-bottom: 2.5rem; }
+                .page-top { margin-bottom: 2rem; }
                 .page-top h1 { font-size: 1.8rem; color: var(--navy-deep); margin: 0.25rem 0; font-weight: 800; }
                 .page-top p { color: #64748b; margin: 0; font-size: 0.95rem; }
+
+                .filter-bar { background: white; padding: 1.5rem; border-radius: 16px; border: 1px solid #e2e8f0; display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1.5rem; margin-bottom: 2.5rem; }
+                .filter-item { display: flex; flex-direction: column; gap: 0.5rem; }
+                .filter-item label { font-size: 0.75rem; font-weight: 800; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; }
+                .filter-item input { padding: 0.75rem 1rem; border-radius: 10px; border: 1.5px solid #e2e8f0; font-size: 0.9rem; background: #f8fafc; color: var(--navy-deep); outline: none; transition: 0.2s; }
+                .filter-item input:focus { border-color: var(--ocean-blue); background: white; box-shadow: 0 0 0 4px rgba(0, 116, 217, 0.1); }
 
                 .loader { padding: 5rem; text-align: center; color: #94a3b8; font-weight: 600; }
                 .empty-state { grid-column: 1 / -1; text-align: center; padding: 4rem; background: white; border-radius: 16px; color: #94a3b8; border: 2px dashed #e2e8f0; }

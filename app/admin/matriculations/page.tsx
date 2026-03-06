@@ -220,6 +220,60 @@ export default function MatriculationPage() {
         printWindow.document.close();
     };
 
+    const handlePrintAll = () => {
+        const printWindow = window.open('', '_blank');
+        if (!printWindow) return alert('Por favor permita popups.');
+
+        const html = `
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <title>Relatório Geral de Matrículas</title>
+                <style>
+                    body { font-family: Arial, sans-serif; padding: 20px; }
+                    h2 { color: #001f3f; text-align: center; margin-bottom: 30px; }
+                    table { width: 100%; border-collapse: collapse; margin-top: 20px; font-size: 12px; }
+                    th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+                    th { background: #f8fafc; font-weight: bold; }
+                    .footer { margin-top: 30px; font-size: 10px; color: #666; text-align: right; }
+                    @media print { .no-print { display: none; } }
+                </style>
+            </head>
+            <body>
+                <h2>Relatório Geral de Matrículas</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Aluno</th>
+                            <th>Curso</th>
+                            <th>Formador</th>
+                            <th>Horário</th>
+                            <th>Status/Dívida</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${filteredMatriculations.map(m => `
+                            <tr>
+                                <td>${m.studentName}</td>
+                                <td>${m.course}</td>
+                                <td>${m.trainer}</td>
+                                <td>${m.startDate} | ${m.schedule}</td>
+                                <td>${m.paymentStatus} ${m.amountDue > 0 ? `(${m.amountDue} KZ)` : ''}</td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+                <div class="footer">Gerado em ${new Date().toLocaleString('pt-BR')}</div>
+                <script>window.onload = function() { window.print(); }</script>
+            </body>
+            </html>
+        `;
+
+        printWindow.document.open();
+        printWindow.document.write(html);
+        printWindow.document.close();
+    };
+
     const getPaymentClass = (status: string) => {
         if (!status) return 'pay-pending';
         const s = status.toLowerCase();
@@ -252,6 +306,9 @@ export default function MatriculationPage() {
                 </div>
                 <button className="new-btn" onClick={() => { setIsModalOpen(true); setSelectedStudent(null); setSearchQuery(''); }}>
                     + Nova Matrícula
+                </button>
+                <button className="print-report-btn" onClick={() => handlePrintAll()}>
+                    📊 Relatório Geral
                 </button>
             </div>
 
@@ -571,8 +628,11 @@ export default function MatriculationPage() {
                 .page-top h1 { font-size: 1.8rem; color: var(--navy-deep); margin: 0.25rem 0; font-weight: 800; }
                 .page-top p { color: #64748b; margin: 0; font-size: 0.95rem; }
 
-                .new-btn { background: var(--navy-deep); color: white; border: none; padding: 0.85rem 1.5rem; border-radius: 12px; font-weight: 700; font-size: 0.9rem; cursor: pointer; transition: 0.3s; white-space: nowrap; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.15); }
+                .new-btn { background: var(--navy-deep); color: white; border: none; padding: 0.85rem 1.5rem; border-radius: 12px; font-weight: 700; font-size: 0.9rem; cursor: pointer; transition: 0.3s; white-space: nowrap; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.15); margin-right: 0.75rem; }
                 .new-btn:hover { background: var(--ocean-blue); transform: translateY(-2px); }
+
+                .print-report-btn { background: white; color: var(--navy-deep); border: 1.5px solid var(--navy-deep); padding: 0.85rem 1.5rem; border-radius: 12px; font-weight: 700; font-size: 0.9rem; cursor: pointer; transition: 0.3s; }
+                .print-report-btn:hover { background: #f0f7ff; transform: translateY(-2px); }
 
                 .loader { text-align: center; padding: 4rem; color: #94a3b8; font-weight: 500; }
                 .empty-state { text-align: center; padding: 3rem; color: #94a3b8; font-weight: 500; }
