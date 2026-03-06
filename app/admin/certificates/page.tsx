@@ -484,7 +484,7 @@ export default function CertificatesPage() {
                 .btn-close-cert:hover { background: #e2e8f0; }
 
                 @media print {
-                    @page { size: landscape; margin: 0; }
+                    @page { size: A4 landscape; margin: 0; }
                     :global(body) { background: white !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
                     :global(.sidebar), :global(.admin-header), .page-top, .gen-panel, .stats-row, .table-wrap, .cert-modal-actions { display: none !important; }
                     .overlay { background: white !important; backdrop-filter: none !important; position: absolute !important; inset: 0 !important; display: block !important; padding: 0 !important; z-index: 9999 !important; }
