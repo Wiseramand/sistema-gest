@@ -8,7 +8,7 @@ import HeroCarousel from './components/HeroCarousel';
 
 export default function Home() {
   return (
-    <main>
+    <main style={{ paddingTop: '80px' }}>
       <Navbar />
 
       {/* Hero Section with Carousel */}

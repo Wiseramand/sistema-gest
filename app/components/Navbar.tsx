@@ -3,30 +3,32 @@
 import Link from 'next/link';
 
 export default function Navbar() {
-    return (
-        <nav className="navbar">
-            <div className="container nav-container">
-                <Link href="/" className="nav-logo">
-                    <span className="logo-icon">⚓</span>
-                    <div className="logo-text">
-                        <span className="main">MARÍTIMO</span>
-                        <span className="sub">Training Center</span>
-                    </div>
-                </Link>
-                <div className="nav-links">
-                    <Link href="/cursos">Cursos</Link>
-                    <Link href="/sobre">Sobre Nós</Link>
-                    <Link href="/contacto">Contacto</Link>
-                    <Link href="/login" className="btn btn-portal">Portal do Aluno</Link>
-                </div>
-            </div>
-            <style jsx>{`
+  return (
+    <nav className="navbar">
+      <div className="container nav-container">
+        <Link href="/" className="nav-logo">
+          <span className="logo-icon">⚓</span>
+          <div className="logo-text">
+            <span className="main">MARÍTIMO</span>
+            <span className="sub">Training Center</span>
+          </div>
+        </Link>
+        <div className="nav-links">
+          <Link href="/cursos">Cursos</Link>
+          <Link href="/sobre">Sobre Nós</Link>
+          <Link href="/contacto">Contacto</Link>
+          <Link href="/login" className="btn btn-portal">Portal do Aluno</Link>
+        </div>
+      </div>
+      <style jsx>{`
         .navbar {
           background: var(--navy-deep);
           color: white;
           padding: 1rem 0;
-          position: sticky;
+          position: fixed;
           top: 0;
+          left: 0;
+          width: 100%;
           z-index: 1000;
           box-shadow: var(--shadow-md);
         }
@@ -97,6 +99,6 @@ export default function Navbar() {
           .nav-links { display: none; }
         }
       `}</style>
-        </nav>
-    );
+    </nav>
+  );
 }
