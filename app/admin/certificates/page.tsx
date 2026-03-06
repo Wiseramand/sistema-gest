@@ -123,6 +123,12 @@ export default function CertificatesPage() {
         fetchAll();
     };
 
+    const handleDelete = async (id: string) => {
+        if (!confirm('Tens a certeza que desejas eliminar este certificado? Esta ação não pode ser desfeita.')) return;
+        await fetch(`/api/certificates/${id}`, { method: 'DELETE' });
+        fetchAll();
+    };
+
     const isExpiringSoon = (dateStr: string) => {
         if (!dateStr) return false;
         const expiryDate = new Date(dateStr);
@@ -254,6 +260,7 @@ export default function CertificatesPage() {
                                                     <button className="row-btn reject" onClick={() => setRejectModal({ id: cert.id, reason: '' })}>✗ Rejeitar</button>
                                                 </>
                                             )}
+                                            <button className="row-btn delete-mini" onClick={() => handleDelete(cert.id)} title="Eliminar">🗑️</button>
                                         </div>
                                     </td>
                                 </tr>
@@ -387,16 +394,17 @@ export default function CertificatesPage() {
                 .page-top h1 { font-size: 1.8rem; color: var(--navy-deep); margin: 0.25rem 0; font-weight: 800; }
                 .page-top p { color: #64748b; margin: 0; }
 
-                .gen-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 2rem; }
-                .gen-panel { background: linear-gradient(135deg, var(--navy-deep) 0%, #1e40af 100%); border-radius: 16px; padding: 1.5rem; display: flex; flex-direction: column; gap: 1.25rem; color: white; transition: 0.3s; border: 1px solid rgba(255,255,255,0.1); }
+                .gen-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 1.5rem; margin-bottom: 2rem; }
+                .gen-panel { background: linear-gradient(135deg, var(--navy-deep) 0%, #1e40af 100%); border-radius: 16px; padding: 1.5rem; display: flex; flex-direction: column; gap: 1.25rem; color: white; transition: 0.3s; border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
                 .gen-panel.student-panel { background: linear-gradient(135deg, #1e3a8a 0%, var(--navy-deep) 100%); }
-                .gen-info h3 { margin: 0 0 0.25rem; font-size: 1rem; font-weight: 800; display: flex; align-items: center; gap: 0.5rem; }
-                .gen-info p { margin: 0; font-size: 0.8rem; opacity: 0.8; }
-                .gen-controls { display: flex; gap: 0.75rem; width: 100%; }
-                .gen-controls select { flex: 1; padding: 0.65rem; border-radius: 8px; border: none; font-size: 0.85rem; background: white; color: var(--navy-deep); font-weight: 600; outline: none; }
-                .gen-btn { background: var(--sand-gold); color: var(--navy-deep); border: none; padding: 0.65rem 1.25rem; border-radius: 8px; font-weight: 800; cursor: pointer; transition: 0.2s; font-size: 0.85rem; white-space: nowrap; box-shadow: 0 4px 0 rgba(0,0,0,0.1); }
-                .gen-btn:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 6px 0 rgba(0,0,0,0.1); }
-                .gen-btn:disabled { opacity: 0.5; cursor: not-allowed; box-shadow: none; }
+                .gen-info h3 { margin: 0 0 0.25rem; font-size: 1.1rem; font-weight: 800; display: flex; align-items: center; gap: 0.6rem; }
+                .gen-info p { margin: 0; font-size: 0.85rem; opacity: 0.85; }
+                .gen-controls { display: flex; gap: 0.75rem; width: 100%; flex-wrap: wrap; }
+                .gen-controls select { flex: 1; min-width: 200px; padding: 0.75rem; border-radius: 10px; border: none; font-size: 0.9rem; background: white; color: var(--navy-deep); font-weight: 600; outline: none; box-shadow: inset 0 2px 4px rgba(0,0,0,0.05); }
+                .gen-btn { background: var(--sand-gold); color: var(--navy-deep); border: none; padding: 0.75rem 1.5rem; border-radius: 10px; font-weight: 800; cursor: pointer; transition: 0.2s; font-size: 0.9rem; white-space: nowrap; box-shadow: 0 4px 0 #b48a04; }
+                .gen-btn:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 6px 0 #b48a04; filter: brightness(1.1); }
+                .gen-btn:active:not(:disabled) { transform: translateY(2px); box-shadow: 0 0 0 #b48a04; }
+                .gen-btn:disabled { opacity: 0.5; cursor: not-allowed; box-shadow: none; transform: none; }
 
                 .stats-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem; margin-bottom: 2rem; }
                 .stat-card { background: white; border: 1px solid #e2e8f0; border-top: 4px solid; border-radius: 12px; padding: 1.5rem; transition: 0.2s; }
@@ -429,6 +437,8 @@ export default function CertificatesPage() {
                 .row-btn.reject:hover { background: #fee2e2; }
                 .row-btn.view { background: #f0f9ff; color: var(--ocean-blue); }
                 .row-btn.view:hover { background: #e0f2fe; }
+                .row-btn.delete-mini { background: #fff1f2; color: #e11d48; padding: 0.45rem; display: flex; align-items: center; justify-content: center; font-size: 1rem; }
+                .row-btn.delete-mini:hover { background: #ffe4e6; transform: scale(1.1); }
 
                 /* Certificate Mockup Styles */
                 .certificate-modal { background: white; width: 95%; max-width: 960px; border-radius: 20px; padding: 2rem; position: relative; max-height: 98vh; display: flex; flex-direction: column; overflow: hidden; }
@@ -474,14 +484,16 @@ export default function CertificatesPage() {
                 .btn-close-cert:hover { background: #e2e8f0; }
 
                 @media print {
-                    :global(body) { background: white !important; }
+                    @page { size: landscape; margin: 0; }
+                    :global(body) { background: white !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
                     :global(.sidebar), :global(.admin-header), .page-top, .gen-panel, .stats-row, .table-wrap, .cert-modal-actions { display: none !important; }
-                    .overlay { background: white !important; backdrop-filter: none !important; position: static !important; padding: 0 !important; }
-                    .certificate-modal { box-shadow: none !important; width: 100% !important; max-width: none !important; padding: 0 !important; margin: 0 !important; }
-                    .cert-mockup { border: none !important; box-shadow: none !important; width: 100% !important; padding: 0 !important; }
-+                    .cert-qrcode { display: block !important; visibility: visible !important; opacity: 1 !important; height: auto !important; width: auto !important; }
-+                    .cert-qrcode svg { display: block !important; visibility: visible !important; }
-                 }
+                    .overlay { background: white !important; backdrop-filter: none !important; position: absolute !important; inset: 0 !important; display: block !important; padding: 0 !important; z-index: 9999 !important; }
+                    .certificate-modal { box-shadow: none !important; width: 100vw !important; height: 100vh !important; max-width: none !important; padding: 0 !important; margin: 0 !important; border-radius: 0 !important; overflow: visible !important; display: block !important; }
+                    .cert-mockup { border: none !important; box-shadow: none !important; width: 297mm !important; height: 210mm !important; padding: 0 !important; margin: 0 auto !important; overflow: visible !important; border-radius: 0 !important; }
+                    .cert-border { height: 100% !important; min-height: 0 !important; }
+                    .cert-inner-border { height: calc(100% - 30px) !important; min-height: 0 !important; padding: 2.5rem !important; }
+                    .cert-qr-container svg { display: block !important; }
+                }
 
                 .overlay { position: fixed; inset: 0; background: rgba(0,20,50,0.5); backdrop-filter: blur(8px); display: flex; align-items: center; justify-content: center; z-index: 1000; padding: 1rem; }
                 .small-modal { background: white; width: 100%; max-width: 480px; border-radius: 16px; padding: 2rem; box-shadow: 0 20px 50px rgba(0,0,0,0.25); }
