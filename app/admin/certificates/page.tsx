@@ -484,15 +484,15 @@ export default function CertificatesPage() {
                 .btn-close-cert:hover { background: #e2e8f0; }
 
                 @media print {
-                    @page { size: A4 landscape; margin: 0; }
+                    @page { size: A4 portrait; margin: 0; }
                     :global(body) { background: white !important; margin: 0 !important; padding: 0 !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; overflow: hidden !important; }
                     :global(.sidebar), :global(.admin-header), .page-top, .gen-panel, .stats-row, .table-wrap, .cert-modal-actions { display: none !important; }
                     .overlay { background: white !important; backdrop-filter: none !important; position: absolute !important; inset: 0 !important; display: block !important; padding: 0 !important; z-index: 9999 !important; overflow: hidden !important; width: 100% !important; height: 100% !important; }
                     .certificate-modal { box-shadow: none !important; width: 100% !important; height: 100% !important; max-width: none !important; padding: 0 !important; margin: 0 !important; border-radius: 0 !important; overflow: hidden !important; display: block !important; position: absolute !important; inset: 0 !important; }
-                    .cert-mockup { border: none !important; box-shadow: none !important; width: 100vw !important; height: 100vh !important; padding: 0 !important; margin: 0 !important; overflow: hidden !important; border-radius: 0 !important; display: flex !important; flex-direction: column !important; box-sizing: border-box !important; break-inside: avoid !important; }
-                    .cert-border { height: 100% !important; width: 100% !important; min-height: 0 !important; box-sizing: border-box !important; border-width: 10px !important; }
-                    .cert-inner-border { height: 100% !important; width: 100% !important; min-height: 0 !important; padding: 2rem !important; box-sizing: border-box !important; }
-                    .cert-qr-container svg { display: block !important; max-width: 80px !important; max-height: 80px !important; }
+                    .cert-mockup { border: none !important; box-shadow: none !important; width: 100vw !important; height: 100vh !important; padding: 0 !important; margin: 0 !important; overflow: hidden !important; border-radius: 0 !important; display: flex !important; flex-direction: column !important; box-sizing: border-box !important; }
+                    .cert-border { height: 100% !important; width: 100% !important; min-height: 0 !important; box-sizing: border-box !important; border-width: 15px !important; }
+                    .cert-inner-border { height: 100% !important; width: 100% !important; min-height: 0 !important; padding: 3rem !important; box-sizing: border-box !important; }
+                    .cert-qr-container svg { display: block !important; max-width: 90px !important; max-height: 90px !important; }
                 }
 
                 .overlay { position: fixed; inset: 0; background: rgba(0,20,50,0.5); backdrop-filter: blur(8px); display: flex; align-items: center; justify-content: center; z-index: 1000; padding: 1rem; }
