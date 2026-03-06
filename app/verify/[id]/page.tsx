@@ -11,6 +11,7 @@ interface Certificate {
     status: string;
     approvedAt: string;
     validUntil: string;
+    trainingCenter?: string;
 }
 
 export default function VerifyCertificatePage() {
@@ -79,6 +80,10 @@ export default function VerifyCertificatePage() {
                             <div className="detail-row">
                                 <span className="label">Curso:</span>
                                 <span className="value">{cert.courseTitle}</span>
+                            </div>
+                            <div className="detail-row">
+                                <span className="label">Centro de Formação:</span>
+                                <span className="value">{cert.trainingCenter || 'Marítimo Training Center'}</span>
                             </div>
                             <div className="detail-row">
                                 <span className="label">Data de Emissão:</span>

@@ -481,6 +481,7 @@ export default function AdminLayout({
           min-width: 0;
           margin-left: 280px;
           transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          padding-top: 75px; /* Offset for fixed header */
         }
 
         .collapsed .admin-content {
@@ -488,14 +489,23 @@ export default function AdminLayout({
         }
 
         .admin-header {
+          position: fixed;
+          top: 0;
+          right: 0;
+          left: 280px;
           height: 75px;
           background-color: white;
           display: flex;
           align-items: center;
           justify-content: space-between;
           padding: 0 2.5rem;
-          box-shadow: 0 2px 5px rgba(0,0,0,0.02);
-          z-index: 50;
+          box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+          z-index: 999;
+          transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .collapsed .admin-header {
+          left: 80px;
         }
 
         .breadcrumb {

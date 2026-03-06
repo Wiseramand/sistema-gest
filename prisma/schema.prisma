@@ -165,6 +165,7 @@ model Certificate {
   approvedBy       String?
   rejectedAt       DateTime?
   rejectionReason  String?
+  trainingCenter   String    @default("Marítimo Training Center")
   createdAt        DateTime  @default(now())
   updatedAt        DateTime  @updatedAt
 }
