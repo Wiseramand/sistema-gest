@@ -33,6 +33,20 @@ export default function AdminFeedbacksPage() {
             });
     }, []);
 
+    // Filter states
+    const [filterDate, setFilterDate] = useState('');
+    const [filterMonth, setFilterMonth] = useState(''); // Format: YYYY-MM
+    const [filterCourse, setFilterCourse] = useState('');
+
+    const filteredFeedbacks = feedbacks.filter(f => {
+        const dateMatch = filterDate ? f.createdAt.startsWith(filterDate) : true;
+        const monthMatch = filterMonth ? f.createdAt.startsWith(filterMonth) : true;
+        const courseMatch = filterCourse ? f.courseTitle === filterCourse : true;
+        return dateMatch && monthMatch && courseMatch;
+    });
+
+    const courses = Array.from(new Set(feedbacks.map(f => f.courseTitle)));
+
     const handlePrintIndividual = (f: Feedback) => {
         setPrintingFeedback(f);
         // We use a small timeout to ensure the state update is rendered if needed,
@@ -51,6 +65,25 @@ export default function AdminFeedbacksPage() {
                     <h1>Relatórios de Satisfação</h1>
                     <p>Feedback detalhado dos alunos sobre a instituição, formadores e cursos.</p>
                 </div>
+            </div>
+
+            <div className="filter-bar no-print">
+                <div className="filter-group">
+                    <label>Data Específica:</label>
+                    <input type="date" value={filterDate} onChange={e => { setFilterDate(e.target.value); setFilterMonth(''); }} />
+                </div>
+                <div className="filter-group">
+                    <label>Mês:</label>
+                    <input type="month" value={filterMonth} onChange={e => { setFilterMonth(e.target.value); setFilterDate(''); }} />
+                </div>
+                <div className="filter-group">
+                    <label>Curso:</label>
+                    <select value={filterCourse} onChange={e => setFilterCourse(e.target.value)}>
+                        <option value="">Todos os Cursos</option>
+                        {courses.map(c => <option key={c} value={c}>{c}</option>)}
+                    </select>
+                </div>
+                <button className="reset-btn" onClick={() => { setFilterDate(''); setFilterMonth(''); setFilterCourse(''); }}>Limpar Filtros</button>
             </div>
 
             {/* Hidden Print Template for Individual Feedback */}
@@ -107,7 +140,7 @@ export default function AdminFeedbacksPage() {
             )}
 
             <div className="feedbacks-grid no-print">
-                {feedbacks.map(f => (
+                {filteredFeedbacks.map(f => (
                     <div key={f.id} className="feedback-card card shadow-sm">
                         <div className="card-header">
                             <div className="student-info">
@@ -157,10 +190,18 @@ export default function AdminFeedbacksPage() {
             </div>
 
             <style jsx>{`
-                .feedbacks-page { display: flex; flex-direction: column; gap: 2rem; }
+                .feedbacks-page { display: flex; flex-direction: column; gap: 1rem; }
                 .page-header { display: flex; justify-content: space-between; align-items: center; }
                 .page-header h1 { font-size: 1.8rem; color: var(--navy-deep); margin-bottom: 0.5rem; }
                 .page-header p { color: #64748b; font-size: 0.95rem; }
+
+                .filter-bar { display: flex; flex-wrap: wrap; gap: 1.5rem; background: white; padding: 1.5rem; border-radius: 12px; border: 1px solid #e2e8f0; align-items: flex-end; }
+                .filter-group { display: flex; flex-direction: column; gap: 0.5rem; flex: 1; min-width: 200px; }
+                .filter-group label { font-size: 0.75rem; font-weight: 800; color: #64748b; text-transform: uppercase; }
+                .filter-group input, .filter-group select { padding: 0.6rem; border: 1.5px solid #e2e8f0; border-radius: 8px; outline: none; transition: 0.2s; background: #f8fafc; font-size: 0.85rem; }
+                .filter-group input:focus, .filter-group select:focus { border-color: var(--ocean-blue); background: white; }
+                .reset-btn { padding: 0.6rem 1.2rem; background: #f1f5f9; color: #475569; border: none; border-radius: 8px; font-weight: 700; cursor: pointer; transition: 0.2s; font-size: 0.85rem; height: 38px; }
+                .reset-btn:hover { background: #e2e8f0; color: #1e293b; }
 
                 .feedbacks-grid { display: flex; flex-direction: column; gap: 1.5rem; }
                 

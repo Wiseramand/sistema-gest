@@ -3,7 +3,8 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { signOut, useSession } from 'next-auth/react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import LoadingOverlay from '../components/LoadingOverlay';
 
 export default function AdminLayout({
   children,
@@ -11,7 +12,18 @@ export default function AdminLayout({
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
+  const [isAppLoading, setIsAppLoading] = useState(true);
+
+  useEffect(() => {
+    // Artificial delay to ensure a smooth transition and prevent layout flash
+    const timer = setTimeout(() => {
+      setIsAppLoading(false);
+    }, 800);
+    return () => clearTimeout(timer);
+  }, [pathname]);
+
+  const isLoading = status === 'loading' || isAppLoading;
 
   interface NavItem {
     name: string;
@@ -56,7 +68,7 @@ export default function AdminLayout({
         { name: 'Registo de Atividades', href: '/admin/activity-logs', icon: '📜', superOnly: true },
         { name: 'Relatórios', href: '/admin/reports', icon: '📈', responsibility: 'reports' },
         { name: 'Feedbacks', href: '/admin/feedbacks', icon: '⭐' },
-        { name: 'Gestão de Admins', href: '/admin/admin-users', icon: '🔐', superOnly: true },]
+        { name: 'Gestão de Utilizador', href: '/admin/admin-users', icon: '🔐', superOnly: true },]
     }
   ];
 
@@ -79,6 +91,7 @@ export default function AdminLayout({
 
   return (
     <div className={`admin-container ${isCollapsed ? 'collapsed' : ''}`}>
+      {isLoading && <LoadingOverlay />}
       <aside className="sidebar">
         <div className="sidebar-inner">
           <div className="sidebar-header">

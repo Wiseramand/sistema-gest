@@ -125,19 +125,7 @@ function AttendanceListContent() {
                         <tr>
                             <th className="num-col">Nº</th>
                             <th className="name-col">Nome do Aluno</th>
-                            {attendanceDates.length > 0 ? (
-                                attendanceDates.map(date => (
-                                    <th key={date} className="sig-col">{new Date(date).toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' })}</th>
-                                ))
-                            ) : (
-                                <>
-                                    <th className="sig-col">_______</th>
-                                    <th className="sig-col">_______</th>
-                                    <th className="sig-col">_______</th>
-                                    <th className="sig-col">_______</th>
-                                    <th className="sig-col">_______</th>
-                                </>
-                            )}
+                            <th className="sig-col">Assinatura / Presença</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -146,54 +134,26 @@ function AttendanceListContent() {
                                 <tr key={student.id}>
                                     <td className="num-cell">{index + 1}</td>
                                     <td className="name-cell">{student.name}</td>
-                                    {attendanceDates.length > 0 ? (
-                                        attendanceDates.map(date => {
-                                            const record = attendanceData[student.id]?.[date] as any;
-                                            let display = '';
-                                            let color = 'inherit';
-
-                                            if (typeof record === 'string') {
-                                                if (record === 'PRESENT') display = 'P';
-                                                else if (record === 'ABSENT') { display = 'F'; color = 'red'; }
-                                                else if (record === 'LATE') { display = 'A'; color = 'orange'; }
-                                            } else if (record && typeof record === 'object') {
-                                                if (record.status === 'PRESENT') display = record.participated ? 'P*' : 'P';
-                                                else if (record.status === 'ABSENT') { display = 'F'; color = 'red'; }
-                                                else if (record.status === 'LATE') { display = 'A'; color = 'orange'; }
-                                            }
-
-                                            return <td key={date} style={{ textAlign: 'center', fontWeight: 'bold', color }}>{display}</td>;
-                                        })
-                                    ) : (
-                                        <>
-                                            <td></td><td></td><td></td><td></td><td></td>
-                                        </>
-                                    )}
+                                    <td className="sig-cell"></td>
                                 </tr>
                             ))
                         ) : (
                             <tr>
-                                <td colSpan={7} className="empty-row">Nenhum aluno matriculado neste curso.</td>
+                                <td colSpan={3} className="empty-row">Nenhum aluno matriculado neste curso.</td>
                             </tr>
                         )}
-                        {/* Add empty rows to fill the page if there are few students */}
-                        {Array.from({ length: Math.max(0, 15 - students.length) }).map((_, i) => (
+                        {/* Add empty rows to fill the page */}
+                        {Array.from({ length: Math.max(0, 25 - students.length) }).map((_, i) => (
                             <tr key={`empty-${i}`} className="empty-fill-row">
                                 <td className="num-cell"></td>
                                 <td className="name-cell"></td>
-                                {attendanceDates.length > 0 ? (
-                                    attendanceDates.map(date => <td key={`e-${date}`}></td>)
-                                ) : (
-                                    <><td></td><td></td><td></td><td></td><td></td></>
-                                )}
+                                <td className="sig-cell"></td>
                             </tr>
                         ))}
                     </tbody>
                 </table>
 
-                <div className="attendance-legend" style={{ fontSize: '0.7rem', color: '#64748b', marginBottom: '2rem' }}>
-                    <strong>Legenda:</strong> P = Presente | F = Falta | A = Atraso | P* = Presente com Participação Ativa
-                </div>
+
 
                 <div className="document-footer">
                     <div className="signature-area">

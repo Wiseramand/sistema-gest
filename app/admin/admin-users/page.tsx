@@ -139,10 +139,10 @@ export default function AdminUsersPage() {
             <div className="page-top">
                 <div>
                     <div className="maritime-accent"></div>
-                    <h1>Gestão de Administradores</h1>
-                    <p>Crie admins e atribua responsabilidades específicas no sistema.</p>
+                    <h1>Gestão de Utilizadores</h1>
+                    <p>Crie utilizadores e atribua responsabilidades específicas no sistema.</p>
                 </div>
-                <button className="new-btn" onClick={() => handleOpenModal()}>+ Novo Admin</button>
+                <button className="new-btn" onClick={() => handleOpenModal()}>+ Novo Utilizador</button>
             </div>
 
             {/* Role Legend */}

@@ -25,6 +25,11 @@ export default function StudentsPage() {
     const [editingStudent, setEditingStudent] = useState<Student | null>(null);
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
     const [uploading, setUploading] = useState(false);
+
+    // Pagination state
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 10;
+
     const [accessModal, setAccessModal] = useState<{ name: string; username: string; password: string; loading?: boolean } | null>(null);
     const [formData, setFormData] = useState({
         name: '', email: '', phone: '', status: 'Ativo',
@@ -162,6 +167,9 @@ export default function StudentsPage() {
         window.location.href = `mailto:${email}?subject=${subject}&body=${body}`;
     };
 
+    const totalPages = Math.ceil(students.length / itemsPerPage);
+    const paginatedStudents = students.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+
     return (
         <div className="page-wrapper">
             {/* Header */}
@@ -194,7 +202,7 @@ export default function StudentsPage() {
                             </tr>
                         </thead>
                         <tbody>
-                            {students.map((s) => (
+                            {paginatedStudents.map((s) => (
                                 <tr key={s.id}>
                                     <td>
                                         <div className="student-cell">
@@ -246,6 +254,25 @@ export default function StudentsPage() {
                         </tbody>
                     </table>
                     {students.length === 0 && <div className="empty-state">Nenhum aluno registado ainda.</div>}
+                    {totalPages > 1 && (
+                        <div className="pagination">
+                            <button
+                                className="page-btn"
+                                disabled={currentPage === 1}
+                                onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                            >
+                                Anterior
+                            </button>
+                            <span className="page-info">Página {currentPage} de {totalPages}</span>
+                            <button
+                                className="page-btn"
+                                disabled={currentPage === totalPages}
+                                onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                            >
+                                Próxima
+                            </button>
+                        </div>
+                    )}
                 </div>
             )}
 
@@ -431,6 +458,13 @@ export default function StudentsPage() {
                 .row-btn.edit:hover { background: #eff6ff; }
                 .row-btn.delete { color: #dc2626; }
                 .row-btn.delete:hover { background: #fef2f2; }
+
+                /* Pagination */
+                .pagination { display: flex; justify-content: space-between; align-items: center; padding: 1rem 1.5rem; border-top: 1px solid #e2e8f0; background: #f8fafc; }
+                .page-btn { padding: 0.5rem 1rem; border: 1px solid #cbd5e1; background: white; border-radius: 8px; font-weight: 600; font-size: 0.85rem; color: #475569; cursor: pointer; transition: 0.2s; }
+                .page-btn:hover:not(:disabled) { background: #f1f5f9; color: var(--navy-deep); }
+                .page-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+                .page-info { font-size: 0.85rem; color: #64748b; font-weight: 500; }
 
                 /* Modal */
                 .overlay { position: fixed; inset: 0; background: rgba(0,20,50,0.5); backdrop-filter: blur(8px); display: flex; align-items: center; justify-content: center; z-index: 1000; padding: 1rem; }

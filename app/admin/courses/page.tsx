@@ -49,6 +49,10 @@ export default function CoursesPage() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [uploading, setUploading] = useState(false);
 
+  // Pagination state
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 8;
+
   const fetchData = async () => {
     setLoading(true);
     try {
@@ -169,6 +173,9 @@ export default function CoursesPage() {
     }
   };
 
+  const totalPages = Math.ceil(courses.length / itemsPerPage);
+  const paginatedCourses = courses.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+
   return (
     <div className="page-wrapper">
       {/* Header */}
@@ -187,7 +194,7 @@ export default function CoursesPage() {
       ) : (
         <div className="courses-grid">
           {courses.length === 0 && <div className="empty">Nenhum curso cadastrado. Comece criando um novo!</div>}
-          {courses.map((course) => (
+          {paginatedCourses.map((course) => (
             <div key={course.id} className="course-card">
               <div className="card-top">
                 <span className={`badge ${course.status === 'Inscrições Abertas' ? 'badge-open' : course.status === 'Em andamento' ? 'badge-progress' : 'badge-done'}`}>
@@ -212,6 +219,26 @@ export default function CoursesPage() {
               </div>
             </div>
           ))}
+        </div>
+      )}
+
+      {totalPages > 1 && !loading && courses.length > 0 && (
+        <div className="pagination">
+          <button
+            className="page-btn"
+            disabled={currentPage === 1}
+            onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+          >
+            Anterior
+          </button>
+          <span className="page-info">Página {currentPage} de {totalPages}</span>
+          <button
+            className="page-btn"
+            disabled={currentPage === totalPages}
+            onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+          >
+            Próxima
+          </button>
         </div>
       )}
 
@@ -495,6 +522,13 @@ export default function CoursesPage() {
         .action-edit:hover { background: #e2e8f0; }
         .action-delete { background: #fef2f2; color: #dc2626; }
         .action-delete:hover { background: #fee2e2; }
+
+        /* Pagination */
+        .pagination { display: flex; justify-content: space-between; align-items: center; padding: 1rem 1.5rem; background: transparent; margin-top: 1.5rem; }
+        .page-btn { padding: 0.6rem 1.25rem; border: 1px solid #cbd5e1; background: white; border-radius: 8px; font-weight: 600; font-size: 0.85rem; color: #475569; cursor: pointer; transition: 0.2s; }
+        .page-btn:hover:not(:disabled) { background: #f1f5f9; color: var(--navy-deep); }
+        .page-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+        .page-info { font-size: 0.85rem; color: #64748b; font-weight: 500; }
 
         /* ===== Modal ===== */
         .overlay {
