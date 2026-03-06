@@ -16,20 +16,20 @@ export default function Footer() {
                 <div className="footer-links">
                     <h4>Navegação</h4>
                     <ul>
-                        <li><a href="#">Início</a></li>
-                        <li><a href="#">Nossos Cursos</a></li>
-                        <li><a href="#">Sobre a Instituição</a></li>
-                        <li><a href="#">Portal do Aluno</a></li>
+                        <li><a href="/">Início</a></li>
+                        <li><a href="/cursos">Nossos Cursos</a></li>
+                        <li><a href="/sobre">Sobre a Instituição</a></li>
+                        <li><a href="/login">Portal do Aluno</a></li>
                     </ul>
                 </div>
 
                 <div className="footer-links">
                     <h4>Suporte</h4>
                     <ul>
-                        <li><a href="#">Perguntas Frequentes</a></li>
-                        <li><a href="#">Política de Privacidade</a></li>
-                        <li><a href="#">Termos de Uso</a></li>
-                        <li><a href="#">Contacto</a></li>
+                        <li><a href="/faq">Perguntas Frequentes</a></li>
+                        <li><a href="/privacidade">Política de Privacidade</a></li>
+                        <li><a href="/termos">Termos de Uso</a></li>
+                        <li><a href="/contacto">Contacto</a></li>
                     </ul>
                 </div>
 
