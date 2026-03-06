@@ -31,6 +31,7 @@ export default function CertificatesPage() {
     const [loading, setLoading] = useState(true);
     const [statusFilter, setStatusFilter] = useState<'ALL' | 'PENDENTE' | 'APROVADO' | 'REJEITADO'>('ALL');
     const [genCourseId, setGenCourseId] = useState('');
+    const [genStudentId, setGenStudentId] = useState('');
     const [generating, setGenerating] = useState(false);
     const [rejectModal, setRejectModal] = useState<{ id: string; reason: string } | null>(null);
     const [viewingCert, setViewingCert] = useState<Certificate | null>(null);
@@ -71,6 +72,22 @@ export default function CertificatesPage() {
         });
         fetchAll();
         setGenCourseId('');
+        setGenerating(false);
+    };
+
+    const generateForStudent = async () => {
+        if (!genStudentId) return;
+        setGenerating(true);
+        const m = matriculations.find(m => m.id === genStudentId);
+        if (!m) { setGenerating(false); return; }
+
+        await fetch('/api/certificates', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ courseTitle: m.course, matriculationIds: [m.id] })
+        });
+        fetchAll();
+        setGenStudentId('');
         setGenerating(false);
     };
 
@@ -138,20 +155,40 @@ export default function CertificatesPage() {
                 </div>
             </div>
 
-            {/* Generation Panel */}
-            <div className="gen-panel">
-                <div className="gen-info">
-                    <h3>🎓 Gerar Certificados para Curso</h3>
-                    <p>Selecione um curso finalizado para gerar os certificados de todos os alunos matriculados.</p>
+            {/* Generation Panels */}
+            <div className="gen-grid">
+                <div className="gen-panel">
+                    <div className="gen-info">
+                        <h3>🎓 Por Curso</h3>
+                        <p>Gerar para todos os alunos de um curso.</p>
+                    </div>
+                    <div className="gen-controls">
+                        <select value={genCourseId} onChange={e => setGenCourseId(e.target.value)}>
+                            <option value="">Selecionar curso...</option>
+                            {courses.map(c => <option key={c.id} value={c.id}>{c.title}</option>)}
+                        </select>
+                        <button className="gen-btn" onClick={generateForCourse} disabled={!genCourseId || generating}>
+                            {generating ? '...' : 'Gerar Curso'}
+                        </button>
+                    </div>
                 </div>
-                <div className="gen-controls">
-                    <select value={genCourseId} onChange={e => setGenCourseId(e.target.value)}>
-                        <option value="">Selecionar curso...</option>
-                        {courses.map(c => <option key={c.id} value={c.id}>{c.title}</option>)}
-                    </select>
-                    <button className="gen-btn" onClick={generateForCourse} disabled={!genCourseId || generating}>
-                        {generating ? 'A gerar...' : '⚡ Gerar Certificados'}
-                    </button>
+
+                <div className="gen-panel student-panel">
+                    <div className="gen-info">
+                        <h3>👤 Por Aluno</h3>
+                        <p>Selecionar um aluno específico para gerar.</p>
+                    </div>
+                    <div className="gen-controls">
+                        <select value={genStudentId} onChange={e => setGenStudentId(e.target.value)}>
+                            <option value="">Selecionar aluno...</option>
+                            {matriculations.map(m => (
+                                <option key={m.id} value={m.id}>{m.studentName} - {m.course}</option>
+                            ))}
+                        </select>
+                        <button className="gen-btn" onClick={generateForStudent} disabled={!genStudentId || generating}>
+                            {generating ? '...' : 'Gerar Aluno'}
+                        </button>
+                    </div>
                 </div>
             </div>
 
@@ -350,14 +387,16 @@ export default function CertificatesPage() {
                 .page-top h1 { font-size: 1.8rem; color: var(--navy-deep); margin: 0.25rem 0; font-weight: 800; }
                 .page-top p { color: #64748b; margin: 0; }
 
-                .gen-panel { background: linear-gradient(135deg, var(--navy-deep) 0%, #1e40af 100%); border-radius: 16px; padding: 2rem; display: flex; justify-content: space-between; align-items: center; gap: 2rem; margin-bottom: 2rem; color: white; flex-wrap: wrap; }
-                .gen-info h3 { margin: 0 0 0.35rem; font-size: 1.1rem; }
-                .gen-info p { margin: 0; font-size: 0.88rem; opacity: 0.8; }
-                .gen-controls { display: flex; gap: 1rem; align-items: center; }
-                .gen-controls select { padding: 0.75rem 1rem; border-radius: 10px; border: none; font-size: 0.9rem; min-width: 220px; }
-                .gen-btn { background: var(--sand-gold); color: var(--navy-deep); border: none; padding: 0.75rem 1.5rem; border-radius: 10px; font-weight: 800; cursor: pointer; transition: 0.2s; white-space: nowrap; }
-                .gen-btn:hover:not(:disabled) { brightness: 1.1; transform: translateY(-1px); }
-                .gen-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+                .gen-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 2rem; }
+                .gen-panel { background: linear-gradient(135deg, var(--navy-deep) 0%, #1e40af 100%); border-radius: 16px; padding: 1.5rem; display: flex; flex-direction: column; gap: 1.25rem; color: white; transition: 0.3s; border: 1px solid rgba(255,255,255,0.1); }
+                .gen-panel.student-panel { background: linear-gradient(135deg, #1e3a8a 0%, var(--navy-deep) 100%); }
+                .gen-info h3 { margin: 0 0 0.25rem; font-size: 1rem; font-weight: 800; display: flex; align-items: center; gap: 0.5rem; }
+                .gen-info p { margin: 0; font-size: 0.8rem; opacity: 0.8; }
+                .gen-controls { display: flex; gap: 0.75rem; width: 100%; }
+                .gen-controls select { flex: 1; padding: 0.65rem; border-radius: 8px; border: none; font-size: 0.85rem; background: white; color: var(--navy-deep); font-weight: 600; outline: none; }
+                .gen-btn { background: var(--sand-gold); color: var(--navy-deep); border: none; padding: 0.65rem 1.25rem; border-radius: 8px; font-weight: 800; cursor: pointer; transition: 0.2s; font-size: 0.85rem; white-space: nowrap; box-shadow: 0 4px 0 rgba(0,0,0,0.1); }
+                .gen-btn:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 6px 0 rgba(0,0,0,0.1); }
+                .gen-btn:disabled { opacity: 0.5; cursor: not-allowed; box-shadow: none; }
 
                 .stats-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem; margin-bottom: 2rem; }
                 .stat-card { background: white; border: 1px solid #e2e8f0; border-top: 4px solid; border-radius: 12px; padding: 1.5rem; transition: 0.2s; }
@@ -392,43 +431,43 @@ export default function CertificatesPage() {
                 .row-btn.view:hover { background: #e0f2fe; }
 
                 /* Certificate Mockup Styles */
-                .certificate-modal { background: white; width: 95%; max-width: 900px; border-radius: 20px; padding: 2rem; position: relative; max-height: 95vh; overflow-y: auto; }
-                .cert-mockup { background: #fdfdfd; padding: 2rem; box-shadow: 0 0 20px rgba(0,0,0,0.1); border: 1px solid #ddd; position: relative; aspect-ratio: 1.414 / 1; }
-                .cert-border { border: 15px double var(--navy-deep); height: 100%; padding: 10px; box-sizing: border-box; }
-                .cert-inner-border { border: 2px solid var(--sand-gold); height: 100%; padding: 3rem; box-sizing: border-box; position: relative; display: flex; flex-direction: column; align-items: center; justify-content: space-between; text-align: center; overflow: hidden; }
+                .certificate-modal { background: white; width: 95%; max-width: 960px; border-radius: 20px; padding: 2rem; position: relative; max-height: 98vh; display: flex; flex-direction: column; overflow: hidden; }
+                .cert-mockup { background: #fdfdfd; padding: 2rem; box-shadow: 0 0 20px rgba(0,0,0,0.1); border: 1px solid #ddd; position: relative; width: 100%; height: auto; overflow-y: auto; flex: 1; margin-bottom: 1rem; border-radius: 10px; scrollbar-width: thin; scrollbar-color: var(--navy-deep) #f1f5f9; }
+                .cert-border { border: 15px double var(--navy-deep); min-height: 800px; padding: 10px; box-sizing: border-box; }
+                .cert-inner-border { border: 2px solid var(--sand-gold); min-height: 780px; padding: 2.5rem; box-sizing: border-box; position: relative; display: flex; flex-direction: column; align-items: center; justify-content: space-between; text-align: center; }
                 
-                .cert-watermark { position: absolute; font-size: 25rem; color: rgba(0,0,0,0.03); z-index: 0; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-15deg); pointer-events: none; }
-                .cert-content { position: relative; z-index: 1; width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: space-between; }
+                .cert-watermark { position: absolute; font-size: 20rem; color: rgba(0,0,0,0.02); z-index: 0; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-15deg); pointer-events: none; }
+                .cert-content { position: relative; z-index: 1; width: 100%; display: flex; flex-direction: column; height: 100%; }
 
                 .cert-header { margin-bottom: 1.5rem; }
                 .cert-logo { font-size: 3rem; margin-bottom: 0.5rem; }
-                .cert-institution { font-family: 'Georgia', serif; font-size: 2rem; font-weight: 900; color: var(--navy-deep); letter-spacing: 2px; }
-                .cert-subtitle { font-size: 0.8rem; font-weight: 700; color: var(--sand-gold); margin-top: 0.5rem; letter-spacing: 3px; }
+                .cert-institution { font-family: 'Georgia', serif; font-size: 1.8rem; font-weight: 900; color: var(--navy-deep); letter-spacing: 2px; }
+                .cert-subtitle { font-size: 0.75rem; font-weight: 700; color: var(--sand-gold); margin-top: 0.5rem; letter-spacing: 2px; }
 
-                .cert-body { margin: 2rem 0; }
-                .cert-title { font-family: 'Georgia', serif; font-size: 2.5rem; color: var(--navy-deep); font-weight: 800; margin-bottom: 2rem; position: relative; display: inline-block; }
-                .cert-title::after { content: ''; position: absolute; bottom: -10px; left: 50%; transform: translateX(-50%); width: 60%; height: 2px; background: var(--sand-gold); }
-                .cert-text { font-size: 1.1rem; color: #444; margin: 1rem 0; font-style: italic; }
-                .cert-student-name { font-family: 'Times New Roman', serif; font-size: 3rem; font-weight: 900; color: #000; margin: 1rem 0; text-decoration: underline; text-decoration-color: var(--sand-gold); text-underline-offset: 8px; }
-                .cert-course-name { font-size: 1.8rem; font-weight: 800; color: var(--navy-deep); margin: 0.5rem 0; }
+                .cert-body { margin: 1.5rem 0; flex: 1; display: flex; flex-direction: column; justify-content: center; }
+                .cert-title { font-family: 'Georgia', serif; font-size: 2.2rem; color: var(--navy-deep); font-weight: 800; margin-bottom: 1.5rem; position: relative; display: inline-block; }
+                .cert-title::after { content: ''; position: absolute; bottom: -8px; left: 50%; transform: translateX(-50%); width: 50%; height: 2px; background: var(--sand-gold); }
+                .cert-text { font-size: 1rem; color: #444; margin: 0.75rem 0; font-style: italic; }
+                .cert-student-name { font-family: 'Times New Roman', serif; font-size: 2.8rem; font-weight: 900; color: #000; margin: 1rem 0; text-decoration: underline; text-decoration-color: var(--sand-gold); text-underline-offset: 6px; }
+                .cert-course-name { font-size: 1.6rem; font-weight: 800; color: var(--navy-deep); margin: 0.4rem 0; }
 
                 .cert-footer { width: 100%; margin-top: 2rem; }
-                .cert-date { font-size: 1rem; font-weight: 600; color: #666; margin-bottom: 2rem; }
+                .cert-date { font-size: 0.9rem; font-weight: 600; color: #666; margin-bottom: 1.5rem; }
                 .cert-signatures { display: flex; justify-content: space-between; align-items: flex-end; width: 100%; margin-bottom: 1.5rem; }
-                .signature { width: 220px; }
+                .signature { width: 40%; }
                 .sig-line { border-top: 1px solid #000; margin-bottom: 0.5rem; width: 100%; }
-                .sig-name { font-size: 0.8rem; font-weight: 700; color: #333; }
+                .sig-name { font-size: 0.75rem; font-weight: 700; color: #333; }
                 
-                .cert-seal { width: 100px; height: 100px; display: flex; align-items: center; justify-content: center; position: relative; }
-                .seal-outer { width: 80px; height: 80px; border: 4px solid var(--sand-gold); border-radius: 50%; display: flex; align-items: center; justify-content: center; background: rgba(234, 179, 8, 0.1); transform: rotate(-10deg); }
-                .seal-inner { font-size: 0.6rem; font-weight: 900; color: var(--sand-gold); text-align: center; }
+                .cert-seal { width: 80px; height: 80px; display: flex; align-items: center; justify-content: center; position: relative; }
+                .seal-outer { width: 60px; height: 60px; border: 3px solid var(--sand-gold); border-radius: 50%; display: flex; align-items: center; justify-content: center; background: rgba(234, 179, 8, 0.1); transform: rotate(-10deg); }
+                .seal-inner { font-size: 0.5rem; font-weight: 900; color: var(--sand-gold); text-align: center; }
 
-                .cert-bottom-info { display: flex; justify-content: space-between; align-items: flex-end; width: 100%; border-top: 2px solid var(--navy-deep); padding-top: 1.5rem; margin-top: 1.5rem; }
-                .cert-id-print { font-size: 0.75rem; color: #444; font-weight: 800; font-family: monospace; }
-                .cert-qr-container { display: flex; flex-direction: column; align-items: center; gap: 0.5rem; padding: 10px; background: white; border: 2px solid var(--navy-deep); border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-                .qr-text { font-size: 0.5rem; color: var(--navy-deep); font-weight: 900; text-transform: uppercase; letter-spacing: 1.5px; }
+                .cert-bottom-info { display: flex; justify-content: space-between; align-items: flex-end; width: 100%; border-top: 2px solid var(--navy-deep); padding-top: 1rem; margin-top: 1rem; }
+                .cert-id-print { font-size: 0.7rem; color: #444; font-weight: 800; font-family: monospace; }
+                .cert-qr-container { display: flex; flex-direction: column; align-items: center; gap: 0.4rem; padding: 8px; background: white; border: 2px solid var(--navy-deep); border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+                .qr-text { font-size: 0.45rem; color: var(--navy-deep); font-weight: 900; text-transform: uppercase; letter-spacing: 1px; }
 
-                .cert-modal-actions { display: flex; justify-content: center; gap: 1.5rem; margin-top: 2rem; }
+                .cert-modal-actions { display: flex; justify-content: center; gap: 1rem; padding: 0.5rem 0; border-top: 1px solid #f1f5f9; }
                 .btn-print { background: var(--ocean-blue); color: white; border: none; padding: 0.85rem 2rem; border-radius: 50px; font-weight: 700; cursor: pointer; transition: 0.2s; box-shadow: 0 4px 12px rgba(0, 116, 217, 0.2); }
                 .btn-print:hover { background: var(--navy-deep); transform: translateY(-2px); }
                 .btn-close-cert { background: #f1f5f9; color: #64748b; border: none; padding: 0.85rem 2rem; border-radius: 50px; font-weight: 700; cursor: pointer; transition: 0.2s; }
