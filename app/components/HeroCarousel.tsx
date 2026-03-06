@@ -3,69 +3,69 @@
 import { useState, useEffect } from 'react';
 
 const banners = [
-    {
-        image: '/assets/hero/banner1.png',
-        title: 'Excelência em Formação Marítima',
-        subtitle: 'Liderando o caminho para uma navegação segura e profissional em águas globais.'
-    },
-    {
-        image: '/assets/hero/banner2.png',
-        title: 'Simuladores de Alta Tecnologia',
-        subtitle: 'Treine em ambientes controlados com a tecnologia mais avançada do mercado.'
-    },
-    {
-        image: '/assets/hero/banner3.png',
-        title: 'Segurança em Primeiro Lugar',
-        subtitle: 'Cursos práticos de sobrevivência e combate a incêndios com instrutores de elite.'
-    },
-    {
-        image: '/assets/hero/banner4.png',
-        title: 'Certificação Internacional',
-        subtitle: 'Sua carreira sem fronteiras. Diplomas reconhecidos por instituições mundiais.'
-    }
+  {
+    image: '/assets/hero/banner1.png',
+    title: 'Excelência em Formação Marítima',
+    subtitle: 'Liderando o caminho para uma navegação segura e profissional em águas globais.'
+  },
+  {
+    image: '/assets/hero/banner2.png',
+    title: 'Simuladores de Alta Tecnologia',
+    subtitle: 'Treine em ambientes controlados com a tecnologia mais avançada do mercado.'
+  },
+  {
+    image: '/assets/hero/banner3.png',
+    title: 'Segurança em Primeiro Lugar',
+    subtitle: 'Cursos práticos de sobrevivência e combate a incêndios com instrutores de elite.'
+  },
+  {
+    image: '/assets/hero/banner4.png',
+    title: 'Certificação Internacional',
+    subtitle: 'Sua carreira sem fronteiras. Diplomas reconhecidos por instituições mundiais.'
+  }
 ];
 
 export default function HeroCarousel() {
-    const [current, setCurrent] = useState(0);
+  const [current, setCurrent] = useState(0);
 
-    useEffect(() => {
-        const timer = setInterval(() => {
-            setCurrent(prev => (prev + 1) % banners.length);
-        }, 5000);
-        return () => clearInterval(timer);
-    }, []);
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrent(prev => (prev + 1) % banners.length);
+    }, 5000);
+    return () => clearInterval(timer);
+  }, []);
 
-    return (
-        <section className="hero-carousel">
-            {banners.map((banner, idx) => (
-                <div
-                    key={idx}
-                    className={`slide ${idx === current ? 'active' : ''}`}
-                    style={{ backgroundImage: `linear-gradient(rgba(0, 31, 63, 0.6), rgba(0, 31, 63, 0.6)), url(${banner.image})` }}
-                >
-                    <div className="container slide-content">
-                        <div className="maritime-accent"></div>
-                        <h1>{banner.title}</h1>
-                        <p className="hero-subtitle">{banner.subtitle}</p>
-                        <div className="hero-actions">
-                            <a href="#inscrever" className="btn btn-primary">Inscreva-se Agora</a>
-                            <a href="/cursos" className="btn btn-outline-white">Conheça Nossos Cursos</a>
-                        </div>
-                    </div>
-                </div>
-            ))}
-
-            <div className="carousel-dots">
-                {banners.map((_, idx) => (
-                    <button
-                        key={idx}
-                        className={`dot ${idx === current ? 'active' : ''}`}
-                        onClick={() => setCurrent(idx)}
-                    ></button>
-                ))}
+  return (
+    <section className="hero-carousel">
+      {banners.map((banner, idx) => (
+        <div
+          key={idx}
+          className={`slide ${idx === current ? 'active' : ''}`}
+          style={{ backgroundImage: `linear-gradient(rgba(0, 31, 63, 0.6), rgba(0, 31, 63, 0.6)), url(${banner.image})` }}
+        >
+          <div className="container slide-content">
+            <div className="maritime-accent"></div>
+            <h1>{banner.title}</h1>
+            <p className="hero-subtitle">{banner.subtitle}</p>
+            <div className="hero-actions">
+              <a href="#inscrever" className="btn btn-primary">Inscreva-se agora</a>
+              <a href="/cursos" className="btn btn-outline-white">Conheça nossos cursos</a>
             </div>
+          </div>
+        </div>
+      ))}
 
-            <style jsx>{`
+      <div className="carousel-dots">
+        {banners.map((_, idx) => (
+          <button
+            key={idx}
+            className={`dot ${idx === current ? 'active' : ''}`}
+            onClick={() => setCurrent(idx)}
+          ></button>
+        ))}
+      </div>
+
+      <style jsx>{`
         .hero-carousel {
           position: relative;
           height: 600px;
@@ -156,6 +156,6 @@ export default function HeroCarousel() {
           .hero-actions { flex-direction: column; gap: 1rem; }
         }
       `}</style>
-        </section>
-    );
+    </section>
+  );
 }
