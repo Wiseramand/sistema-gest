@@ -84,6 +84,23 @@ export async function POST(request: Request) {
             );
         } catch (e) { }
 
+        // 4. Create a notification for the student
+        try {
+            const courseName = data.courseTitle || data.course || 'um curso';
+            const startInfo = data.startDate ? ` com início em ${new Date(data.startDate).toLocaleDateString('pt-BR')}` : '';
+            await (db as any).notification.create({
+                data: {
+                    studentId: data.studentId,
+                    title: '🎓 Matrícula Confirmada!',
+                    message: `Você foi matriculado no curso "${courseName}"${startInfo}. Aceda ao seu portal para ver os detalhes e descarregar o comprovante.`,
+                    type: 'MATRICULATION',
+                    read: false
+                }
+            });
+        } catch (notifErr) {
+            console.error('Failed to create student notification:', notifErr);
+        }
+
         return NextResponse.json(newMatriculation);
     } catch (error: any) {
         console.error('Matriculation Create Error:', error);

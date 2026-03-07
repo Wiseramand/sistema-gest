@@ -35,7 +35,7 @@ export default function SobrePage() {
                             </div>
                         </div>
                     </div>
-                    <div className="about-image card shadow-premium" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1517245318728-ebe6e4fc3483?q=80&w=1200&auto=format&fit=crop')" }}>
+                    <div className="about-image card shadow-premium" style={{ backgroundImage: "url('/assets/hero/banner4.png')" }}>
                     </div>
                 </div>
             </section>

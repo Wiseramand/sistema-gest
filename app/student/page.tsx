@@ -165,6 +165,65 @@ export default function StudentDashboard() {
         }
     };
 
+    const handlePrintReceipt = (en: Enrollment) => {
+        const printWindow = window.open('', '_blank');
+        if (!printWindow) return alert('Por favor permita popups para imprimir o comprovante.');
+        const html = `
+            <!DOCTYPE html>
+            <html lang="pt">
+            <head>
+                <meta charset="UTF-8">
+                <title>Comprovante de Matrícula</title>
+                <style>
+                    * { box-sizing: border-box; margin: 0; padding: 0; }
+                    body { font-family: 'Helvetica Neue', Arial, sans-serif; color: #1a1a2e; padding: 40px; background: white; }
+                    .header { text-align: center; border-bottom: 3px solid #003d7a; padding-bottom: 24px; margin-bottom: 32px; }
+                    .header .logo { font-size: 2rem; margin-bottom: 8px; }
+                    .header h1 { color: #003d7a; font-size: 1.4rem; text-transform: uppercase; letter-spacing: 2px; }
+                    .header p { color: #64748b; font-size: 0.85rem; margin-top: 4px; }
+                    .badge { display: inline-block; background: #ecfdf5; color: #065f46; border: 1px solid #6ee7b7; border-radius: 20px; padding: 4px 16px; font-size: 0.75rem; font-weight: 700; margin-bottom: 24px; }
+                    .table { width: 100%; border-collapse: collapse; border-radius: 8px; overflow: hidden; border: 1px solid #e2e8f0; }
+                    .table tr:nth-child(even) { background: #f8fafc; }
+                    .table td { padding: 12px 18px; font-size: 0.9rem; border-bottom: 1px solid #f1f5f9; }
+                    .table td:first-child { font-weight: 700; color: #475569; width: 40%; }
+                    .table tr:last-child td { border-bottom: none; }
+                    .sig { margin-top: 60px; display: flex; justify-content: space-around; }
+                    .sig-box { text-align: center; width: 200px; }
+                    .sig-line { border-top: 1px solid #333; padding-top: 8px; font-size: 0.8rem; color: #475569; }
+                    .footer { margin-top: 40px; text-align: center; font-size: 0.75rem; color: #94a3b8; border-top: 1px solid #e2e8f0; padding-top: 16px; }
+                    @media print { body { padding: 20px; } }
+                </style>
+            </head>
+            <body>
+                <div class="header">
+                    <div class="logo">⚓</div>
+                    <h1>Centro de Treinamento Marítimo</h1>
+                    <p>Comprovante Oficial de Matrícula</p>
+                </div>
+                <div style="text-align:center"><span class="badge">✅ Matrícula Confirmada</span></div>
+                <table class="table">
+                    <tr><td>Aluno</td><td>${session?.user?.name || '—'}</td></tr>
+                    <tr><td>Curso / Formação</td><td>${en.course || '—'}</td></tr>
+                    <tr><td>Sala / Convés</td><td>${en.classroom || 'A designar'}</td></tr>
+                    <tr><td>Formador</td><td>${en.trainer || 'A designar'}</td></tr>
+                    <tr><td>Horário</td><td>${en.schedule || 'A designar'}</td></tr>
+                    <tr><td>Data de Início</td><td>${en.startDate || 'A designar'}</td></tr>
+                    <tr><td>Estado do Pagamento</td><td>${en.paymentStatus || 'Pendente'}${en.amountDue > 0 ? ' — Dívida: ' + en.amountDue + ' KZ' : ''}</td></tr>
+                    <tr><td>Data de Emissão</td><td>${new Date().toLocaleDateString('pt-BR')}</td></tr>
+                </table>
+                <div class="sig">
+                    <div class="sig-box"><div class="sig-line">Assinatura do Aluno</div></div>
+                    <div class="sig-box"><div class="sig-line">Diretor de Formação</div></div>
+                </div>
+                <div class="footer">Documento emitido pelo Sistema de Gestão Académica Maritimo Training Center<br>Não dispensa validação institucional em caso de litígios.</div>
+                <script>window.onload = function() { window.print(); }<\/script>
+            </body>
+            </html>`;
+        printWindow.document.open();
+        printWindow.document.write(html);
+        printWindow.document.close();
+    };
+
     return (
         <div className="student-dashboard container">
             <div className="dashboard-header">
@@ -221,6 +280,14 @@ export default function StudentDashboard() {
                                             </div>
                                         </div>
                                     )}
+
+                                    <button
+                                        className="btn-comprovante"
+                                        onClick={() => handlePrintReceipt(en)}
+                                        title="Descarregar comprovante de matrícula em PDF"
+                                    >
+                                        📄 Comprovante de Matrícula
+                                    </button>
 
                                     <div className="materials-section">
                                         <h4>📚 Materiais e Recursos</h4>
@@ -369,6 +436,9 @@ export default function StudentDashboard() {
         .student-material-item span { font-size: 0.85rem; font-weight: 700; color: var(--navy-medium); }
         .btn-read { background: var(--navy-medium); color: white; border: none; padding: 0.4rem 0.8rem; border-radius: 6px; font-size: 0.75rem; font-weight: 700; cursor: pointer; transition: 0.2s; }
         .btn-read:hover { background: var(--ocean-blue); }
+
+        .btn-comprovante { display: flex; align-items: center; gap: 0.5rem; background: linear-gradient(135deg, #0f172a, #1e3a5f); color: white; border: none; padding: 0.65rem 1.25rem; border-radius: 10px; font-size: 0.82rem; font-weight: 700; cursor: pointer; transition: 0.3s; box-shadow: 0 4px 10px rgba(0,0,0,0.12); width: 100%; justify-content: center; }
+        .btn-comprovante:hover { background: linear-gradient(135deg, #1e3a5f, #0074d9); transform: translateY(-2px); box-shadow: 0 6px 16px rgba(0,116,217,0.25); }
 
         /* Reader Modal */
         .material-reader-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(8px); display: flex; align-items: center; justify-content: center; z-index: 2000; padding: 2rem; }

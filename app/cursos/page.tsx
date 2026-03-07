@@ -25,7 +25,7 @@ const courses = [
         title: 'Combate a Incêndio Avançado',
         category: 'Técnico',
         duration: '40 horas',
-        image: 'https://images.unsplash.com/photo-1533903345206-13a89ce8fd0a?q=80&w=1200&auto=format&fit=crop',
+        image: '/assets/hero/banner3.png',
         description: 'Treinamento intensivo para liderança em equipes de resposta a emergências.'
     },
     {
@@ -33,7 +33,7 @@ const courses = [
         title: 'Inglês Marítimo',
         category: 'Linguagem',
         duration: '3 meses',
-        image: 'https://images.unsplash.com/photo-1454165833767-027ffea10c3b?q=80&w=1200&auto=format&fit=crop',
+        image: '/assets/hero/banner1.png',
         description: 'Comunicação rádio e terminologia técnica padrão da IMO.'
     }
 ];

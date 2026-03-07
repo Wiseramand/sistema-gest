@@ -1,5 +1,6 @@
 'use client';
 
+import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { signOut, useSession } from 'next-auth/react';
@@ -11,12 +12,60 @@ export default function StudentLayout({
 }) {
     const pathname = usePathname();
     const { data: session, status } = useSession();
+    const [notifications, setNotifications] = useState<any[]>([]);
+    const [notifOpen, setNotifOpen] = useState(false);
+    const notifRef = useRef<HTMLDivElement>(null);
+
+    const user = session?.user as any;
+    const userId = user?.id;
+    const unreadCount = notifications.filter((n: any) => !n.read).length;
+
+    useEffect(() => {
+        if (!userId) return;
+        const fetchNotifications = async () => {
+            try {
+                const res = await fetch(`/api/notifications?studentId=${userId}`);
+                if (res.ok) {
+                    const data = await res.json();
+                    setNotifications(Array.isArray(data) ? data : []);
+                }
+            } catch (e) { console.error(e); }
+        };
+        fetchNotifications();
+        const interval = setInterval(fetchNotifications, 30000);
+        return () => clearInterval(interval);
+    }, [userId]);
+
+    useEffect(() => {
+        const handleClickOutside = (e: MouseEvent) => {
+            if (notifRef.current && !notifRef.current.contains(e.target as Node)) {
+                setNotifOpen(false);
+            }
+        };
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+    }, []);
+
+    const handleMarkRead = async (id: string) => {
+        try {
+            await fetch(`/api/notifications/${id}`, {
+                method: 'PATCH',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ read: true })
+            });
+            setNotifications(prev => prev.map((n: any) => n.id === id ? { ...n, read: true } : n));
+        } catch (e) { console.error(e); }
+    };
+
+    const handleMarkAllRead = async () => {
+        const unread = notifications.filter((n: any) => !n.read);
+        for (const n of unread) { await handleMarkRead(n.id); }
+    };
 
     if (status === 'loading') {
         return <div className="loading-portal">A carregar portal...</div>;
     }
 
-    const user = session?.user as any;
     const isStudent = user?.role === 'STUDENT';
 
     if (!isStudent) {
@@ -104,6 +153,56 @@ export default function StudentLayout({
                     </div>
 
                     <div className="header-right">
+                        {/* Notification Bell */}
+                        <div className="notif-wrapper" ref={notifRef}>
+                            <button
+                                className="notif-bell"
+                                onClick={() => setNotifOpen(o => !o)}
+                                title="Notificações"
+                            >
+                                🔔
+                                {unreadCount > 0 && (
+                                    <span className="notif-badge">{unreadCount > 9 ? '9+' : unreadCount}</span>
+                                )}
+                            </button>
+
+                            {notifOpen && (
+                                <div className="notif-dropdown">
+                                    <div className="notif-header">
+                                        <span className="notif-title">Notificações</span>
+                                        {unreadCount > 0 && (
+                                            <button className="mark-all-btn" onClick={handleMarkAllRead}>
+                                                Marcar todas como lidas
+                                            </button>
+                                        )}
+                                    </div>
+                                    <div className="notif-list">
+                                        {notifications.length === 0 ? (
+                                            <div className="notif-empty">Nenhuma notificação.</div>
+                                        ) : (
+                                            notifications.map((n: any) => (
+                                                <div
+                                                    key={n.id}
+                                                    className={`notif-item ${n.read ? 'read' : 'unread'}`}
+                                                    onClick={() => !n.read && handleMarkRead(n.id)}
+                                                >
+                                                    <div className="notif-icon">
+                                                        {n.type === 'MATRICULATION' ? '🎓' : '📢'}
+                                                    </div>
+                                                    <div className="notif-content">
+                                                        <strong>{n.title}</strong>
+                                                        <p>{n.message}</p>
+                                                        <small>{new Date(n.createdAt).toLocaleDateString('pt-BR', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' })}</small>
+                                                    </div>
+                                                    {!n.read && <span className="notif-dot"></span>}
+                                                </div>
+                                            ))
+                                        )}
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+
                         <div className="user-profile">
                             <div className="user-info">
                                 <span className="user-name">{session?.user?.name || 'Aluno'}</span>
@@ -321,6 +420,9 @@ export default function StudentLayout({
                     justify-content: space-between;
                     padding: 0 2rem;
                     border-bottom: 1px solid #e2e8f0;
+                    position: sticky;
+                    top: 0;
+                    z-index: 50;
                 }
 
                 .breadcrumb {
@@ -332,6 +434,154 @@ export default function StudentLayout({
                 .header-right {
                     display: flex;
                     align-items: center;
+                    gap: 1rem;
+                }
+
+                /* Notification Bell */
+                .notif-wrapper {
+                    position: relative;
+                }
+
+                .notif-bell {
+                    position: relative;
+                    background: #f1f5f9;
+                    border: none;
+                    border-radius: 50%;
+                    width: 40px;
+                    height: 40px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-size: 1.1rem;
+                    cursor: pointer;
+                    transition: 0.2s;
+                }
+                .notif-bell:hover { background: #e2e8f0; }
+
+                .notif-badge {
+                    position: absolute;
+                    top: -4px;
+                    right: -4px;
+                    background: #ef4444;
+                    color: white;
+                    font-size: 0.6rem;
+                    font-weight: 800;
+                    width: 18px;
+                    height: 18px;
+                    border-radius: 50%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    border: 2px solid white;
+                    animation: pulse-badge 2s ease-in-out infinite;
+                }
+
+                @keyframes pulse-badge {
+                    0%, 100% { transform: scale(1); }
+                    50% { transform: scale(1.15); }
+                }
+
+                .notif-dropdown {
+                    position: absolute;
+                    top: calc(100% + 10px);
+                    right: 0;
+                    width: 360px;
+                    background: white;
+                    border-radius: 16px;
+                    box-shadow: 0 20px 50px -10px rgba(0,0,0,0.2);
+                    border: 1px solid #e2e8f0;
+                    z-index: 200;
+                    overflow: hidden;
+                    animation: dropIn 0.2s ease-out;
+                }
+
+                @keyframes dropIn {
+                    from { opacity: 0; transform: translateY(-8px); }
+                    to { opacity: 1; transform: translateY(0); }
+                }
+
+                .notif-header {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    padding: 1rem 1.25rem;
+                    border-bottom: 1px solid #f1f5f9;
+                    background: #f8fafc;
+                }
+
+                .notif-title {
+                    font-weight: 800;
+                    font-size: 0.9rem;
+                    color: #0f172a;
+                }
+
+                .mark-all-btn {
+                    background: none;
+                    border: none;
+                    color: #3b82f6;
+                    font-size: 0.75rem;
+                    font-weight: 700;
+                    cursor: pointer;
+                    padding: 0.25rem 0.5rem;
+                    border-radius: 6px;
+                    transition: 0.2s;
+                }
+                .mark-all-btn:hover { background: #eff6ff; }
+
+                .notif-list {
+                    max-height: 360px;
+                    overflow-y: auto;
+                }
+
+                .notif-empty {
+                    padding: 2rem;
+                    text-align: center;
+                    color: #94a3b8;
+                    font-size: 0.88rem;
+                }
+
+                .notif-item {
+                    display: flex;
+                    gap: 0.875rem;
+                    padding: 1rem 1.25rem;
+                    border-bottom: 1px solid #f8fafc;
+                    cursor: pointer;
+                    transition: background 0.15s;
+                    position: relative;
+                }
+
+                .notif-item:last-child { border-bottom: none; }
+                .notif-item:hover { background: #f8fafc; }
+                .notif-item.unread { background: #eff6ff; }
+                .notif-item.unread:hover { background: #dbeafe; }
+
+                .notif-icon {
+                    font-size: 1.4rem;
+                    flex-shrink: 0;
+                    width: 36px;
+                    height: 36px;
+                    background: white;
+                    border-radius: 10px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+                }
+
+                .notif-content { flex: 1; min-width: 0; }
+                .notif-content strong { display: block; font-size: 0.85rem; color: #0f172a; margin-bottom: 0.2rem; }
+                .notif-content p { font-size: 0.78rem; color: #64748b; margin: 0 0 0.25rem; line-height: 1.4; }
+                .notif-content small { font-size: 0.7rem; color: #94a3b8; }
+
+                .notif-dot {
+                    position: absolute;
+                    top: 1rem;
+                    right: 1rem;
+                    width: 8px;
+                    height: 8px;
+                    border-radius: 50%;
+                    background: #3b82f6;
+                    flex-shrink: 0;
                 }
 
                 .user-profile {
@@ -382,6 +632,7 @@ export default function StudentLayout({
                     .nav-text, .nav-label, .logo-text, .user-info { display: none; }
                     .sidebar-header, .nav-item { justify-content: center; padding: 1rem; }
                     .nav-icon { margin: 0; }
+                    .notif-dropdown { right: -80px; width: 300px; }
                 }
             `}</style>
         </div>

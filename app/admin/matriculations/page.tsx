@@ -20,6 +20,7 @@ interface Matriculation {
     studentId: string;
     studentName: string;
     course: string;
+    courseTitle?: string;
     classroom: string;
     trainer: string;
     schedule: string;
@@ -39,6 +40,7 @@ export default function MatriculationPage() {
     });
     const [loading, setLoading] = useState(true);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [receiptMatriculation, setReceiptMatriculation] = useState<Matriculation | null>(null);
     const [searchQuery, setSearchQuery] = useState('');
     const [selectedStudent, setSelectedStudent] = useState<Student | null>(null);
     const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
@@ -108,11 +110,14 @@ export default function MatriculationPage() {
                 })
             });
             if (res.ok) {
+                const created = await res.json();
                 setIsModalOpen(false);
                 setSelectedStudent(null);
                 setSearchQuery('');
                 setFormData({ course: '', classroom: '', trainer: '', schedule: '', duration: '', startDate: '', paymentStatus: 'Pendente', amountDue: 0 });
                 fetchData();
+                // Show receipt modal with the newly created matriculation
+                setReceiptMatriculation(created);
             } else {
                 const errorData = await res.json();
                 alert(`Erro ao criar matrícula: ${errorData.error || 'Verifique a ligação à API.'}\n${errorData.details || ''}`);
@@ -439,6 +444,81 @@ export default function MatriculationPage() {
                 </div>
             )}
 
+            {/* Receipt Modal - shown after creating a matriculation */}
+            {receiptMatriculation && (
+                <div className="overlay">
+                    <div className="modal-box receipt-modal">
+                        <div className="modal-top">
+                            <div>
+                                <span className="badge-mini">✅ Matrícula Efectuada com Sucesso</span>
+                                <h2>Comprovante de Matrícula</h2>
+                            </div>
+                            <button className="close-x" onClick={() => setReceiptMatriculation(null)}>×</button>
+                        </div>
+
+                        <div className="receipt-body">
+                            <div className="receipt-success-banner">
+                                <span className="receipt-check">🎓</span>
+                                <div>
+                                    <strong>{receiptMatriculation.studentName}</strong>
+                                    <span>foi matriculado com sucesso e recebeu uma notificação no seu portal.</span>
+                                </div>
+                            </div>
+
+                            <div className="receipt-grid">
+                                <div className="receipt-row">
+                                    <span className="receipt-label">ID da Matrícula</span>
+                                    <span className="receipt-value mono">{receiptMatriculation.id?.substring(0, 16)}...</span>
+                                </div>
+                                <div className="receipt-row">
+                                    <span className="receipt-label">Aluno</span>
+                                    <span className="receipt-value">{receiptMatriculation.studentName || '—'}</span>
+                                </div>
+                                <div className="receipt-row">
+                                    <span className="receipt-label">Curso / Formação</span>
+                                    <span className="receipt-value">{receiptMatriculation.course || receiptMatriculation.courseTitle || '—'}</span>
+                                </div>
+                                <div className="receipt-row">
+                                    <span className="receipt-label">Sala / Convés</span>
+                                    <span className="receipt-value">{receiptMatriculation.classroom || 'A designar'}</span>
+                                </div>
+                                <div className="receipt-row">
+                                    <span className="receipt-label">Formador</span>
+                                    <span className="receipt-value">{receiptMatriculation.trainer || 'A designar'}</span>
+                                </div>
+                                <div className="receipt-row">
+                                    <span className="receipt-label">Horário</span>
+                                    <span className="receipt-value">{receiptMatriculation.schedule || 'A designar'}</span>
+                                </div>
+                                <div className="receipt-row">
+                                    <span className="receipt-label">Data de Início</span>
+                                    <span className="receipt-value">{receiptMatriculation.startDate ? new Date(receiptMatriculation.startDate).toLocaleDateString('pt-BR') : 'A designar'}</span>
+                                </div>
+                                <div className="receipt-row">
+                                    <span className="receipt-label">Duração</span>
+                                    <span className="receipt-value">{receiptMatriculation.duration || 'N/A'}</span>
+                                </div>
+                                <div className="receipt-row">
+                                    <span className="receipt-label">Pagamento</span>
+                                    <span className="receipt-value">{receiptMatriculation.paymentStatus || 'Pendente'}{(receiptMatriculation.amountDue ?? 0) > 0 ? ` — Dívida: ${receiptMatriculation.amountDue} KZ` : ''}</span>
+                                </div>
+                                <div className="receipt-row">
+                                    <span className="receipt-label">Data de Emissão</span>
+                                    <span className="receipt-value">{new Date().toLocaleDateString('pt-BR')}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="modal-footer" style={{ gridColumn: 'unset' }}>
+                            <button className="btn-cancel" onClick={() => setReceiptMatriculation(null)}>Fechar</button>
+                            <button className="btn-print" onClick={() => handlePrintReceipt(receiptMatriculation)}>
+                                🖨️ Imprimir / Guardar PDF
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
             {/* Course Detail Modal */}
             {selectedCourse && (
                 <div className="overlay">
@@ -675,6 +755,23 @@ export default function MatriculationPage() {
                 .action-print:hover { background: #e0f2fe; }
                 .row-btn.delete { color: #dc2626; background: #fef2f2; }
                 .row-btn.delete:hover { background: #fee2e2; }
+
+                /* Receipt Modal */
+                .receipt-modal { max-width: 600px; }
+                .receipt-success-banner { display: flex; align-items: center; gap: 1rem; background: linear-gradient(135deg, #ecfdf5, #d1fae5); border: 1.5px solid #6ee7b7; border-radius: 14px; padding: 1.25rem 1.5rem; margin-bottom: 1.5rem; }
+                .receipt-check { font-size: 2.2rem; }
+                .receipt-success-banner strong { display: block; color: #065f46; font-size: 1.05rem; font-weight: 800; }
+                .receipt-success-banner span { color: #047857; font-size: 0.88rem; }
+                .receipt-grid { display: flex; flex-direction: column; gap: 0; border: 1px solid #e2e8f0; border-radius: 12px; overflow: hidden; }
+                .receipt-row { display: flex; justify-content: space-between; align-items: center; padding: 0.9rem 1.25rem; border-bottom: 1px solid #f1f5f9; }
+                .receipt-row:last-child { border-bottom: none; }
+                .receipt-row:nth-child(even) { background: #f8fafc; }
+                .receipt-label { font-size: 0.8rem; font-weight: 700; color: #64748b; }
+                .receipt-value { font-size: 0.9rem; font-weight: 600; color: var(--navy-deep); text-align: right; }
+                .receipt-value.mono { font-family: monospace; font-size: 0.78rem; color: #94a3b8; }
+                .receipt-body { margin-bottom: 1.5rem; }
+                .btn-print { padding: 0.85rem 2rem; border-radius: 12px; border: none; background: linear-gradient(135deg, #0074d9, #003d7a); color: white; font-weight: 700; font-size: 0.9rem; cursor: pointer; transition: 0.3s; box-shadow: 0 4px 12px rgba(0,116,217,0.3); }
+                .btn-print:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,116,217,0.4); }
 
                 /* Pagination */
                 .pagination { display: flex; justify-content: space-between; align-items: center; padding: 1rem 1.5rem; background: #f8fafc; border-top: 1px solid #e2e8f0; }
