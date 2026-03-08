@@ -99,7 +99,10 @@ function AdminLayoutContent({
 
   const allItems: NavItem[] = [dashboardItem, ...navGroups.flatMap(g => g.items)];
   const currentItem = allItems.find(i => i.href === pathname);
-  const isAuthorizedFinal = currentItem?.superOnly ? isSuper : (!currentItem?.responsibility || checkAccess(currentItem));
+  const isLoginPage = pathname === '/admin/login';
+  const isAuthorizedFinal = isLoginPage || (currentItem?.superOnly ? isSuper : (!currentItem?.responsibility || checkAccess(currentItem!)));
+
+  if (isLoginPage) return <>{children}</>;
 
   return (
     <div className={`admin-container ${isCollapsed ? 'collapsed' : ''}`}>

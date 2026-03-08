@@ -30,6 +30,9 @@ function TrainerLayoutContent({
 
     const user = session?.user as any;
     const isTrainer = user?.role === 'PROFESSOR' || user?.role === 'TRAINER';
+    const isLoginPage = pathname === '/professor/login';
+
+    if (isLoginPage) return <>{children}</>;
 
     if (!isTrainer) {
         return (
