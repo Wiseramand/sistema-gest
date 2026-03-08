@@ -167,7 +167,7 @@ function AdminLayoutContent({
               {!isCollapsed && <span className="nav-text">Voltar ao Site</span>}
             </Link>
             <button
-              onClick={() => signOut({ callbackUrl: '/' })}
+              onClick={() => signOut({ callbackUrl: '/admin/login' })}
               className="nav-item secondary logout-btn"
               title={isCollapsed ? "Sair do Sistema" : ""}
             >

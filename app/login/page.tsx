@@ -90,11 +90,26 @@ export default function StudentLoginPage() {
         </form>
 
         <div className="login-footer">
-          <Link href="/">Voltar para o início</Link>
+          <Link href="/" className="site-link">
+            <span className="arrow">←</span> Ir para o Site
+          </Link>
         </div>
       </div>
 
       <style jsx>{`
+        .site-link {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 0.5rem;
+          color: #3b82f6;
+          text-decoration: none;
+          font-weight: 600;
+          margin-top: 1rem;
+          transition: 0.2s;
+        }
+        .site-link:hover { color: #2563eb; transform: translateX(-5px); }
+        .arrow { font-size: 1.2rem; }
         .login-container {
           min-height: 100vh;
           display: flex;

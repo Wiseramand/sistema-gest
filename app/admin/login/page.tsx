@@ -6,95 +6,97 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 
 export default function AdminLoginPage() {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [error, setError] = useState('');
-    const [isLoading, setIsLoading] = useState(false);
-    const router = useRouter();
-    const { data: session, status } = useSession();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
+  const { data: session, status } = useSession();
 
-    useEffect(() => {
-        if (status === 'authenticated') {
-            router.push('/admin');
-        }
-    }, [status, router]);
-
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-        setIsLoading(true);
-        setError('');
-
-        try {
-            const res = await signIn('credentials', {
-                email,
-                password,
-                redirect: false,
-                callbackUrl: '/admin',
-            }, {
-                basePath: '/api/auth/admin'
-            } as any);
-
-            if (res?.error) {
-                setError('E-mail ou senha inválidos.');
-                setIsLoading(false);
-            }
-        } catch (err) {
-            setError('Ocorreu um erro ao tentar entrar.');
-            setIsLoading(false);
-        }
-    };
-
-    if (status === 'loading' || status === 'authenticated') {
-        return <div className="loading-screen">Direcionando para o painel administrativo...</div>;
+  useEffect(() => {
+    if (status === 'authenticated') {
+      router.push('/admin');
     }
+  }, [status, router]);
 
-    return (
-        <div className="login-container">
-            <div className="login-card card">
-                <div className="login-header">
-                    <div className="maritime-accent mx-auto"></div>
-                    <h2>Centro Administrativo</h2>
-                    <p>Área restrita para administradores.</p>
-                </div>
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsLoading(true);
+    setError('');
 
-                {error && <div className="alert error">{error}</div>}
+    try {
+      const res = await signIn('credentials', {
+        email,
+        password,
+        redirect: false,
+        callbackUrl: '/admin',
+      }, {
+        basePath: '/api/auth/admin'
+      } as any);
 
-                <form onSubmit={handleSubmit} className="login-form">
-                    <div className="form-group">
-                        <label htmlFor="email">E-mail ou Utilizador</label>
-                        <input
-                            type="text"
-                            id="email"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                            required
-                            placeholder="admin@maritimo.com"
-                        />
-                    </div>
+      if (res?.error) {
+        setError('E-mail ou senha inválidos.');
+        setIsLoading(false);
+      }
+    } catch (err) {
+      setError('Ocorreu um erro ao tentar entrar.');
+      setIsLoading(false);
+    }
+  };
 
-                    <div className="form-group">
-                        <label htmlFor="password">Senha</label>
-                        <input
-                            type="password"
-                            id="password"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            required
-                            placeholder="••••••••"
-                        />
-                    </div>
+  if (status === 'loading' || status === 'authenticated') {
+    return <div className="loading-screen">Direcionando para o painel administrativo...</div>;
+  }
 
-                    <button type="submit" className="btn btn-primary w-full" disabled={isLoading}>
-                        {isLoading ? 'Entrando...' : 'Entrar no Sistema'}
-                    </button>
-                </form>
+  return (
+    <div className="login-container">
+      <div className="login-card card">
+        <div className="login-header">
+          <div className="maritime-accent mx-auto"></div>
+          <h2>Centro Administrativo</h2>
+          <p>Área restrita para administradores.</p>
+        </div>
 
-                <div className="login-footer">
-                    <Link href="/">Voltar para o início</Link>
-                </div>
-            </div>
+        {error && <div className="alert error">{error}</div>}
 
-            <style jsx>{`
+        <form onSubmit={handleSubmit} className="login-form">
+          <div className="form-group">
+            <label htmlFor="email">E-mail ou Utilizador</label>
+            <input
+              type="text"
+              id="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              placeholder="admin@maritimo.com"
+            />
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="password">Senha</label>
+            <input
+              type="password"
+              id="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              placeholder="••••••••"
+            />
+          </div>
+
+          <button type="submit" className="btn btn-primary w-full" disabled={isLoading}>
+            {isLoading ? 'Entrando...' : 'Entrar no Sistema'}
+          </button>
+        </form>
+
+        <div className="login-footer">
+          <Link href="/" className="site-link">
+            <span className="arrow">←</span> Ir para o Site
+          </Link>
+        </div>
+      </div>
+
+      <style jsx>{`
         .login-container {
           min-height: 100vh;
           display: flex;
@@ -210,6 +212,6 @@ export default function AdminLoginPage() {
           font-weight: 600;
         }
       `}</style>
-        </div>
-    );
+    </div>
+  );
 }

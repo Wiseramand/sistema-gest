@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { signOut, useSession, SessionProvider } from 'next-auth/react';
+import LoadingOverlay from '../components/LoadingOverlay';
 
 export default function StudentLayout({
     children,
@@ -24,12 +25,22 @@ function StudentLayoutContent({
 }) {
     const pathname = usePathname();
     const { data: session, status } = useSession();
+    const [isAppLoading, setIsAppLoading] = useState(true);
     const [notifications, setNotifications] = useState<any[]>([]);
     const [notifOpen, setNotifOpen] = useState(false);
     const notifRef = useRef<HTMLDivElement>(null);
 
     const user = session?.user as any;
     const userId = user?.id;
+
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setIsAppLoading(false);
+        }, 800);
+        return () => clearTimeout(timer);
+    }, [pathname]);
+
+    const isLoading = status === 'loading' || isAppLoading;
     const unreadCount = notifications.filter((n: any) => !n.read).length;
 
     useEffect(() => {
@@ -148,7 +159,7 @@ function StudentLayoutContent({
                             <span className="nav-text">Voltar ao Site</span>
                         </Link>
                         <button
-                            onClick={() => signOut({ callbackUrl: '/' })}
+                            onClick={() => signOut({ callbackUrl: '/login' })}
                             className="nav-item secondary logout-btn"
                         >
                             <span className="nav-icon">🚪</span>
@@ -157,6 +168,8 @@ function StudentLayoutContent({
                     </div>
                 </div>
             </aside>
+
+            {isLoading && <LoadingOverlay />}
 
             <main className="portal-content" style={{ gridColumn: 2 }}>
                 <header className="portal-header">

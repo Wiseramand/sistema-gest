@@ -3,6 +3,8 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { signOut, useSession, SessionProvider } from 'next-auth/react';
+import LoadingOverlay from '../components/LoadingOverlay';
+import { useState, useEffect } from 'react';
 
 export default function TrainerLayout({
     children,
@@ -23,10 +25,16 @@ function TrainerLayoutContent({
 }) {
     const pathname = usePathname();
     const { data: session, status } = useSession();
+    const [isAppLoading, setIsAppLoading] = useState(true);
 
-    if (status === 'loading') {
-        return <div className="loading-portal">A carregar portal...</div>;
-    }
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setIsAppLoading(false);
+        }, 800);
+        return () => clearTimeout(timer);
+    }, [pathname]);
+
+    const isLoading = status === 'loading' || isAppLoading;
 
     const user = session?.user as any;
     const isTrainer = user?.role === 'PROFESSOR' || user?.role === 'TRAINER';
@@ -100,7 +108,7 @@ function TrainerLayoutContent({
                             <span className="nav-text">Voltar ao Site</span>
                         </Link>
                         <button
-                            onClick={() => signOut({ callbackUrl: '/' })}
+                            onClick={() => signOut({ callbackUrl: '/professor/login' })}
                             className="nav-item secondary logout-btn"
                         >
                             <span className="nav-icon">🚪</span>
@@ -109,6 +117,8 @@ function TrainerLayoutContent({
                     </div>
                 </div>
             </aside>
+
+            {isLoading && <LoadingOverlay />}
 
             <main className="portal-content" style={{ gridColumn: 2 }}>
                 <header className="portal-header">
