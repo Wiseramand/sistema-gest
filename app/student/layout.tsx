@@ -75,14 +75,11 @@ function StudentLayoutContent({
         for (const n of unread) { await handleMarkRead(n.id); }
     };
 
-    useEffect(() => {
-        if (status === 'unauthenticated') {
-            router.push('/login');
-        }
-    }, [status, router]);
+    if (status === 'loading') return null;
 
-    if (status === 'loading' || status === 'unauthenticated') {
-        return null; // Let the global overlay or redirect handle it
+    if (status === 'unauthenticated') {
+        router.push('/login');
+        return null;
     }
 
     const isStudent = user?.role === 'STUDENT';

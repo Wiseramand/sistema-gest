@@ -36,14 +36,13 @@ function AdminLayoutContent({
 
   const [isCollapsed, setIsCollapsed] = useState(false);
 
-  useEffect(() => {
-    if (status === 'unauthenticated' && pathname !== '/admin/login') {
-      router.push('/admin/login');
-    }
-  }, [status, router, pathname]);
+  const isLoginPage = pathname === '/admin/login';
 
-  if (status === 'loading') return null;
-  if (status === 'unauthenticated' && pathname !== '/admin/login') return null;
+  if (status === 'loading' && !isLoginPage) return null;
+  if (status === 'unauthenticated' && !isLoginPage) {
+    router.push('/admin/login');
+    return null;
+  }
 
   const navGroups: { label: string; items: NavItem[] }[] = [
     {
@@ -97,7 +96,6 @@ function AdminLayoutContent({
 
   const allItems: NavItem[] = [dashboardItem, ...navGroups.flatMap(g => g.items)];
   const currentItem = allItems.find(i => i.href === pathname);
-  const isLoginPage = pathname === '/admin/login';
   const isAuthorizedFinal = isLoginPage || (currentItem?.superOnly ? isSuper : (!currentItem?.responsibility || checkAccess(currentItem!)));
 
   if (isLoginPage) return <>{children}</>;

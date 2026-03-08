@@ -1,6 +1,5 @@
 'use client';
 
-import { SessionProvider } from "next-auth/react";
 import "./globals.css";
 import { useState, useEffect } from 'react';
 import { usePathname } from 'next/navigation';
@@ -31,10 +30,8 @@ export default function RootLayout({
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
       </head>
       <body>
-        <SessionProvider>
-          {isLoading && <LoadingOverlay />}
-          {children}
-        </SessionProvider>
+        {isLoading && <LoadingOverlay />}
+        {children}
       </body>
     </html>
   );

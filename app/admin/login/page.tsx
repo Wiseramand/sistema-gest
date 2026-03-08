@@ -1,19 +1,11 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { signIn, useSession, SessionProvider } from 'next-auth/react';
+import { signIn, useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 
-export default function AdminLoginPageWrapper() {
-  return (
-    <SessionProvider basePath="/api/auth/admin">
-      <AdminLoginPage />
-    </SessionProvider>
-  );
-}
-
-function AdminLoginPage() {
+export default function AdminLoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');

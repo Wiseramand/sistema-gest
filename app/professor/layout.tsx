@@ -27,18 +27,16 @@ function TrainerLayoutContent({
     const router = useRouter();
     const { data: session, status } = useSession();
 
-    useEffect(() => {
-        if (status === 'unauthenticated' && pathname !== '/professor/login') {
-            router.push('/professor/login');
-        }
-    }, [status, router, pathname]);
+    const isLoginPage = pathname === '/professor/login';
 
-    if (status === 'loading') return null;
-    if (status === 'unauthenticated' && pathname !== '/professor/login') return null;
+    if (status === 'loading' && !isLoginPage) return null;
+    if (status === 'unauthenticated' && !isLoginPage) {
+        router.push('/professor/login');
+        return null;
+    }
 
     const user = session?.user as any;
     const isTrainer = user?.role === 'PROFESSOR' || user?.role === 'TRAINER';
-    const isLoginPage = pathname === '/professor/login';
 
     if (isLoginPage) return <>{children}</>;
 
