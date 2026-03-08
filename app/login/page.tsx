@@ -5,41 +5,89 @@ import { signIn, useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 
-export default function LoginPage() {
+export default function StudentLoginPage() {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
+  const { data: session, status } = useSession();
+
+  useEffect(() => {
+    if (status === 'authenticated') {
+      router.push('/student');
+    }
+  }, [status, router]);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsLoading(true);
+    setError('');
+
+    try {
+      const res = await signIn('credentials', {
+        email,
+        password,
+        redirect: false,
+        callbackUrl: '/student',
+      }, {
+        basePath: '/api/auth/student'
+      } as any);
+
+      if (res?.error) {
+        setError('E-mail ou senha inválidos.');
+        setIsLoading(false);
+      }
+    } catch (err) {
+      setError('Ocorreu um erro ao tentar entrar.');
+      setIsLoading(false);
+    }
+  };
+
+  if (status === 'loading' || status === 'authenticated') {
+    return <div className="loading-screen">Direcionando para o portal do aluno...</div>;
+  }
+
   return (
     <div className="login-container">
       <div className="login-card card">
         <div className="login-header">
           <div className="maritime-accent mx-auto"></div>
-          <h2>Acesso aos Portais</h2>
-          <p>Escolha o portal que deseja acessar.</p>
+          <h2>Portal do Aluno</h2>
+          <p>Entre com suas credenciais de aluno.</p>
         </div>
 
-        <div className="portal-choices">
-          <Link href="/admin/login" className="portal-btn admin">
-            <span className="icon">🔐</span>
-            <div className="text">
-              <strong>Portal Administrativo</strong>
-              <span>Painel de gestão e controle</span>
-            </div>
-          </Link>
+        {error && <div className="alert error">{error}</div>}
 
-          <Link href="/student/login" className="portal-btn student">
-            <span className="icon">🎓</span>
-            <div className="text">
-              <strong>Portal do Aluno</strong>
-              <span>Materiais, notas e suporte</span>
-            </div>
-          </Link>
+        <form onSubmit={handleSubmit} className="login-form">
+          <div className="form-group">
+            <label htmlFor="email">E-mail ou Utilizador</label>
+            <input
+              type="text"
+              id="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              placeholder="seu@email.com ou username"
+            />
+          </div>
 
-          <Link href="/professor/login" className="portal-btn professor">
-            <span className="icon">👨‍🏫</span>
-            <div className="text">
-              <strong>Portal do Formador</strong>
-              <span>Gestão de turmas e conteúdos</span>
-            </div>
-          </Link>
-        </div>
+          <div className="form-group">
+            <label htmlFor="password">Senha</label>
+            <input
+              type="password"
+              id="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              placeholder="••••••••"
+            />
+          </div>
+
+          <button type="submit" className="btn btn-primary w-full" disabled={isLoading}>
+            {isLoading ? 'Entrando...' : 'Entrar no Portal'}
+          </button>
+        </form>
 
         <div className="login-footer">
           <Link href="/">Voltar para o início</Link>
@@ -52,77 +100,31 @@ export default function LoginPage() {
           display: flex;
           align-items: center;
           justify-content: center;
-          background: linear-gradient(135deg, var(--navy-deep) 0%, var(--ocean-blue) 100%);
+          background: linear-gradient(135deg, #0f172a 0%, #3b82f6 100%);
           padding: 1.5rem;
         }
 
         .login-card {
           width: 100%;
-          max-width: 450px;
+          max-width: 400px;
           padding: 2.5rem;
           background: rgba(255, 255, 255, 0.95);
           backdrop-filter: blur(10px);
           border-radius: 20px;
+          box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
         }
 
         .login-header {
           text-align: center;
-          margin-bottom: 2.5rem;
+          margin-bottom: 2rem;
         }
 
-        .portal-choices {
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-        }
-
-        .portal-btn {
-            display: flex;
-            align-items: center;
-            gap: 1.25rem;
-            padding: 1.25rem;
-            background: white;
-            border: 1px solid #e2e8f0;
-            border-radius: 15px;
-            text-decoration: none;
-            transition: 0.2s;
-            color: #1e293b;
-        }
-
-        .portal-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-            border-color: #3b82f6;
-        }
-
-        .portal-btn .icon {
-            font-size: 1.8rem;
+        .maritime-accent {
             width: 50px;
-            height: 50px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: #f1f5f9;
-            border-radius: 12px;
-        }
-
-        .portal-btn.admin:hover .icon { background: #fee2e2; }
-        .portal-btn.student:hover .icon { background: #dbeafe; }
-        .portal-btn.professor:hover .icon { background: #fef3c7; }
-
-        .text {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .text strong {
-            font-size: 1.05rem;
-            color: #0f172a;
-        }
-
-        .text span {
-            font-size: 0.85rem;
-            color: #64748b;
+            height: 5px;
+            background: #3b82f6;
+            border-radius: 10px;
+            margin-bottom: 1rem;
         }
 
         .mx-auto {
@@ -130,15 +132,82 @@ export default function LoginPage() {
           margin-right: auto;
         }
 
+        .login-form {
+          display: flex;
+          flex-direction: column;
+          gap: 1.5rem;
+        }
+
+        .form-group {
+          display: flex;
+          flex-direction: column;
+          gap: 0.5rem;
+        }
+
+        label {
+          font-weight: 600;
+          color: #1e293b;
+          font-size: 0.9rem;
+        }
+
+        input {
+          padding: 0.75rem;
+          border: 1px solid #e2e8f0;
+          border-radius: 10px;
+          font-family: inherit;
+        }
+
+        .alert.error {
+          background-color: #fca5a5;
+          color: #7f1d1d;
+          padding: 0.75rem;
+          border-radius: 10px;
+          margin-bottom: 1rem;
+          font-size: 0.9rem;
+          border: 1px solid #f87171;
+          text-align: center;
+        }
+
+        .btn-primary {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 0.75rem;
+            border-radius: 10px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .btn-primary:hover {
+            background: #2563eb;
+            transform: translateY(-2px);
+        }
+
+        .w-full {
+          width: 100%;
+        }
+
         .login-footer {
-          margin-top: 2rem;
+          margin-top: 1.5rem;
           text-align: center;
           font-size: 0.9rem;
         }
 
         .login-footer a {
-          color: var(--navy-medium);
+          color: #64748b;
           text-decoration: underline;
+        }
+
+        .loading-screen {
+          min-height: 100vh;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background-color: #0f172a;
+          color: white;
+          font-size: 1.25rem;
+          font-weight: 600;
         }
       `}</style>
     </div>

@@ -34,8 +34,18 @@ export const getAuthOptions = (portal: string = 'default'): NextAuthOptions => (
                     throw new Error("Dados de acesso inválidos")
                 }
 
-                // Collections to search in order
-                const collections = ['user', 'adminUser', 'student', 'trainer'] as const;
+                // Collections to search based on portal
+                let collections: string[] = [];
+                if (portal === 'admin') {
+                    collections = ['adminUser', 'user'];
+                } else if (portal === 'student') {
+                    collections = ['student'];
+                } else if (portal === 'professor') {
+                    collections = ['trainer'];
+                } else {
+                    collections = ['user', 'adminUser', 'student', 'trainer'];
+                }
+
                 let foundUser = null;
                 let foundPasswordHash = null;
 

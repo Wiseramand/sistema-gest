@@ -87,7 +87,7 @@ function StudentLayoutContent({
                     <span className="icon">🚫</span>
                     <h1>Acesso Restrito</h1>
                     <p>Você não tem permissão de Aluno para acessar esta área.</p>
-                    <Link href="/student/login" className="btn-back">Ir para o Login</Link>
+                    <Link href="/login" className="btn-back">Ir para o Login</Link>
                 </div>
                 <style jsx>{`
                     .access-denied-container { height: 100vh; display: flex; align-items: center; justify-content: center; background: #f8fafc; font-family: 'Inter', sans-serif; }
