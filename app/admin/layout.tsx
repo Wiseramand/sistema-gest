@@ -3,8 +3,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { signOut, useSession, SessionProvider } from 'next-auth/react';
-import { useState, useEffect } from 'react';
-import LoadingOverlay from '../components/LoadingOverlay';
+import { useState } from 'react';
 
 export default function AdminLayout({
   children,
@@ -25,17 +24,6 @@ function AdminLayoutContent({
 }) {
   const pathname = usePathname();
   const { data: session, status } = useSession();
-  const [isAppLoading, setIsAppLoading] = useState(true);
-
-  useEffect(() => {
-    // Artificial delay to ensure a smooth transition and prevent layout flash
-    const timer = setTimeout(() => {
-      setIsAppLoading(false);
-    }, 800);
-    return () => clearTimeout(timer);
-  }, [pathname]);
-
-  const isLoading = status === 'loading' || isAppLoading;
 
   interface NavItem {
     name: string;
@@ -106,7 +94,6 @@ function AdminLayoutContent({
 
   return (
     <div className={`admin-container ${isCollapsed ? 'collapsed' : ''}`}>
-      {isLoading && <LoadingOverlay />}
       <aside className="sidebar">
         <div className="sidebar-inner">
           <div className="sidebar-header">
