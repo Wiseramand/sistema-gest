@@ -3,9 +3,20 @@ import CredentialsProvider from "next-auth/providers/credentials"
 import { db } from "./db"
 import bcrypt from "bcryptjs"
 
-export const authOptions: NextAuthOptions = {
+export const getAuthOptions = (portal: string = 'default'): NextAuthOptions => ({
     session: {
         strategy: "jwt",
+    },
+    cookies: {
+        sessionToken: {
+            name: portal === 'default' ? `next-auth.session-token` : `next-auth.session-token.${portal}`,
+            options: {
+                httpOnly: true,
+                sameSite: 'lax',
+                path: '/',
+                secure: process.env.NODE_ENV === 'production',
+            },
+        },
     },
     pages: {
         signIn: "/login",
@@ -62,7 +73,7 @@ export const authOptions: NextAuthOptions = {
                     email: foundUser.email,
                     name: foundUser.name,
                     role: foundUser.role,
-                    responsibilities: foundUser.responsibilities || [],
+                    responsibilities: (foundUser as any).responsibilities || [],
                 }
             },
         }),
@@ -85,4 +96,6 @@ export const authOptions: NextAuthOptions = {
             return session
         },
     },
-}
+});
+
+export const authOptions = getAuthOptions();

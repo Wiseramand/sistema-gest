@@ -2,11 +2,23 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { signOut, useSession } from 'next-auth/react';
+import { signOut, useSession, SessionProvider } from 'next-auth/react';
 import { useState, useEffect } from 'react';
 import LoadingOverlay from '../components/LoadingOverlay';
 
 export default function AdminLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return (
+    <SessionProvider basePath="/api/auth/admin">
+      <AdminLayoutContent>{children}</AdminLayoutContent>
+    </SessionProvider>
+  );
+}
+
+function AdminLayoutContent({
   children,
 }: {
   children: React.ReactNode;
@@ -189,7 +201,7 @@ export default function AdminLayout({
               <h2>Acesso Restrito</h2>
               <p>Não tem as responsabilidades necessárias para aceder a esta secção (<strong>{allItems.find(i => i.href === pathname)?.name}</strong>).</p>
               <p>Contacte um Super Administrador para solicitar acesso.</p>
-              <Link href="/admin" className="back-btn">Voltar ao Painel</Link>
+              <Link href="/admin/login" className="back-btn">Ir para o Login</Link>
             </div>
           )}
         </div>

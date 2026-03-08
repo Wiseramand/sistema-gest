@@ -2,9 +2,21 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { signOut, useSession } from 'next-auth/react';
+import { signOut, useSession, SessionProvider } from 'next-auth/react';
 
 export default function TrainerLayout({
+    children,
+}: {
+    children: React.ReactNode;
+}) {
+    return (
+        <SessionProvider basePath="/api/auth/professor">
+            <TrainerLayoutContent>{children}</TrainerLayoutContent>
+        </SessionProvider>
+    );
+}
+
+function TrainerLayoutContent({
     children,
 }: {
     children: React.ReactNode;
@@ -26,7 +38,7 @@ export default function TrainerLayout({
                     <span className="icon">🚫</span>
                     <h1>Acesso Restrito</h1>
                     <p>Você não tem permissão de Formador para acessar esta área.</p>
-                    <Link href="/login" className="btn-back">Ir para o Login</Link>
+                    <Link href="/professor/login" className="btn-back">Ir para o Login</Link>
                 </div>
                 <style jsx>{`
                     .access-denied-container { height: 100vh; display: flex; align-items: center; justify-content: center; background: #f1f5f9; font-family: 'Inter', sans-serif; }

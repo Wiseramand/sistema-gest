@@ -34,17 +34,38 @@ export default function LoginPage() {
     setError('');
 
     try {
+      // Find user role first to determine which portal to sign in to
+      const userRes = await fetch(`/api/user/role?identifier=${encodeURIComponent(email)}`);
+      if (!userRes.ok) {
+        setError('Usuário não encontrado.');
+        setIsLoading(false);
+        return;
+      }
+      const { role } = await userRes.json();
+
+      let basePath = '';
+      if (role === 'SUPER_ADMIN' || role === 'ADMIN') {
+        basePath = '/api/auth/admin';
+      } else if (role === 'PROFESSOR' || role === 'TRAINER') {
+        basePath = '/api/auth/professor';
+      } else if (role === 'STUDENT') {
+        basePath = '/api/auth/student';
+      }
+
       const res = await signIn('credentials', {
         email,
         password,
         redirect: false,
-      });
+        callbackUrl: role === 'STUDENT' ? '/student' : (role === 'ADMIN' || role === 'SUPER_ADMIN' ? '/admin' : '/professor'),
+      }, {
+        basePath: basePath || undefined
+      } as any);
 
       if (res?.error) {
         setError('E-mail ou senha inválidos.');
         setIsLoading(false);
       } else {
-        // Redirection is handled by the useEffect
+        // Redirection will happen after session is updated
       }
     } catch (err) {
       setError('Ocorreu um erro ao tentar entrar.');
@@ -61,41 +82,35 @@ export default function LoginPage() {
       <div className="login-card card">
         <div className="login-header">
           <div className="maritime-accent mx-auto"></div>
-          <h2>Acesso ao Portal</h2>
-          <p>Entre com suas credenciais para gerenciar o centro.</p>
+          <h2>Acesso aos Portais</h2>
+          <p>Escolha o portal que deseja acessar.</p>
         </div>
 
-        {error && <div className="alert error">{error}</div>}
+        <div className="portal-choices">
+          <Link href="/admin/login" className="portal-btn admin">
+            <span className="icon">🔐</span>
+            <div className="text">
+              <strong>Portal Administrativo</strong>
+              <span>Painel de gestão e controle</span>
+            </div>
+          </Link>
 
-        <form onSubmit={handleSubmit} className="login-form">
-          <div className="form-group">
-            <label htmlFor="email">E-mail ou Utilizador</label>
-            <input
-              type="text"
-              id="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              placeholder="seu@email.com ou username"
-            />
-          </div>
+          <Link href="/student/login" className="portal-btn student">
+            <span className="icon">🎓</span>
+            <div className="text">
+              <strong>Portal do Aluno</strong>
+              <span>Materiais, notas e suporte</span>
+            </div>
+          </Link>
 
-          <div className="form-group">
-            <label htmlFor="password">Senha</label>
-            <input
-              type="password"
-              id="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              placeholder="••••••••"
-            />
-          </div>
-
-          <button type="submit" className="btn btn-primary w-full" disabled={isLoading}>
-            {isLoading ? 'Entrando...' : 'Entrar'}
-          </button>
-        </form>
+          <Link href="/professor/login" className="portal-btn professor">
+            <span className="icon">👨‍🏫</span>
+            <div className="text">
+              <strong>Portal do Formador</strong>
+              <span>Gestão de turmas e conteúdos</span>
+            </div>
+          </Link>
+        </div>
 
         <div className="login-footer">
           <Link href="/">Voltar para o início</Link>
@@ -114,15 +129,71 @@ export default function LoginPage() {
 
         .login-card {
           width: 100%;
-          max-width: 400px;
+          max-width: 450px;
           padding: 2.5rem;
           background: rgba(255, 255, 255, 0.95);
           backdrop-filter: blur(10px);
+          border-radius: 20px;
         }
 
         .login-header {
           text-align: center;
-          margin-bottom: 2rem;
+          margin-bottom: 2.5rem;
+        }
+
+        .portal-choices {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .portal-btn {
+            display: flex;
+            align-items: center;
+            gap: 1.25rem;
+            padding: 1.25rem;
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 15px;
+            text-decoration: none;
+            transition: 0.2s;
+            color: #1e293b;
+        }
+
+        .portal-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            border-color: #3b82f6;
+        }
+
+        .portal-btn .icon {
+            font-size: 1.8rem;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #f1f5f9;
+            border-radius: 12px;
+        }
+
+        .portal-btn.admin:hover .icon { background: #fee2e2; }
+        .portal-btn.student:hover .icon { background: #dbeafe; }
+        .portal-btn.professor:hover .icon { background: #fef3c7; }
+
+        .text {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .text strong {
+            font-size: 1.05rem;
+            color: #0f172a;
+        }
+
+        .text span {
+            font-size: 0.85rem;
+            color: #64748b;
         }
 
         .mx-auto {
@@ -130,48 +201,8 @@ export default function LoginPage() {
           margin-right: auto;
         }
 
-        .login-form {
-          display: flex;
-          flex-direction: column;
-          gap: 1.5rem;
-        }
-
-        .form-group {
-          display: flex;
-          flex-direction: column;
-          gap: 0.5rem;
-        }
-
-        label {
-          font-weight: 600;
-          color: var(--navy-medium);
-          font-size: 0.9rem;
-        }
-
-        input {
-          padding: 0.75rem;
-          border: 1px solid var(--gray-light);
-          border-radius: var(--radius-md);
-          font-family: inherit;
-        }
-
-        .alert.error {
-          background-color: #f8d7da;
-          color: #721c24;
-          padding: 0.75rem;
-          border-radius: var(--radius-md);
-          margin-bottom: 1rem;
-          font-size: 0.9rem;
-          border: 1px solid #f5c6cb;
-          text-align: center;
-        }
-
-        .w-full {
-          width: 100%;
-        }
-
         .login-footer {
-          margin-top: 1.5rem;
+          margin-top: 2rem;
           text-align: center;
           font-size: 0.9rem;
         }
@@ -179,17 +210,6 @@ export default function LoginPage() {
         .login-footer a {
           color: var(--navy-medium);
           text-decoration: underline;
-        }
-
-        .loading-screen {
-          min-height: 100vh;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          background-color: var(--navy-deep);
-          color: white;
-          font-size: 1.25rem;
-          font-weight: 600;
         }
       `}</style>
     </div>

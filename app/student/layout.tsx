@@ -3,9 +3,21 @@
 import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { signOut, useSession } from 'next-auth/react';
+import { signOut, useSession, SessionProvider } from 'next-auth/react';
 
 export default function StudentLayout({
+    children,
+}: {
+    children: React.ReactNode;
+}) {
+    return (
+        <SessionProvider basePath="/api/auth/student">
+            <StudentLayoutContent>{children}</StudentLayoutContent>
+        </SessionProvider>
+    );
+}
+
+function StudentLayoutContent({
     children,
 }: {
     children: React.ReactNode;
@@ -75,7 +87,7 @@ export default function StudentLayout({
                     <span className="icon">🚫</span>
                     <h1>Acesso Restrito</h1>
                     <p>Você não tem permissão de Aluno para acessar esta área.</p>
-                    <Link href="/login" className="btn-back">Ir para o Login</Link>
+                    <Link href="/student/login" className="btn-back">Ir para o Login</Link>
                 </div>
                 <style jsx>{`
                     .access-denied-container { height: 100vh; display: flex; align-items: center; justify-content: center; background: #f8fafc; font-family: 'Inter', sans-serif; }
