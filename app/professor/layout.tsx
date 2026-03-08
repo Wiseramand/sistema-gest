@@ -1,7 +1,9 @@
 'use client';
 
+import { useState, useEffect } from 'react';
+
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { signOut, useSession, SessionProvider } from 'next-auth/react';
 
 export default function TrainerLayout({
@@ -22,7 +24,17 @@ function TrainerLayoutContent({
     children: React.ReactNode;
 }) {
     const pathname = usePathname();
+    const router = useRouter();
     const { data: session, status } = useSession();
+
+    useEffect(() => {
+        if (status === 'unauthenticated' && pathname !== '/professor/login') {
+            router.push('/professor/login');
+        }
+    }, [status, router, pathname]);
+
+    if (status === 'loading') return null;
+    if (status === 'unauthenticated' && pathname !== '/professor/login') return null;
 
     const user = session?.user as any;
     const isTrainer = user?.role === 'PROFESSOR' || user?.role === 'TRAINER';

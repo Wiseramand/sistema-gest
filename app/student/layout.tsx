@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { signOut, useSession, SessionProvider } from 'next-auth/react';
 
 export default function StudentLayout({
@@ -23,6 +23,7 @@ function StudentLayoutContent({
     children: React.ReactNode;
 }) {
     const pathname = usePathname();
+    const router = useRouter();
     const { data: session, status } = useSession();
     const [notifications, setNotifications] = useState<any[]>([]);
     const [notifOpen, setNotifOpen] = useState(false);
@@ -74,8 +75,14 @@ function StudentLayoutContent({
         for (const n of unread) { await handleMarkRead(n.id); }
     };
 
-    if (status === 'loading') {
-        return <div className="loading-portal">A carregar portal...</div>;
+    useEffect(() => {
+        if (status === 'unauthenticated') {
+            router.push('/login');
+        }
+    }, [status, router]);
+
+    if (status === 'loading' || status === 'unauthenticated') {
+        return null; // Let the global overlay or redirect handle it
     }
 
     const isStudent = user?.role === 'STUDENT';

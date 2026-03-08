@@ -1,11 +1,19 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { signIn, useSession } from 'next-auth/react';
+import { signIn, useSession, SessionProvider } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 
-export default function StudentLoginPage() {
+export default function StudentLoginPageWrapper() {
+  return (
+    <SessionProvider basePath="/api/auth/student">
+      <StudentLoginPage />
+    </SessionProvider>
+  );
+}
+
+function StudentLoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');

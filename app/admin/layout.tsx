@@ -1,9 +1,9 @@
 'use client';
 
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { signOut, useSession, SessionProvider } from 'next-auth/react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 export default function AdminLayout({
   children,
@@ -23,6 +23,7 @@ function AdminLayoutContent({
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
+  const router = useRouter();
   const { data: session, status } = useSession();
 
   interface NavItem {
@@ -34,6 +35,15 @@ function AdminLayoutContent({
   }
 
   const [isCollapsed, setIsCollapsed] = useState(false);
+
+  useEffect(() => {
+    if (status === 'unauthenticated' && pathname !== '/admin/login') {
+      router.push('/admin/login');
+    }
+  }, [status, router, pathname]);
+
+  if (status === 'loading') return null;
+  if (status === 'unauthenticated' && pathname !== '/admin/login') return null;
 
   const navGroups: { label: string; items: NavItem[] }[] = [
     {
