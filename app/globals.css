@@ -131,3 +131,76 @@ h1, h2, h3, h4, h5, h6 {
   margin-bottom: 1rem;
   border-radius: 2px;
 }
+
+/* Ocultar elementos desnecessários durante a impressão (Sidebar, Header, Botões, etc.) */
+@media print {
+  .sidebar,
+  .admin-header,
+  .header-actions,
+  .row-actions,
+  .maritime-accent,
+  .print-btn,
+  .new-btn,
+  .toggle-sidebar,
+  .pagination,
+  .filter-bar,
+  .page-top p,
+  button {
+    display: none !important;
+  }
+
+  /* Ajustar o corpo principal (Admin Content) para usar todo o espaço de impressão limpa */
+  .admin-content {
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 100% !important;
+    max-width: none !important;
+    background: #ffffff !important;
+  }
+
+  .admin-container {
+    background: transparent !important;
+    min-height: auto !important;
+  }
+
+  body {
+    background: transparent !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  .content-inner {
+    padding: 0 !important;
+    margin: 0 !important;
+    max-width: none !important;
+  }
+
+  /* Remover sombras e bordas fortes para economizar tinta e focar nos dados */
+  .table-wrap, 
+  .card, 
+  .page-wrapper {
+    box-shadow: none !important;
+    border: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: transparent !important;
+  }
+
+  /* Manter cor nos cabeçalhos de tabela */
+  .data-table th {
+    background-color: #f1f5f9 !important;
+    color: #000 !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .data-table td {
+    color: #000 !important;
+  }
+
+  /* Garantir que a tabela se adapte à folha e evite cortes ruins */
+  table { page-break-inside: auto; width: 100% !important; }
+  tr    { page-break-inside: avoid; page-break-after: auto; }
+  thead { display: table-header-group; }
+  tfoot { display: table-footer-group; }
+}

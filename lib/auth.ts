@@ -9,7 +9,7 @@ export const getAuthOptions = (portal: string = 'default'): NextAuthOptions => (
     },
     cookies: {
         sessionToken: {
-            name: portal === 'default' ? `next-auth.session-token` : `next-auth.session-token.${portal}`,
+            name: `next-auth.session-token`,
             options: {
                 httpOnly: true,
                 sameSite: 'lax',

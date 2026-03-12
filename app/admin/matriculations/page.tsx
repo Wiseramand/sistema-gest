@@ -309,12 +309,17 @@ export default function MatriculationPage() {
                     <h1>Gestão de Matrículas</h1>
                     <p>Inscreva alunos em turmas, defina horários e controle pagamentos.</p>
                 </div>
-                <button className="new-btn" onClick={() => { setIsModalOpen(true); setSelectedStudent(null); setSearchQuery(''); }}>
-                    + Nova Matrícula
-                </button>
-                <button className="print-report-btn" onClick={() => handlePrintAll()}>
-                    📊 Relatório Geral
-                </button>
+                <div className="header-actions" style={{ display: 'flex', gap: '1rem' }}>
+                    <button className="print-report-btn print-btn" onClick={() => window.print()} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                        🖨️ Imprimir Lista
+                    </button>
+                    <button className="print-report-btn" onClick={() => handlePrintAll()}>
+                        📊 Relatório Geral
+                    </button>
+                    <button className="new-btn" onClick={() => { setIsModalOpen(true); setSelectedStudent(null); setSearchQuery(''); }}>
+                        + Nova Matrícula
+                    </button>
+                </div>
             </div>
 
             {/* Filters Section */}

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 
 interface Inscription {
     id: string;
@@ -80,11 +80,14 @@ export default function InscriptionsPage() {
 
     return (
         <div className="inscriptions-content">
-            <div className="page-header">
+            <div className="page-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
                 <div>
                     <div className="maritime-accent"></div>
                     <h1>Inscrições Recebidas</h1>
                     <p>Avalie os candidatos e confirme as matrículas no sistema.</p>
+                </div>
+                <div className="header-actions">
+                    <button className="print-btn" onClick={() => window.print()} style={{ background: 'white', color: '#1e293b', border: '1px solid #e2e8f0', padding: '0.85rem 1.5rem', borderRadius: '12px', fontWeight: 700, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>🖨️ Imprimir Lista</button>
                 </div>
             </div>
 

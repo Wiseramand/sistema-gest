@@ -185,7 +185,12 @@ export default function CoursesPage() {
           <h1>Gestão de Cursos</h1>
           <p>Administre o catálogo de formações e materiais didáticos.</p>
         </div>
-        <button className="new-btn" onClick={() => handleOpenModal()}>+ Novo Curso</button>
+        <div className="header-actions" style={{ display: 'flex', gap: '1rem' }}>
+          <button className="print-btn" onClick={() => window.print()} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', background: '#e2e8f0', color: '#0f172a', border: 'none', padding: '0.85rem 1.5rem', borderRadius: '12px', fontWeight: 700, fontSize: '0.9rem', cursor: 'pointer' }}>
+            🖨️ Imprimir Lista
+          </button>
+          <button className="new-btn" onClick={() => handleOpenModal()}>+ Novo Curso</button>
+        </div>
       </div>
 
       {/* Course Grid */}
