@@ -86,18 +86,39 @@ export default function ProfessorDashboard() {
             if (!session?.user?.name) return;
             setLoading(true);
             try {
-                // 1. Fetch all courses assigned to this professor
+                // 1. Fetch all courses and matriculations
                 const userId = (session?.user as any)?.id;
-                const resC = await fetch('/api/courses');
-                const allCourses = await resC.json();
-                const profCourses = allCourses.filter((c: any) => (c.trainerId && c.trainerId === userId) || c.trainerName === session.user?.name);
+                const userName = session?.user?.name;
 
-                // 2. Fetch matriculations to get student lists for these courses
-                const resM = await fetch('/api/matriculations');
+                const [resC, resM] = await Promise.all([
+                    fetch('/api/courses'),
+                    fetch('/api/matriculations')
+                ]);
+
+                const allCourses = await resC.json();
                 const allMatriculations = await resM.json();
 
+                // 2. Find courses where trainer is assigned in Matriculations
+                const matriculationCourseTitles = new Set(
+                    allMatriculations
+                        .filter((m: any) => (m.trainerId === userId || m.trainer === userName))
+                        .map((m: any) => m.course)
+                );
+
+                // 3. Filter courses: either explicitly assigned to the trainer or present in their matriculations
+                const profCourses = allCourses.filter((c: any) => 
+                    (c.trainerId === userId) || 
+                    (c.trainerName === userName) || 
+                    matriculationCourseTitles.has(c.title)
+                );
+
+                // 4. Enrich courses with student lists
                 const enrichedCourses = profCourses.map((c: Course) => {
-                    const courseMatrics = allMatriculations.filter((m: any) => m.courseId === c.id || m.course === c.title);
+                    const courseMatrics = allMatriculations.filter((m: any) => 
+                        (m.courseId === c.id || m.course === c.title) &&
+                        (m.trainerId === userId || m.trainer === userName)
+                    );
+                    
                     return {
                         ...c,
                         studentsList: courseMatrics.map((m: any) => ({ id: m.studentId, name: m.studentName })),
