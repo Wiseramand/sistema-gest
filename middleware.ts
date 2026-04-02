@@ -31,7 +31,9 @@ export default withAuth(
     },
     {
         callbacks: {
-            authorized: ({ token }) => !!token,
+            // Return true to always run the middleware function below it,
+            // which handles the path-specific authentication and redirection.
+            authorized: () => true,
         },
     }
 );
