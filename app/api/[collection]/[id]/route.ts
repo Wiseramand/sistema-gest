@@ -4,23 +4,8 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '../../../../lib/auth';
 import { logActivity } from '../../../../lib/logger';
 
-function getModelName(collection: string) {
-    const mapping: { [key: string]: string } = {
-        'students': 'student',
-        'trainers': 'trainer',
-        'courses': 'course',
-        'classrooms': 'classroom',
-        'inscriptions': 'inscription',
-        'matriculations': 'matriculation',
-        'companies': 'company',
-        'feedbacks': 'feedback',
-        'activity-logs': 'activityLog',
-        'attendance': 'attendance',
-        'materials': 'material',
-        'adminusers': 'adminUser'
-    };
-    return mapping[collection] || collection.replace(/s$/, '');
-}
+import { getModel } from '../../../../lib/getModel';
+import { schemas } from '../../../../lib/validators';
 
 export async function GET(
     request: Request,
@@ -28,7 +13,14 @@ export async function GET(
 ) {
     try {
         const { collection, id } = await params;
-        const model = (db as any)[getModelName(collection)];
+
+        // ✅ CORRECÇÃO: Verificar autenticação PRIMEIRO
+        const session = await getServerSession(authOptions);
+        if (!session) {
+            return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+        }
+
+        const model = getModel(collection);
 
         if (!model) return NextResponse.json({ error: `Collection '${collection}' not found` }, { status: 404 });
 
@@ -38,7 +30,7 @@ export async function GET(
         return NextResponse.json(item);
     } catch (error: any) {
         console.error('API GET Single Error:', error);
-        return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+        return NextResponse.json({ error: 'Ocorreu um erro interno ao procurar o registo.' }, { status: 500 });
     }
 }
 
@@ -52,11 +44,41 @@ export async function PATCH(
         const { collection, id } = await params;
         collectionName = collection;
         itemId = id;
-        const model = (db as any)[getModelName(collection)];
+
+        // ✅ CORRECÇÃO: Verificar autenticação PRIMEIRO
+        const session = await getServerSession(authOptions);
+        if (!session) {
+            return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+        }
+
+        // ✅ Verificar role para colecções sensíveis
+        const sensitiveCollections = ['adminusers', 'activity-logs', 'trainers', 'courses', 'classrooms'];
+        if (sensitiveCollections.includes(collection)) {
+            const role = (session.user as any).role;
+            if (role !== 'SUPER_ADMIN' && role !== 'ADMIN') {
+                return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+            }
+        }
+
+        const model = getModel(collection);
 
         if (!model) return NextResponse.json({ error: `Collection '${collection}' not found` }, { status: 404 });
 
         const body = await request.json();
+
+        // Validar dados usando Zod
+        if (schemas[collection]) {
+            // No PATCH, criamos uma versão partial do esquema para permitir updates parciais
+            const partialSchema = schemas[collection].partial();
+            const validation = partialSchema.safeParse(body);
+            if (!validation.success) {
+                return NextResponse.json({ 
+                    error: 'Dados inválidos ou formato incorreto', 
+                    details: validation.error.format() 
+                }, { status: 400 });
+            }
+        }
+
         const sanitizedData = { ...body };
         // Remove id and materialName as they shouldn't be in the update data
         delete sanitizedData.id;
@@ -71,7 +93,6 @@ export async function PATCH(
 
         // Log the activity
         try {
-            const session = await getServerSession(authOptions);
             if (session?.user) {
                 await logActivity(
                     (session.user as any).id,
@@ -79,7 +100,7 @@ export async function PATCH(
                     (session.user as any).role,
                     'UPDATE',
                     `Editou um item em ${collection}`,
-                    getModelName(collection),
+                    collection,
                     id
                 );
             }
@@ -89,8 +110,8 @@ export async function PATCH(
 
         return NextResponse.json(updatedItem);
     } catch (error: any) {
-        console.error(`API PATCH [${collectionName}/${itemId}] Error:`, error);
-        return NextResponse.json({ error: 'Internal Server Error', details: error.message }, { status: 500 });
+        console.error(`API PATCH [${collectionName}/${itemId}] Error:`, error.message);
+        return NextResponse.json({ error: 'Ocorreu um erro interno ao atualizar o registo.' }, { status: 500 });
     }
 }
 
@@ -104,7 +125,20 @@ export async function DELETE(
         const { collection, id } = await params;
         collectionName = collection;
         itemId = id;
-        const model = (db as any)[getModelName(collection)];
+
+        // ✅ CORRECÇÃO: Verificar autenticação PRIMEIRO
+        const session = await getServerSession(authOptions);
+        if (!session) {
+            return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+        }
+
+        // ✅ Verificar role para todas colecções - DELETE deve ser restrito
+        const role = (session.user as any).role;
+        if (role !== 'SUPER_ADMIN' && role !== 'ADMIN') {
+            return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+        }
+
+        const model = getModel(collection);
 
         if (!model) return NextResponse.json({ error: `Collection '${collection}' not found` }, { status: 404 });
 
@@ -112,7 +146,6 @@ export async function DELETE(
 
         // Log the activity
         try {
-            const session = await getServerSession(authOptions);
             if (session?.user) {
                 await logActivity(
                     (session.user as any).id,
@@ -120,7 +153,7 @@ export async function DELETE(
                     (session.user as any).role,
                     'DELETE',
                     `Removeu um item de ${collection}`,
-                    getModelName(collection),
+                    collection,
                     id
                 );
             }
@@ -130,7 +163,7 @@ export async function DELETE(
 
         return NextResponse.json({ success: true });
     } catch (error: any) {
-        console.error(`API DELETE [${collectionName}/${itemId}] Error:`, error);
-        return NextResponse.json({ error: 'Internal Server Error', details: error.message }, { status: 500 });
+        console.error(`API DELETE [${collectionName}/${itemId}] Error:`, error.message);
+        return NextResponse.json({ error: 'Ocorreu um erro interno ao remover o registo.' }, { status: 500 });
     }
 }

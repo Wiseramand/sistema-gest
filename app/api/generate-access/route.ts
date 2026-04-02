@@ -1,11 +1,23 @@
 import { NextResponse } from 'next/server';
 import { db } from '../../../lib/db';
 import bcrypt from 'bcryptjs';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '../../../lib/auth';
 
 // POST /api/generate-access
 // Body: { type: 'student' | 'trainer', id: string }
 export async function POST(request: Request) {
     try {
+        // ✅ CORRECÇÃO: Verificar que é um admin autenticado (Issue #6)
+        const session = await getServerSession(authOptions);
+        if (!session) {
+            return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+        }
+        const role_user = (session.user as any).role;
+        if (role_user !== 'ADMIN' && role_user !== 'SUPER_ADMIN') {
+            return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+        }
+
         const { type, id } = await request.json();
         console.log(`[API] Generating access for ${type} with id ${id}`);
 
@@ -41,7 +53,8 @@ export async function POST(request: Request) {
             plainPassword += chars[Math.floor(Math.random() * chars.length)];
         }
 
-        const passwordHash = await bcrypt.hash(plainPassword, 4);
+        // ✅ CORRECÇÃO: bcrypt com Salt Rounds = 12 (Issue #3)
+        const passwordHash = await bcrypt.hash(plainPassword, 12);
         const role = type === 'student' ? 'STUDENT' : 'TRAINER';
 
         if (type === 'student') {

@@ -4,23 +4,8 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '../../../lib/auth';
 import { logActivity } from '../../../lib/logger';
 
-function getModelName(collection: string) {
-    const mapping: { [key: string]: string } = {
-        'students': 'student',
-        'trainers': 'trainer',
-        'courses': 'course',
-        'classrooms': 'classroom',
-        'inscriptions': 'inscription',
-        'matriculations': 'matriculation',
-        'companies': 'company',
-        'feedbacks': 'feedback',
-        'activity-logs': 'activityLog',
-        'attendance': 'attendance',
-        'materials': 'material',
-        'adminusers': 'adminUser'
-    };
-    return mapping[collection] || collection.replace(/s$/, '');
-}
+import { getModel } from '../../../lib/getModel';
+import { schemas } from '../../../lib/validators';
 
 export async function GET(
     request: Request,
@@ -30,7 +15,23 @@ export async function GET(
     try {
         const { collection } = await params;
         collectionName = collection;
-        const model = (db as any)[getModelName(collection)];
+
+        // ✅ CORRECÇÃO: Verificar autenticação PRIMEIRO
+        const session = await getServerSession(authOptions);
+        if (!session) {
+            return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+        }
+
+        // ✅ Verificar role para colecções sensíveis
+        const sensitiveCollections = ['adminusers', 'activity-logs'];
+        if (sensitiveCollections.includes(collection)) {
+            const role = (session.user as any).role;
+            if (role !== 'SUPER_ADMIN' && role !== 'ADMIN') {
+                return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+            }
+        }
+
+        const model = getModel(collection);
 
         if (!model) return NextResponse.json({ error: `Collection '${collection}' not found` }, { status: 404 });
 
@@ -40,7 +41,7 @@ export async function GET(
         return NextResponse.json(items || []);
     } catch (error: any) {
         console.error(`API GET [${collectionName}] Error:`, error);
-        return NextResponse.json({ error: 'Internal Server Error', details: error.message }, { status: 500 });
+        return NextResponse.json({ error: 'Ocorreu um erro interno ao procurar os dados.' }, { status: 500 });
     }
 }
 
@@ -49,11 +50,27 @@ export async function POST(
     { params }: { params: Promise<{ collection: string }> }
 ) {
     let collectionName = 'unknown';
-    let body: any; // Declare body here to be accessible in the outer catch block
+    let body: any; 
     try {
         const { collection } = await params;
         collectionName = collection;
-        const model = (db as any)[getModelName(collection)];
+
+        // ✅ CORRECÇÃO: Verificar autenticação PRIMEIRO
+        const session = await getServerSession(authOptions);
+        if (!session) {
+            return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+        }
+
+        // ✅ Verificar role para colecções sensíveis
+        const sensitiveCollections = ['adminusers', 'activity-logs', 'trainers', 'courses', 'classrooms'];
+        if (sensitiveCollections.includes(collection)) {
+            const role = (session.user as any).role;
+            if (role !== 'SUPER_ADMIN' && role !== 'ADMIN') {
+                return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+            }
+        }
+
+        const model = getModel(collection);
 
         if (!model) return NextResponse.json({ error: `Collection '${collection}' not found` }, { status: 404 });
 
@@ -61,6 +78,18 @@ export async function POST(
             body = await request.json();
         } catch (e) {
             return NextResponse.json({ error: 'Invalid JSON body' }, { status: 400 });
+        }
+
+        // Validar dados usando Zod se houver esquema definido para a coleção
+        if (schemas[collection]) {
+            const validation = schemas[collection].safeParse(body);
+            if (!validation.success) {
+                return NextResponse.json({ 
+                    error: 'Dados inválidos ou em formato incorreto', 
+                    details: validation.error.format() 
+                }, { status: 400 });
+            }
+            // Substituir pelos campos verificados se necessário (opcional)
         }
 
         // Sanitize data for specific models if needed
@@ -76,7 +105,6 @@ export async function POST(
 
         // Log the activity (don't let logging failure block the main action)
         try {
-            const session = await getServerSession(authOptions);
             if (session?.user) {
                 await logActivity(
                     (session.user as any).id,
@@ -84,7 +112,7 @@ export async function POST(
                     (session.user as any).role,
                     'CREATE',
                     `Criou um novo item em ${collection}`,
-                    getModelName(collection),
+                    collection,
                     newItem.id
                 );
             }
@@ -94,12 +122,10 @@ export async function POST(
 
         return NextResponse.json(newItem);
     } catch (error: any) {
-        console.error(`API POST [${collectionName}] Error:`, error);
+        // ✅ CORRECÇÃO: Nunca expor dados do utilizador (payload) em erros
+        console.error(`API POST [${collectionName}] Error:`, error.message);
         return NextResponse.json({
-            error: 'Internal Server Error',
-            details: error.message,
-            targetCollection: collectionName,
-            payload: typeof body !== 'undefined' ? body : 'Not parsed'
+            error: 'Ocorreu um erro interno ao criar o registo.',
         }, { status: 500 });
     }
 }

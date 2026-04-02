@@ -2,6 +2,7 @@ import { NextAuthOptions } from "next-auth"
 import CredentialsProvider from "next-auth/providers/credentials"
 import { db } from "./db"
 import bcrypt from "bcryptjs"
+import { checkRateLimit } from "./rateLimit"
 
 export const getAuthOptions = (portal: string = 'default'): NextAuthOptions => ({
     session: {
@@ -34,6 +35,11 @@ export const getAuthOptions = (portal: string = 'default'): NextAuthOptions => (
                     throw new Error("Dados de acesso inválidos")
                 }
 
+                const { allowed, retryAfter } = checkRateLimit(`login:${identifier}`);
+                if (!allowed) {
+                    throw new Error(`Demasiadas tentativas de login. Aguarde ${retryAfter} segundos.`);
+                }
+
                 // Collections to search based on portal
                 let collections: string[] = [];
                 if (portal === 'admin') {
@@ -60,7 +66,7 @@ export const getAuthOptions = (portal: string = 'default'): NextAuthOptions => (
 
                     if (user) {
                         foundUser = user;
-                        foundPasswordHash = user.password || user.passwordHash;
+                        foundPasswordHash = user.passwordHash;
                         break;
                     }
                 }

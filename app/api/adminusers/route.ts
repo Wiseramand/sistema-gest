@@ -1,9 +1,21 @@
 import { NextResponse } from 'next/server';
 import { db } from '../../../lib/db';
 import bcrypt from 'bcryptjs';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '../../../lib/auth';
 
 export async function GET() {
     try {
+        // ✅ CORRECÇÃO: Verificar autenticação
+        const session = await getServerSession(authOptions);
+        if (!session) {
+            return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+        }
+        const role = (session.user as any).role;
+        if (role !== 'SUPER_ADMIN' && role !== 'ADMIN') {
+            return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+        }
+
         const admins = await db.adminUser.findMany();
         // Don't expose password hashes
         const safe = admins.map((a: any) => {
@@ -13,12 +25,22 @@ export async function GET() {
 
         return NextResponse.json(safe);
     } catch {
-        return NextResponse.json([], { status: 200 });
+        return NextResponse.json({ error: 'Erro ao procurar administradores' }, { status: 500 });
     }
 }
 
 export async function POST(request: Request) {
     try {
+        // ✅ CORRECÇÃO: Verificar autenticação e role (Issue #1)
+        const session = await getServerSession(authOptions);
+        if (!session) {
+            return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+        }
+        const userRole = (session.user as any).role;
+        if (userRole !== 'SUPER_ADMIN') {
+            return NextResponse.json({ error: 'Forbidden. Apenas SUPER_ADMIN pode criar novos admins.' }, { status: 403 });
+        }
+
         const body = await request.json();
 
         // Generate username
@@ -33,7 +55,8 @@ export async function POST(request: Request) {
         let plainPassword = '';
         for (let i = 0; i < 10; i++) plainPassword += chars[Math.floor(Math.random() * chars.length)];
 
-        const passwordHash = await bcrypt.hash(plainPassword, 4);
+        // ✅ CORRECÇÃO: bcrypt com Salt Rounds = 12 (Issue #3)
+        const passwordHash = await bcrypt.hash(plainPassword, 12);
 
         const newAdmin = await db.adminUser.create({
             data: {
