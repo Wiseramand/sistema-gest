@@ -12,9 +12,7 @@ export default function TrainerLayout({
     children: React.ReactNode;
 }) {
     return (
-        <SessionProvider basePath="/api/auth/professor">
-            <TrainerLayoutContent>{children}</TrainerLayoutContent>
-        </SessionProvider>
+        <TrainerLayoutContent>{children}</TrainerLayoutContent>
     );
 }
 

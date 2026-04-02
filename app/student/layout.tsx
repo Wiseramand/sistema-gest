@@ -11,9 +11,7 @@ export default function StudentLayout({
     children: React.ReactNode;
 }) {
     return (
-        <SessionProvider basePath="/api/auth/student">
-            <StudentLayoutContent>{children}</StudentLayoutContent>
-        </SessionProvider>
+        <StudentLayoutContent>{children}</StudentLayoutContent>
     );
 }
 

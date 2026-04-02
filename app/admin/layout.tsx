@@ -11,9 +11,7 @@ export default function AdminLayout({
   children: React.ReactNode;
 }) {
   return (
-    <SessionProvider basePath="/api/auth/admin">
-      <AdminLayoutContent>{children}</AdminLayoutContent>
-    </SessionProvider>
+    <AdminLayoutContent>{children}</AdminLayoutContent>
   );
 }
 
