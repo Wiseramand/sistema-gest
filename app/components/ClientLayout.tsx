@@ -16,7 +16,7 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
     }, [pathname]);
 
     return (
-        <SessionProvider basePath="/api/auth">
+        <SessionProvider>
             {isLoading && <LoadingOverlay />}
             {children}
         </SessionProvider>

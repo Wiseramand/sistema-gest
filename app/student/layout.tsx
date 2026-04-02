@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { signOut, useSession, SessionProvider } from 'next-auth/react';
+import { signOut, useSession } from 'next-auth/react';
 
 export default function StudentLayout({
     children,
