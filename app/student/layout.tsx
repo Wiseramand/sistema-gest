@@ -235,420 +235,244 @@ function StudentLayoutContent({
             </main>
 
             <style jsx>{`
-                .portal-container {
-                    display: grid;
-                    grid-template-columns: 260px 1fr;
-                    min-height: 100vh;
-                    background-color: #f8fafc;
-                    font-family: 'Inter', sans-serif;
-                }
+        .portal-container {
+          display: flex;
+          min-height: 100vh;
+          background: linear-gradient(135deg, #f0f4f8 0%, #e2e8f0 100%);
+          font-family: 'Outfit', 'Inter', sans-serif;
+          padding: 1.5rem;
+          gap: 1.5rem;
+        }
 
-                .portal-sidebar {
-                    position: fixed;
-                    left: 0;
-                    top: 0;
-                    bottom: 0;
-                    width: 260px;
-                    background-color: #0f172a;
-                    color: white;
-                    display: flex;
-                    flex-direction: column;
-                    box-shadow: 4px 0 10px rgba(0,0,0,0.1);
-                    z-index: 100;
-                }
+        /* Sidebar Styles (Floating) */
+        .portal-sidebar {
+          width: 260px;
+          background: rgba(15, 23, 42, 0.95); /* Deep Navy */
+          backdrop-filter: blur(12px);
+          color: white;
+          display: flex;
+          flex-direction: column;
+          border-radius: 24px;
+          box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+          z-index: 1000;
+          transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+          flex-shrink: 0;
+          position: sticky;
+          top: 1.5rem;
+          height: calc(100vh - 3rem);
+          border: 1px solid rgba(255,255,255,0.1);
+        }
 
-                .sidebar-inner {
-                    height: 100%;
-                    display: flex;
-                    flex-direction: column;
-                    overflow: hidden;
-                }
+        .sidebar-inner {
+          height: 100%;
+          display: flex;
+          flex-direction: column;
+          overflow: hidden;
+        }
 
-                .sidebar-header {
-                    padding: 2rem 1.5rem;
-                    border-bottom: 1px solid rgba(255,255,255,0.05);
-                }
+        .sidebar-header {
+          padding: 2.5rem 1.5rem;
+          border-bottom: 1px solid rgba(255,255,255,0.08);
+        }
 
-                .logo-box {
-                    display: flex;
-                    align-items: center;
-                    gap: 1rem;
-                }
+        .logo-box {
+          display: flex;
+          align-items: center;
+          gap: 1rem;
+        }
 
-                .logo-icon {
-                    font-size: 1.8rem;
-                    background: var(--sand-gold, #eab308);
-                    width: 40px;
-                    height: 40px;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    border-radius: 10px;
-                }
+        .logo-icon {
+          font-size: 1.8rem;
+          background: #eab308;
+          width: 44px;
+          height: 44px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          border-radius: 12px;
+          box-shadow: 0 8px 16px rgba(234, 179, 8, 0.25);
+        }
 
-                .logo-text h1 {
-                    font-size: 1.1rem;
-                    margin: 0;
-                    letter-spacing: 0.5px;
-                    color: white;
-                    font-weight: 800;
-                }
+        .logo-text h1 {
+          font-size: 1.15rem;
+          margin: 0;
+          letter-spacing: 0.5px;
+          color: white;
+          font-weight: 800;
+        }
 
-                .logo-text span {
-                    font-size: 0.65rem;
-                    text-transform: uppercase;
-                    letter-spacing: 1.5px;
-                    color: rgba(255,255,255,0.5);
-                    font-weight: 600;
-                }
+        .logo-text span {
+          font-size: 0.65rem;
+          text-transform: uppercase;
+          letter-spacing: 1.5px;
+          color: rgba(255,255,255,0.4);
+          font-weight: 600;
+        }
 
-                .sidebar-nav {
-                    flex: 1;
-                    padding: 1.5rem 0;
-                    overflow-y: auto;
-                    scrollbar-width: thin;
-                    scrollbar-color: rgba(255,255,255,0.1) transparent;
-                }
+        .sidebar-nav {
+          flex: 1;
+          padding: 2rem 0.75rem;
+          overflow-y: auto;
+        }
 
-                .sidebar-nav::-webkit-scrollbar {
-                    width: 4px;
-                }
+        .nav-label {
+          padding: 0 1.25rem 0.75rem;
+          font-size: 0.65rem;
+          font-weight: 800;
+          color: rgba(255,255,255,0.3);
+          letter-spacing: 1.2px;
+          text-transform: uppercase;
+        }
 
-                .sidebar-nav::-webkit-scrollbar-thumb {
-                    background: rgba(255,255,255,0.1);
-                    border-radius: 10px;
-                }
+        .nav-item {
+          display: flex;
+          align-items: center;
+          padding: 1rem 1.25rem;
+          color: rgba(255,255,255,0.7);
+          text-decoration: none;
+          transition: all 0.2s ease;
+          border-radius: 16px;
+          margin-bottom: 4px;
+          font-weight: 500;
+          font-size: 0.9rem;
+        }
 
-                .nav-group {
-                    display: flex;
-                    flex-direction: column;
-                    gap: 0.25rem;
-                }
+        .nav-icon {
+          margin-right: 1.25rem;
+          font-size: 1.2rem;
+          width: 24px;
+          text-align: center;
+        }
 
-                .nav-label {
-                    padding: 0 1.5rem 0.75rem;
-                    font-size: 0.6rem;
-                    font-weight: 700;
-                    color: rgba(255,255,255,0.3);
-                    letter-spacing: 1.2px;
-                }
+        .nav-item:hover {
+          color: white;
+          background-color: rgba(255,255,255,0.08);
+        }
 
-                .nav-item {
-                    display: flex;
-                    align-items: center;
-                    padding: 0.85rem 1.5rem;
-                    color: rgba(255,255,255,0.6);
-                    text-decoration: none;
-                    transition: all 0.2s ease;
-                    position: relative;
-                    font-weight: 500;
-                    border-left: 3px solid transparent;
-                }
+        .nav-item.active {
+          color: #0f172a;
+          background: #eab308;
+          font-weight: 800;
+          box-shadow: 0 8px 16px rgba(234, 179, 8, 0.3);
+        }
 
-                .nav-icon {
-                    margin-right: 1rem;
-                    font-size: 1.1rem;
-                    width: 24px;
-                    text-align: center;
-                }
+        .sidebar-footer {
+          padding: 1.5rem 0.75rem;
+          border-top: 1px solid rgba(255,255,255,0.08);
+        }
 
-                .nav-text {
-                    font-size: 0.9rem;
-                }
+        .logout-btn {
+          width: 100%;
+          padding: 1rem;
+          border: none;
+          background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+          color: white;
+          cursor: pointer;
+          border-radius: 16px;
+          font-weight: 700;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 0.75rem;
+          transition: 0.3s;
+        }
 
-                .nav-item:hover {
-                    color: white;
-                    background-color: rgba(255,255,255,0.05);
-                }
+        .logout-btn:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 10px 20px rgba(59, 130, 246, 0.2);
+        }
 
-                .nav-item.active {
-                    color: white;
-                    background-color: rgba(59, 130, 246, 0.1);
-                    border-left-color: #3b82f6;
-                    font-weight: 600;
-                }
+        /* Content Area (Card) */
+        .portal-content {
+          flex: 1;
+          display: flex;
+          flex-direction: column;
+          background: white;
+          border-radius: 28px;
+          box-shadow: 0 15px 50px rgba(0,0,0,0.08);
+          overflow: hidden;
+          position: relative;
+        }
 
-                .active-indicator {
-                    position: absolute;
-                    right: 0;
-                    width: 3px;
-                    height: 18px;
-                    background-color: #3b82f6;
-                    border-radius: 4px 0 0 4px;
-                }
+        .portal-header {
+          height: 80px;
+          background: rgba(255,255,255,0.8);
+          backdrop-filter: blur(12px);
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          padding: 0 2.5rem;
+          border-bottom: 1px solid #f1f5f9;
+        }
 
-                .sidebar-footer {
-                    padding: 1.5rem 0;
-                    border-top: 1px solid rgba(255,255,255,0.05);
-                }
+        .breadcrumb {
+          font-size: 0.85rem;
+          color: #94a3b8;
+          font-weight: 600;
+        }
 
-                .nav-item.secondary {
-                    font-size: 0.85rem;
-                    opacity: 0.7;
-                    padding: 0.75rem 1.5rem;
-                    margin: 0.25rem 1.25rem;
-                    border-radius: 10px;
-                    transition: all 0.2s ease;
-                }
+        .header-right {
+          display: flex;
+          align-items: center;
+          gap: 1.5rem;
+        }
 
-                .nav-item.secondary:hover {
-                    opacity: 1;
-                    background-color: rgba(255,255,255,0.05);
-                }
+        .notif-bell {
+            background: #f1f5f9;
+            border: none;
+            border-radius: 50%;
+            width: 42px;
+            height: 42px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .notif-bell:hover { background: #e2e8f0; }
 
-                .logout-btn {
-                    width: calc(100% - 2.5rem);
-                    margin: 0.5rem 1.25rem 1.5rem;
-                    border: none;
-                    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
-                    color: white !important;
-                    cursor: pointer;
-                    text-align: left;
-                    border-radius: 12px;
-                    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
-                    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-                    display: flex;
-                    align-items: center;
-                    font-weight: 700;
-                }
+        .user-profile {
+          display: flex;
+          align-items: center;
+          gap: 1rem;
+        }
 
-                .logout-btn:hover {
-                    background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%) !important;
-                    box-shadow: 0 6px 16px rgba(59, 130, 246, 0.35);
-                    transform: translateY(-2px) scale(1.02);
-                    color: white !important;
-                }
+        .user-info {
+          display: flex;
+          flex-direction: column;
+          align-items: flex-end;
+        }
 
-                /* Content Area */
-                .portal-content {
-                    flex: 1;
-                    display: flex;
-                    flex-direction: column;
-                }
+        .user-name { font-weight: 800; font-size: 0.9rem; color: #1e293b; }
+        .user-role { font-size: 0.65rem; font-weight: 800; color: #3b82f6; text-transform: uppercase; }
 
-                .portal-header {
-                    height: 70px;
-                    background-color: white;
-                    display: flex;
-                    align-items: center;
-                    justify-content: space-between;
-                    padding: 0 2rem;
-                    border-bottom: 1px solid #e2e8f0;
-                    position: sticky;
-                    top: 0;
-                    z-index: 50;
-                }
+        .avatar {
+          width: 40px;
+          height: 40px;
+          border-radius: 50%;
+          background: linear-gradient(135deg, #0f172a, #3b82f6);
+          color: white;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-weight: 800;
+        }
 
-                .breadcrumb {
-                    font-size: 0.8rem;
-                    color: #64748b;
-                    font-weight: 600;
-                }
+        .content-inner {
+          padding: 2.5rem;
+          flex: 1;
+          overflow-y: auto;
+        }
 
-                .header-right {
-                    display: flex;
-                    align-items: center;
-                    gap: 1rem;
-                }
-
-                /* Notification Bell */
-                .notif-wrapper {
-                    position: relative;
-                }
-
-                .notif-bell {
-                    position: relative;
-                    background: #f1f5f9;
-                    border: none;
-                    border-radius: 50%;
-                    width: 40px;
-                    height: 40px;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    font-size: 1.1rem;
-                    cursor: pointer;
-                    transition: 0.2s;
-                }
-                .notif-bell:hover { background: #e2e8f0; }
-
-                .notif-badge {
-                    position: absolute;
-                    top: -4px;
-                    right: -4px;
-                    background: #ef4444;
-                    color: white;
-                    font-size: 0.6rem;
-                    font-weight: 800;
-                    width: 18px;
-                    height: 18px;
-                    border-radius: 50%;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    border: 2px solid white;
-                    animation: pulse-badge 2s ease-in-out infinite;
-                }
-
-                @keyframes pulse-badge {
-                    0%, 100% { transform: scale(1); }
-                    50% { transform: scale(1.15); }
-                }
-
-                .notif-dropdown {
-                    position: absolute;
-                    top: calc(100% + 10px);
-                    right: 0;
-                    width: 360px;
-                    background: white;
-                    border-radius: 16px;
-                    box-shadow: 0 20px 50px -10px rgba(0,0,0,0.2);
-                    border: 1px solid #e2e8f0;
-                    z-index: 200;
-                    overflow: hidden;
-                    animation: dropIn 0.2s ease-out;
-                }
-
-                @keyframes dropIn {
-                    from { opacity: 0; transform: translateY(-8px); }
-                    to { opacity: 1; transform: translateY(0); }
-                }
-
-                .notif-header {
-                    display: flex;
-                    justify-content: space-between;
-                    align-items: center;
-                    padding: 1rem 1.25rem;
-                    border-bottom: 1px solid #f1f5f9;
-                    background: #f8fafc;
-                }
-
-                .notif-title {
-                    font-weight: 800;
-                    font-size: 0.9rem;
-                    color: #0f172a;
-                }
-
-                .mark-all-btn {
-                    background: none;
-                    border: none;
-                    color: #3b82f6;
-                    font-size: 0.75rem;
-                    font-weight: 700;
-                    cursor: pointer;
-                    padding: 0.25rem 0.5rem;
-                    border-radius: 6px;
-                    transition: 0.2s;
-                }
-                .mark-all-btn:hover { background: #eff6ff; }
-
-                .notif-list {
-                    max-height: 360px;
-                    overflow-y: auto;
-                }
-
-                .notif-empty {
-                    padding: 2rem;
-                    text-align: center;
-                    color: #94a3b8;
-                    font-size: 0.88rem;
-                }
-
-                .notif-item {
-                    display: flex;
-                    gap: 0.875rem;
-                    padding: 1rem 1.25rem;
-                    border-bottom: 1px solid #f8fafc;
-                    cursor: pointer;
-                    transition: background 0.15s;
-                    position: relative;
-                }
-
-                .notif-item:last-child { border-bottom: none; }
-                .notif-item:hover { background: #f8fafc; }
-                .notif-item.unread { background: #eff6ff; }
-                .notif-item.unread:hover { background: #dbeafe; }
-
-                .notif-icon {
-                    font-size: 1.4rem;
-                    flex-shrink: 0;
-                    width: 36px;
-                    height: 36px;
-                    background: white;
-                    border-radius: 10px;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
-                }
-
-                .notif-content { flex: 1; min-width: 0; }
-                .notif-content strong { display: block; font-size: 0.85rem; color: #0f172a; margin-bottom: 0.2rem; }
-                .notif-content p { font-size: 0.78rem; color: #64748b; margin: 0 0 0.25rem; line-height: 1.4; }
-                .notif-content small { font-size: 0.7rem; color: #94a3b8; }
-
-                .notif-dot {
-                    position: absolute;
-                    top: 1rem;
-                    right: 1rem;
-                    width: 8px;
-                    height: 8px;
-                    border-radius: 50%;
-                    background: #3b82f6;
-                    flex-shrink: 0;
-                }
-
-                .user-profile {
-                    display: flex;
-                    align-items: center;
-                    gap: 0.85rem;
-                }
-
-                .user-info {
-                    display: flex;
-                    flex-direction: column;
-                    align-items: flex-end;
-                }
-
-                .user-name {
-                    font-weight: 700;
-                    font-size: 0.85rem;
-                    color: #0f172a;
-                }
-
-                .user-role {
-                    font-size: 0.65rem;
-                    font-weight: 800;
-                    color: #3b82f6;
-                    letter-spacing: 0.5px;
-                }
-
-                .avatar {
-                    width: 36px;
-                    height: 36px;
-                    border-radius: 50%;
-                    background: linear-gradient(135deg, #0f172a, #3b82f6);
-                    color: white;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    font-weight: 700;
-                    font-size: 1rem;
-                }
-
-                .content-inner {
-                    padding: 2rem;
-                    flex: 1;
-                }
-
-                @media (max-width: 768px) {
-                    .portal-sidebar { width: 70px; }
-                    .nav-text, .nav-label, .logo-text, .user-info { display: none; }
-                    .sidebar-header, .nav-item { justify-content: center; padding: 1rem; }
-                    .nav-icon { margin: 0; }
-                    .notif-dropdown { right: -80px; width: 300px; }
-                }
-            `}</style>
+        @media (max-width: 1024px) {
+          .portal-container { padding: 1rem; }
+          .portal-sidebar { width: 80px; }
+          .nav-text, .nav-label, .logo-text, .user-info { display: none; }
+          .nav-item { justify-content: center; }
+          .nav-icon { margin: 0; }
+        }
+      `}</style>
         </div>
     );
 }

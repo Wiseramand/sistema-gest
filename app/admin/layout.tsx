@@ -347,24 +347,25 @@ function AdminLayoutContent({
         .nav-item {
           display: flex;
           align-items: center;
-          padding: 0.85rem 1.25rem;
-          color: rgba(255,255,255,0.65);
+          padding: 1rem 1.5rem;
+          color: rgba(255,255,255,0.7);
           text-decoration: none;
-          transition: all 0.2s ease;
-          border-radius: 16px;
-          margin-bottom: 4px;
+          transition: all 0.3s ease;
+          border-radius: 12px;
+          margin: 0.25rem 0.75rem;
           font-weight: 500;
-          font-size: 0.9rem;
+          font-size: 0.95rem;
         }
 
         .nav-icon {
           margin-right: 1.25rem;
-          font-size: 1.2rem;
+          font-size: 1.25rem;
           width: 24px;
           text-align: center;
           display: flex;
           align-items: center;
           justify-content: center;
+          opacity: 0.8;
         }
 
         .nav-text {
@@ -374,15 +375,18 @@ function AdminLayoutContent({
 
         .nav-item:hover {
           color: white;
-          background-color: rgba(255,255,255,0.08);
-          padding-left: 1.5rem;
+          background-color: rgba(255,255,255,0.1);
         }
 
         .nav-item.active {
           color: #001f3f;
           background: #eab308;
-          font-weight: 700;
-          box-shadow: 0 8px 20px rgba(234, 179, 8, 0.3);
+          font-weight: 800;
+          box-shadow: 0 4px 12px rgba(234, 179, 8, 0.4);
+        }
+
+        .nav-item.active .nav-icon {
+          opacity: 1;
         }
 
         .sidebar-footer {
