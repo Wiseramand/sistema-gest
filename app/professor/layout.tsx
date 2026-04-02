@@ -142,29 +142,27 @@ function TrainerLayoutContent({
         .portal-container {
           display: flex;
           min-height: 100vh;
-          background: linear-gradient(135deg, #f0f4f8 0%, #e2e8f0 100%);
+          background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
           font-family: 'Outfit', 'Inter', sans-serif;
           padding: 1.5rem;
           gap: 1.5rem;
         }
 
-        /* Sidebar Styles (Floating) */
+        /* Modern White Sidebar */
         .portal-sidebar {
           width: 260px;
-          background: rgba(30, 41, 59, 0.95); /* Deep Navy */
-          backdrop-filter: blur(12px);
-          color: white;
+          background: #ffffff;
           display: flex;
           flex-direction: column;
           border-radius: 24px;
-          box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+          border: 1px solid #e2e8f0;
+          box-shadow: 0 4px 20px rgba(0,0,0,0.03);
           z-index: 1000;
           transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
           flex-shrink: 0;
           position: sticky;
           top: 1.5rem;
           height: calc(100vh - 3rem);
-          border: 1px solid rgba(255,255,255,0.1);
         }
 
         .sidebar-inner {
@@ -176,7 +174,7 @@ function TrainerLayoutContent({
 
         .sidebar-header {
           padding: 2.5rem 1.5rem;
-          border-bottom: 1px solid rgba(255,255,255,0.08);
+          border-bottom: 1px solid #f1f5f9;
         }
 
         .logo-box {
@@ -187,58 +185,58 @@ function TrainerLayoutContent({
 
         .logo-icon {
           font-size: 1.8rem;
-          background: #eab308;
+          background: #001f3f;
           width: 44px;
           height: 44px;
           display: flex;
           align-items: center;
           justify-content: center;
           border-radius: 12px;
-          box-shadow: 0 8px 16px rgba(234, 179, 8, 0.25);
+          color: white;
         }
 
         .logo-text h1 {
           font-size: 1.15rem;
           margin: 0;
-          letter-spacing: 0.5px;
-          color: white;
+          color: #001f3f;
           font-weight: 800;
         }
 
         .logo-text span {
           font-size: 0.65rem;
           text-transform: uppercase;
-          letter-spacing: 1.5px;
-          color: rgba(255,255,255,0.4);
+          letter-spacing: 1px;
+          color: #94a3b8;
           font-weight: 600;
         }
 
         .sidebar-nav {
           flex: 1;
-          padding: 2rem 0.75rem;
+          padding: 1.5rem 0.75rem;
           overflow-y: auto;
         }
 
         .nav-label {
-          padding: 0 1.25rem 0.75rem;
+          padding: 0 1.25rem 0.5rem;
           font-size: 0.65rem;
-          font-weight: 800;
-          color: rgba(255,255,255,0.3);
-          letter-spacing: 1.2px;
+          font-weight: 700;
+          color: #94a3b8;
+          letter-spacing: 1px;
           text-transform: uppercase;
         }
 
         .nav-item {
           display: flex;
           align-items: center;
-          padding: 1rem 1.25rem;
-          color: rgba(255,255,255,0.7);
+          padding: 0.8rem 1.25rem;
+          color: #64748b;
           text-decoration: none;
-          transition: all 0.2s ease;
-          border-radius: 16px;
-          margin-bottom: 4px;
+          transition: all 0.2s;
+          border-radius: 12px;
+          margin-bottom: 2px;
           font-weight: 500;
-          font-size: 0.9rem;
+          font-size: 0.95rem;
+          border-left: 3px solid transparent;
         }
 
         .nav-icon {
@@ -246,62 +244,66 @@ function TrainerLayoutContent({
           font-size: 1.2rem;
           width: 24px;
           text-align: center;
+          opacity: 0.7;
         }
 
         .nav-item:hover {
-          color: white;
-          background-color: rgba(255,255,255,0.08);
+          background-color: #f8fafc;
+          color: #001f3f;
         }
 
         .nav-item.active {
-          color: #1e293b;
-          background: #eab308;
-          font-weight: 800;
-          box-shadow: 0 8px 16px rgba(234, 179, 8, 0.3);
+          color: #ca8a04;
+          background: #fefce8;
+          font-weight: 700;
+          border-left-color: #eab308;
+        }
+
+        .nav-item.active .nav-icon {
+          opacity: 1;
         }
 
         .sidebar-footer {
-          padding: 1.5rem 0.75rem;
-          border-top: 1px solid rgba(255,255,255,0.08);
+          padding: 1rem 0.75rem 2rem;
+          border-top: 1px solid #f1f5f9;
         }
 
         .logout-btn {
           width: 100%;
-          padding: 1rem;
+          padding: 0.85rem;
           border: none;
-          background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
-          color: white;
+          background: #fef2f2;
+          color: #ef4444;
           cursor: pointer;
-          border-radius: 16px;
+          border-radius: 12px;
           font-weight: 700;
           display: flex;
           align-items: center;
           justify-content: center;
           gap: 0.75rem;
-          transition: 0.3s;
+          transition: 0.2s;
         }
 
         .logout-btn:hover {
+          background: #fee2e2;
           transform: translateY(-2px);
-          box-shadow: 0 10px 20px rgba(239, 68, 68, 0.2);
         }
 
-        /* Content Area (Card) */
+        /* Content Area (Clean White Card) */
         .portal-content {
           flex: 1;
           display: flex;
           flex-direction: column;
           background: white;
           border-radius: 28px;
-          box-shadow: 0 15px 50px rgba(0,0,0,0.08);
+          box-shadow: 0 4px 30px rgba(0,0,0,0.02);
+          border: 1px solid #f1f5f9;
           overflow: hidden;
-          position: relative;
         }
 
         .portal-header {
           height: 80px;
-          background: rgba(255,255,255,0.8);
-          backdrop-filter: blur(12px);
+          background: #ffffff;
           display: flex;
           align-items: center;
           justify-content: space-between;
@@ -312,7 +314,7 @@ function TrainerLayoutContent({
         .breadcrumb {
           font-size: 0.85rem;
           color: #94a3b8;
-          font-weight: 600;
+          font-weight: 500;
         }
 
         .header-right {
@@ -325,22 +327,20 @@ function TrainerLayoutContent({
           display: flex;
           align-items: center;
           gap: 1rem;
+          padding: 0.5rem 1rem;
+          border-radius: 50px;
+          background: #f8fafc;
+          border: 1px solid #f1f5f9;
         }
 
-        .user-info {
-          display: flex;
-          flex-direction: column;
-          align-items: flex-end;
-        }
-
-        .user-name { font-weight: 800; font-size: 0.9rem; color: #1e293b; }
-        .user-role { font-size: 0.65rem; font-weight: 800; color: #3b82f6; text-transform: uppercase; }
+        .user-name { font-weight: 700; font-size: 0.9rem; color: #1e293b; }
+        .user-role { font-size: 0.65rem; font-weight: 700; color: #3b82f6; text-transform: uppercase; }
 
         .avatar {
-          width: 40px;
-          height: 40px;
+          width: 38px;
+          height: 38px;
           border-radius: 50%;
-          background: linear-gradient(135deg, #1e293b, #3b82f6);
+          background: #1e293b;
           color: white;
           display: flex;
           align-items: center;
@@ -356,6 +356,7 @@ function TrainerLayoutContent({
 
         @media (max-width: 1024px) {
           .portal-container { padding: 1rem; }
+          .portal-content { border-radius: 20px; }
           .portal-sidebar { width: 80px; }
           .nav-text, .nav-label, .logo-text, .user-info { display: none; }
           .nav-item { justify-content: center; }
