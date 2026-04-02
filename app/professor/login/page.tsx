@@ -30,9 +30,7 @@ export default function TrainerLoginPage() {
         password,
         redirect: false,
         callbackUrl: '/professor',
-      }, {
-        basePath: '/api/auth/professor'
-      } as any);
+      });
 
       if (res?.error) {
         setError('E-mail ou senha inválidos.');

@@ -30,9 +30,7 @@ export default function AdminLoginPage() {
         password,
         redirect: false,
         callbackUrl: '/admin',
-      }, {
-        basePath: '/api/auth/admin'
-      } as any);
+      });
 
       if (res?.error) {
         setError('E-mail ou senha inválidos.');

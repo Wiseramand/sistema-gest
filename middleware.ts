@@ -38,7 +38,9 @@ export default withAuth(
     }
 );
 
-// Aplicar middleware a estas rotas
+// Aplicar middleware a todas as rotas EXCETO ficheiros estáticos e páginas de login
 export const config = {
-    matcher: ['/admin/:path*', '/student/:path*', '/professor/:path*'],
+    matcher: [
+        '/((?!api|_next/static|_next/image|favicon.ico|admin/login|student/login|professor/login|login).*)'
+    ],
 };
