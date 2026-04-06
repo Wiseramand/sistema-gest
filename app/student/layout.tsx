@@ -55,10 +55,53 @@ function IconHome() {
 }
 function IconSquare() {
   return (
-    <svg width="12" height="12" viewBox="0 0 20 20" fill="none">
-      <rect x="3" y="3" width="14" height="14" rx="2" fill="currentColor" fillOpacity="0.6"/>
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="3" y="3" width="18" height="18" rx="2" />
     </svg>
   );
+}
+
+function getFlyoutIcon(itemName: string) {
+  const name = itemName.toLowerCase();
+  
+  if (name.includes('inscri')) {
+    return <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>;
+  }
+  if (name.includes('aluno')) {
+    return <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>;
+  }
+  if (name.includes('matríc') || name.includes('matric')) {
+    return <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>;
+  }
+  if (name.includes('client') || name.includes('empres')) {
+    return <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>;
+  }
+  if (name.includes('turma') || name.includes('formador') || name.includes('instrutor')) {
+    return <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>;
+  }
+  if (name.includes('calend') || name.includes('curso')) {
+    return <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>;
+  }
+  if (name.includes('sala')) {
+    return <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="9" y1="3" x2="9" y2="21"/></svg>;
+  }
+  if (name.includes('frequ') || name.includes('pend')) {
+    return <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>;
+  }
+  if (name.includes('certif') || name.includes('stcw') || name.includes('arquiv')) {
+    return <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M12 15l-2 5l9-9l-9-9l2 5l-9 9z" transform="rotate(-45 12 12)"/></svg>;
+  }
+  if (name.includes('pagament') || name.includes('fat') || name.includes('finan')) {
+    return <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>;
+  }
+  if (name.includes('desemp') || name.includes('relat') || name.includes('ativ') || name.includes('avali')) {
+    return <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M3 3v18h18"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/></svg>;
+  }
+  if (name.includes('utiliz') || name.includes('config') || name.includes('media') || name.includes('mensag') || name.includes('feed') || name.includes('materiais') || name.includes('detalh') || name.includes('chat') || name.includes('suport') || name.includes('dash') || name.includes('perfil')) {
+    return <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>;
+  }
+  
+  return <IconSquare />;
 }
 
 // ── Types ────────────────────────────────────────────────────
@@ -277,7 +320,7 @@ function StudentLayoutContent({ children }: { children: React.ReactNode }) {
                   href={item.href}
                   className={`flyout-item${pathname === item.href ? ' active' : ''}`}
                 >
-                  <div className="flyout-icon"><IconSquare /></div>
+                  <div className="flyout-icon">{getFlyoutIcon(item.name)}</div>
                   <span className="flyout-label">{item.name}</span>
                   {item.badge && <span className="flyout-badge">{item.badge}</span>}
                 </Link>
@@ -361,10 +404,10 @@ function StudentLayoutContent({ children }: { children: React.ReactNode }) {
 
       <style jsx>{`
         /* ── Container ── */
-        .admin-wrap { display: flex; min-height: 100vh; background: #f4f7fb; font-family: 'DM Sans', sans-serif; padding: 1.25rem; gap: 0; }
+        .admin-wrap { display: flex; height: 100vh; overflow: hidden; background: #f4f7fb; font-family: 'DM Sans', sans-serif; padding: 1.25rem; gap: 0; }
 
         /* ── Rail ── */
-        .rail { width: 58px; background: #0a2a5e; border-radius: 14px 0 0 14px; display: flex; flex-direction: column; align-items: center; padding: 14px 0; flex-shrink: 0; position: sticky; top: 1.25rem; height: calc(100vh - 2.5rem); }
+        .rail { width: 58px; background: #0a2a5e; border-radius: 14px 0 0 14px; display: flex; flex-direction: column; align-items: center; padding: 14px 0; flex-shrink: 0; height: calc(100vh - 2.5rem); }
         .rail-logo { width: 34px; height: 34px; background: #F5C518; border-radius: 9px; display: flex; align-items: center; justify-content: center; margin-bottom: 20px; flex-shrink: 0; }
         .rail-modules { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; width: 100%; padding: 0 10px; }
         .rail-btn { width: 38px; height: 38px; border-radius: 9px; display: flex; align-items: center; justify-content: center; background: transparent; border: none; cursor: pointer; color: rgba(255, 255, 255, 0.6); transition: all 0.2s ease; }
@@ -375,7 +418,7 @@ function StudentLayoutContent({ children }: { children: React.ReactNode }) {
         .rail-avatar { width: 30px; height: 30px; border-radius: 50%; background: linear-gradient(135deg, #0ea5e9, #1a4fa0); color: #ffffff; font-size: 10px; font-weight: 600; font-family: 'Outfit', sans-serif; display: flex; align-items: center; justify-content: center; cursor: default; letter-spacing: 0.5px; }
 
         /* ── Flyout ── */
-        .flyout { width: 200px; background: #ffffff; border-right: 0.5px solid rgba(0, 0, 0, 0.07); display: flex; flex-direction: column; flex-shrink: 0; position: sticky; top: 1.25rem; height: calc(100vh - 2.5rem); overflow: hidden; }
+        .flyout { width: 200px; background: #ffffff; border-right: 0.5px solid rgba(0, 0, 0, 0.07); display: flex; flex-direction: column; flex-shrink: 0; height: calc(100vh - 2.5rem); overflow: hidden; }
         .flyout-hdr { padding: 16px; border-bottom: 0.5px solid rgba(0, 0, 0, 0.06); flex-shrink: 0; }
         .flyout-pre { display: block; font-size: 10px; text-transform: uppercase; letter-spacing: 0.12em; color: #94a3b8; margin-bottom: 4px; font-weight: 500; }
         .flyout-title { display: block; font-family: 'Outfit', sans-serif; font-size: 16px; font-weight: 600; color: #0a2a5e; letter-spacing: -0.02em; }
@@ -389,7 +432,7 @@ function StudentLayoutContent({ children }: { children: React.ReactNode }) {
         .flyout-item.active .flyout-label { color: #0a2a5e; font-weight: 500; }
         .flyout-item.active .flyout-icon { background: #0a2a5e; color: #ffffff; }
         .flyout-icon { width: 24px; height: 24px; border-radius: 6px; background: #f8fafc; display: flex; align-items: center; justify-content: center; color: #64748b; flex-shrink: 0; transition: all 0.15s; }
-        .flyout-label { font-size: 13px; color: #475569; flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; line-height: 1; }
+        .flyout-label { font-size: 13px; color: #0a2a5e; font-weight: 500; flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; line-height: 1; }
         .flyout-badge { font-size: 10px; background: #f1f5f9; color: #94a3b8; padding: 2px 5px; border-radius: 4px; font-weight: 500; flex-shrink: 0; }
         .flyout-foot { padding: 10px 8px; border-top: 0.5px solid rgba(0, 0, 0, 0.06); display: flex; flex-direction: column; gap: 2px; flex-shrink: 0; }
         .flyout-action { display: flex; align-items: center; gap: 8px; padding: 8px; border-radius: 7px; font-size: 12px; color: #94a3b8; background: none; border: none; cursor: pointer; text-decoration: none; width: 100%; transition: all 0.15s; font-family: 'DM Sans', sans-serif; }
