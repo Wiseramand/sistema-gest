@@ -200,7 +200,7 @@ const MODULE_FLYOUTS: Record<string, { label: string; groups: FlyoutGroup[] }> =
         label: 'GESTÃO',
         items: [
           { name: 'Turmas ativas', href: '/admin/classes', badge: '12', responsibility: 'classes' },
-          { name: 'Calendário', href: '/admin/courses', responsibility: 'courses' },
+          { name: 'Calendário', href: '/admin/calendar', responsibility: 'courses' },
           { name: 'Salas de Aula', href: '/admin/classrooms', responsibility: 'classrooms' },
         ],
       },
@@ -208,7 +208,7 @@ const MODULE_FLYOUTS: Record<string, { label: string; groups: FlyoutGroup[] }> =
         label: 'ALUNOS',
         items: [
           { name: 'Matrículas', href: '/admin/matriculations', badge: '47', responsibility: 'matriculations' },
-          { name: 'Frequência', href: '/admin/matriculations', responsibility: 'matriculations' },
+          { name: 'Frequência', href: '/admin/attendance', responsibility: 'matriculations' },
           { name: 'Pendências', href: '/admin/inscriptions', badgeAlert: '3', responsibility: 'inscriptions' },
         ],
       },
@@ -227,8 +227,8 @@ const MODULE_FLYOUTS: Record<string, { label: string; groups: FlyoutGroup[] }> =
         label: 'CERTIFICAÇÃO',
         items: [
           { name: 'Emitir certificado', href: '/admin/certificates', responsibility: 'certificates' },
-          { name: 'Validar STCW', href: '/admin/certificates', responsibility: 'certificates' },
-          { name: 'Arquivo', href: '/admin/certificates', responsibility: 'certificates' },
+          { name: 'Validar STCW', href: '/admin/validations', responsibility: 'certificates' },
+          { name: 'Arquivo', href: '/admin/archive', responsibility: 'certificates' },
         ],
       },
     ],
@@ -239,9 +239,9 @@ const MODULE_FLYOUTS: Record<string, { label: string; groups: FlyoutGroup[] }> =
       {
         label: 'FINANCEIRO',
         items: [
-          { name: 'Pagamentos', href: '/admin/matriculations', responsibility: 'matriculations' },
-          { name: 'Faturas', href: '/admin/matriculations', responsibility: 'matriculations' },
-          { name: 'Pendentes', href: '/admin/inscriptions', responsibility: 'inscriptions' },
+          { name: 'Pagamentos', href: '/admin/payments', responsibility: 'matriculations' },
+          { name: 'Faturas', href: '/admin/invoices', responsibility: 'matriculations' },
+          { name: 'Pendentes', href: '/admin/pending', responsibility: 'inscriptions' },
         ],
       },
     ],
