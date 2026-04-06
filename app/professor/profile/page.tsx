@@ -20,7 +20,7 @@ interface Trainer {
 }
 
 export default function TrainerProfilePage() {
-    const { data: session } = useSession();
+    const { data: session, status } = useSession();
     const [trainer, setTrainer] = useState<Trainer | null>(null);
     const [loading, setLoading] = useState(true);
 
@@ -81,7 +81,8 @@ export default function TrainerProfilePage() {
         }
     };
 
-    if (loading) return <div className="loader">A carregar o seu perfil...</div>;
+    if (loading || status === 'loading') return <div className="loader">A carregar o seu perfil...</div>;
+    if (!session) return <div className="error">Acesso negado. Por favor inicie sessão.</div>;
     if (!trainer) return <div className="error">Dados do perfil não encontrados. Por favor, contacte o administrador.</div>;
 
     return (

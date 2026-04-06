@@ -15,7 +15,7 @@ interface ClassSchedule {
 const DAYS = ['Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sábado'];
 
 export default function CalendarPage() {
-    const { data: session } = useSession();
+    const { data: session, status } = useSession();
     const [schedules, setSchedules] = useState<ClassSchedule[]>([]);
     const [loading, setLoading] = useState(true);
 
@@ -56,6 +56,14 @@ export default function CalendarPage() {
         };
         fetchSchedules();
     }, [session]);
+
+    if (status === 'loading') {
+        return <div className="p-8 text-center text-gray-500">A carregar...</div>;
+    }
+
+    if (!session) {
+        return <div className="p-8 text-center text-red-500">Acesso negado. Por favor inicie sessão.</div>;
+    }
 
     return (
         <div className="calendar-page container">

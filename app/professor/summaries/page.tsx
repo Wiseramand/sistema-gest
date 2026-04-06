@@ -16,7 +16,7 @@ interface Summary {
 }
 
 export default function SummariesPage() {
-    const { data: session } = useSession();
+    const { data: session, status } = useSession();
     const [courses, setCourses] = useState<Course[]>([]);
     const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
     const [summaries, setSummaries] = useState<Summary[]>([]);
@@ -91,6 +91,14 @@ export default function SummariesPage() {
         } catch (e) { console.error(e); }
         finally { setSaving(false); }
     };
+
+    if (status === 'loading') {
+        return <div className="p-8 text-center text-gray-500">A carregar...</div>;
+    }
+
+    if (!session) {
+        return <div className="p-8 text-center text-red-500">Acesso negado. Por favor inicie sessão.</div>;
+    }
 
     return (
         <div className="summaries-page container">

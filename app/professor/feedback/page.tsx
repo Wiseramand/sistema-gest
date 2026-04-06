@@ -13,7 +13,7 @@ interface Feedback {
 }
 
 export default function ProfessorFeedbackPage() {
-    const { data: session } = useSession();
+    const { data: session, status } = useSession();
     const [feedbacks, setFeedbacks] = useState<Feedback[]>([]);
     const [loading, setLoading] = useState(true);
 
@@ -53,6 +53,14 @@ export default function ProfessorFeedbackPage() {
         };
         fetchFeedback();
     }, [session]);
+
+    if (status === 'loading') {
+        return <div className="p-8 text-center text-gray-500">A carregar...</div>;
+    }
+
+    if (!session) {
+        return <div className="p-8 text-center text-red-500">Acesso negado. Por favor inicie sessão.</div>;
+    }
 
     return (
         <div className="professor-feedback container">
