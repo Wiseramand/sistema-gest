@@ -44,6 +44,7 @@ export const getAuthOptions = (portal: string = 'default'): NextAuthOptions => {
                         throw new Error(`Demasiadas tentativas de login. Aguarde ${retryAfter} segundos.`);
                     }
 
+                    console.log(`[AUTH] Attempting login for identifier: ${identifier} on portal: ${portal}`);
                     // Collections to search based on portal
                     let collections: string[] = [];
                     if (portal === 'admin') {
@@ -60,22 +61,28 @@ export const getAuthOptions = (portal: string = 'default'): NextAuthOptions => {
                     let foundPasswordHash = null;
 
                     for (const col of collections) {
-                        // Try email first
-                        let user = await (db as any)[col].findUnique({ where: { email: identifier } });
+                        try {
+                            // Try email first
+                            let user = await (db as any)[col].findUnique({ where: { email: identifier } });
 
-                        // Try username if not found
-                        if (!user) {
-                            user = await (db as any)[col].findUnique({ where: { username: identifier } });
-                        }
+                            // Try username if not found
+                            if (!user) {
+                                user = await (db as any)[col].findUnique({ where: { username: identifier } });
+                            }
 
-                        if (user) {
-                            foundUser = user;
-                            foundPasswordHash = user.passwordHash;
-                            break;
+                            if (user) {
+                                console.log(`[AUTH] Found user in collection: ${col}`);
+                                foundUser = user;
+                                foundPasswordHash = user.passwordHash;
+                                break;
+                            }
+                        } catch (err: any) {
+                            console.error(`[AUTH] Error searching in collection ${col}:`, err.message);
                         }
                     }
 
                     if (!foundUser || !foundPasswordHash) {
+                        console.log(`[AUTH] User not found or no password hash for: ${identifier}`);
                         throw new Error("Usuário não encontrado")
                     }
 
