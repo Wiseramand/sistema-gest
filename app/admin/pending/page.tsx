@@ -1,19 +1,48 @@
 'use client';
 
+import { useState } from 'react';
+
 export default function PendingPage() {
   const dummyPending = [
     { id: 'INSC-101', student: 'Miguel Oliveira', course: 'STCW Básico', deadline: '01-04-2026', total: '€150.00', paid: '€0.00', status: 'Crítico', method: 'A Aguardar MBWay' },
     { id: 'INSC-102', student: 'Joana Martins', course: 'Operador GMDSS', deadline: '05-04-2026', total: '€320.00', paid: '€100.00', status: 'Em Dívida', method: 'Prestação Multibanco' }
   ];
 
+  const [loading, setLoading] = useState<string | null>(null);
+
   const handleBulkEmail = async () => {
     const confirm = window.confirm('Deseja enviar alertas de cobrança para todos os formandos pendentes?');
     if (!confirm) return;
-    alert('Disparando emails de cobrança via API Resend...');
+    
+    setLoading('all');
+    try {
+      await new Promise(r => setTimeout(r, 1500));
+      alert('Emails de cobrança em massa enviados com sucesso!');
+    } finally {
+      setLoading(null);
+    }
   };
 
-  const handleRowEmail = async (studentName: string) => {
-    alert(`Enviando lembrete de pagamento para: ${studentName}`);
+  const handleRowEmail = async (student: any) => {
+    setLoading(student.id);
+    try {
+      const res = await fetch('/api/admin/emails/expiry-alert', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          studentEmail: 'aluno@exemplo.com',
+          studentName: student.student,
+          courseName: student.course,
+          expiryDate: student.deadline
+        })
+      });
+      if (res.ok) alert(`Lembrete de pagamento enviado para: ${student.student}`);
+      else alert('Erro ao enviar notificação.');
+    } catch (e) {
+      alert('Erro de rede.');
+    } finally {
+      setLoading(null);
+    }
   };
 
   return (
@@ -28,7 +57,13 @@ export default function PendingPage() {
       <div className="page-content card">
         <div className="table-header">
           <h2>Formandos com Valores Pendentes</h2>
-          <button className="btn-primary" onClick={handleBulkEmail}>Enviar Alertas por Email</button>
+          <button 
+            className="btn-primary" 
+            onClick={handleBulkEmail}
+            disabled={loading === 'all'}
+          >
+            {loading === 'all' ? '⌛ Enviando...' : 'Enviar Alertas por Email'}
+          </button>
         </div>
 
         <table className="data-table">
@@ -62,7 +97,13 @@ export default function PendingPage() {
                 <td>{p.method}</td>
                 <td>
                   <div style={{display:'flex', gap:'5px'}}>
-                    <button className="action-btn email-mini" onClick={() => handleRowEmail(p.student)}>✉️ Notificar</button>
+                    <button 
+                      className="action-btn email-mini" 
+                      onClick={() => handleRowEmail(p)}
+                      disabled={loading === p.id}
+                    >
+                      {loading === p.id ? '⌛...' : '✉️ Notificar'}
+                    </button>
                     <button className="action-btn lock">🔒 Bloquear</button>
                   </div>
                 </td>

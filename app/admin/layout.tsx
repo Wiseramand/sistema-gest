@@ -168,7 +168,7 @@ interface FlyoutGroup {
 
 // ── Rail Module Data ─────────────────────────────────────────
 const TOP_MODULES = [
-  'dashboard', 'alunos', 'cursos', 'certificados'
+  'dashboard', 'alunos', 'cursos', 'certificados', 'administracao'
 ];
 const BOTTOM_MODULES = ['financeiro', 'relatorios'];
 
@@ -258,16 +258,33 @@ const MODULE_FLYOUTS: Record<string, { label: string; groups: FlyoutGroup[] }> =
       },
     ],
   },
+  administracao: {
+    label: 'Administração',
+    groups: [
+      {
+        label: 'EQUIPA',
+        items: [
+          { name: 'Gestão de Utilizadores', href: '/admin/users', superOnly: true },
+          { name: 'Tarefas & Delegar', href: '/admin/users/tasks', superOnly: true },
+        ],
+      },
+      {
+        label: 'CONTEÚDO',
+        items: [
+          { name: 'Hub de Média', href: '/admin/media', responsibility: 'media' },
+        ],
+      },
+    ],
+  },
   config: {
     label: 'Configurações',
     groups: [
       {
         label: 'SISTEMA',
         items: [
-          { name: 'Utilizadores', href: '/admin/admin-users', superOnly: true },
-          { name: 'Área de Media', href: '/admin/materials' },
+          { name: 'Log de Atividades', href: '/admin/activity-logs', superOnly: true },
           { name: 'Feedbacks', href: '/admin/feedbacks' },
-          { name: 'Mensagens', href: '/admin/chat' },
+          { name: 'Mensagens / Chat', href: '/admin/chat' },
         ],
       },
     ],
@@ -323,6 +340,7 @@ function AdminLayoutContent({ children }: { children: React.ReactNode }) {
     alunos: <IconAlunos />,
     cursos: <IconCursos />,
     certificados: <IconCertificados />,
+    administracao: <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M17 21v-2a4 4 0 0 0-3-3.87"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>,
     financeiro: <IconFinanceiro />,
     relatorios: <IconRelatorios />,
   };

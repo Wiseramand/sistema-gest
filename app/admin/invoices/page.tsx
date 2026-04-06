@@ -1,10 +1,138 @@
 'use client';
 
+import { useState } from 'react';
+
 export default function InvoicesPage() {
   const dummyInvoices = [
     { nif: '504123456', client: 'Marítima Global Lda', type: 'Fatura Agrupada Empresa', amount: '€1,500.00', date: '06-04-2026', method: 'Transferência', status: 'Emitida' },
     { nif: '210000000', client: 'Joaquim Silva', type: 'Proforma Individual', amount: '€150.00', date: '06-04-2026', method: 'Referência MB', status: 'Aguardando Pagamento' }
   ];
+
+  const [selectedInvoice, setSelectedInvoice] = useState<any>(null);
+  const [sendingEmail, setSendingEmail] = useState<string | null>(null);
+
+  const handleSendEmail = async (invoice: any) => {
+    setSendingEmail(invoice.client);
+    try {
+      const res = await fetch('/api/admin/emails/send-invoice', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          studentEmail: 'aluno@exemplo.com', // In a real app, this comes from the invoice record
+          studentName: invoice.client,
+          amount: invoice.amount,
+          invoiceId: 'INV-2026-001'
+        })
+      });
+      if (res.ok) alert('Fatura enviada com sucesso para ' + invoice.client);
+      else alert('Erro ao enviar fatura.');
+    } catch (e) {
+      alert('Erro de conexão ao enviar email.');
+    } finally {
+      setSendingEmail(null);
+    }
+  };
+
+  const InvoiceModal = ({ invoice, onClose }: { invoice: any, onClose: () => void }) => (
+    <div className="modal-overlay" onClick={onClose}>
+      <div className="modal-card" onClick={e => e.stopPropagation()}>
+        <div className="modal-close" onClick={onClose}>×</div>
+        <div className="invoice-doc">
+          <div className="inv-header">
+            <div className="inv-logo">⚓ MTC</div>
+            <div className="inv-title">
+              <h1>FATURA PROFORMA</h1>
+              <p>Nº {invoice.nif}-2026</p>
+            </div>
+          </div>
+          
+          <div className="inv-info">
+            <div className="inv-from">
+              <strong>De:</strong>
+              <p>Marítimo Training Center</p>
+              <p>Luanda, Angola</p>
+              <p>NIF: 5000123456</p>
+            </div>
+            <div className="inv-to">
+              <strong>Para:</strong>
+              <p>{invoice.client}</p>
+              <p>NIF: {invoice.nif}</p>
+              <p>Data: {invoice.date}</p>
+            </div>
+          </div>
+
+          <table className="inv-table">
+            <thead>
+              <tr>
+                <th>Descrição do Serviço</th>
+                <th>Qtd</th>
+                <th>Preço Unit.</th>
+                <th>Total</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>{invoice.type} - Formação Profissional Marítima</td>
+                <td>1</td>
+                <td>{invoice.amount}</td>
+                <td>{invoice.amount}</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div className="inv-summary">
+            <div className="summary-row"><span>Subtotal:</span> <span>{invoice.amount}</span></div>
+            <div className="summary-row"><span>IVA (14%):</span> <span>Inc.</span></div>
+            <div className="summary-row total"><span>TOTAL A PAGAR:</span> <span>{invoice.amount}</span></div>
+          </div>
+
+          <div className="inv-footer">
+            <p>Método de Pagamento Predefinido: <strong>{invoice.method}</strong></p>
+            <p>Obrigado pela sua preferência. Bons Ventos!</p>
+          </div>
+        </div>
+        <div className="modal-actions">
+          <button className="btn-print" onClick={() => window.print()}>🖨️ Descarregar / Imprimir</button>
+        </div>
+      </div>
+      <style jsx>{`
+        .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(10, 42, 94, 0.8); z-index: 1000; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(5px); }
+        .modal-card { background: white; border-radius: 20px; width: 90%; max-width: 800px; padding: 3rem; position: relative; animation: zoomIn 0.3s ease; }
+        @keyframes zoomIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
+        .modal-close { position: absolute; top: 1rem; right: 1.5rem; font-size: 2rem; cursor: pointer; color: #94a3b8; }
+
+        .invoice-doc { color: #0a2a5e; font-family: 'Inter', sans-serif; }
+        .inv-header { display: flex; justify-content: space-between; border-bottom: 2px solid #F5C518; padding-bottom: 2rem; margin-bottom: 2rem; }
+        .inv-logo { font-size: 2rem; font-weight: 900; color: #0a2a5e; }
+        .inv-title { text-align: right; }
+        .inv-title h1 { font-family: 'Outfit', sans-serif; font-size: 1.5rem; margin: 0; }
+        
+        .inv-info { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; margin-bottom: 3rem; }
+        .inv-info strong { display: block; font-size: 0.8rem; text-transform: uppercase; color: #64748b; margin-bottom: 0.5rem; }
+        .inv-info p { margin: 0; font-size: 0.95rem; line-height: 1.5; }
+
+        .inv-table { width: 100%; border-collapse: collapse; margin-bottom: 2rem; }
+        .inv-table th { text-align: left; background: #f8fafc; padding: 1rem; font-size: 0.8rem; text-transform: uppercase; color: #64748b; }
+        .inv-table td { padding: 1rem; border-bottom: 1px solid #f1f5f9; font-size: 0.95rem; }
+
+        .inv-summary { margin-left: auto; width: 250px; }
+        .summary-row { display: flex; justify-content: space-between; padding: 0.5rem 0; font-size: 0.95rem; }
+        .summary-row.total { border-top: 2px solid #0a2a5e; margin-top: 0.5rem; padding-top: 1rem; font-weight: 900; font-size: 1.1rem; }
+
+        .inv-footer { margin-top: 4rem; padding-top: 2rem; border-top: 1px dashed #e2e8f0; font-size: 0.85rem; color: #64748b; }
+        
+        .modal-actions { margin-top: 3rem; display: flex; justify-content: center; }
+        .btn-print { background: #0a2a5e; color: white; border: none; padding: 0.75rem 2rem; border-radius: 10px; font-weight: 700; cursor: pointer; transition: 0.2s; }
+        .btn-print:hover { background: #173b7d; }
+
+        @media print {
+          .modal-overlay { background: white; position: absolute; }
+          .modal-close, .modal-actions { display: none; }
+          .modal-card { width: 100%; max-width: 100%; padding: 0; box-shadow: none; }
+        }
+      `}</style>
+    </div>
+  );
 
   return (
     <div className="page-wrap">
@@ -15,11 +143,7 @@ export default function InvoicesPage() {
         </div>
       </div>
 
-      <script>{`
-        function handleSendEmail(client) {
-          alert('Enviando fatura PDF por email para: ' + client);
-        }
-      `}</script>
+      {selectedInvoice && <InvoiceModal invoice={selectedInvoice} onClose={() => setSelectedInvoice(null)} />}
       
       <div className="page-content card">
         <div className="table-header">
@@ -56,8 +180,21 @@ export default function InvoicesPage() {
                 </td>
                 <td>
                   <div style={{display:'flex', gap:'5px'}}>
-                    <button className="action-btn download" title="Descarregar PDF">⬇️ PDF</button>
-                    <button className="action-btn email-mini" onClick={() => alert('Enviando fatura para: ' + p.client)} title="Enviar por Email">✉️ Email</button>
+                    <button 
+                      className="action-btn download" 
+                      onClick={() => setSelectedInvoice(p)}
+                      title="Descarregar PDF"
+                    >
+                      ⬇️ PDF
+                    </button>
+                    <button 
+                      className="action-btn email-mini" 
+                      onClick={() => handleSendEmail(p)} 
+                      disabled={sendingEmail === p.client}
+                      title="Enviar por Email"
+                    >
+                      {sendingEmail === p.client ? '⏳...' : '✉️ Email'}
+                    </button>
                   </div>
                 </td>
               </tr>
