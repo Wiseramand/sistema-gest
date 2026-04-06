@@ -6,11 +6,12 @@ import { checkRateLimit } from "./rateLimit"
 
 export const getAuthOptions = (portal: string = 'default'): NextAuthOptions => {
     const isDefault = portal === 'default';
-    const cookieName = isDefault ? 'next-auth.session-token' : `next-auth.session-token.${portal}`;
+    const cookieName = 'next-auth.session-token';
 
     return {
         session: {
             strategy: "jwt",
+            maxAge: 30 * 24 * 60 * 60, // 30 days
         },
         pages: {
             signIn: portal === 'admin' ? '/admin/login' : (portal === 'professor' ? '/professor/login' : '/login'),
@@ -22,7 +23,7 @@ export const getAuthOptions = (portal: string = 'default'): NextAuthOptions => {
                     httpOnly: true,
                     sameSite: 'lax',
                     path: '/',
-                    secure: process.env.NODE_ENV === 'production',
+                    secure: true, // Force secure since we are on HTTPS
                 },
             },
         },
@@ -145,32 +146,27 @@ import { getServerSession } from "next-auth"
  * because each uses a different cookie name.
  */
 export async function getAnySession() {
-    const portals = ['admin', 'professor', 'student', 'default'];
+    const options = getAuthOptions();
     
-    for (const p of portals) {
-        const options = getAuthOptions(p);
-        const baseCookieName = (options.cookies?.sessionToken as any)?.name || `next-auth.session-token${p === 'default' ? '' : '.' + p}`;
-        
-        // Check for common production prefixes
-        const possibleNames = [
-            baseCookieName,
-            `__Secure-${baseCookieName}`,
-            `__Host-${baseCookieName}`
-        ];
+    // Possíveis nomes de cookies em produção/HTTPS
+    const possibleNames = [
+        'next-auth.session-token',
+        '__Secure-next-auth.session-token',
+        '__Host-next-auth.session-token'
+    ];
 
-        for (const name of possibleNames) {
-            const session = await getServerSession({
-                ...options,
-                cookies: {
-                    ...options.cookies,
-                    sessionToken: {
-                        ...(options.cookies?.sessionToken as any),
-                        name: name
-                    }
+    for (const name of possibleNames) {
+        const session = await getServerSession({
+            ...options,
+            cookies: {
+                ...options.cookies,
+                sessionToken: {
+                    ...(options.cookies?.sessionToken as any),
+                    name: name
                 }
-            });
-            if (session) return session;
-        }
+            }
+        });
+        if (session) return session;
     }
     return null;
 }

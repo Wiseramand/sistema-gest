@@ -5,11 +5,7 @@ import type { NextRequest } from 'next/server';
 export default async function proxy(req: NextRequest) {
     const path = req.nextUrl.pathname;
 
-    // Determine the base cookie name based on the path
-    let baseCookieName = 'next-auth.session-token';
-    if (path.startsWith('/admin')) baseCookieName = 'next-auth.session-token.admin';
-    else if (path.startsWith('/professor')) baseCookieName = 'next-auth.session-token.professor';
-    else if (path.startsWith('/student')) baseCookieName = 'next-auth.session-token.student';
+    const baseCookieName = 'next-auth.session-token';
 
     // Try both standard and Secure/Host prefixed cookies (production vs dev)
     const possibleCookieNames = [
