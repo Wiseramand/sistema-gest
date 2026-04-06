@@ -1,3 +1,5 @@
+'use client';
+
 export default function Footer() {
     return (
         <footer className="footer">
@@ -10,7 +12,7 @@ export default function Footer() {
                             <span className="sub">Training Center</span>
                         </div>
                     </div>
-                    <p className="brand-desc">Referência em treinamento marítimo e segurança offshore. Formando profissionais de elite para os desafios globais.</p>
+                    <p className="brand-desc">Referência em treinamento marítimo e segurança offshore. Formando profissionais de elite para os desafios globais do setor náutico.</p>
                 </div>
 
                 <div className="footer-links">
@@ -20,6 +22,7 @@ export default function Footer() {
                         <li><a href="/cursos">Nossos Cursos</a></li>
                         <li><a href="/sobre">Sobre a Instituição</a></li>
                         <li><a href="/login">Portal do Aluno</a></li>
+                        <li><a href="/professor/login">Portal do Formador</a></li>
                     </ul>
                 </div>
 
@@ -42,60 +45,86 @@ export default function Footer() {
             </div>
 
             <div className="footer-bottom">
-                <div className="container">
+                <div className="container bottom-flex">
                     <p>&copy; {new Date().getFullYear()} Marítimo Training Center. Todos os direitos reservados.</p>
+                    <div className="social-links">
+                      <span>Ref: STCW / ISPS Code Compliant</span>
+                    </div>
                 </div>
             </div>
 
             <style jsx>{`
         .footer {
-          background: var(--navy-deep);
+          background: #0a2a5e;
           color: white;
-          padding: 4rem 0 0;
-          margin-top: 4rem;
+          padding: 5rem 0 0;
+          margin-top: 6rem;
+          font-family: 'DM Sans', sans-serif;
         }
         .grid-footer {
           display: grid;
           grid-template-columns: 2fr 1fr 1fr 1.5fr;
-          gap: 3rem;
-          padding-bottom: 3rem;
+          gap: 4rem;
+          padding-bottom: 4rem;
         }
         .footer-brand .logo-box {
           display: flex;
           align-items: center;
-          gap: 0.75rem;
-          margin-bottom: 1.5rem;
+          gap: 0.85rem;
+          margin-bottom: 2rem;
         }
         .logo-icon {
-          font-size: 1.5rem;
-          background: var(--sand-gold);
-          color: var(--navy-deep);
-          width: 35px;
-          height: 35px;
+          font-size: 1.4rem;
+          background: #F5C518;
+          color: #0a2a5e;
+          width: 38px;
+          height: 38px;
           display: flex;
           align-items: center;
           justify-content: center;
-          border-radius: 6px;
+          border-radius: 8px;
         }
-        .logo-text { display: flex; flex-direction: column; }
-        .logo-text .main { font-weight: 900; font-size: 1rem; }
-        .logo-text .sub { font-size: 0.6rem; opacity: 0.7; text-transform: uppercase; }
+        .logo-text { display: flex; flex-direction: column; line-height: 1.1; }
+        .logo-text .main { font-family: 'Outfit', sans-serif; font-weight: 800; font-size: 1.15rem; letter-spacing: 1px; }
+        .logo-text .sub { font-family: 'Outfit', sans-serif; font-size: 0.65rem; opacity: 0.8; text-transform: uppercase; letter-spacing: 1.2px; }
         
-        .brand-desc { font-size: 0.9rem; color: rgba(255,255,255,0.7); line-height: 1.6; max-width: 300px; }
+        .brand-desc { font-size: 0.95rem; color: rgba(255,255,255,0.7); line-height: 1.7; max-width: 320px; }
         
-        .footer h4 { color: var(--sand-gold); font-size: 1.1rem; margin-bottom: 1.5rem; text-transform: uppercase; letter-spacing: 1px; }
-        .footer ul { list-style: none; }
-        .footer ul li { margin-bottom: 0.75rem; }
-        .footer ul a { font-size: 0.9rem; color: rgba(255,255,255,0.7); transition: 0.2s; }
-        .footer ul a:hover { color: white; padding-left: 5px; }
+        .footer h4 { 
+          color: #F5C518; 
+          font-family: 'Outfit', sans-serif; 
+          font-size: 1rem; 
+          font-weight: 700; 
+          margin-bottom: 2rem; 
+          text-transform: uppercase; 
+          letter-spacing: 1.5px; 
+        }
+        .footer ul { list-style: none; padding: 0; }
+        .footer ul li { margin-bottom: 1rem; }
+        .footer ul a { font-size: 0.95rem; color: rgba(255,255,255,0.7); transition: all 0.25s ease; }
+        .footer ul a:hover { color: #F5C518; padding-left: 8px; }
 
-        .footer-contact p { font-size: 0.9rem; color: rgba(255,255,255,0.7); margin-bottom: 0.75rem; }
+        .footer-contact p { font-size: 0.95rem; color: rgba(255,255,255,0.7); margin-bottom: 1rem; line-height: 1.6; }
 
-        .footer-bottom { border-top: 1px solid rgba(255,255,255,0.1); padding: 1.5rem 0; text-align: center; }
-        .footer-bottom p { font-size: 0.8rem; color: rgba(255,255,255,0.5); }
+        .footer-bottom { 
+          background: rgba(0, 0, 0, 0.2); 
+          padding: 2rem 0; 
+          border-top: 1px solid rgba(255,255,255,0.05); 
+        }
+        .bottom-flex {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+        }
+        .footer-bottom p { font-size: 0.85rem; color: rgba(255,255,255,0.5); margin: 0; }
+        .social-links { font-size: 0.75rem; color: rgba(255,255,255,0.4); font-weight: 600; text-transform: uppercase; letter-spacing: 1px; }
 
-        @media (max-width: 768px) {
-          .grid-footer { grid-template-columns: 1fr; gap: 2rem; }
+        @media (max-width: 992px) {
+          .grid-footer { grid-template-columns: 1fr 1fr; gap: 3rem; }
+        }
+        @media (max-width: 576px) {
+          .grid-footer { grid-template-columns: 1fr; gap: 3rem; }
+          .bottom-flex { flex-direction: column; text-align: center; gap: 1rem; }
         }
       `}</style>
         </footer>

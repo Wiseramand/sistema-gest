@@ -20,8 +20,8 @@ const banners = [
   },
   {
     image: '/assets/hero/banner4.png',
-    title: 'Certificação Internacional',
-    subtitle: 'Sua carreira sem fronteiras. Diplomas reconhecidos por instituições mundiais.'
+    title: 'Certificações STCW / ISPS',
+    subtitle: 'Sua carreira sem fronteiras. Diplomas reconhecidos internacionalmente.'
   }
 ];
 
@@ -31,7 +31,7 @@ export default function HeroCarousel() {
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrent(prev => (prev + 1) % banners.length);
-    }, 5000);
+    }, 6000);
     return () => clearInterval(timer);
   }, []);
 
@@ -41,15 +41,15 @@ export default function HeroCarousel() {
         <div
           key={idx}
           className={`slide ${idx === current ? 'active' : ''}`}
-          style={{ backgroundImage: `linear-gradient(rgba(0, 31, 63, 0.6), rgba(0, 31, 63, 0.6)), url(${banner.image})` }}
+          style={{ backgroundImage: `linear-gradient(rgba(10, 42, 94, 0.7), rgba(10, 42, 94, 0.4)), url(${banner.image})` }}
         >
           <div className="container slide-content">
-            <div className="maritime-accent"></div>
+            <div className="brand-badge">⚓ Marítimo Training Center</div>
             <h1>{banner.title}</h1>
             <p className="hero-subtitle">{banner.subtitle}</p>
             <div className="hero-actions">
-              <a href="#inscrever" className="btn btn-primary">Inscreva-se agora</a>
-              <a href="/cursos" className="btn btn-outline-white">Conheça nossos cursos</a>
+              <a href="#inscrever" className="hero-btn primary">Inscrever-se agora</a>
+              <a href="/cursos" className="hero-btn secondary">Conhecer Cursos</a>
             </div>
           </div>
         </div>
@@ -61,6 +61,7 @@ export default function HeroCarousel() {
             key={idx}
             className={`dot ${idx === current ? 'active' : ''}`}
             onClick={() => setCurrent(idx)}
+            aria-label={`Slide ${idx + 1}`}
           ></button>
         ))}
       </div>
@@ -68,15 +69,16 @@ export default function HeroCarousel() {
       <style jsx>{`
         .hero-carousel {
           position: relative;
-          height: 600px;
+          height: 700px;
           overflow: hidden;
-          background: #001f3f;
+          background: #0a2a5e;
+          font-family: 'DM Sans', sans-serif;
         }
         .slide {
           position: absolute;
           inset: 0;
           opacity: 0;
-          transition: opacity 1s ease-in-out, transform 8s linear;
+          transition: opacity 1.2s ease-in-out, transform 10s linear;
           background-size: cover;
           background-position: center;
           display: flex;
@@ -88,72 +90,111 @@ export default function HeroCarousel() {
           transform: scale(1);
         }
         .slide-content {
-          max-width: 800px;
+          max-width: 900px;
           color: white;
           z-index: 10;
         }
-        .slide-content h1 {
-          color: white;
-          font-size: 3.5rem;
+        .brand-badge {
+          display: inline-flex;
+          align-items: center;
+          gap: 0.5rem;
+          background: #F5C518;
+          color: #0a2a5e;
+          padding: 0.4rem 1rem;
+          border-radius: 50px;
+          font-size: 0.75rem;
+          font-weight: 800;
+          text-transform: uppercase;
+          letter-spacing: 1px;
           margin-bottom: 1.5rem;
-          text-shadow: 0 4px 10px rgba(0,0,0,0.3);
-          animation: fadeInUp 0.8s ease forwards;
+          box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        .slide-content h1 {
+          font-family: 'Outfit', sans-serif;
+          color: white;
+          font-size: 4rem;
+          line-height: 1.1;
+          margin-bottom: 1.5rem;
+          font-weight: 800;
+          letter-spacing: -0.03em;
+          text-shadow: 0 4px 15px rgba(0,0,0,0.2);
         }
         .hero-subtitle {
-          font-size: 1.25rem;
-          margin-bottom: 2.5rem;
+          font-size: 1.35rem;
+          margin-bottom: 3rem;
           opacity: 0.9;
-          text-shadow: 0 2px 4px rgba(0,0,0,0.3);
-          animation: fadeInUp 0.8s ease 0.2s forwards;
+          max-width: 600px;
+          line-height: 1.6;
+          text-shadow: 0 2px 5px rgba(0,0,0,0.2);
         }
         .hero-actions {
           display: flex;
           gap: 1.5rem;
-          animation: fadeInUp 0.8s ease 0.4s forwards;
         }
         
-        .btn-outline-white {
-          background: transparent;
-          border: 2px solid white;
-          color: white;
+        .hero-btn {
+          padding: 1.1rem 2.5rem;
+          border-radius: 12px;
+          font-weight: 700;
+          font-size: 1rem;
+          transition: all 0.3s ease;
+          text-decoration: none;
         }
-        .btn-outline-white:hover {
-          background: white;
-          color: var(--navy-deep);
+        .hero-btn.primary {
+          background: #F5C518;
+          color: #0a2a5e;
+          box-shadow: 0 10px 20px rgba(245, 197, 24, 0.2);
+        }
+        .hero-btn.primary:hover {
+          background: #ffffff;
+          transform: translateY(-3px);
+          box-shadow: 0 15px 30px rgba(245, 197, 24, 0.3);
+        }
+        .hero-btn.secondary {
+          background: transparent;
+          border: 2px solid rgba(255, 255, 255, 0.4);
+          color: white;
+          backdrop-filter: blur(5px);
+        }
+        .hero-btn.secondary:hover {
+          background: rgba(255, 255, 255, 0.1);
+          border-color: white;
+          transform: translateY(-3px);
         }
 
         .carousel-dots {
           position: absolute;
-          bottom: 2rem;
+          bottom: 3rem;
           left: 50%;
           transform: translateX(-50%);
           display: flex;
-          gap: 0.75rem;
+          gap: 1rem;
           z-index: 20;
         }
         .dot {
-          width: 12px;
-          height: 12px;
+          width: 14px;
+          height: 14px;
           border-radius: 50%;
-          background: rgba(255,255,255,0.3);
+          background: rgba(255,255,255,0.2);
           border: none;
           cursor: pointer;
-          transition: 0.3s;
+          transition: all 0.4s ease;
         }
         .dot.active {
-          background: var(--sand-gold);
-          transform: scale(1.3);
+          background: #F5C518;
+          transform: scale(1.4);
+          box-shadow: 0 0 15px rgba(245, 197, 24, 0.5);
         }
 
-        @keyframes fadeInUp {
-          from { opacity: 0; transform: translateY(30px); }
-          to { opacity: 1; transform: translateY(0); }
+        @media (max-width: 992px) {
+          .slide-content h1 { font-size: 3rem; }
         }
-
         @media (max-width: 768px) {
-          .hero-carousel { height: 500px; }
-          .slide-content h1 { font-size: 2.2rem; }
+          .hero-carousel { height: 600px; }
+          .slide-content h1 { font-size: 2.5rem; }
+          .hero-subtitle { font-size: 1.1rem; }
           .hero-actions { flex-direction: column; gap: 1rem; }
+          .hero-btn { width: 100%; text-align: center; }
         }
       `}</style>
     </section>

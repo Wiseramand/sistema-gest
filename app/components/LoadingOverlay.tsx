@@ -7,7 +7,7 @@ export default function LoadingOverlay() {
                 <div className="anchor-spinner">⚓</div>
                 <div className="loading-text">
                     <span className="main-text">MARÍTIMO</span>
-                    <span className="dots">A carregar sistema...</span>
+                    <span className="dots">SISTEMA A CARREGAR...</span>
                 </div>
             </div>
 
@@ -15,7 +15,7 @@ export default function LoadingOverlay() {
         .loading-overlay {
           position: fixed;
           inset: 0;
-          background: #001f3f; /* Deep Navy */
+          background: #0a2a5e;
           display: flex;
           align-items: center;
           justify-content: center;
@@ -32,9 +32,9 @@ export default function LoadingOverlay() {
 
         .anchor-spinner {
           font-size: 3.5rem;
-          color: #f4d03f; /* Sand Gold */
-          animation: anchor-bob 2s ease-in-out infinite;
-          filter: drop-shadow(0 0 15px rgba(244, 208, 63, 0.4));
+          color: #F5C518;
+          animation: anchor-rotate 2.5s ease-in-out infinite;
+          filter: drop-shadow(0 0 20px rgba(245, 197, 24, 0.4));
         }
 
         .loading-text {
@@ -46,23 +46,25 @@ export default function LoadingOverlay() {
 
         .main-text {
           font-family: 'Outfit', sans-serif;
-          font-weight: 900;
-          font-size: 1.25rem;
-          letter-spacing: 4px;
+          font-weight: 800;
+          font-size: 1.35rem;
+          letter-spacing: 5px;
           margin-bottom: 0.5rem;
         }
 
         .dots {
-          font-size: 0.85rem;
-          font-weight: 500;
-          letter-spacing: 1px;
-          opacity: 0.7;
+          font-family: 'DM Sans', sans-serif;
+          font-size: 0.75rem;
+          font-weight: 700;
+          letter-spacing: 1.5px;
+          opacity: 0.6;
           text-transform: uppercase;
         }
 
-        @keyframes anchor-bob {
+        @keyframes anchor-rotate {
           0%, 100% { transform: translateY(0) rotate(0deg); }
-          50% { transform: translateY(-20px) rotate(15deg); }
+          25% { transform: translateY(-15px) rotate(15deg); }
+          75% { transform: translateY(-15px) rotate(-15deg); }
         }
 
         @keyframes fadeIn {

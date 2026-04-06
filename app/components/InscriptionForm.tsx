@@ -24,7 +24,6 @@ export default function InscriptionForm() {
       try {
         const res = await fetch('/api/courses');
         const data = await res.json();
-        // Only show courses with "Inscrições Abertas" status
         setCourses(data.filter((c: Course) => c.status === 'Inscrições Abertas'));
       } catch (error) {
         console.error('Error fetching courses:', error);
@@ -52,7 +51,7 @@ export default function InscriptionForm() {
 
       setStatus('success');
       setFormData({ name: '', email: '', phone: '', course: '', message: '' });
-      setTimeout(() => setStatus('idle'), 5000);
+      setTimeout(() => setStatus('idle'), 6000);
     } catch (error) {
       console.error(error);
       setStatus('error');
@@ -66,10 +65,22 @@ export default function InscriptionForm() {
   return (
     <form className="inscription-form" onSubmit={handleSubmit}>
       {status === 'success' && (
-        <div className="alert success">Inscrição enviada com sucesso! Nossa equipe entrará em contato.</div>
+        <div className="alert success">
+          <span className="icon">✅</span>
+          <div>
+            <strong>Inscrição enviada!</strong>
+            <p>Nossa equipe entrará em contato em breve.</p>
+          </div>
+        </div>
       )}
       {status === 'error' && (
-        <div className="alert error">Ocorreu um erro. Por favor, tente novamente mais tarde.</div>
+        <div className="alert error">
+          <span className="icon">⚠️</span>
+          <div>
+            <strong>Ocorreu um erro</strong>
+            <p>Por favor, tente novamente mais tarde.</p>
+          </div>
+        </div>
       )}
 
       <div className="form-group">
@@ -108,7 +119,7 @@ export default function InscriptionForm() {
             name="phone"
             value={formData.phone}
             onChange={handleChange}
-            placeholder="(xx) xxxx-xxxx"
+            placeholder="+244 9XX XXX XXX"
             disabled={status === 'loading'}
           />
         </div>
@@ -128,7 +139,7 @@ export default function InscriptionForm() {
           {courses.map(course => (
             <option key={course.id} value={course.title}>{course.title}</option>
           ))}
-          {courses.length === 0 && <option disabled>Nenhum curso com inscrições abertas no momento.</option>}
+          {courses.length === 0 && <option disabled>Nenhum curso disponível no momento.</option>}
         </select>
       </div>
 
@@ -145,7 +156,7 @@ export default function InscriptionForm() {
         ></textarea>
       </div>
 
-      <button type="submit" className="btn btn-primary w-full" disabled={status === 'loading' || courses.length === 0}>
+      <button type="submit" className="submit-btn" disabled={status === 'loading' || courses.length === 0}>
         {status === 'loading' ? 'Processando...' : 'Confirmar Pré-Inscrição'}
       </button>
 
@@ -153,7 +164,8 @@ export default function InscriptionForm() {
         .inscription-form {
           display: flex;
           flex-direction: column;
-          gap: 1.25rem;
+          gap: 1.5rem;
+          font-family: 'DM Sans', sans-serif;
         }
 
         .form-group {
@@ -165,63 +177,93 @@ export default function InscriptionForm() {
         .form-row {
           display: grid;
           grid-template-columns: 1fr 1fr;
-          gap: 1rem;
+          gap: 1.25rem;
         }
 
         label {
-          font-weight: 700;
-          color: var(--navy-medium);
+          font-weight: 600;
+          color: #0a2a5e;
           font-size: 0.85rem;
+          letter-spacing: 0.3px;
         }
 
         input, select, textarea {
-          padding: 0.85rem;
-          border: 1px solid #cbd5e0;
-          border-radius: 8px;
+          padding: 1rem;
+          border: 1px solid #dce6f0;
+          border-radius: 12px;
           font-family: inherit;
-          font-size: 1rem;
-          transition: border-color 0.2s;
+          font-size: 0.95rem;
+          transition: all 0.25s ease;
+          background: #fdfdfd;
+          color: #0f1e35;
         }
 
         input:focus, select:focus, textarea:focus {
           outline: none;
-          border-color: var(--ocean-blue);
-          box-shadow: 0 0 0 3px rgba(0, 116, 217, 0.1);
+          border-color: #0a2a5e;
+          background: white;
+          box-shadow: 0 0 0 4px rgba(10, 42, 94, 0.05);
+        }
+
+        input::placeholder, textarea::placeholder {
+          color: #94a3b8;
         }
 
         .alert {
-          padding: 1rem;
-          border-radius: 8px;
-          margin-bottom: 1rem;
-          font-weight: 700;
-          text-align: center;
+          padding: 1.25rem;
+          border-radius: 12px;
+          margin-bottom: 1.5rem;
+          display: flex;
+          align-items: flex-start;
+          gap: 1rem;
           font-size: 0.9rem;
+          border: 0.5px solid;
         }
+        .alert strong { display: block; margin-bottom: 2px; }
+        .alert p { margin: 0; opacity: 0.9; }
+        .alert .icon { font-size: 1.25rem; }
 
         .alert.success {
-          background-color: #ecfdf5;
-          color: #065f46;
-          border: 1px solid #a7f3d0;
+          background-color: #e0f2ea;
+          color: #0d6e3f;
+          border-color: #0d6e3f20;
         }
 
-         .alert.error {
-          background-color: #fef2f2;
+        .alert.error {
+          background-color: #fde8e8;
           color: #991b1b;
-          border: 1px solid #fecaca;
+          border-color: #991b1b20;
         }
 
-        .w-full {
+        .submit-btn {
           width: 100%;
-          padding: 1rem;
-          font-weight: 800;
-          text-transform: uppercase;
-          letter-spacing: 1px;
+          padding: 1.1rem;
+          background: #0a2a5e;
+          color: white;
+          border: none;
+          border-radius: 12px;
+          font-weight: 700;
+          font-size: 1rem;
+          cursor: pointer;
+          transition: all 0.3s ease;
+          margin-top: 0.5rem;
+          box-shadow: 0 4px 12px rgba(10, 42, 94, 0.15);
+        }
+
+        .submit-btn:hover {
+          background: #1a4fa0;
+          transform: translateY(-2px);
+          box-shadow: 0 8px 20px rgba(10, 42, 94, 0.2);
+        }
+
+        .submit-btn:disabled {
+          opacity: 0.6;
+          cursor: not-allowed;
+          filter: grayscale(0.5);
         }
 
         @media (max-width: 600px) {
-          .form-row {
-            grid-template-columns: 1fr;
-          }
+          .form-row { grid-template-columns: 1fr; gap: 1.5rem; }
         }
       `}</style>
     </form>

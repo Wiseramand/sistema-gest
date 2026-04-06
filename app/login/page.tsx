@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { signIn, useSession, SessionProvider } from 'next-auth/react';
+import { signIn, useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 
@@ -43,35 +43,61 @@ export default function StudentLoginPage() {
   };
 
   if (status === 'loading' || status === 'authenticated') {
-    return <div className="loading-screen">Direcionando para o portal do aluno...</div>;
+    return (
+      <div className="loading-screen">
+        <div className="loader-inner">
+           <div className="spinner">⚓</div>
+           <p>Direcionando para o portal do aluno...</p>
+        </div>
+        <style jsx>{`
+          .loading-screen {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #0a2a5e;
+            color: white;
+            font-family: 'Outfit', sans-serif;
+          }
+          .loader-inner { text-align: center; }
+          .spinner { font-size: 3rem; margin-bottom: 1rem; animation: pulse 2s infinite ease-in-out; }
+          @keyframes pulse {
+            0% { transform: scale(1); opacity: 0.8; }
+            50% { transform: scale(1.1); opacity: 1; }
+            100% { transform: scale(1); opacity: 0.8; }
+          }
+        `}</style>
+      </div>
+    );
   }
 
   return (
-    <div className="login-container">
-      <div className="login-card card">
+    <div className="login-wrapper">
+      <div className="login-card">
         <div className="login-header">
-          <div className="maritime-accent mx-auto"></div>
-          <h2>Portal do Aluno</h2>
-          <p>Entre com suas credenciais de aluno.</p>
+           <div className="brand-icon">⚓</div>
+           <h1>Marítimo</h1>
+           <span>Portal do Aluno</span>
+           <div className="brand-accent"></div>
         </div>
 
-        {error && <div className="alert error">{error}</div>}
+        {error && <div className="login-alert">{error}</div>}
 
         <form onSubmit={handleSubmit} className="login-form">
-          <div className="form-group">
-            <label htmlFor="email">E-mail ou Utilizador</label>
+          <div className="input-group">
+            <label htmlFor="email">Utilizador ou E-mail</label>
             <input
               type="text"
               id="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              placeholder="seu@email.com ou username"
+              placeholder="Ex: aluno@maritimo.com"
             />
           </div>
 
-          <div className="form-group">
-            <label htmlFor="password">Senha</label>
+          <div className="input-group">
+            <label htmlFor="password">Palavra-passe</label>
             <input
               type="password"
               id="password"
@@ -82,67 +108,74 @@ export default function StudentLoginPage() {
             />
           </div>
 
-          <button type="submit" className="btn btn-primary w-full" disabled={isLoading}>
-            {isLoading ? 'Entrando...' : 'Entrar no Portal'}
+          <button type="submit" className="login-submit" disabled={isLoading}>
+            {isLoading ? 'A autenticar...' : 'Entrar no Portal'}
           </button>
         </form>
 
-        <div className="login-footer">
-          <Link href="/" className="site-link">
-            <span className="arrow">←</span> Ir para o Site
+        <div className="login-options">
+          <Link href="/" className="btn-return">
+            <span>←</span> Voltar ao Site Principal
           </Link>
         </div>
       </div>
 
       <style jsx>{`
-        .site-link {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          gap: 0.5rem;
-          color: #3b82f6;
-          text-decoration: none;
-          font-weight: 600;
-          margin-top: 1rem;
-          transition: 0.2s;
-        }
-        .site-link:hover { color: #2563eb; transform: translateX(-5px); }
-        .arrow { font-size: 1.2rem; }
-        .login-container {
+        .login-wrapper {
           min-height: 100vh;
           display: flex;
           align-items: center;
           justify-content: center;
-          background: linear-gradient(135deg, #0f172a 0%, #3b82f6 100%);
+          background-color: #f4f7fb;
           padding: 1.5rem;
+          font-family: 'DM Sans', sans-serif;
         }
 
         .login-card {
           width: 100%;
-          max-width: 400px;
-          padding: 2.5rem;
-          background: rgba(255, 255, 255, 0.95);
-          backdrop-filter: blur(10px);
-          border-radius: 20px;
-          box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+          max-width: 440px;
+          background: #ffffff;
+          padding: 3.5rem 2.5rem;
+          border-radius: 14px;
+          border: 1px solid #dce6f0;
+          box-shadow: 0 10px 25px rgba(10, 42, 94, 0.05);
         }
 
         .login-header {
           text-align: center;
-          margin-bottom: 2rem;
+          margin-bottom: 2.5rem;
         }
 
-        .maritime-accent {
-            width: 50px;
-            height: 5px;
-            background: #3b82f6;
-            border-radius: 10px;
-            margin-bottom: 1rem;
+        .brand-icon {
+          font-size: 2.5rem;
+          margin-bottom: 0.5rem;
+          display: block;
         }
 
-        .mx-auto {
-          margin-left: auto;
-          margin-right: auto;
+        .login-header h1 {
+          font-family: 'Outfit', sans-serif;
+          font-size: 2.2rem;
+          margin-bottom: 2px;
+          color: #0a2a5e;
+          font-weight: 700;
+          letter-spacing: -0.02em;
+        }
+
+        .login-header span {
+          font-family: 'Outfit', sans-serif;
+          font-size: 0.85rem;
+          color: #6b7ea0;
+          text-transform: uppercase;
+          letter-spacing: 1.5px;
+          font-weight: 600;
+        }
+
+        .brand-accent {
+          width: 40px;
+          height: 3px;
+          background: #F5C518;
+          margin: 1.25rem auto 0;
+          border-radius: 2px;
         }
 
         .login-form {
@@ -151,76 +184,100 @@ export default function StudentLoginPage() {
           gap: 1.5rem;
         }
 
-        .form-group {
+        .input-group {
           display: flex;
           flex-direction: column;
           gap: 0.5rem;
         }
 
-        label {
+        .input-group label {
           font-weight: 600;
-          color: #1e293b;
-          font-size: 0.9rem;
+          color: #0f1e35;
+          font-size: 0.85rem;
         }
 
-        input {
-          padding: 0.75rem;
-          border: 1px solid #e2e8f0;
+        .input-group input {
+          padding: 0.85rem 1rem;
+          border: 1px solid #dce6f0;
           border-radius: 10px;
-          font-family: inherit;
+          font-family: 'DM Sans', sans-serif;
+          font-size: 0.95rem;
+          transition: all 0.25s ease;
+          background: #ffffff;
         }
 
-        .alert.error {
-          background-color: #fca5a5;
-          color: #7f1d1d;
-          padding: 0.75rem;
+        .input-group input:focus {
+          outline: none;
+          border-color: #1a4fa0;
+          box-shadow: 0 0 0 4px rgba(26, 79, 160, 0.08);
+        }
+
+        .login-alert {
+          background-color: #fde8e8;
+          color: #991b1b;
+          padding: 0.85rem;
           border-radius: 10px;
-          margin-bottom: 1rem;
-          font-size: 0.9rem;
-          border: 1px solid #f87171;
+          margin-bottom: 1.5rem;
+          font-size: 0.85rem;
+          border: 1px solid rgba(153, 27, 27, 0.1);
+          text-align: center;
+          font-weight: 500;
+        }
+
+        .login-submit {
+          background: #0a2a5e;
+          color: #ffffff;
+          border: none;
+          padding: 1rem;
+          border-radius: 10px;
+          font-weight: 700;
+          font-size: 1rem;
+          cursor: pointer;
+          transition: all 0.25s ease;
+          margin-top: 0.5rem;
+        }
+
+        .login-submit:hover {
+          background: #1a4fa0;
+          transform: translateY(-1px);
+          box-shadow: 0 4px 12px rgba(10, 42, 94, 0.2);
+        }
+
+        .login-submit:disabled {
+          opacity: 0.7;
+          cursor: not-allowed;
+        }
+
+        .login-options {
+          margin-top: 2.5rem;
           text-align: center;
         }
 
-        .btn-primary {
-            background: #3b82f6;
-            color: white;
-            border: none;
-            padding: 0.75rem;
-            border-radius: 10px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: 0.2s;
-        }
-
-        .btn-primary:hover {
-            background: #2563eb;
-            transform: translateY(-2px);
-        }
-
-        .w-full {
-          width: 100%;
-        }
-
-        .login-footer {
-          margin-top: 1.5rem;
-          text-align: center;
-          font-size: 0.9rem;
-        }
-
-        .login-footer a {
-          color: #64748b;
-          text-decoration: underline;
-        }
-
-        .loading-screen {
-          min-height: 100vh;
-          display: flex;
+        .btn-return {
+          display: inline-flex;
           align-items: center;
-          justify-content: center;
-          background-color: #0f172a;
-          color: white;
-          font-size: 1.25rem;
-          font-weight: 600;
+          gap: 0.75rem;
+          color: #0a2a5e;
+          text-decoration: none;
+          font-weight: 700;
+          font-size: 0.9rem;
+          transition: all 0.25s ease;
+          padding: 0.6rem 1.25rem;
+          border-radius: 10px;
+          border: 1px solid #dce6f0;
+        }
+
+        .btn-return:hover {
+          background: #e8f0fb;
+          border-color: #1a4fa0;
+          transform: translateX(-5px);
+        }
+
+        @media (max-width: 480px) {
+          .login-card {
+            padding: 2.5rem 1.5rem;
+          }
+          .login-header h1 { font-size: 1.8rem; }
         }
       `}</style>
     </div>
