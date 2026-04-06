@@ -1,15 +1,15 @@
 import { NextResponse } from 'next/server';
 import { db } from '../../../lib/db';
 import bcrypt from 'bcryptjs';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '../../../lib/auth';
+;
+import { getAnySession } from '../../../lib/auth';
 
 // POST /api/generate-access
 // Body: { type: 'student' | 'trainer', id: string }
 export async function POST(request: Request) {
     try {
         // ✅ CORRECÇÃO: Verificar que é um admin autenticado (Issue #6)
-        const session = await getServerSession(authOptions);
+        const session = await getAnySession();
         if (!session) {
             return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
         }

@@ -1,7 +1,6 @@
 import { NextResponse } from 'next/server';
 import { db } from '../../../../lib/db';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '../../../../lib/auth';
+import { getAnySession } from '../../../../lib/auth';
 import { logActivity } from '../../../../lib/logger';
 
 import { getModel } from '../../../../lib/getModel';
@@ -14,8 +13,8 @@ export async function GET(
     try {
         const { collection, id } = await params;
 
-        // ✅ CORRECÇÃO: Verificar autenticação PRIMEIRO
-        const session = await getServerSession(authOptions);
+        // ✅ CORRECÇÃO: Verificar autenticação usando helper multi-portal (Admin, Professor, Aluno)
+        const session = await getAnySession();
         if (!session) {
             return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
         }
@@ -51,8 +50,8 @@ export async function PATCH(
         collectionName = collection;
         itemId = id;
 
-        // ✅ CORRECÇÃO: Verificar autenticação PRIMEIRO
-        const session = await getServerSession(authOptions);
+        // ✅ CORRECÇÃO: Verificar autenticação usando helper multi-portal (Admin, Professor, Aluno)
+        const session = await getAnySession();
         if (!session) {
             return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
         }
@@ -74,7 +73,6 @@ export async function PATCH(
 
         // Validar dados usando Zod
         if (schemas[collection]) {
-            // No PATCH, criamos uma versão partial do esquema para permitir updates parciais
             const partialSchema = schemas[collection].partial();
             const validation = partialSchema.safeParse(body);
             if (!validation.success) {
@@ -86,7 +84,6 @@ export async function PATCH(
         }
 
         const dataToUpdate = { ...body };
-        // SQLite Compatibility: Stringify
         if (collection === 'courses' && Array.isArray(dataToUpdate.materials)) {
             dataToUpdate.materials = JSON.stringify(dataToUpdate.materials);
         }
@@ -97,18 +94,14 @@ export async function PATCH(
             dataToUpdate.responsibilities = JSON.stringify(dataToUpdate.responsibilities);
         }
 
-        // Remove id and materialName as they shouldn't be in the update data
         delete dataToUpdate.id;
-        if (collection === 'courses') {
-            delete (dataToUpdate as any).materialName;
-        }
+        if (collection === 'courses') delete (dataToUpdate as any).materialName;
 
         const updatedItem = await model.update({
             where: { id },
             data: dataToUpdate
         });
 
-        // Log the activity
         try {
             if (session?.user) {
                 await logActivity(
@@ -122,10 +115,9 @@ export async function PATCH(
                 );
             }
         } catch (logError) {
-            console.error('Activity Log Error (Non-blocking):', logError);
+            console.error('Activity Log Error:', logError);
         }
 
-        // Return parsed
         const responseItem = { ...updatedItem };
         if (typeof responseItem.materials === 'string') try { responseItem.materials = JSON.parse(responseItem.materials); } catch (e) {}
         if (typeof responseItem.records === 'string') try { responseItem.records = JSON.parse(responseItem.records); } catch (e) {}
@@ -149,13 +141,12 @@ export async function DELETE(
         collectionName = collection;
         itemId = id;
 
-        // ✅ CORRECÇÃO: Verificar autenticação PRIMEIRO
-        const session = await getServerSession(authOptions);
+        // ✅ CORRECÇÃO: Verificar autenticação usando helper multi-portal (Admin, Professor, Aluno)
+        const session = await getAnySession();
         if (!session) {
             return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
         }
 
-        // ✅ Verificar role para todas colecções - DELETE deve ser restrito
         const role = (session.user as any).role;
         if (role !== 'SUPER_ADMIN' && role !== 'ADMIN') {
             return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
@@ -167,7 +158,6 @@ export async function DELETE(
 
         await model.delete({ where: { id } });
 
-        // Log the activity
         try {
             if (session?.user) {
                 await logActivity(
@@ -181,7 +171,7 @@ export async function DELETE(
                 );
             }
         } catch (logError) {
-            console.error('Activity Log Error (Non-blocking):', logError);
+            console.error('Activity Log Error:', logError);
         }
 
         return NextResponse.json({ success: true });

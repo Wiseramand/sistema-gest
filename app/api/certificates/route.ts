@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { db } from '../../../lib/db';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '../../../lib/auth';
+;
+import { getAnySession } from '../../../lib/auth';
 import { logActivity } from '../../../lib/logger';
 
 // GET /api/certificates
@@ -48,7 +48,7 @@ export async function POST(request: Request) {
         );
 
         // Log the activity
-        const session = await getServerSession(authOptions);
+        const session = await getAnySession();
         if (session?.user) {
             await logActivity(
                 (session.user as any).id,

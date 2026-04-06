@@ -1,13 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '../../../lib/db';
-import { getServerSession } from 'next-auth';
+;
 import { getToken } from 'next-auth/jwt';
-import { authOptions } from '../../../lib/auth';
+import { getAnySession } from '../../../lib/auth';
 
 async function getSessionUser(request: NextRequest) {
     // Try getServerSession first
     try {
-        const session = await getServerSession(authOptions);
+        const session = await getAnySession();
         console.log('[Chat Auth] getServerSession result:', session ? 'found' : 'null');
         if (session?.user) {
             return session.user as any;

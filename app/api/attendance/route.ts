@@ -1,11 +1,19 @@
 import { NextResponse } from 'next/server';
 import { db } from '../../../lib/db';
+import { getAnySession } from '../../../lib/auth';
+import { logActivity } from '../../../lib/logger';
 
 export async function GET(request: Request) {
     try {
         const { searchParams } = new URL(request.url);
         const course = searchParams.get('course');
         const date = searchParams.get('date');
+
+        // ✅ CORRECÇÃO: Verificar autenticação usando helper multi-portal
+        const session = await getAnySession();
+        if (!session) {
+            return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+        }
 
         const where: any = {};
         if (course) where.courseId = course;
@@ -24,24 +32,23 @@ export async function POST(request: Request) {
         const body = await request.json();
         const { courseId, date, trainerId, records } = body;
 
+        // ✅ CORRECÇÃO: Verificar autenticação usando helper multi-portal
+        const session = await getAnySession();
+        if (!session) {
+            return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+        }
+
         if (!courseId || !date || !records) {
             return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
         }
 
-        // Upsert: update if the courseId + date combo already exists, otherwise create
         const attendance = await db.attendance.upsert({
             where: { courseId_date: { courseId, date } },
             update: { records, trainerId: trainerId ?? undefined, updatedAt: new Date() },
             create: { courseId, date, trainerId, records }
         });
 
-        // Log the activity
         try {
-            const { getServerSession } = await import('next-auth');
-            const { authOptions } = await import('../../../lib/auth');
-            const { logActivity } = await import('../../../lib/logger');
-            const session = await getServerSession(authOptions);
-
             if (session?.user) {
                 await logActivity(
                     (session.user as any).id,

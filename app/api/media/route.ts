@@ -1,13 +1,13 @@
 import { NextResponse } from 'next/server';
 import { db } from '../../../lib/db';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '../../../lib/auth';
+;
+import { getAnySession } from '../../../lib/auth';
 import { writeFile, mkdir } from 'node:fs/promises';
 import { join } from 'node:path';
 
 export async function GET(request: Request) {
     try {
-        const session = await getServerSession(authOptions);
+        const session = await getAnySession();
         if (!session) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
         const { searchParams } = new URL(request.url);
@@ -27,7 +27,7 @@ export async function GET(request: Request) {
 
 export async function POST(request: Request) {
     try {
-        const session = await getServerSession(authOptions);
+        const session = await getAnySession();
         if (!session) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
         const contentType = request.headers.get('content-type') || '';
@@ -92,7 +92,7 @@ export async function POST(request: Request) {
 
 export async function PATCH(request: Request) {
     try {
-        const session = await getServerSession(authOptions);
+        const session = await getAnySession();
         if (!session) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
         const body = await request.json();
@@ -116,7 +116,7 @@ export async function PATCH(request: Request) {
 
 export async function DELETE(request: Request) {
     try {
-        const session = await getServerSession(authOptions);
+        const session = await getAnySession();
         if (!session) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
         const { searchParams } = new URL(request.url);

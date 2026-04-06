@@ -134,3 +134,21 @@ export const getAuthOptions = (portal: string = 'default'): NextAuthOptions => {
 };
 
 export const authOptions = getAuthOptions();
+
+import { NextRequest } from "next/server"
+import { getServerSession } from "next-auth"
+
+/**
+ * Helper to get the session across any portal (default, admin, professor, student)
+ * because each uses a different cookie name.
+ */
+export async function getAnySession() {
+    // Try each portal's options until one finds a session
+    const portals = ['admin', 'professor', 'student', 'default'];
+    
+    for (const p of portals) {
+        const session = await getServerSession(getAuthOptions(p));
+        if (session) return session;
+    }
+    return null;
+}

@@ -7,16 +7,15 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-
 model User {
-  id          String   @id @default(cuid())
-  name        String
-  email       String   @unique
-  username    String?  @unique
+  id           String   @id @default(cuid())
+  name         String
+  email        String   @unique
+  username     String?  @unique
   passwordHash String?
-  role        String   @default("USER")
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  role         String   @default("USER")
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 }
 
 model AdminUser {
@@ -26,54 +25,54 @@ model AdminUser {
   username         String?  @unique
   passwordHash     String?
   role             String   @default("ADMIN")
-  responsibilities String   @default("[]") // Em SQLite usamos String para JSON
+  responsibilities String   @default("[]")
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
 }
 
 model Student {
-  id                  String   @id @default(cuid())
-  name                String
-  email               String?  @unique
-  username            String?  @unique
-  passwordHash        String?
-  phone               String?
-  bi                  String?
-  idDocument          String?
-  address             String?
-  company             String?
-  status              String   @default("Ativo")
-  validity            String?
-  nationality         String?
-  photo               String?
-  clientType          String   @default("Particular")
-  companyId           String?
-  course              String?
-  role                String   @default("STUDENT")
-  accessGeneratedAt   DateTime?
-  createdAt           DateTime @default(now())
-  updatedAt           DateTime @updatedAt
+  id                String    @id @default(cuid())
+  name              String
+  email             String?   @unique
+  username          String?   @unique
+  passwordHash      String?
+  phone             String?
+  bi                String?
+  address           String?
+  company           String?
+  role              String    @default("STUDENT")
+  accessGeneratedAt DateTime?
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+  clientType        String    @default("Particular")
+  companyId         String?
+  course            String?
+  idDocument        String?
+  nationality       String?
+  photo             String?
+  status            String    @default("Ativo")
+  validity          String?
 }
 
 model Trainer {
-  id                String   @id @default(cuid())
+  id                String    @id @default(cuid())
   name              String
-  email             String?  @unique
-  username          String?  @unique
+  email             String?   @unique
+  username          String?   @unique
   passwordHash      String?
   phone             String?
-  specialty         String?
-  students          Int      @default(0)
-  status            String   @default("Ativo")
-  idDocument        String?
-  validity          String?
-  photo             String?
-  address           String?
-  nationality       String?
-  role              String   @default("TRAINER")
+  role              String    @default("TRAINER")
   accessGeneratedAt DateTime?
-  createdAt         DateTime @default(now())
-  updatedAt         DateTime @updatedAt
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+  address           String?
+  idDocument        String?
+  nationality       String?
+  photo             String?
+  specialty         String?
+  status            String    @default("Ativo")
+  students          Int       @default(0)
+  validity          String?
 }
 
 model Course {
@@ -85,12 +84,12 @@ model Course {
   status      String   @default("ACTIVE")
   trainerId   String?
   trainerName String?
-  students    Int      @default(0)
-  materials   String   @default("[]") // Em SQLite usamos String para JSON
   startDate   String?
   endDate     String?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+  materials   String   @default("[]")
+  students    Int      @default(0)
 }
 
 model Classroom {
@@ -99,9 +98,9 @@ model Classroom {
   capacity     Int?
   location     String?
   description  String?
-  availability String   @default("Disponível")
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
+  availability String   @default("Disponível")
 }
 
 model Enrollment {
@@ -132,40 +131,40 @@ model Matriculation {
   id            String   @id @default(cuid())
   studentId     String
   studentName   String?
-  course        String?
   courseId      String?
   courseTitle   String?
-  classroom     String?
   classroomId   String?
-  trainer       String?
-  trainerId     String?
-  schedule      String?
-  duration      String?
-  paymentStatus String?  @default("Pendente")
-  amountDue     Int?     @default(0)
   status        String   @default("ACTIVE")
   startDate     String?
   endDate       String?
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
+  amountDue     Int?     @default(0)
+  classroom     String?
+  course        String?
+  duration      String?
+  paymentStatus String?  @default("Pendente")
+  schedule      String?
+  trainer       String?
+  trainerId     String?
 }
 
 model Certificate {
-  id               String    @id @default(cuid())
-  studentId        String
-  studentName      String?
-  courseTitle      String
-  matriculationId  String?
-  status           String    @default("PENDENTE")
-  generatedAt      DateTime  @default(now())
-  validUntil       DateTime?
-  approvedAt       DateTime?
-  approvedBy       String?
-  rejectedAt       DateTime?
-  rejectionReason  String?
-  trainingCenter   String    @default("Marítimo Training Center")
-  createdAt        DateTime  @default(now())
-  updatedAt        DateTime  @updatedAt
+  id              String    @id @default(cuid())
+  studentId       String
+  studentName     String?
+  courseTitle     String
+  matriculationId String?
+  status          String    @default("PENDENTE")
+  generatedAt     DateTime  @default(now())
+  validUntil      DateTime?
+  approvedAt      DateTime?
+  approvedBy      String?
+  rejectedAt      DateTime?
+  rejectionReason String?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  trainingCenter  String    @default("Marítimo Training Center")
 }
 
 model Company {
@@ -176,10 +175,10 @@ model Company {
   address       String?
   nif           String?
   description   String?
-  contactPerson String?
-  logo          String?
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
+  contactPerson String?
+  logo          String?
 }
 
 model ActivityLog {
@@ -202,13 +201,13 @@ model Material {
   type           String?
   url            String?
   access         String   @default("ALL")
-  isFolder       Boolean  @default(false)
-  parentId       String?
-  targetRole     String?  // 'STUDENT', 'TRAINER', or 'BOTH'
   uploadedBy     String?
   uploadedByName String?
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
+  isFolder       Boolean  @default(false)
+  parentId       String?
+  targetRole     String?
 }
 
 model ChatMessage {
@@ -242,7 +241,7 @@ model Attendance {
   courseId  String
   date      String
   trainerId String?
-  records   String   @default("[]") // Em SQLite usamos String para JSON
+  records   String   @default("[]")
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -275,17 +274,16 @@ model Summary {
 }
 
 model Grade {
-  id              String   @id @default(cuid())
-  studentId       String
-  studentName     String?
-  courseId        String
-  courseTitle     String
-  score           Float?   // 0-20
-  observations    String?
-  trainerId       String?
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
+  id           String   @id @default(cuid())
+  studentId    String
+  studentName  String?
+  courseId     String
+  courseTitle  String
+  score        Float?
+  observations String?
+  trainerId    String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 
   @@unique([studentId, courseId])
 }
-

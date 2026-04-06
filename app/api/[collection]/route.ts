@@ -1,7 +1,6 @@
 import { NextResponse } from 'next/server';
 import { db } from '../../../lib/db';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '../../../lib/auth';
+import { getAnySession } from '../../../lib/auth';
 import { logActivity } from '../../../lib/logger';
 
 import { getModel } from '../../../lib/getModel';
@@ -16,8 +15,8 @@ export async function GET(
         const { collection } = await params;
         collectionName = collection;
 
-        // ✅ CORRECÇÃO: Verificar autenticação PRIMEIRO
-        const session = await getServerSession(authOptions);
+        // ✅ CORRECÇÃO: Verificar autenticação usando helper multi-portal (Admin, Professor, Aluno)
+        const session = await getAnySession();
         if (!session) {
             return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
         }
@@ -71,8 +70,8 @@ export async function POST(
         const { collection } = await params;
         collectionName = collection;
 
-        // ✅ CORRECÇÃO: Verificar autenticação PRIMEIRO
-        const session = await getServerSession(authOptions);
+        // ✅ CORRECÇÃO: Verificar autenticação usando helper multi-portal (Admin, Professor, Aluno)
+        const session = await getAnySession();
         if (!session) {
             return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
         }
@@ -105,12 +104,9 @@ export async function POST(
                     details: validation.error.format() 
                 }, { status: 400 });
             }
-            // Substituir pelos campos verificados se necessário (opcional)
         }
 
-        // Sanitize data for specific models if needed
         const dataToSave = { ...body };
-        // SQLite Compatibility: Stringify objects before saving
         if (collection === 'courses' && Array.isArray(dataToSave.materials)) {
             dataToSave.materials = JSON.stringify(dataToSave.materials);
         }
@@ -121,16 +117,11 @@ export async function POST(
             dataToSave.responsibilities = JSON.stringify(dataToSave.responsibilities);
         }
 
-        // Remove id if it's an empty string (Prisma creation fails if id is empty string)
         if (dataToSave.id === '') delete dataToSave.id;
-        // Remove materialName which is a UI-only field in Courses
-        if (collection === 'courses') {
-            delete (dataToSave as any).materialName;
-        }
+        if (collection === 'courses') delete (dataToSave as any).materialName;
 
         const newItem = await model.create({ data: dataToSave });
 
-        // Log the activity (don't let logging failure block the main action)
         try {
             if (session?.user) {
                 await logActivity(
@@ -144,10 +135,9 @@ export async function POST(
                 );
             }
         } catch (logError) {
-            console.error('Activity Log Error (Non-blocking):', logError);
+            console.error('Activity Log Error:', logError);
         }
 
-        // Return parsed item
         const responseItem = { ...newItem };
         if (typeof responseItem.materials === 'string') try { responseItem.materials = JSON.parse(responseItem.materials); } catch (e) {}
         if (typeof responseItem.records === 'string') try { responseItem.records = JSON.parse(responseItem.records); } catch (e) {}
@@ -155,10 +145,7 @@ export async function POST(
 
         return NextResponse.json(responseItem);
     } catch (error: any) {
-        // ✅ CORRECÇÃO: Nunca expor dados do utilizador (payload) em erros
         console.error(`API POST [${collectionName}] Error:`, error.message);
-        return NextResponse.json({
-            error: 'Ocorreu um erro interno ao criar o registo.',
-        }, { status: 500 });
+        return NextResponse.json({ error: 'Ocorreu um erro interno ao criar o registo.' }, { status: 500 });
     }
 }

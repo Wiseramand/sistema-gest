@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { db } from '../../../../lib/db';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '../../../../lib/auth';
+;
+import { getAnySession } from '../../../../lib/auth';
 import { logActivity } from '../../../../lib/logger';
 
 // GET /api/certificates/[id] — fetch details
@@ -54,7 +54,7 @@ export async function PATCH(
         const updated = await db.certificate.update({ where: { id }, data: updateData });
 
         // Log the activity
-        const session = await getServerSession(authOptions);
+        const session = await getAnySession();
         if (session?.user) {
             let actionType = body.action === 'approve' ? 'APPROVE_CERTIFICATE'
                 : body.action === 'reject' ? 'REJECT_CERTIFICATE'
@@ -91,7 +91,7 @@ export async function DELETE(
         await db.certificate.delete({ where: { id } });
 
         // Log the activity
-        const session = await getServerSession(authOptions);
+        const session = await getAnySession();
         if (session?.user) {
             await logActivity(
                 (session.user as any).id,
