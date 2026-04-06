@@ -143,12 +143,32 @@ import { getServerSession } from "next-auth"
  * because each uses a different cookie name.
  */
 export async function getAnySession() {
-    // Try each portal's options until one finds a session
     const portals = ['admin', 'professor', 'student', 'default'];
     
     for (const p of portals) {
-        const session = await getServerSession(getAuthOptions(p));
-        if (session) return session;
+        const options = getAuthOptions(p);
+        const baseCookieName = (options.cookies?.sessionToken as any)?.name || `next-auth.session-token${p === 'default' ? '' : '.' + p}`;
+        
+        // Check for common production prefixes
+        const possibleNames = [
+            baseCookieName,
+            `__Secure-${baseCookieName}`,
+            `__Host-${baseCookieName}`
+        ];
+
+        for (const name of possibleNames) {
+            const session = await getServerSession({
+                ...options,
+                cookies: {
+                    ...options.cookies,
+                    sessionToken: {
+                        ...(options.cookies?.sessionToken as any),
+                        name: name
+                    }
+                }
+            });
+            if (session) return session;
+        }
     }
     return null;
 }
