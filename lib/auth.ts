@@ -34,18 +34,20 @@ export const getAuthOptions = (portal: string = 'default'): NextAuthOptions => {
                     password: { label: "Password", type: "password" },
                 },
                 async authorize(credentials) {
-                    const identifier = credentials?.email; // This field might contain email OR username
-                    if (!identifier || !credentials?.password) {
-                        throw new Error("Dados de acesso inválidos")
+                    const identifier = credentials?.email?.trim(); 
+                    const password = credentials?.password;
+
+                    if (!identifier || !password) {
+                        throw new Error("Identificador e senha são obrigatórios")
                     }
 
                     const { allowed, retryAfter } = checkRateLimit(`login:${identifier}`);
                     if (!allowed) {
-                        throw new Error(`Demasiadas tentativas de login. Aguarde ${retryAfter} segundos.`);
+                        throw new Error(`Demasiadas tentativas. Aguarde ${retryAfter} segundos.`);
                     }
 
-                    console.log(`[AUTH] Attempting login for identifier: ${identifier} on portal: ${portal}`);
-                    // Collections to search based on portal
+                    console.log(`[AUTH] Login: ${identifier} em ${portal}`);
+
                     let collections: string[] = [];
                     if (portal === 'admin') {
                         collections = ['adminUser', 'user'];
@@ -57,52 +59,52 @@ export const getAuthOptions = (portal: string = 'default'): NextAuthOptions => {
                         collections = ['user', 'adminUser', 'student', 'trainer'];
                     }
 
-                    let foundUser = null;
-                    let foundPasswordHash = null;
-
                     for (const col of collections) {
                         try {
-                            // Try email first
-                            let user = await (db as any)[col].findUnique({ where: { email: identifier } });
+                            const model = (db as any)[col];
+                            if (!model) continue;
 
-                            // Try username if not found
-                            if (!user) {
-                                user = await (db as any)[col].findUnique({ where: { username: identifier } });
-                            }
+                            // Tentar encontrar por email ou username
+                            const user = await model.findFirst({
+                                where: {
+                                    OR: [
+                                        { email: { equals: identifier, mode: 'insensitive' } },
+                                        { username: { equals: identifier, mode: 'insensitive' } }
+                                    ]
+                                }
+                            });
 
                             if (user) {
-                                console.log(`[AUTH] Found user in collection: ${col}`);
-                                foundUser = user;
-                                foundPasswordHash = user.passwordHash;
-                                break;
+                                // Suportar tanto 'password' como 'passwordHash'
+                                const hash = user.passwordHash || user.password;
+                                
+                                if (!hash) {
+                                    console.error(`[AUTH] Utilizador ${identifier} encontrado em ${col} mas sem senha definida.`);
+                                    continue;
+                                }
+
+                                const isValid = await bcrypt.compare(password, hash);
+
+                                if (isValid) {
+                                    console.log(`[AUTH] Sucesso: ${identifier} (${col})`);
+                                    return {
+                                        id: user.id,
+                                        email: user.email,
+                                        name: user.name,
+                                        role: user.role,
+                                        photo: (user as any).photo || null,
+                                        responsibilities: (user as any).responsibilities || [],
+                                    };
+                                } else {
+                                    console.log(`[AUTH] Senha incorreta para ${identifier} em ${col}`);
+                                }
                             }
                         } catch (err: any) {
-                            console.error(`[AUTH] Error searching in collection ${col}:`, err.message);
+                            console.error(`[AUTH] Erro em ${col}:`, err.message);
                         }
                     }
 
-                    if (!foundUser || !foundPasswordHash) {
-                        console.log(`[AUTH] User not found or no password hash for: ${identifier}`);
-                        throw new Error("Usuário não encontrado")
-                    }
-
-                    const isPasswordCorrect = await bcrypt.compare(
-                        credentials.password,
-                        foundPasswordHash
-                    )
-
-                    if (!isPasswordCorrect) {
-                        throw new Error("Senha incorreta")
-                    }
-
-                    return {
-                        id: foundUser.id,
-                        email: foundUser.email,
-                        name: foundUser.name,
-                        role: foundUser.role,
-                        photo: (foundUser as any).photo || null,
-                        responsibilities: (foundUser as any).responsibilities || [],
-                    }
+                    throw new Error("Utilizador não encontrado ou palavra-passe incorreta");
                 },
             }),
         ],
