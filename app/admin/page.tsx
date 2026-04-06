@@ -261,18 +261,18 @@ export default function AdminDashboard() {
         }
 
         .welcome-banner {
-          background: linear-gradient(135deg, var(--navy-deep) 0%, var(--ocean-blue) 100%);
+          background: linear-gradient(135deg, #0a2a5e 0%, #173b7d 100%);
           padding: 3rem;
           border-radius: 16px;
           color: white;
           display: flex;
           justify-content: space-between;
           align-items: center;
-          box-shadow: 0 10px 30px rgba(0, 31, 63, 0.15);
+          box-shadow: 0 10px 30px rgba(10, 42, 94, 0.15);
         }
 
-        .banner-content h1 { font-size: 2rem; margin-bottom: 0.5rem; color: var(--sand-gold); }
-        .banner-content p { font-size: 1.1rem; opacity: 0.9; }
+        .banner-content h1 { font-family: 'Outfit', sans-serif; font-size: 2.2rem; margin-bottom: 0.5rem; color: #F5C518; letter-spacing: -0.02em; }
+        .banner-content p { font-size: 1.1rem; opacity: 0.9; color: #e2e8f0; }
         .maritime-illustration { font-size: 5rem; opacity: 0.2; }
 
         .stats-grid {
@@ -283,13 +283,15 @@ export default function AdminDashboard() {
 
         .stat-card {
           padding: 1.75rem;
-          border-radius: 12px;
+          background: #ffffff;
+          border-radius: 14px;
+          border: 1px solid #e2e8f0;
           position: relative;
           overflow: hidden;
-          transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.2s;
         }
 
-        .stat-card:hover { transform: translateY(-5px); }
+        .stat-card:hover { transform: translateY(-5px); box-shadow: 0 15px 35px rgba(0,0,0,0.05); }
 
         .card-inner {
           display: flex;
@@ -298,9 +300,9 @@ export default function AdminDashboard() {
         }
 
         .stat-info { display: flex; flex-direction: column; }
-        .stat-label { font-size: 0.85rem; font-weight: 700; color: var(--gray-medium); text-transform: uppercase; letter-spacing: 0.5px; }
-        .stat-value { font-size: 2.5rem; font-weight: 800; color: var(--navy-deep); margin: 0.25rem 0; }
-        .stat-sublabel { font-size: 0.75rem; color: var(--ocean-blue); font-weight: 600; }
+        .stat-label { font-size: 0.85rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; }
+        .stat-value { font-size: 2.5rem; font-family: 'Outfit', sans-serif; font-weight: 800; color: #0a2a5e; margin: 0.35rem 0; }
+        .stat-sublabel { font-size: 0.75rem; color: #3b82f6; font-weight: 600; }
 
         .stat-icon-box {
           width: 60px; height: 60px;
@@ -325,21 +327,22 @@ export default function AdminDashboard() {
           gap: 2rem;
         }
 
-        .main-card, .side-card { padding: 2rem; }
-        h2 { font-size: 1.25rem; color: var(--navy-deep); margin-bottom: 2rem; font-weight: 800; border-left: 4px solid var(--sand-gold); padding-left: 1rem; }
+        .main-card, .side-card { padding: 2rem; background: #ffffff; border-radius: 14px; border: 1px solid #e2e8f0; }
+        h2 { font-family: 'Outfit', sans-serif; font-size: 1.25rem; color: #0a2a5e; margin-bottom: 2rem; font-weight: 700; border-left: 4px solid #F5C518; padding-left: 1rem; }
 
         .timeline { display: flex; flex-direction: column; gap: 2rem; position: relative; }
         .timeline::before { content: ''; position: absolute; left: 7px; top: 0; bottom: 0; width: 2px; background: #edf2f7; }
 
         .timeline-item { display: flex; gap: 1.5rem; position: relative; padding-left: 2rem; }
-        .timeline-marker { position: absolute; left: 0; top: 5px; width: 16px; height: 16px; border-radius: 50%; background: var(--ocean-blue); border: 3px solid white; box-shadow: 0 0 0 1px #edf2f7; z-index: 1; }
+        .timeline-marker { position: absolute; left: 0; top: 5px; width: 16px; height: 16px; border-radius: 50%; background: #3b82f6; border: 3px solid white; box-shadow: 0 0 0 1px #edf2f7; z-index: 1; }
         .timeline-marker.success { background: #10b981; }
+        .timeline-marker.warning { background: #F5C518; }
 
-        .timeline-content h3 { font-size: 1rem; color: var(--navy-medium); margin-bottom: 0.25rem; }
-        .timeline-content p { font-size: 0.9rem; color: var(--gray-medium); }
+        .timeline-content h3 { font-family: 'Outfit', sans-serif; font-size: 1rem; color: #0f1e35; margin-bottom: 0.25rem; font-weight: 600;}
+        .timeline-content p { font-size: 0.9rem; color: #64748b; }
 
         .status-list { display: flex; flex-direction: column; gap: 1rem; }
-        .status-item { display: flex; justify-content: space-between; align-items: center; padding: 1rem; background: #f8fafc; border-radius: 8px; font-size: 0.9rem; font-weight: 600; color: var(--navy-medium); }
+        .status-item { display: flex; justify-content: space-between; align-items: center; padding: 1rem; background: #f8fafc; border-radius: 8px; font-size: 0.9rem; font-weight: 600; color: #0a2a5e; }
         .status-tag { font-size: 0.65rem; padding: 0.25rem 0.6rem; border-radius: 4px; font-weight: 800; }
         .status-tag.online { background: #ecfdf5; color: #059669; }
 
@@ -349,11 +352,11 @@ export default function AdminDashboard() {
 
         .filter-group { display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 1.5rem; }
         .filter-group label { font-size: 0.85rem; font-weight: 700; color: #475569; }
-        .filter-group select { padding: 0.75rem 1rem; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 0.9rem; background: #f8fafc; color: var(--navy-deep); outline: none; }
+        .filter-group select { padding: 0.75rem 1rem; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 0.9rem; background: #f8fafc; color: #0a2a5e; outline: none; }
 
-        .list-card { padding: 2.5rem 2rem; }
+        .list-card { padding: 2.5rem 2rem; background: #ffffff; border-radius: 14px; border: 1px solid #e2e8f0; }
         .distribution-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
-        .dist-section h3 { font-size: 0.95rem; color: var(--navy-medium); margin-bottom: 1rem; padding-bottom: 0.5rem; border-bottom: 2px solid #f1f5f9; }
+        .dist-section h3 { font-size: 0.95rem; font-weight: 600; color: #0a2a5e; margin-bottom: 1rem; padding-bottom: 0.5rem; border-bottom: 2px solid #f1f5f9; }
         .dist-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 0.75rem; }
         .dist-list li { display: flex; justify-content: space-between; align-items: center; font-size: 0.85rem; padding: 0.5rem; background: #f8fafc; border-radius: 6px; }
         .dist-name { font-weight: 600; color: #334155; }
