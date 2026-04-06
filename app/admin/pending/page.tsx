@@ -6,6 +6,16 @@ export default function PendingPage() {
     { id: 'INSC-102', student: 'Joana Martins', course: 'Operador GMDSS', deadline: '05-04-2026', total: '€320.00', paid: '€100.00', status: 'Em Dívida', method: 'Prestação Multibanco' }
   ];
 
+  const handleBulkEmail = async () => {
+    const confirm = window.confirm('Deseja enviar alertas de cobrança para todos os formandos pendentes?');
+    if (!confirm) return;
+    alert('Disparando emails de cobrança via API Resend...');
+  };
+
+  const handleRowEmail = async (studentName: string) => {
+    alert(`Enviando lembrete de pagamento para: ${studentName}`);
+  };
+
   return (
     <div className="page-wrap">
       <div className="page-header">
@@ -18,7 +28,7 @@ export default function PendingPage() {
       <div className="page-content card">
         <div className="table-header">
           <h2>Formandos com Valores Pendentes</h2>
-          <button className="btn-primary">Enviar Alertas por Email</button>
+          <button className="btn-primary" onClick={handleBulkEmail}>Enviar Alertas por Email</button>
         </div>
 
         <table className="data-table">
@@ -51,7 +61,10 @@ export default function PendingPage() {
                 </td>
                 <td>{p.method}</td>
                 <td>
-                  <button className="action-btn lock">🔒 Bloquear Acesso</button>
+                  <div style={{display:'flex', gap:'5px'}}>
+                    <button className="action-btn email-mini" onClick={() => handleRowEmail(p.student)}>✉️ Notificar</button>
+                    <button className="action-btn lock">🔒 Bloquear</button>
+                  </div>
                 </td>
               </tr>
             ))}
@@ -85,6 +98,9 @@ export default function PendingPage() {
 
         .action-btn.lock { background: #fee2e2; color: #dc2626; border: none; padding: 0.4rem 0.8rem; border-radius: 6px; font-weight: 700; cursor: pointer; }
         .action-btn.lock:hover { background: #fca5a5; }
+
+        .action-btn.email-mini { background: #f0f9ff; color: #0a2a5e; border: none; padding: 0.4rem 0.8rem; border-radius: 6px; font-weight: 700; cursor: pointer; }
+        .action-btn.email-mini:hover { background: #e0f2fe; }
       `}</style>
     </div>
   );

@@ -58,6 +58,26 @@ export default function AdminDashboard() {
     fetchStats();
   }, []);
 
+  const [sendingEmail, setSendingEmail] = useState<string | null>(null);
+
+  const handleSendEmailAlert = async (certId: string) => {
+    setSendingEmail(certId);
+    try {
+      const res = await fetch('/api/admin/emails/expiry-alert', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ certificateId: certId })
+      });
+      if (res.ok) alert('E-mail de alerta enviado com sucesso!');
+      else alert('Ocorreu um erro ao enviar o e-mail.');
+    } catch (e) {
+      console.error(e);
+      alert('Erro de conexão ao tentar enviar email.');
+    } finally {
+      setSendingEmail(null);
+    }
+  };
+
   const inscritos = Array.isArray(stats.students) ? stats.students.filter((s: any) => s.status === 'Ativo' || s.status === 'Inscrito').length : 0;
   const matriculados = Array.isArray(stats.matriculations) ? stats.matriculations.length : 0;
   const formados = Array.isArray(stats.students) ? stats.students.filter((s: any) => s.status === 'Formado').length : 0;
@@ -123,6 +143,13 @@ export default function AdminDashboard() {
                   >
                     Notificar WhatsApp
                   </a>
+                  <button 
+                    onClick={() => handleSendEmailAlert(cert.id)}
+                    className="email-btn"
+                    disabled={sendingEmail === cert.id}
+                  >
+                    {sendingEmail === cert.id ? '...' : 'Notificar Email'}
+                  </button>
                 </div>
               </div>
             ))}
@@ -310,6 +337,21 @@ export default function AdminDashboard() {
         }
 
         .wa-btn:hover { background: #128C7E; }
+
+        .email-btn {
+          background: #0a2a5e;
+          color: white;
+          padding: 0.5rem 1rem;
+          border-radius: 8px;
+          font-size: 0.8rem;
+          font-weight: 700;
+          border: none;
+          cursor: pointer;
+          transition: background 0.2s;
+        }
+
+        .email-btn:hover { background: #173b7d; }
+        .email-btn:disabled { opacity: 0.6; cursor: not-allowed; }
 
         .banner-content h1 { font-family: 'Outfit', sans-serif; font-size: 2.2rem; margin-bottom: 0.5rem; color: #F5C518; letter-spacing: -0.02em; }
         .banner-content p { font-size: 1.1rem; opacity: 0.9; color: #e2e8f0; }

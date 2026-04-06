@@ -14,6 +14,12 @@ export default function InvoicesPage() {
           <p>Área que alberga a lista de faturas geradas, faturas proforma e exportação de dados (SAF-T).</p>
         </div>
       </div>
+
+      <script>{`
+        function handleSendEmail(client) {
+          alert('Enviando fatura PDF por email para: ' + client);
+        }
+      `}</script>
       
       <div className="page-content card">
         <div className="table-header">
@@ -49,7 +55,10 @@ export default function InvoicesPage() {
                   </span>
                 </td>
                 <td>
-                  <button className="action-btn download">⬇️ PDF</button>
+                  <div style={{display:'flex', gap:'5px'}}>
+                    <button className="action-btn download" title="Descarregar PDF">⬇️ PDF</button>
+                    <button className="action-btn email-mini" onClick={() => alert('Enviando fatura para: ' + p.client)} title="Enviar por Email">✉️ Email</button>
+                  </div>
                 </td>
               </tr>
             ))}
@@ -82,6 +91,9 @@ export default function InvoicesPage() {
 
         .action-btn.download { background: #f0f9ff; color: #0a2a5e; border: none; padding: 0.4rem 0.8rem; border-radius: 6px; font-weight: 700; cursor: pointer; }
         .action-btn.download:hover { background: #e0f2fe; }
+
+        .action-btn.email-mini { background: #ecfdf5; color: #059669; border: none; padding: 0.4rem 0.8rem; border-radius: 6px; font-weight: 700; cursor: pointer; }
+        .action-btn.email-mini:hover { background: #d1fae5; }
       `}</style>
     </div>
   );
