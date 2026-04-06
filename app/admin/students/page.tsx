@@ -368,10 +368,10 @@ export default function StudentsPage() {
                 </div>
             )}
 
-            {/* Access Credentials Modal */}
             {accessModal && (
-                <div className="overlay">
-                    <div className="modal-box credentials">
+                <div className="overlay" onClick={() => setAccessModal(null)}>
+                    <div className="modal-box credentials" onClick={e => e.stopPropagation()}>
+                        <button className="close-x" style={{ position: 'absolute', top: '1.5rem', right: '1.5rem' }} onClick={() => setAccessModal(null)}>×</button>
                         <div className="creds-icon">{accessModal.loading ? '⏳' : '✅'}</div>
                         <h2>{accessModal.loading ? 'A preparar acessos...' : 'Acesso Ativado!'}</h2>
                         <p>{accessModal.loading ? 'A processar credenciais seguras para o aluno.' : 'Partilhe estas credenciais com o aluno. A senha é única e segura.'}</p>

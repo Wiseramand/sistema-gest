@@ -200,12 +200,12 @@ export default function AdminUsersPage() {
                 </div>
             )}
 
-            {/* Modal */}
             {isModalOpen && (
-                <div className="overlay">
-                    <div className="modal-box">
+                <div className="overlay" onClick={() => { setIsModalOpen(false); setGeneratedCredentials(null); }}>
+                    <div className="modal-box" onClick={e => e.stopPropagation()}>
                         {generatedCredentials ? (
                             <div className="creds-box">
+                                <button className="close-x" style={{ position: 'absolute', top: '1.5rem', right: '1.5rem' }} onClick={() => { setIsModalOpen(false); setGeneratedCredentials(null); }}>×</button>
                                 <div className="creds-icon">{generatedCredentials.loading ? '⏳' : '✅'}</div>
                                 <h2>{generatedCredentials.loading ? 'A criar administrador...' : 'Administrador Criado!'}</h2>
                                 <p>{generatedCredentials.loading ? 'A processar as credenciais de segurança...' : 'Partilhe estas credenciais com o novo administrador. A senha não pode ser recuperada.'}</p>

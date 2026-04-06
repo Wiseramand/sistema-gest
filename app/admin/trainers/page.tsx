@@ -232,8 +232,8 @@ export default function TrainersPage() {
 
       {/* Access Credentials Modal */}
       {accessModal && (
-        <div className="overlay">
-          <div className="modal-box credentials-modal">
+        <div className="overlay" onClick={() => setAccessModal(null)}>
+          <div className="modal-box credentials-modal" onClick={e => e.stopPropagation()}>
             <div className="modal-top">
               <div>
                 <h2>{accessModal.loading ? '⏳ A processar...' : '🔐 Acesso Ativado'}</h2>
