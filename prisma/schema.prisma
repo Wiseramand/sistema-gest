@@ -203,6 +203,9 @@ model Material {
   type           String?
   url            String?
   access         String   @default("ALL")
+  isFolder       Boolean  @default(false)
+  parentId       String?
+  targetRole     String?  // 'STUDENT', 'TRAINER', or 'BOTH'
   uploadedBy     String?
   uploadedByName String?
   createdAt      DateTime @default(now())
