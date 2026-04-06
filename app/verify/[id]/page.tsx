@@ -1,170 +1,104 @@
-'use client';
-
-import { useState, useEffect } from 'react';
-import { useParams } from 'next/navigation';
+import { PrismaClient } from '@prisma/client';
 import Link from 'next/link';
 
-interface Certificate {
-    id: string;
-    studentName: string;
-    courseTitle: string;
-    status: string;
-    approvedAt: string;
-    validUntil: string;
-    trainingCenter?: string;
-}
+const prisma = new PrismaClient();
 
-export default function VerifyCertificatePage() {
-    const { id } = useParams();
-    const [cert, setCert] = useState<Certificate | null>(null);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
+export default async function VerifyPage({ params }: { params: { id: string } }) {
+  const { id } = params;
 
-    useEffect(() => {
-        if (id) {
-            fetchCertificate();
-        }
-    }, [id]);
+  let certificate;
+  try {
+    certificate = await (prisma as any).certificate.findUnique({
+      where: { id },
+    });
+  } catch (error) {
+    console.error('Error fetching certificate:', error);
+  }
 
-    async function fetchCertificate() {
-        try {
-            const res = await fetch(`/api/certificates/${id}`);
-            if (!res.ok) {
-                if (res.status === 404) throw new Error('Certificado não encontrado ou inválido.');
-                throw new Error('Erro ao verificar certificado.');
-            }
-            const data = await res.json();
-            setCert(data);
-        } catch (err: any) {
-            setError(err.message);
-        } finally {
-            setLoading(false);
-        }
-    }
-
-    const isExpired = (date: string) => new Date(date) < new Date();
-
+  if (!certificate) {
     return (
-        <div className="verify-container">
-            <div className="verify-card shadow-premium">
-                <div className="verify-header">
-                    <div className="maritime-logo">⚓</div>
-                    <h1>Verificação de Certificado</h1>
-                    <p className="subtitle">Marítimo Training Center - Sistema de Autenticidade</p>
-                </div>
-
-                {loading ? (
-                    <div className="loading-state">
-                        <div className="spinner"></div>
-                        <p>A validar autenticidade...</p>
-                    </div>
-                ) : error ? (
-                    <div className="error-state">
-                        <div className="error-icon">⚠️</div>
-                        <h2>Documento Não Validado</h2>
-                        <p>{error}</p>
-                        <Link href="/" className="back-link">Voltar ao Início</Link>
-                    </div>
-                ) : cert ? (
-                    <div className="success-state">
-                        <div className="status-banner authentic">
-                            <span className="check-icon">✓</span>
-                            <span>CERTIFICADO AUTÊNTICO</span>
-                        </div>
-
-                        <div className="cert-details">
-                            <div className="detail-row">
-                                <span className="label">Aluno(a):</span>
-                                <span className="value">{cert.studentName}</span>
-                            </div>
-                            <div className="detail-row">
-                                <span className="label">Curso:</span>
-                                <span className="value">{cert.courseTitle}</span>
-                            </div>
-                            <div className="detail-row">
-                                <span className="label">Centro de Formação:</span>
-                                <span className="value">{cert.trainingCenter || 'Marítimo Training Center'}</span>
-                            </div>
-                            <div className="detail-row">
-                                <span className="label">Data de Emissão:</span>
-                                <span className="value">{new Date(cert.approvedAt || '').toLocaleDateString('pt-BR')}</span>
-                            </div>
-                            <div className="detail-row">
-                                <span className="label">Válido Até:</span>
-                                <span className={`value ${isExpired(cert.validUntil) ? 'expired' : ''}`}>
-                                    {new Date(cert.validUntil).toLocaleDateString('pt-BR')}
-                                    {isExpired(cert.validUntil) && ' (EXPIRADO)'}
-                                </span>
-                            </div>
-                            <div className="detail-row">
-                                <span className="label">Código de Verificação:</span>
-                                <span className="value mono">{cert.id}</span>
-                            </div>
-                        </div>
-
-                        <div className="footer-notice">
-                            <p>Este documento foi emitido eletronicamente e sua autenticidade pode ser confirmada através deste portal oficial.</p>
-                        </div>
-                    </div>
-                ) : null}
-            </div>
-
-            <style jsx>{`
-                .verify-container {
-                    min-height: 100vh;
-                    background: radial-gradient(circle at top right, #001f3f, #000);
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    padding: 2rem;
-                    font-family: 'Inter', system-ui, sans-serif;
-                }
-                .verify-card {
-                    background: white;
-                    width: 100%;
-                    max-width: 500px;
-                    border-radius: 24px;
-                    padding: 3rem;
-                    text-align: center;
-                    overflow: hidden;
-                }
-                .verify-header { margin-bottom: 2.5rem; }
-                .maritime-logo { font-size: 3.5rem; margin-bottom: 1rem; }
-                h1 { font-size: 1.5rem; color: #001f3f; font-weight: 800; margin-bottom: 0.5rem; }
-                .subtitle { color: #64748b; font-size: 0.85rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; }
-
-                .status-banner {
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    gap: 0.75rem;
-                    padding: 1rem;
-                    border-radius: 12px;
-                    font-weight: 800;
-                    font-size: 0.9rem;
-                    margin-bottom: 2rem;
-                }
-                .status-banner.authentic { background: #ecfdf5; color: #059669; border: 1.5px solid #10b981; }
-                .check-icon { font-size: 1.2rem; }
-
-                .cert-details { text-align: left; background: #f8fafc; padding: 1.5rem; border-radius: 16px; margin-bottom: 2rem; }
-                .detail-row { margin-bottom: 1rem; border-bottom: 1px solid #e2e8f0; padding-bottom: 0.5rem; }
-                .detail-row:last-child { border-bottom: none; margin-bottom: 0; }
-                .label { display: block; font-size: 0.75rem; color: #94a3b8; font-weight: 700; text-transform: uppercase; margin-bottom: 0.25rem; }
-                .value { font-size: 1rem; color: #1e293b; font-weight: 700; }
-                .value.mono { font-family: monospace; color: #64748b; }
-                .value.expired { color: #dc2626; }
-
-                .footer-notice { color: #94a3b8; font-size: 0.75rem; line-height: 1.5; font-style: italic; }
-
-                .loading-state { padding: 3rem 0; }
-                .spinner { width: 40px; height: 40px; border: 4px solid #f3f3f3; border-top: 4px solid #001f3f; border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 1rem; }
-                @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-
-                .error-state { color: #dc2626; }
-                .error-icon { font-size: 4rem; margin-bottom: 1rem; }
-                .back-link { display: inline-block; margin-top: 1.5rem; color: #001f3f; text-decoration: underline; font-weight: 700; }
-            `}</style>
+      <div className="verify-wrap">
+        <div className="card invalid">
+          <div className="icon">❌</div>
+          <h1>Certificado Não Encontrado</h1>
+          <p>O identificador {id} não corresponde a nenhum certificado válido emitido pelo Marítimo Training Center.</p>
         </div>
+        <style jsx>{`
+          .verify-wrap { min-height: 100vh; display: flex; align-items: center; justify-content: center; background: #f4f7fb; font-family: 'DM Sans', sans-serif; padding: 2rem; }
+          .card { background: white; padding: 3rem; border-radius: 16px; text-align: center; max-width: 500px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); border-top: 5px solid #ef4444; }
+          .icon { font-size: 4rem; margin-bottom: 1rem; }
+          h1 { color: #0f1e35; font-family: 'Outfit', sans-serif; font-size: 1.5rem; }
+          p { color: #64748b; margin-top: 1rem; line-height: 1.5; }
+        `}</style>
+      </div>
     );
+  }
+
+  const isExpired = certificate.validUntil && new Date(certificate.validUntil) < new Date();
+  const isApproved = certificate.status === 'APROVADO';
+
+  return (
+    <div className="verify-wrap">
+      <div className={`card ${isApproved && !isExpired ? 'valid' : 'warning'}`}>
+        <div className="mtc-logo">⚓ MARÍTIMO TRAINING CENTER</div>
+        
+        <div className="status-badge">
+          {isApproved && !isExpired ? '✅ CERTIFICADO AUTÊNTICO' : isExpired ? '⚠️ CERTIFICADO EXPIRADO' : '⏳ PENDENTE DE VALIDAÇÃO'}
+        </div>
+
+        <div className="cert-details">
+          <div className="detail-row">
+            <span className="label">Formando:</span>
+            <span className="value">{certificate.studentName}</span>
+          </div>
+          <div className="detail-row">
+            <span className="label">Treinamento/Curso:</span>
+            <span className="value">{certificate.courseTitle}</span>
+          </div>
+          <div className="detail-row">
+            <span className="label">Data de Emissão:</span>
+            <span className="value">{new Date(certificate.generatedAt).toLocaleDateString('pt-PT')}</span>
+          </div>
+          <div className="detail-row">
+            <span className="label">Válido Até:</span>
+            <span className="value">{certificate.validUntil ? new Date(certificate.validUntil).toLocaleDateString('pt-PT') : 'Vitalício'}</span>
+          </div>
+          <div className="detail-row">
+            <span className="label">ID Autenticador:</span>
+            <span className="value mono">{certificate.id}</span>
+          </div>
+        </div>
+
+        <p className="footer-note">
+          A leitura deste QR Code digital garante a proveniência dos registos da nossa base de dados oficial. Em caso de dúvidas, contacte a entidade formadora.
+        </p>
+
+        <Link href="/" className="home-link">Voltar ao Início</Link>
+      </div>
+
+      <style jsx>{`
+        .verify-wrap { min-height: 100vh; display: flex; align-items: center; justify-content: center; background: #0a2a5e; font-family: 'DM Sans', sans-serif; padding: 2rem; }
+        .card { background: white; padding: 3rem; border-radius: 16px; text-align: center; max-width: 500px; width: 100%; box-shadow: 0 15px 40px rgba(0,0,0,0.2); }
+        .card.valid { border-top: 5px solid #10b981; }
+        .card.warning { border-top: 5px solid #F5C518; }
+        
+        .mtc-logo { font-family: 'Outfit', sans-serif; font-size: 1.25rem; font-weight: 800; color: #0a2a5e; margin-bottom: 2rem; letter-spacing: 0.05em; }
+        
+        .status-badge { background: #f8fafc; padding: 0.75rem 1rem; border-radius: 8px; font-weight: 800; font-size: 0.9rem; margin-bottom: 2rem; color: #0f1e35; border: 1px solid #e2e8f0; display: inline-block;}
+        .card.valid .status-badge { background: #ecfdf5; color: #059669; border-color: #a7f3d0; }
+        .card.warning .status-badge { background: #fffbeb; color: #d97706; border-color: #fde68a; }
+
+        .cert-details { text-align: left; background: #f8fafc; padding: 1.5rem; border-radius: 12px; margin-bottom: 2rem; }
+        .detail-row { display: flex; flex-direction: column; margin-bottom: 1rem; }
+        .detail-row:last-child { margin-bottom: 0; }
+        .label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: #64748b; font-weight: 700; }
+        .value { font-size: 1.1rem; color: #0f1e35; font-weight: 600; margin-top: 0.25rem; }
+        .value.mono { font-family: 'Courier New', monospace; font-size: 0.95rem; }
+
+        .footer-note { font-size: 0.8rem; color: #94a3b8; line-height: 1.5; margin-bottom: 2rem; }
+        .home-link { display: inline-block; padding: 0.75rem 1.5rem; background: #f1f5f9; color: #0a2a5e; font-weight: 600; border-radius: 8px; text-decoration: none; transition: 0.2s; }
+        .home-link:hover { background: #e2e8f0; }
+      `}</style>
+    </div>
+  );
 }

@@ -111,8 +111,18 @@ export default function AdminDashboard() {
                   <span className="student-name">{cert.studentName}</span>
                   <span className="course-title">{cert.courseTitle}</span>
                 </div>
-                <div className="expiry-date">
-                  Expira em: {new Date(cert.validUntil).toLocaleDateString('pt-BR')}
+                <div className="alert-actions">
+                  <div className="expiry-date">
+                    Expira em: {new Date(cert.validUntil).toLocaleDateString('pt-BR')}
+                  </div>
+                  <a 
+                    href={`https://wa.me/?text=Ol%C3%A1%20${encodeURIComponent(cert.studentName || 'Formando')}.%20O%20seu%20certificado%20de%20${encodeURIComponent(cert.courseTitle)}%20(STCW)%20expira%20em%20breve.%20Por%20favor%20contacte%20a%20Mar%C3%ADtimo%20Training%20Center%20para%20renova%C3%A7%C3%A3o.`} 
+                    target="_blank" 
+                    rel="noopener noreferrer" 
+                    className="wa-btn"
+                  >
+                    Notificar WhatsApp
+                  </a>
                 </div>
               </div>
             ))}
@@ -270,6 +280,36 @@ export default function AdminDashboard() {
           align-items: center;
           box-shadow: 0 10px 30px rgba(10, 42, 94, 0.15);
         }
+
+        .alert-item {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding: 1rem 0;
+          border-bottom: 1px solid #e2e8f0;
+        }
+
+        .alert-actions {
+          display: flex;
+          align-items: center;
+          gap: 1.5rem;
+        }
+
+        .wa-btn {
+          background: #25D366;
+          color: white;
+          padding: 0.5rem 1rem;
+          border-radius: 8px;
+          font-size: 0.8rem;
+          font-weight: 700;
+          text-decoration: none;
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+          transition: background 0.2s;
+        }
+
+        .wa-btn:hover { background: #128C7E; }
 
         .banner-content h1 { font-family: 'Outfit', sans-serif; font-size: 2.2rem; margin-bottom: 0.5rem; color: #F5C518; letter-spacing: -0.02em; }
         .banner-content p { font-size: 1.1rem; opacity: 0.9; color: #e2e8f0; }
