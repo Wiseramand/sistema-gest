@@ -1,46 +1,120 @@
-const { PrismaClient } = require('@prisma/client');
-const bcrypt = require('bcryptjs');
-
-const prisma = new PrismaClient();
-
-async function main() {
-    console.log('🌱 Seeding database...');
-
-    // Check if SUPER_ADMIN already exists
-    const existing = await prisma.adminUser.findFirst({
-        where: { role: 'SUPER_ADMIN' }
+"use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
-
-    if (existing) {
-        console.log('✅ SUPER_ADMIN already exists, skipping seed.');
-        return;
+};
+var __generator = (this && this.__generator) || function (thisArg, body) {
+    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g = Object.create((typeof Iterator === "function" ? Iterator : Object).prototype);
+    return g.next = verb(0), g["throw"] = verb(1), g["return"] = verb(2), typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
+    function verb(n) { return function (v) { return step([n, v]); }; }
+    function step(op) {
+        if (f) throw new TypeError("Generator is already executing.");
+        while (g && (g = 0, op[0] && (_ = 0)), _) try {
+            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+            if (y = 0, t) op = [op[0] & 2, t.value];
+            switch (op[0]) {
+                case 0: case 1: t = op; break;
+                case 4: _.label++; return { value: op[1], done: false };
+                case 5: _.label++; y = op[1]; op = [0]; continue;
+                case 7: op = _.ops.pop(); _.trys.pop(); continue;
+                default:
+                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
+                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
+                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
+                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
+                    if (t[2]) _.ops.pop();
+                    _.trys.pop(); continue;
+            }
+            op = body.call(thisArg, _);
+        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
+        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
-
-    const passwordHash = await bcrypt.hash('Admin@2026!', 10);
-
-    await prisma.adminUser.create({
-        data: {
-            name: 'Super Admin',
-            email: 'admin@sistema.com',
-            username: 'superadmin',
-            passwordHash,
-            role: 'SUPER_ADMIN',
-            responsibilities: ['Gestão total do sistema'],
-        }
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+var client_1 = require("@prisma/client");
+var bcryptjs_1 = require("bcryptjs");
+var db = new client_1.PrismaClient();
+function main() {
+    return __awaiter(this, void 0, void 0, function () {
+        var hash, admin, adminUser, trainer, student;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, bcryptjs_1.default.hash('admin123', 10)];
+                case 1:
+                    hash = _a.sent();
+                    return [4 /*yield*/, db.user.upsert({
+                            where: { email: 'admin@maritimo.com' },
+                            update: {},
+                            create: {
+                                name: 'Administrador',
+                                email: 'admin@maritimo.com',
+                                username: 'admin',
+                                passwordHash: hash,
+                                role: 'SUPER_ADMIN',
+                            },
+                        })];
+                case 2:
+                    admin = _a.sent();
+                    console.log('✅ Admin criado:', admin.email);
+                    return [4 /*yield*/, db.adminUser.upsert({
+                            where: { email: 'gestor@maritimo.com' },
+                            update: {},
+                            create: {
+                                name: 'Gestor',
+                                email: 'gestor@maritimo.com',
+                                username: 'gestor',
+                                passwordHash: hash,
+                                role: 'ADMIN',
+                                responsibilities: '["Alunos","Cursos"]',
+                            },
+                        })];
+                case 3:
+                    adminUser = _a.sent();
+                    console.log('✅ AdminUser criado:', adminUser.email);
+                    return [4 /*yield*/, db.trainer.upsert({
+                            where: { email: 'professor@maritimo.com' },
+                            update: {},
+                            create: {
+                                name: 'João Formador',
+                                email: 'professor@maritimo.com',
+                                username: 'professor',
+                                passwordHash: hash,
+                                phone: '912345678',
+                                specialty: 'Segurança Marítima',
+                                status: 'Ativo',
+                                role: 'TRAINER',
+                            },
+                        })];
+                case 4:
+                    trainer = _a.sent();
+                    console.log('✅ Formador criado:', trainer.email);
+                    return [4 /*yield*/, db.student.upsert({
+                            where: { email: 'aluno@maritimo.com' },
+                            update: {},
+                            create: {
+                                name: 'Maria Aluna',
+                                email: 'aluno@maritimo.com',
+                                username: 'aluno',
+                                passwordHash: hash,
+                                phone: '923456789',
+                                status: 'Ativo',
+                                role: 'STUDENT',
+                            },
+                        })];
+                case 5:
+                    student = _a.sent();
+                    console.log('✅ Aluno criado:', student.email);
+                    console.log('\n🔑 Todos os logins usam a senha: admin123');
+                    return [2 /*return*/];
+            }
+        });
     });
-
-    console.log('✅ SUPER_ADMIN criado com sucesso!');
-    console.log('   📧 Email: admin@sistema.com');
-    console.log('   👤 Username: superadmin');
-    console.log('   🔑 Password: Admin@2026!');
-    console.log('   ⚠️  Altere a password após o primeiro login!');
 }
-
 main()
-    .catch(e => {
-        console.error('❌ Seed failed:', e);
-        process.exit(1);
-    })
-    .finally(async () => {
-        await prisma.$disconnect();
-    });
+    .then(function () { return db.$disconnect(); })
+    .catch(function (e) { console.error(e); db.$disconnect(); process.exit(1); });
