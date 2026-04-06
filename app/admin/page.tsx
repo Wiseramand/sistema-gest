@@ -1,6 +1,10 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { 
+  AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
+  BarChart, Bar, Cell, Legend
+} from 'recharts';
 
 export default function AdminDashboard() {
   const [stats, setStats] = useState({
@@ -108,6 +112,23 @@ export default function AdminDashboard() {
   const [selectedCourseFilter, setSelectedCourseFilter] = useState('');
   const [selectedMatriculationFilter, setSelectedMatriculationFilter] = useState('');
 
+  // Dummy data for charts
+  const monthlyData = [
+    { name: 'Jan', inscricoes: 45, alunos: 38 },
+    { name: 'Fev', inscricoes: 52, alunos: 42 },
+    { name: 'Mar', inscricoes: 48, alunos: 51 },
+    { name: 'Abr', inscricoes: 70, alunos: 62 },
+    { name: 'Mai', inscricoes: 61, alunos: 55 },
+    { name: 'Jun', inscricoes: 85, alunos: 78 },
+  ];
+
+  const categoryData = [
+    { name: 'STCW Básico', value: 4500, color: '#0a2a5e' },
+    { name: 'GMDSS', value: 3200, color: '#173b7d' },
+    { name: 'Incêndios', value: 2100, color: '#1e40af' },
+    { name: 'Sobrevivência', value: 2800, color: '#F5C518' },
+  ];
+
   return (
     <div className="dashboard-overview">
       <div className="welcome-banner">
@@ -182,6 +203,61 @@ export default function AdminDashboard() {
           ))}
         </div>
       )}
+
+      <div className="analytics-row">
+        <div className="card chart-card">
+          <div className="card-header">
+            <div>
+              <h3>Tendência de Inscrições</h3>
+              <p>Volume mensal de novos registros</p>
+            </div>
+            <div className="trend-badge positive">+12% vs mês anterior</div>
+          </div>
+          <div className="chart-container">
+            <ResponsiveContainer width="100%" height={300}>
+              <AreaChart data={monthlyData}>
+                <defs>
+                  <linearGradient id="colorInsc" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="#0a2a5e" stopOpacity={0.1}/>
+                    <stop offset="95%" stopColor="#0a2a5e" stopOpacity={0}/>
+                  </linearGradient>
+                </defs>
+                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
+                <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{fill: '#94a3b8', fontSize: 12}} dy={10} />
+                <YAxis axisLine={false} tickLine={false} tick={{fill: '#94a3b8', fontSize: 12}} />
+                <Tooltip 
+                  contentStyle={{borderRadius: '12px', border: 'none', boxShadow: '0 10px 15px rgba(0,0,0,0.1)'}}
+                />
+                <Area type="monotone" dataKey="inscricoes" stroke="#0a2a5e" strokeWidth={3} fillOpacity={1} fill="url(#colorInsc)" />
+              </AreaChart>
+            </ResponsiveContainer>
+          </div>
+        </div>
+
+        <div className="card chart-card">
+          <div className="card-header">
+            <div>
+              <h3>Faturamento por Categoria</h3>
+              <p>Distribuição de receita bruta (EUR)</p>
+            </div>
+          </div>
+          <div className="chart-container">
+            <ResponsiveContainer width="100%" height={300}>
+              <BarChart data={categoryData} layout="vertical" margin={{left: 20}}>
+                <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke="#f1f5f9" />
+                <XAxis type="number" hide />
+                <YAxis dataKey="name" type="category" axisLine={false} tickLine={false} tick={{fill: '#0a2a5e', fontSize: 12, fontWeight: 600}} width={90} />
+                <Tooltip cursor={{fill: '#f8fafc'}} contentStyle={{borderRadius: '12px', border: 'none'}} />
+                <Bar dataKey="value" radius={[0, 4, 4, 0]} barSize={20}>
+                  {categoryData.map((entry, index) => (
+                    <Cell key={`cell-${index}`} fill={entry.color} />
+                  ))}
+                </Bar>
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+        </div>
+      </div>
 
       <div className="dashboard-row">
         <div className="card main-card">
@@ -356,6 +432,57 @@ export default function AdminDashboard() {
         .banner-content h1 { font-family: 'Outfit', sans-serif; font-size: 2.2rem; margin-bottom: 0.5rem; color: #F5C518; letter-spacing: -0.02em; }
         .banner-content p { font-size: 1.1rem; opacity: 0.9; color: #e2e8f0; }
         .maritime-illustration { font-size: 5rem; opacity: 0.2; }
+
+        .analytics-row {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 1.5rem;
+          margin-bottom: 2.5rem;
+        }
+
+        .chart-card {
+          padding: 1.5rem;
+          background: white;
+          border-radius: 16px;
+          border: 1px solid #e2e8f0;
+        }
+
+        .card-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: flex-start;
+          margin-bottom: 2rem;
+        }
+
+        .card-header h3 {
+          font-family: 'Outfit', sans-serif;
+          font-size: 1.1rem;
+          color: #0a2a5e;
+          margin: 0;
+          font-weight: 700;
+        }
+
+        .card-header p {
+          font-size: 0.85rem;
+          color: #64748b;
+          margin: 0.25rem 0 0;
+        }
+
+        .trend-badge {
+          font-size: 0.75rem;
+          font-weight: 800;
+          padding: 0.25rem 0.6rem;
+          border-radius: 50px;
+        }
+
+        .trend-badge.positive {
+          background: #ecfdf5;
+          color: #059669;
+        }
+
+        .chart-container {
+          width: 100%;
+        }
 
         .stats-grid {
           display: grid;

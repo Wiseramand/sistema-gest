@@ -116,19 +116,43 @@ interface FlyoutGroup {
 }
 
 // ── Rail Module Data ─────────────────────────────────────────
-const TOP_MODULES = ['academico'];
+const TOP_MODULES = ['academico', 'certificados', 'pagamentos'];
 const BOTTOM_MODULES = ['chat', 'perfil'];
 
 const MODULE_FLYOUTS: Record<string, { label: string; groups: FlyoutGroup[] }> = {
   academico: {
-    label: 'Académico',
+    label: 'Formação',
     groups: [
       {
-        label: 'CURSOS',
+        label: 'AULAS',
         items: [
-          { name: 'Dashboard', href: '/student' },
-          { name: 'Cursos / Materiais', href: '/student/materials' },
-          { name: 'Avaliações', href: '/student/feedback' },
+          { name: 'Dashboard Aluno', href: '/student' },
+          { name: 'Meus Cursos', href: '/student/materials' },
+          { name: 'Agenda de Aulas', href: '/student/calendar' },
+        ],
+      },
+    ],
+  },
+  certificados: {
+    label: 'Documentos',
+    groups: [
+      {
+        label: 'STCW',
+        items: [
+          { name: 'Meus Certificados', href: '/student/certificates' },
+          { name: 'Validar QR Code', href: '/student/verify' },
+        ],
+      },
+    ],
+  },
+  pagamentos: {
+    label: 'Financeiro',
+    groups: [
+      {
+        label: 'CONTA',
+        items: [
+          { name: 'Histórico de Faturas', href: '/student/payments' },
+          { name: 'Regularizar Dívida', href: '/student/billing' },
         ],
       },
     ],
@@ -257,6 +281,8 @@ function StudentLayoutContent({ children }: { children: React.ReactNode }) {
 
   const railIconMap: Record<string, React.ReactNode> = {
     academico: <IconClass />,
+    certificados: <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>,
+    pagamentos: <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>,
     chat: <IconChat />,
     perfil: <IconProfile />,
   };

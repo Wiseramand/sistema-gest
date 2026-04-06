@@ -116,18 +116,43 @@ interface FlyoutGroup {
 }
 
 // ── Rail Module Data ─────────────────────────────────────────
-const TOP_MODULES = ['turmas'];
+const TOP_MODULES = ['turmas', 'sumarios', 'avaliacoes'];
 const BOTTOM_MODULES = ['chat', 'perfil'];
 
 const MODULE_FLYOUTS: Record<string, { label: string; groups: FlyoutGroup[] }> = {
   turmas: {
-    label: 'Aulas & Materiais',
+    label: 'Ensino STCW',
     groups: [
       {
-        label: 'ENSINO',
+        label: 'TURMAS',
         items: [
           { name: 'Minhas Turmas', href: '/professor' },
+          { name: 'Agenda Semanal', href: '/professor/calendar' },
           { name: 'Materiais de Apoio', href: '/professor/materials' },
+        ],
+      },
+    ],
+  },
+  sumarios: {
+    label: 'Registos',
+    groups: [
+      {
+        label: 'DIÁRIO',
+        items: [
+          { name: 'Folha de Presenças', href: '/professor/attendance' },
+          { name: 'Registos de Sumário', href: '/professor/summaries' },
+        ],
+      },
+    ],
+  },
+  avaliacoes: {
+    label: 'Qualidade',
+    groups: [
+      {
+        label: 'ACADÉMICO',
+        items: [
+          { name: 'Lançar Notas', href: '/professor/grades' },
+          { name: 'Feedback de Alunos', href: '/professor/feedback' },
         ],
       },
     ],
@@ -216,6 +241,8 @@ function TrainerLayoutContent({ children }: { children: React.ReactNode }) {
 
   const railIconMap: Record<string, React.ReactNode> = {
     turmas: <IconClass />,
+    sumarios: <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>,
+    avaliacoes: <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>,
     chat: <IconChat />,
     perfil: <IconProfile />,
   };
