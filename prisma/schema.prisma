@@ -3,9 +3,8 @@ generator client {
 }
 
 datasource db {
-  provider  = "postgresql"
-  url       = env("DATABASE_URL")
-  directUrl = env("DIRECT_URL")
+  provider = "sqlite"
+  url      = "file:./dev.db"
 }
 
 
@@ -27,7 +26,7 @@ model AdminUser {
   username         String?  @unique
   passwordHash     String?
   role             String   @default("ADMIN")
-  responsibilities String[] @default([])
+  responsibilities String   @default("[]") // Em SQLite usamos String para JSON
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
 }
@@ -87,7 +86,7 @@ model Course {
   trainerId   String?
   trainerName String?
   students    Int      @default(0)
-  materials   Json     @default("[]")
+  materials   String   @default("[]") // Em SQLite usamos String para JSON
   startDate   String?
   endDate     String?
   createdAt   DateTime @default(now())
@@ -243,7 +242,7 @@ model Attendance {
   courseId  String
   date      String
   trainerId String?
-  records   Json     @default("[]")
+  records   String   @default("[]") // Em SQLite usamos String para JSON
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -260,3 +259,33 @@ model Notification {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
+
+model Summary {
+  id          String   @id @default(cuid())
+  courseId    String
+  courseTitle String?
+  date        String
+  content     String
+  trainerId   String
+  trainerName String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@unique([courseId, date])
+}
+
+model Grade {
+  id              String   @id @default(cuid())
+  studentId       String
+  studentName     String?
+  courseId        String
+  courseTitle     String
+  score           Float?   // 0-20
+  observations    String?
+  trainerId       String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@unique([studentId, courseId])
+}
+

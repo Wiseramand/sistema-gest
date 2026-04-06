@@ -15,8 +15,15 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
         return () => clearTimeout(timer);
     }, [pathname]);
 
+    const getBasePath = () => {
+        if (pathname.startsWith('/admin')) return '/api/auth/admin';
+        if (pathname.startsWith('/professor')) return '/api/auth/professor';
+        if (pathname.startsWith('/student')) return '/api/auth/student';
+        return '/api/auth';
+    };
+
     return (
-        <SessionProvider>
+        <SessionProvider basePath={getBasePath()}>
             {isLoading && <LoadingOverlay />}
             {children}
         </SessionProvider>

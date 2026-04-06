@@ -38,37 +38,76 @@ export default function StudentProfilePage() {
     const [matriculations, setMatriculations] = useState<Matriculation[]>([]);
     const [loading, setLoading] = useState(true);
 
-    useEffect(() => {
-        const fetchData = async () => {
-            const userId = (session?.user as any)?.id;
-            if (!userId) return;
+    const [uploading, setUploading] = useState(false);
 
-            try {
-                const [sRes, mRes] = await Promise.all([
-                    fetch(`/api/students/${userId}`),
-                    fetch('/api/matriculations')
-                ]);
+    const fetchData = async () => {
+        const userId = (session?.user as any)?.id;
+        if (!userId) return;
 
-                const studentData = await sRes.json();
-                setStudent(studentData || null);
+        try {
+            const [sRes, mRes] = await Promise.all([
+                fetch(`/api/students/${userId}`),
+                fetch('/api/matriculations')
+            ]);
 
-                if (studentData?.companyId) {
-                    const cRes = await fetch(`/api/companies/${studentData.companyId}`);
-                    const companyData = await cRes.json();
-                    setCompany(companyData || null);
-                }
+            const studentData = await sRes.json();
+            setStudent(studentData || null);
 
-                const allMatriculations = await mRes.json();
-                setMatriculations(allMatriculations.filter((m: any) => m.studentId === userId));
-
-            } catch (error) {
-                console.error('Error fetching data:', error);
-            } finally {
-                setLoading(false);
+            if (studentData?.companyId) {
+                const cRes = await fetch(`/api/companies/${studentData.companyId}`);
+                const companyData = await cRes.json();
+                setCompany(companyData || null);
             }
-        };
+
+            const allMatriculations = await mRes.json();
+            setMatriculations(allMatriculations.filter((m: any) => m.studentId === userId));
+
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
         fetchData();
     }, [session]);
+
+    const handlePhotoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (!file || !student) return;
+
+        setUploading(true);
+        try {
+            const formData = new FormData();
+            formData.append('file', file);
+
+            const res = await fetch('/api/upload', {
+                method: 'POST',
+                body: formData
+            });
+
+            const data = await res.json();
+            if (data.url) {
+                // Update student photo in DB
+                const updateRes = await fetch(`/api/students/${student.id}`, {
+                    method: 'PATCH',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ photo: data.url })
+                });
+
+                if (updateRes.ok) {
+                    setStudent({ ...student, photo: data.url });
+                    alert('Foto de perfil atualizada!');
+                }
+            }
+        } catch (error) {
+            console.error('Upload error:', error);
+            alert('Falha ao carregar a foto.');
+        } finally {
+            setUploading(false);
+        }
+    };
 
     if (loading) return <div className="loader">A carregar o seu perfil...</div>;
     if (!student) return <div className="error">Dados do perfil não encontrados. Por favor, contacte o administrador.</div>;
@@ -84,6 +123,10 @@ export default function StudentProfilePage() {
                         ) : (
                             <div className="photo-placeholder">{student.name.charAt(0)}</div>
                         )}
+                        <label className="photo-edit-btn">
+                            <input type="file" onChange={handlePhotoUpload} accept="image/*" hidden disabled={uploading} />
+                            {uploading ? '...' : '📸'}
+                        </label>
                         <span className={`status-badge ${student.status?.toLowerCase()}`}>{student.status}</span>
                     </div>
                     <div className="profile-main-info">
@@ -197,6 +240,9 @@ export default function StudentProfilePage() {
                 .profile-photo { width: 180px; height: 180px; border-radius: 50%; border: 6px solid white; object-fit: cover; box-shadow: 0 10px 25px rgba(0,0,0,0.1); background: white; }
                 .photo-placeholder { width: 180px; height: 180px; border-radius: 50%; border: 6px solid white; background: #f8fafc; display: flex; align-items: center; justify-content: center; font-size: 5rem; font-weight: 800; color: #cbd5e0; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
                 
+                .photo-edit-btn { position: absolute; bottom: 10px; left: 10px; width: 36px; height: 36px; background: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.1); border: 1.5px solid #e2e8f0; transition: 0.2s; z-index: 10; font-size: 1.1rem; }
+                .photo-edit-btn:hover { transform: scale(1.1); background: #f8fafc; border-color: #3b82f6; }
+
                 .status-badge { position: absolute; bottom: 10px; right: 10px; padding: 0.5rem 1rem; border-radius: 50px; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; border: 3px solid white; }
                 .status-badge.ativo { background: #10b981; color: white; }
                 .status-badge.inativo { background: #ef4444; color: white; }

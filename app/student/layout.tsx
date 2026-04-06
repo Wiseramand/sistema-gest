@@ -323,8 +323,14 @@ function StudentLayoutContent({ children }: { children: React.ReactNode }) {
         </div>
 
         <div className="rail-footer">
-          <div className="rail-avatar" title={session?.user?.name || 'Aluno'}>
-            {(session?.user?.name || 'AL').slice(0, 2).toUpperCase()}
+          <div className="rail-avatar-container" title={session?.user?.name || 'Aluno'}>
+            {(session?.user as any)?.photo ? (
+              <img src={(session?.user as any).photo} className="rail-photo" alt="Avatar" />
+            ) : (
+              <div className="rail-avatar">
+                {(session?.user?.name || 'AL').slice(0, 2).toUpperCase()}
+              </div>
+            )}
           </div>
         </div>
       </div>
@@ -441,7 +447,9 @@ function StudentLayoutContent({ children }: { children: React.ReactNode }) {
         .rail-btn.active { background: #ffffff; color: #0a2a5e; }
         .rail-sep { width: 24px; height: 0.5px; background: rgba(255, 255, 255, 0.12); margin: 8px 0; flex-shrink: 0; }
         .rail-footer { display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 0 10px; flex-shrink: 0; }
-        .rail-avatar { width: 30px; height: 30px; border-radius: 50%; background: linear-gradient(135deg, #0ea5e9, #1a4fa0); color: #ffffff; font-size: 10px; font-weight: 600; font-family: 'Outfit', sans-serif; display: flex; align-items: center; justify-content: center; cursor: default; letter-spacing: 0.5px; }
+        .rail-avatar-container { width: 30px; height: 30px; border-radius: 50%; border: 2px solid rgba(255, 255, 255, 0.2); overflow: hidden; display: flex; align-items: center; justify-content: center; background: #1a4fa0; }
+        .rail-photo { width: 100%; height: 100%; object-fit: cover; }
+        .rail-avatar { width: 100%; height: 100%; color: #ffffff; font-size: 10px; font-weight: 600; font-family: 'Outfit', sans-serif; display: flex; align-items: center; justify-content: center; cursor: default; letter-spacing: 0.5px; }
 
         /* ── Flyout ── */
         .flyout { width: 200px; background: #ffffff; border-right: 0.5px solid rgba(0, 0, 0, 0.07); display: flex; flex-direction: column; flex-shrink: 0; height: calc(100vh - 2.5rem); overflow: hidden; }

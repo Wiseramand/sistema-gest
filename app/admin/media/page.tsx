@@ -25,8 +25,11 @@ export default function MediaHubPage() {
     const [navigationStack, setNavigationStack] = useState<MediaItem[]>([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [modalType, setModalType] = useState<'FILE' | 'FOLDER'>('FILE');
+    const [uploadMode, setUploadMode] = useState<'LINK' | 'FILE'>('FILE');
     const [editingItem, setEditingItem] = useState<MediaItem | null>(null);
     const [searchQuery, setSearchQuery] = useState('');
+    const [uploadFile, setUploadFile] = useState<File | null>(null);
+    const [isSaving, setIsSaving] = useState(false);
 
     const [formData, setFormData] = useState({
         name: '', description: '', url: '', targetRole: 'BOTH', type: 'PDF'
@@ -66,25 +69,58 @@ export default function MediaHubPage() {
 
     const handleSave = async (e: React.FormEvent) => {
         e.preventDefault();
-        const type = modalType === 'FOLDER' ? 'FOLDER' : formData.type;
-        const payload = {
-            ...formData,
-            type,
-            isFolder: modalType === 'FOLDER',
-            parentId: currentFolder?.id || null
-        };
+        setIsSaving(true);
 
-        const res = await fetch('/api/media', {
-            method: editingItem ? 'PATCH' : 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(editingItem ? { ...payload, id: editingItem.id } : payload)
-        });
+        try {
+            const fData = new FormData();
+            fData.append('name', formData.name);
+            fData.append('description', formData.description);
+            fData.append('targetRole', formData.targetRole);
+            fData.append('isFolder', (modalType === 'FOLDER').toString());
+            fData.append('parentId', currentFolder?.id || '');
 
-        if (res.ok) {
-            setIsModalOpen(false);
-            setEditingItem(null);
-            fetchItems(currentFolder?.id || null);
+            if (modalType === 'FOLDER') {
+                fData.append('type', 'FOLDER');
+            } else {
+                fData.append('type', formData.type);
+                if (uploadMode === 'FILE' && uploadFile) {
+                    fData.append('file', uploadFile);
+                } else {
+                    fData.append('url', formData.url);
+                }
+            }
+
+            const res = await fetch('/api/media', {
+                method: editingItem ? 'PATCH' : 'POST',
+                // Note: With FormData, do NOT set Content-Type header manually
+                body: editingItem ? JSON.stringify({ ...formData, id: editingItem.id, isFolder: modalType === 'FOLDER', parentId: currentFolder?.id || null }) : fData
+            });
+
+            // Patch still uses JSON for simplicity as it's usually just metadata
+            if (editingItem) {
+                const patchRes = await fetch('/api/media', {
+                    method: 'PATCH',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ ...formData, id: editingItem.id, isFolder: modalType === 'FOLDER', parentId: currentFolder?.id || null })
+                });
+                if (patchRes.ok) finalizeSave();
+            } else {
+                if (res.ok) finalizeSave();
+                else alert('Erro ao salvar. Verifique se preencheu todos os campos.');
+            }
+        } catch (error) {
+            console.error(error);
+            alert('Erro de conexão.');
+        } finally {
+            setIsSaving(false);
         }
+    };
+
+    const finalizeSave = () => {
+        setIsModalOpen(false);
+        setEditingItem(null);
+        setUploadFile(null);
+        fetchItems(currentFolder?.id || null);
     };
 
     const handleDelete = async (id: string) => {
@@ -121,7 +157,7 @@ export default function MediaHubPage() {
                 </div>
                 <div className="header-actions">
                     <button className="btn-secondary" onClick={() => { setModalType('FOLDER'); setEditingItem(null); setIsModalOpen(true); }}>📁 Nova Pasta</button>
-                    <button className="btn-primary" onClick={() => { setModalType('FILE'); setEditingItem(null); setIsModalOpen(true); }}>📤 Carregar Material</button>
+                    <button className="btn-primary" onClick={() => { setModalType('FILE'); setEditingItem(null); setIsModalOpen(true); setUploadMode('FILE'); }}>📤 Carregar Material</button>
                 </div>
             </div>
 
@@ -228,26 +264,40 @@ export default function MediaHubPage() {
 
                             {modalType === 'FILE' && (
                                 <>
-                                    <div className="form-row">
+                                    <div className="mode-toggle">
+                                        <button type="button" className={uploadMode === 'FILE' ? 'active' : ''} onClick={() => setUploadMode('FILE')}>Arquivo Local</button>
+                                        <button type="button" className={uploadMode === 'LINK' ? 'active' : ''} onClick={() => setUploadMode('LINK')}>Link Externo</button>
+                                    </div>
+
+                                    {uploadMode === 'FILE' ? (
                                         <div className="form-group">
-                                            <label>Tipo de Média</label>
-                                            <select value={formData.type} onChange={e => setFormData({ ...formData, type: e.target.value })}>
-                                                <option value="PDF">PDF (Manual)</option>
-                                                <option value="Vídeo">Vídeo (Aula)</option>
-                                                <option value="WORD">Word (Exercício)</option>
-                                                <option value="LINK">Link Externo</option>
-                                            </select>
+                                            <label>Selecionar Arquivo</label>
+                                            <input 
+                                                type="file" 
+                                                onChange={e => setUploadFile(e.target.files?.[0] || null)}
+                                                className="file-input"
+                                            />
                                         </div>
+                                    ) : (
                                         <div className="form-group">
                                             <label>URL / Caminho</label>
                                             <input 
                                                 type="text" 
-                                                required 
                                                 value={formData.url}
                                                 onChange={e => setFormData({ ...formData, url: e.target.value })}
                                                 placeholder="https://exemplo.com/doc.pdf"
                                             />
                                         </div>
+                                    )}
+
+                                    <div className="form-group">
+                                        <label>Tipo de Média</label>
+                                        <select value={formData.type} onChange={e => setFormData({ ...formData, type: e.target.value })}>
+                                            <option value="PDF">PDF (Manual)</option>
+                                            <option value="Vídeo">Vídeo (Aula)</option>
+                                            <option value="WORD">Word (Exercício)</option>
+                                            <option value="LINK">Link Externos</option>
+                                        </select>
                                     </div>
                                 </>
                             )}
@@ -270,7 +320,9 @@ export default function MediaHubPage() {
 
                             <div className="modal-footer">
                                 <button type="button" className="btn-cancel" onClick={() => setIsModalOpen(false)}>Cancelar</button>
-                                <button type="submit" className="btn-save">{editingItem ? 'Guardar' : 'Criar'}</button>
+                                <button type="submit" className="btn-save" disabled={isSaving}>
+                                    {isSaving ? 'A processar...' : (editingItem ? 'Guardar' : 'Criar')}
+                                </button>
                             </div>
                         </form>
                     </div>
@@ -299,7 +351,7 @@ export default function MediaHubPage() {
                 .stats { font-size: 0.8rem; color: #94a3b8; font-weight: 600; }
 
                 .media-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.25rem; }
-                .item-card { background: white; padding: 1.25rem; border-radius: 12px; border: 1px solid #e2e8f0; display: flex; gap: 1rem; cursor: pointer; transition: 0.2s; position: relative; }
+                .item-card { background: white; padding: 1.25rem; border-radius: 12px; border: 1px solid #e2e8f0; display: flex; gap: 1rem; cursor: pointer; transition: 0.2s; position: relative; min-height: 100px; }
                 .item-card:hover { transform: translateY(-3px); box-shadow: 0 8px 16px rgba(0,0,0,0.05); }
                 .item-card.folder { border-left: 4px solid #F5C518; }
                 .item-card.back { background: #f8fafc; border-style: dashed; }
@@ -337,7 +389,10 @@ export default function MediaHubPage() {
                 .form-group label { font-size: 0.85rem; font-weight: 700; color: #475569; }
                 .form-group input, .form-group select, .form-group textarea { padding: 0.75rem; border: 1.5px solid #e2e8f0; border-radius: 10px; font-family: inherit; font-size: 0.9rem; }
                 .form-group textarea { height: 80px; resize: none; }
-                .form-row { display: grid; grid-template-columns: 140px 1fr; gap: 1rem; }
+                
+                .mode-toggle { display: flex; gap: 0.5rem; margin-bottom: 1.25rem; background: #f1f5f9; padding: 0.25rem; border-radius: 10px; }
+                .mode-toggle button { flex: 1; border: none; padding: 0.5rem; border-radius: 8px; font-size: 0.8rem; font-weight: 700; cursor: pointer; transition: 0.2s; color: #64748b; background: none; }
+                .mode-toggle button.active { background: white; color: #0a2a5e; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
 
                 .role-selector { display: flex; gap: 0.5rem; }
                 .role-btn { flex: 1; border: 1.5px solid #e2e8f0; background: white; padding: 0.5rem; border-radius: 8px; font-size: 0.8rem; font-weight: 700; color: #64748b; cursor: pointer; }
@@ -345,9 +400,9 @@ export default function MediaHubPage() {
 
                 .modal-footer { display: flex; justify-content: flex-end; gap: 0.75rem; padding-top: 1rem; border-top: 1px solid #f1f5f9; }
                 .btn-cancel { padding: 0.6rem 1.2rem; background: none; border: none; font-weight: 600; cursor: pointer; color: #94a3b8; }
-                .btn-save { padding: 0.6rem 1.5rem; background: #0a2a5e; color: white; border: none; border-radius: 8px; font-weight: 700; cursor: pointer; }
+                .btn-save { padding: 0.6rem 1.5rem; background: #0a2a5e; color: white; border: none; border-radius: 8px; font-weight: 700; cursor: pointer; transition: 0.2s; }
+                .btn-save:disabled { opacity: 0.5; cursor: not-allowed; }
             `}</style>
         </div>
     );
 }
-

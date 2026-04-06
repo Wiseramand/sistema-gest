@@ -18,6 +18,8 @@ const collectionMap: Record<string, ModelName> = {
     'attendance':      'attendance',
     'materials':       'material',
     'adminusers':      'adminUser',
+    'summaries':       'summary',
+    'grades':          'grade',
 };
 
 export function getModel(collection: string) {

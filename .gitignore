@@ -52,3 +52,6 @@ build_output*.txt
 .env.production
 data/db.json
 data/
+/prisma/dev.db
+/prisma/dev.db-journal
+/public/uploads/

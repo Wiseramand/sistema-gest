@@ -24,23 +24,62 @@ export default function TrainerProfilePage() {
     const [trainer, setTrainer] = useState<Trainer | null>(null);
     const [loading, setLoading] = useState(true);
 
-    useEffect(() => {
-        const fetchTrainer = async () => {
-            const userId = (session?.user as any)?.id;
-            if (!userId) return;
+    const [uploading, setUploading] = useState(false);
 
-            try {
-                const res = await fetch(`/api/trainers/${userId}`);
-                const found = await res.json();
-                setTrainer(found || null);
-            } catch (error) {
-                console.error('Error fetching trainer:', error);
-            } finally {
-                setLoading(false);
-            }
-        };
+    const fetchTrainer = async () => {
+        const userId = (session?.user as any)?.id;
+        if (!userId) return;
+
+        try {
+            const res = await fetch(`/api/trainers/${userId}`);
+            const found = await res.json();
+            setTrainer(found || null);
+        } catch (error) {
+            console.error('Error fetching trainer:', error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
         fetchTrainer();
     }, [session]);
+
+    const handlePhotoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (!file || !trainer) return;
+
+        setUploading(true);
+        try {
+            const formData = new FormData();
+            formData.append('file', file);
+
+            const res = await fetch('/api/upload', {
+                method: 'POST',
+                body: formData
+            });
+
+            const data = await res.json();
+            if (data.url) {
+                // Update trainer photo in DB
+                const updateRes = await fetch(`/api/trainers/${trainer.id}`, {
+                    method: 'PATCH',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ photo: data.url })
+                });
+
+                if (updateRes.ok) {
+                    setTrainer({ ...trainer, photo: data.url });
+                    alert('Foto de perfil atualizada!');
+                }
+            }
+        } catch (error) {
+            console.error('Upload error:', error);
+            alert('Falha ao carregar a foto.');
+        } finally {
+            setUploading(false);
+        }
+    };
 
     if (loading) return <div className="loader">A carregar o seu perfil...</div>;
     if (!trainer) return <div className="error">Dados do perfil não encontrados. Por favor, contacte o administrador.</div>;
@@ -56,6 +95,10 @@ export default function TrainerProfilePage() {
                         ) : (
                             <div className="photo-placeholder">{trainer.name.charAt(0)}</div>
                         )}
+                        <label className="photo-edit-btn">
+                            <input type="file" onChange={handlePhotoUpload} accept="image/*" hidden disabled={uploading} />
+                            {uploading ? '...' : '📸'}
+                        </label>
                         <span className={`status-badge ${trainer.status?.toLowerCase()}`}>{trainer.status}</span>
                     </div>
                     <div className="profile-main-info">
@@ -134,6 +177,9 @@ export default function TrainerProfilePage() {
                 .profile-photo { width: 180px; height: 180px; border-radius: 50%; border: 6px solid white; object-fit: cover; box-shadow: 0 10px 25px rgba(0,0,0,0.1); background: white; }
                 .photo-placeholder { width: 180px; height: 180px; border-radius: 50%; border: 6px solid white; background: #f1f5f9; display: flex; align-items: center; justify-content: center; font-size: 5rem; font-weight: 800; color: #94a3b8; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
                 
+                .photo-edit-btn { position: absolute; bottom: 10px; left: 10px; width: 36px; height: 36px; background: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.1); border: 1.5px solid #e2e8f0; transition: 0.2s; z-index: 10; font-size: 1.1rem; }
+                .photo-edit-btn:hover { transform: scale(1.1); background: #f8fafc; border-color: var(--ocean-blue); }
+
                 .status-badge { position: absolute; bottom: 10px; right: 10px; padding: 0.5rem 1rem; border-radius: 50px; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; border: 3px solid white; }
                 .status-badge.ativo { background: #10b981; color: white; }
                 .status-badge.inativo { background: #ef4444; color: white; }

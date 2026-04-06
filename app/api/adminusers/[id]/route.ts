@@ -8,14 +8,22 @@ export async function PATCH(
     try {
         const { id } = await params;
         const body = await request.json();
+        
+        const updateData: any = { ...body, updatedAt: new Date() };
+        if (body.responsibilities) {
+            updateData.responsibilities = JSON.stringify(body.responsibilities);
+        }
 
         const updated = await db.adminUser.update({
             where: { id },
-            data: { ...body, updatedAt: new Date() }
+            data: updateData
         });
 
-        const { passwordHash, ...safe } = updated;
-        return NextResponse.json(safe);
+        const { passwordHash: _, responsibilities, ...safe } = updated;
+        return NextResponse.json({
+            ...safe,
+            responsibilities: typeof updated.responsibilities === 'string' ? JSON.parse(updated.responsibilities) : updated.responsibilities
+        });
     } catch {
         return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
     }
