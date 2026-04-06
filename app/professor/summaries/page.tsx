@@ -28,7 +28,8 @@ export default function SummariesPage() {
         if (!session?.user) return;
         setLoading(true);
         try {
-            const userId = (session.user as any).id;
+            const userId = (session?.user as any)?.id;
+            if (!userId) return;
             const [resC, resM] = await Promise.all([
                 fetch('/api/courses'),
                 fetch('/api/matriculations')
@@ -79,8 +80,8 @@ export default function SummariesPage() {
                     courseTitle: selectedCourse.title,
                     date: newSummary.date,
                     content: newSummary.content,
-                    trainerId: (session?.user as any).id,
-                    trainerName: session?.user.name
+                    trainerId: (session?.user as any)?.id || '',
+                    trainerName: session?.user?.name || 'Formador'
                 })
             });
             if (res.ok) {

@@ -24,7 +24,8 @@ export default function CalendarPage() {
             if (!session?.user) return;
             setLoading(true);
             try {
-                const userId = (session.user as any).id;
+                const userId = (session?.user as any)?.id;
+                if (!userId) return;
                 const res = await fetch('/api/matriculations');
                 const data = await res.json();
                 

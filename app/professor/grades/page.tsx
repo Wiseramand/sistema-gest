@@ -29,7 +29,8 @@ export default function GradesPage() {
             if (!session?.user) return;
             setLoading(true);
             try {
-                const userId = (session.user as any).id;
+                const userId = (session?.user as any)?.id;
+                if (!userId) return;
                 const [resC, resM] = await Promise.all([
                     fetch('/api/courses'),
                     fetch('/api/matriculations')
@@ -52,7 +53,8 @@ export default function GradesPage() {
         const fetchGrades = async () => {
             if (!selectedCourse) return;
             try {
-                const userId = (session?.user as any).id;
+                const userId = (session?.user as any)?.id;
+                if (!userId) return;
                 const [resM, resG] = await Promise.all([
                     fetch('/api/matriculations'),
                     fetch(`/api/grades?courseId=${selectedCourse.id}`)
@@ -97,7 +99,8 @@ export default function GradesPage() {
         if (!selectedCourse) return;
         setSaving(true);
         try {
-            const userId = (session?.user as any).id;
+            const userId = (session?.user as any)?.id;
+            if (!userId) return;
             const promises = studentGrades.map(sg => {
                 const body = {
                     studentId: sg.studentId,

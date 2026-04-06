@@ -22,8 +22,9 @@ export default function ProfessorFeedbackPage() {
             if (!session?.user) return;
             setLoading(true);
             try {
-                const userId = (session?.user as any).id;
+                const userId = (session?.user as any)?.id;
                 const userName = session?.user?.name;
+                if (!userId) return;
 
                 // 1. Fetch feedbacks
                 const resF = await fetch('/api/feedbacks');

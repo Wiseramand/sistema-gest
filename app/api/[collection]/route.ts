@@ -38,7 +38,23 @@ export async function GET(
         const items = await model.findMany({
             orderBy: { createdAt: 'desc' }
         });
-        return NextResponse.json(items || []);
+
+        // SQLite Compatibility: Parse JSON strings back to objects
+        const parsedItems = items.map((item: any) => {
+            const newItem = { ...item };
+            if (collection === 'courses' && typeof newItem.materials === 'string') {
+                try { newItem.materials = JSON.parse(newItem.materials); } catch (e) { newItem.materials = []; }
+            }
+            if (collection === 'attendance' && typeof newItem.records === 'string') {
+                try { newItem.records = JSON.parse(newItem.records); } catch (e) { newItem.records = []; }
+            }
+            if (collection === 'adminusers' && typeof newItem.responsibilities === 'string') {
+                try { newItem.responsibilities = JSON.parse(newItem.responsibilities); } catch (e) { newItem.responsibilities = []; }
+            }
+            return newItem;
+        });
+
+        return NextResponse.json(parsedItems || []);
     } catch (error: any) {
         console.error(`API GET [${collectionName}] Error:`, error);
         return NextResponse.json({ error: 'Ocorreu um erro interno ao procurar os dados.' }, { status: 500 });
@@ -93,15 +109,26 @@ export async function POST(
         }
 
         // Sanitize data for specific models if needed
-        const sanitizedData = { ...body };
-        // Remove id if it's an empty string (Prisma creation fails if id is empty string)
-        if (sanitizedData.id === '') delete sanitizedData.id;
-        // Remove materialName which is a UI-only field in Courses
-        if (collection === 'courses') {
-            delete (sanitizedData as any).materialName;
+        const dataToSave = { ...body };
+        // SQLite Compatibility: Stringify objects before saving
+        if (collection === 'courses' && Array.isArray(dataToSave.materials)) {
+            dataToSave.materials = JSON.stringify(dataToSave.materials);
+        }
+        if (collection === 'attendance' && (typeof dataToSave.records === 'object')) {
+            dataToSave.records = JSON.stringify(dataToSave.records);
+        }
+        if (collection === 'adminusers' && Array.isArray(dataToSave.responsibilities)) {
+            dataToSave.responsibilities = JSON.stringify(dataToSave.responsibilities);
         }
 
-        const newItem = await model.create({ data: sanitizedData });
+        // Remove id if it's an empty string (Prisma creation fails if id is empty string)
+        if (dataToSave.id === '') delete dataToSave.id;
+        // Remove materialName which is a UI-only field in Courses
+        if (collection === 'courses') {
+            delete (dataToSave as any).materialName;
+        }
+
+        const newItem = await model.create({ data: dataToSave });
 
         // Log the activity (don't let logging failure block the main action)
         try {
@@ -120,7 +147,13 @@ export async function POST(
             console.error('Activity Log Error (Non-blocking):', logError);
         }
 
-        return NextResponse.json(newItem);
+        // Return parsed item
+        const responseItem = { ...newItem };
+        if (typeof responseItem.materials === 'string') try { responseItem.materials = JSON.parse(responseItem.materials); } catch (e) {}
+        if (typeof responseItem.records === 'string') try { responseItem.records = JSON.parse(responseItem.records); } catch (e) {}
+        if (typeof responseItem.responsibilities === 'string') try { responseItem.responsibilities = JSON.parse(responseItem.responsibilities); } catch (e) {}
+
+        return NextResponse.json(responseItem);
     } catch (error: any) {
         // ✅ CORRECÇÃO: Nunca expor dados do utilizador (payload) em erros
         console.error(`API POST [${collectionName}] Error:`, error.message);

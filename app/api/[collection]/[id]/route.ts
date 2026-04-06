@@ -27,7 +27,13 @@ export async function GET(
         const item = await model.findUnique({ where: { id } });
         if (!item) return NextResponse.json({ error: 'Item not found' }, { status: 404 });
 
-        return NextResponse.json(item);
+        // SQLite Compatibility: Parse JSON strings
+        const responseItem = { ...item };
+        if (collection === 'courses' && typeof responseItem.materials === 'string') try { responseItem.materials = JSON.parse(responseItem.materials); } catch (e) {}
+        if (collection === 'attendance' && typeof responseItem.records === 'string') try { responseItem.records = JSON.parse(responseItem.records); } catch (e) {}
+        if (collection === 'adminusers' && typeof responseItem.responsibilities === 'string') try { responseItem.responsibilities = JSON.parse(responseItem.responsibilities); } catch (e) {}
+
+        return NextResponse.json(responseItem);
     } catch (error: any) {
         console.error('API GET Single Error:', error);
         return NextResponse.json({ error: 'Ocorreu um erro interno ao procurar o registo.' }, { status: 500 });
@@ -79,16 +85,27 @@ export async function PATCH(
             }
         }
 
-        const sanitizedData = { ...body };
+        const dataToUpdate = { ...body };
+        // SQLite Compatibility: Stringify
+        if (collection === 'courses' && Array.isArray(dataToUpdate.materials)) {
+            dataToUpdate.materials = JSON.stringify(dataToUpdate.materials);
+        }
+        if (collection === 'attendance' && (typeof dataToUpdate.records === 'object')) {
+            dataToUpdate.records = JSON.stringify(dataToUpdate.records);
+        }
+        if (collection === 'adminusers' && Array.isArray(dataToUpdate.responsibilities)) {
+            dataToUpdate.responsibilities = JSON.stringify(dataToUpdate.responsibilities);
+        }
+
         // Remove id and materialName as they shouldn't be in the update data
-        delete sanitizedData.id;
+        delete dataToUpdate.id;
         if (collection === 'courses') {
-            delete (sanitizedData as any).materialName;
+            delete (dataToUpdate as any).materialName;
         }
 
         const updatedItem = await model.update({
             where: { id },
-            data: sanitizedData
+            data: dataToUpdate
         });
 
         // Log the activity
@@ -108,7 +125,13 @@ export async function PATCH(
             console.error('Activity Log Error (Non-blocking):', logError);
         }
 
-        return NextResponse.json(updatedItem);
+        // Return parsed
+        const responseItem = { ...updatedItem };
+        if (typeof responseItem.materials === 'string') try { responseItem.materials = JSON.parse(responseItem.materials); } catch (e) {}
+        if (typeof responseItem.records === 'string') try { responseItem.records = JSON.parse(responseItem.records); } catch (e) {}
+        if (typeof responseItem.responsibilities === 'string') try { responseItem.responsibilities = JSON.parse(responseItem.responsibilities); } catch (e) {}
+
+        return NextResponse.json(responseItem);
     } catch (error: any) {
         console.error(`API PATCH [${collectionName}/${itemId}] Error:`, error.message);
         return NextResponse.json({ error: 'Ocorreu um erro interno ao atualizar o registo.' }, { status: 500 });
