@@ -25,6 +25,7 @@ export default function TrainerDetailsPage() {
     const [trainer, setTrainer] = useState<Trainer | null>(null);
     const [logs, setLogs] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
+    const [uploading, setUploading] = useState(false);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -50,6 +51,39 @@ export default function TrainerDetailsPage() {
         if (id) fetchData();
     }, [id]);
 
+    const handlePhotoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+
+        setUploading(true);
+        try {
+            const formData = new FormData();
+            formData.set('file', file);
+            const resUp = await fetch('/api/upload', { method: 'POST', body: formData });
+            if (resUp.ok) {
+                const uploadData = await resUp.json();
+                const photoUrl = uploadData.url;
+
+                // Update trainer in DB
+                const resSave = await fetch(`/api/trainers/${id}`, {
+                    method: 'PATCH',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ ...trainer, photo: photoUrl })
+                });
+
+                if (resSave.ok) {
+                    setTrainer(prev => prev ? { ...prev, photo: photoUrl } : null);
+                    alert('Foto de perfil atualizada com sucesso!');
+                }
+            }
+        } catch (error) {
+            console.error('Error uploading photo:', error);
+            alert('Erro ao carregar a foto.');
+        } finally {
+            setUploading(false);
+        }
+    };
+
     if (loading) return <div className="loader">A carregar detalhes do formador...</div>;
     if (!trainer) return <div className="error">Formador não encontrado.</div>;
 
@@ -59,11 +93,17 @@ export default function TrainerDetailsPage() {
                 <div className="profile-bg"></div>
                 <div className="profile-top-content">
                     <div className="photo-container">
-                        {trainer.photo ? (
-                            <img src={trainer.photo} alt={trainer.name} className="profile-photo" />
-                        ) : (
-                            <div className="photo-placeholder">{trainer.name.charAt(0)}</div>
-                        )}
+                        <div className="photo-wrapper">
+                            {trainer.photo ? (
+                                <img src={trainer.photo} alt={trainer.name} className="profile-photo" />
+                            ) : (
+                                <div className="photo-placeholder">{trainer.name.charAt(0)}</div>
+                            )}
+                            <label className={`upload-overlay ${uploading ? 'loading' : ''}`}>
+                                <span>{uploading ? '⌛' : '📷'}</span>
+                                <input type="file" onChange={handlePhotoUpload} accept="image/*" hidden />
+                            </label>
+                        </div>
                         <span className={`status-badge ${trainer.status?.toLowerCase()}`}>{trainer.status}</span>
                     </div>
                     <div className="profile-main-info">
@@ -166,6 +206,18 @@ export default function TrainerDetailsPage() {
                 .status-badge { position: absolute; bottom: 10px; right: 10px; padding: 0.5rem 1rem; border-radius: 50px; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; border: 3px solid white; }
                 .status-badge.ativo { background: #10b981; color: white; }
                 .status-badge.inativo { background: #ef4444; color: white; }
+
+                .photo-wrapper { position: relative; width: 180px; height: 180px; }
+                .upload-overlay { 
+                    position: absolute; bottom: 5px; right: 5px; width: 42px; height: 42px; 
+                    background: var(--sand-gold); border-radius: 50%; display: flex; 
+                    align-items: center; justify-content: center; cursor: pointer; 
+                    border: 4px solid white; box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+                    transition: 0.2s;
+                }
+                .upload-overlay:hover { transform: scale(1.1); background: white; color: var(--navy-deep); }
+                .upload-overlay span { font-size: 1.2rem; }
+                .upload-overlay.loading { opacity: 0.5; cursor: wait; }
 
                 .profile-main-info { flex: 1; padding-bottom: 0.5rem; }
                 .profile-main-info h1 { margin: 0; font-size: 2.2rem; color: var(--navy-deep); font-weight: 800; }

@@ -118,7 +118,10 @@ export async function POST(
         }
 
         if (dataToSave.id === '') delete dataToSave.id;
-        if (collection === 'courses') delete (dataToSave as any).materialName;
+        if (collection === 'courses') {
+            delete (dataToSave as any).materialName;
+            delete (dataToSave as any).materialCategory;
+        }
 
         const newItem = await model.create({ data: dataToSave });
 

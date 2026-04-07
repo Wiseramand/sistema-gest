@@ -415,7 +415,11 @@ function AdminLayoutContent({ children }: { children: React.ReactNode }) {
             <IconSettings />
           </button>
           <div className="rail-avatar" title={session?.user?.name || 'Admin'}>
-            {(session?.user?.name || 'AM').slice(0, 2).toUpperCase()}
+            {user?.photo ? (
+              <img src={user.photo} alt="User" style={{ width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover' }} />
+            ) : (
+              (session?.user?.name || 'AM').slice(0, 2).toUpperCase()
+            )}
           </div>
         </div>
       </div>
@@ -483,8 +487,17 @@ function AdminLayoutContent({ children }: { children: React.ReactNode }) {
             )}
           </div>
           <div className="hdr-user">
-            <span className="user-name">{session?.user?.name || 'Administrador'}</span>
-            <span className="user-badge">{isSuper ? 'SUPER ADMIN' : 'ADMIN'}</span>
+            {user?.photo ? (
+              <img src={user.photo} className="user-photo" alt="Profile" />
+            ) : (
+              <div className="user-avatar-placeholder">
+                {(session?.user?.name || 'AM').slice(0, 2).toUpperCase()}
+              </div>
+            )}
+            <div className="user-info-text">
+              <span className="user-name">{session?.user?.name || 'Administrador'}</span>
+              <span className="user-badge">{isSuper ? 'SUPER ADMIN' : 'ADMIN'}</span>
+            </div>
           </div>
         </div>
 
@@ -494,6 +507,52 @@ function AdminLayoutContent({ children }: { children: React.ReactNode }) {
       </main>
 
       <style jsx>{`
+        .user-photo {
+          width: 38px;
+          height: 38px;
+          border-radius: 50%;
+          object-fit: cover;
+          border: 2px solid #F5C518;
+          cursor: pointer;
+          transition: 0.2s;
+        }
+        .user-photo:hover {
+          transform: scale(1.05);
+          box-shadow: 0 0 12px rgba(245, 197, 24, 0.3);
+        }
+        .user-avatar-placeholder {
+          width: 38px;
+          height: 38px;
+          border-radius: 50%;
+          background: #F5C518;
+          color: #0a2a5e;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-weight: 800;
+          font-size: 13px;
+          cursor: pointer;
+        }
+        .user-info-text {
+          display: flex;
+          flex-direction: column;
+          align-items: flex-end;
+          gap: 1px;
+        }
+        .user-name {
+          font-size: 14px;
+          font-weight: 700;
+          color: #0a2a5e;
+          line-height: 1.2;
+        }
+        .user-badge {
+          font-size: 10px;
+          font-weight: 800;
+          color: #64748b;
+          text-transform: uppercase;
+          letter-spacing: 0.05em;
+        }
+
         /* ── Container ─────────────────────────────────── */
         .admin-wrap {
           display: flex;
@@ -507,13 +566,13 @@ function AdminLayoutContent({ children }: { children: React.ReactNode }) {
 
         /* ── Rail (58px) ───────────────────────────────── */
         .rail {
-          width: 58px;
+          width: 72px;
           background: #0a2a5e;
           border-radius: 14px 0 0 14px;
           display: flex;
           flex-direction: column;
           align-items: center;
-          padding: 14px 0;
+          padding: 16px 0;
           flex-shrink: 0;
           height: calc(100vh - 2.5rem);
         }
@@ -541,9 +600,9 @@ function AdminLayoutContent({ children }: { children: React.ReactNode }) {
         }
 
         .rail-btn {
-          width: 38px;
-          height: 38px;
-          border-radius: 9px;
+          width: 46px;
+          height: 46px;
+          border-radius: 12px;
           display: flex;
           align-items: center;
           justify-content: center;
@@ -552,6 +611,11 @@ function AdminLayoutContent({ children }: { children: React.ReactNode }) {
           cursor: pointer;
           color: rgba(255, 255, 255, 0.6);
           transition: all 0.2s ease;
+        }
+
+        .rail-btn :global(svg) {
+          width: 24px;
+          height: 24px;
         }
 
         .rail-btn:hover {
@@ -712,7 +776,7 @@ function AdminLayoutContent({ children }: { children: React.ReactNode }) {
         }
 
         .flyout-label {
-          font-size: 13px;
+          font-size: 14px;
           color: #0a2a5e;
           font-weight: 500;
           flex: 1;

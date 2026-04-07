@@ -35,6 +35,8 @@ export const courseSchema = z.object({
     trainerName: z.string().optional().nullable(),
     startDate:   z.string().optional().nullable(),
     endDate:     z.string().optional().nullable(),
+    materials:   z.array(z.any()).or(z.string()).optional(),
+    students:    z.number().optional(),
 });
 
 export const classroomSchema = z.object({
