@@ -1,10 +1,13 @@
 'use client';
 
 import Link from 'next/link';
+import { useState } from 'react';
 
 export default function Navbar() {
+  const [isOpen, setIsOpen] = useState(false);
+
   return (
-    <nav className="navbar">
+    <nav className={`navbar ${isOpen ? 'is-open' : ''}`}>
       <div className="container nav-container">
         <Link href="/" className="nav-logo">
           <span className="logo-icon">⚓</span>
@@ -13,25 +16,32 @@ export default function Navbar() {
             <span className="sub">Training Center</span>
           </div>
         </Link>
-        <div className="nav-links">
-          <Link href="/cursos">Cursos</Link>
-          <Link href="/sobre">Sobre Nós</Link>
+
+        {/* Hamburger Toggle */}
+        <button className="mobile-toggle" onClick={() => setIsOpen(!isOpen)}>
+          {isOpen ? '✕' : '☰'}
+        </button>
+
+        <div className={`nav-links ${isOpen ? 'active' : ''}`}>
+          <Link href="/cursos" onClick={() => setIsOpen(false)}>Cursos</Link>
+          <Link href="/sobre" onClick={() => setIsOpen(false)}>Sobre Nós</Link>
           <div className="nav-divider"></div>
-          <Link href="/login" className="btn-portal">Portal do Aluno</Link>
-          <Link href="/professor/login" className="btn-trainer">Portal Formador</Link>
+          <Link href="/login" className="btn-portal" onClick={() => setIsOpen(false)}>Portal do Aluno</Link>
+          <Link href="/professor/login" className="btn-trainer" onClick={() => setIsOpen(false)}>Portal Formador</Link>
         </div>
       </div>
       <style jsx>{`
         .navbar {
           background: #0a2a5e;
           color: white;
-          padding: 1.25rem 0;
+          padding: 1rem 0;
           position: fixed;
           top: 0;
           left: 0;
           width: 100%;
-          z-index: 1000;
+          z-index: 2000;
           box-shadow: 0 2px 10px rgba(10, 42, 94, 0.15);
+          transition: 0.3s;
         }
         .nav-container {
           display: flex;
@@ -42,6 +52,7 @@ export default function Navbar() {
           display: flex;
           align-items: center;
           gap: 0.85rem;
+          z-index: 2001;
         }
         .logo-icon {
           font-size: 1.5rem;
@@ -75,6 +86,17 @@ export default function Navbar() {
           color: #ffffff;
           margin-top: 1px;
         }
+
+        .mobile-toggle {
+          display: none;
+          background: none;
+          border: none;
+          color: white;
+          font-size: 1.8rem;
+          cursor: pointer;
+          z-index: 2001;
+        }
+
         .nav-links {
           display: flex;
           align-items: center;
@@ -82,7 +104,7 @@ export default function Navbar() {
         }
         .nav-links a {
           font-family: 'DM Sans', sans-serif;
-          font-size: 0.9rem;
+          font-size: 0.95rem;
           font-weight: 600;
           transition: all 0.25s ease;
           color: #ffffff;
@@ -110,7 +132,6 @@ export default function Navbar() {
         .btn-portal:hover {
           background: #F5C518 !important;
           transform: translateY(-2px);
-          box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
         }
         .btn-trainer {
           background: rgba(255, 255, 255, 0.1);
@@ -121,14 +142,44 @@ export default function Navbar() {
           border: 1px solid rgba(255, 255, 255, 0.2);
           opacity: 1 !important;
         }
-        .btn-trainer:hover {
-          background: rgba(255, 255, 255, 0.2) !important;
-          border-color: #ffffff;
-        }
 
         @media (max-width: 992px) {
-           .nav-links a:not(.btn-portal):not(.btn-trainer) { display: none; }
-           .nav-divider { display: none; }
+          .mobile-toggle { display: block; }
+
+          .nav-links {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 80%;
+            height: 100vh;
+            background: #0a2a5e;
+            flex-direction: column;
+            justify-content: center;
+            padding: 2rem;
+            transition: 0.3s ease-in-out;
+            box-shadow: -10px 0 30px rgba(0,0,0,0.3);
+            z-index: 2000;
+          }
+
+          .nav-links.active {
+            right: 0;
+          }
+
+          .nav-links a {
+            font-size: 1.4rem;
+            width: 100%;
+            text-align: center;
+            padding: 1rem 0;
+          }
+
+          .nav-divider { display: none; }
+          
+          .btn-portal, .btn-trainer {
+            width: 100%;
+            padding: 1.2rem;
+            font-size: 1.1rem;
+            margin-top: 1rem;
+          }
         }
       `}</style>
     </nav>

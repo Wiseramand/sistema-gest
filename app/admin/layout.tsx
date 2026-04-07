@@ -465,6 +465,7 @@ function AdminLayoutContent({ children }: { children: React.ReactNode }) {
             <Link
               href="/admin"
               className={`flyout-item${pathname === '/admin' ? ' active' : ''}`}
+              onClick={() => setShowMobileMenu(false)}
             >
               <div className="flyout-icon"><IconGridMini /></div>
               <span className="flyout-label">Visão Geral</span>
@@ -478,6 +479,7 @@ function AdminLayoutContent({ children }: { children: React.ReactNode }) {
                     key={ii}
                     href={item.href}
                     className={`flyout-item${pathname === item.href ? ' active' : ''}`}
+                    onClick={() => setShowMobileMenu(false)}
                   >
                     <div className="flyout-icon">{getFlyoutIcon(item.name)}</div>
                     <span className="flyout-label">{item.name}</span>
@@ -492,12 +494,12 @@ function AdminLayoutContent({ children }: { children: React.ReactNode }) {
 
         <div className="flyout-foot">
           <button
-            onClick={() => signOut({ callbackUrl: '/admin/login' })}
+            onClick={() => { signOut({ callbackUrl: '/admin/login' }); setShowMobileMenu(false); }}
             className="flyout-action"
           >
             <IconSignOut /> Sair
           </button>
-          <Link href="/" className="flyout-action">
+          <Link href="/" className="flyout-action" onClick={() => setShowMobileMenu(false)}>
             <IconHome /> Site
           </Link>
         </div>
@@ -620,27 +622,29 @@ function AdminLayoutContent({ children }: { children: React.ReactNode }) {
           .mobile-toggle-fixed { display: flex; }
           .rail {
             position: fixed;
-            left: -80px;
-            z-index: 1002;
-            transition: 0.3s transform ease;
+            left: -322px;
+            z-index: 10002;
+            transition: 0.4s transform cubic-bezier(0.4, 0, 0.2, 1);
             height: 100vh;
             border-radius: 0;
             top: 0;
+            width: 72px;
           }
           .flyout {
             position: fixed;
-            left: -300px;
-            z-index: 1001;
-            transition: 0.3s transform ease;
+            left: -250px;
+            z-index: 10001;
+            transition: 0.4s transform cubic-bezier(0.4, 0, 0.2, 1);
             height: 100vh;
             border-radius: 0;
             top: 0;
-            box-shadow: 10px 0 30px rgba(0,0,0,0.1);
+            width: 250px;
+            box-shadow: 10px 0 30px rgba(0,0,0,0.15);
           }
-          .admin-wrap.mobile-open .rail { transform: translateX(80px); }
-          .admin-wrap.mobile-open .flyout { transform: translateX(352px); }
-          .content { width: 100%; margin-left: 0; padding: 5rem 1rem 1rem; }
-          .content-hdr { padding: 0; margin-bottom: 1rem; }
+          .admin-wrap.mobile-open .rail { transform: translateX(322px); }
+          .admin-wrap.mobile-open .flyout { transform: translateX(322px); }
+          .content { width: 100%; margin-left: 0; padding: 5rem 1rem 1rem; overflow-x: hidden; }
+          .content-hdr { padding: 0.5rem 0; margin-bottom: 2rem; border-bottom: 1px solid #e2e8f0; }
           .mobile-toggle { display: none; }
           .user-info-text { display: none; }
           .hdr-user { gap: 0.5rem; }
