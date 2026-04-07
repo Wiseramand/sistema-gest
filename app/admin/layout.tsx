@@ -59,6 +59,12 @@ function IconRelatorios() {
     </svg>
   );
 }
+function IconTrainers() {
+  return (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+  );
+}
 function IconSettings() {
   return (
     <svg width="18" height="18" viewBox="0 0 20 20" fill="none">
@@ -168,7 +174,7 @@ interface FlyoutGroup {
 
 // ── Rail Module Data ─────────────────────────────────────────
 const TOP_MODULES = [
-  'dashboard', 'alunos', 'cursos', 'certificados', 'administracao'
+  'dashboard', 'alunos', 'formadores', 'cursos', 'certificados', 'administracao'
 ];
 const BOTTOM_MODULES = ['financeiro', 'relatorios'];
 
@@ -183,12 +189,26 @@ const MODULE_FLYOUTS: Record<string, { label: string; groups: FlyoutGroup[] }> =
           { name: 'Inscrições', href: '/admin/inscriptions', responsibility: 'inscriptions' },
           { name: 'Lista de Alunos', href: '/admin/students', responsibility: 'students' },
           { name: 'Matrículas', href: '/admin/matriculations', responsibility: 'matriculations' },
+          { name: 'Frequência', href: '/admin/attendance', responsibility: 'matriculations' },
         ],
       },
       {
-        label: 'EMPRESAS',
+        label: 'FINANCEIRO',
         items: [
-          { name: 'Clientes', href: '/admin/companies', responsibility: 'companies' },
+          { name: 'Pagamentos Alunos', href: '/admin/payments', responsibility: 'matriculations' },
+          { name: 'Clientes / Empresas', href: '/admin/companies', responsibility: 'companies' },
+        ],
+      },
+    ],
+  },
+  formadores: {
+    label: 'Formadores',
+    groups: [
+      {
+        label: 'GESTÃO',
+        items: [
+          { name: 'Lista de Formadores', href: '/admin/trainers', responsibility: 'trainers' },
+          { name: 'Acessos ao Portal', href: '/admin/trainers', responsibility: 'trainers' },
         ],
       },
     ],
@@ -199,6 +219,7 @@ const MODULE_FLYOUTS: Record<string, { label: string; groups: FlyoutGroup[] }> =
       {
         label: 'GESTÃO',
         items: [
+          { name: 'Catálogo de Cursos', href: '/admin/courses', responsibility: 'courses' },
           { name: 'Turmas ativas', href: '/admin/classes', badge: '12', responsibility: 'classes' },
           { name: 'Calendário', href: '/admin/calendar', responsibility: 'courses' },
           { name: 'Salas de Aula', href: '/admin/classrooms', responsibility: 'classrooms' },
@@ -272,6 +293,7 @@ const MODULE_FLYOUTS: Record<string, { label: string; groups: FlyoutGroup[] }> =
         label: 'CONTEÚDO',
         items: [
           { name: 'Hub de Média', href: '/admin/media', responsibility: 'media' },
+          { name: 'Hub de Materiais', href: '/admin/materials', responsibility: 'media' },
         ],
       },
     ],
@@ -338,6 +360,7 @@ function AdminLayoutContent({ children }: { children: React.ReactNode }) {
   const railIconMap: Record<string, React.ReactNode> = {
     dashboard: <IconDashboard />,
     alunos: <IconAlunos />,
+    formadores: <IconTrainers />,
     cursos: <IconCursos />,
     certificados: <IconCertificados />,
     administracao: <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M17 21v-2a4 4 0 0 0-3-3.87"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>,
