@@ -622,28 +622,47 @@ function AdminLayoutContent({ children }: { children: React.ReactNode }) {
           .mobile-toggle-fixed { display: flex; }
           .rail {
             position: fixed;
-            left: -322px;
-            z-index: 10002;
-            transition: 0.4s transform cubic-bezier(0.4, 0, 0.2, 1);
-            height: 100vh;
-            border-radius: 0;
+            left: 0;
             top: 0;
+            bottom: 0;
             width: 72px;
+            z-index: 10005;
+            transform: translateX(-352px);
+            transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            border-radius: 0;
+            background: #0a2a5e;
           }
           .flyout {
             position: fixed;
-            left: -250px;
-            z-index: 10001;
-            transition: 0.4s transform cubic-bezier(0.4, 0, 0.2, 1);
-            height: 100vh;
-            border-radius: 0;
+            left: 72px;
             top: 0;
+            bottom: 0;
             width: 250px;
-            box-shadow: 10px 0 30px rgba(0,0,0,0.15);
+            z-index: 10004;
+            transform: translateX(-352px);
+            transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            border-radius: 0;
+            box-shadow: 10px 0 30px rgba(0,0,0,0.2);
+            background: white;
+            display: flex !important;
+            visibility: visible !important;
+            opacity: 1 !important;
           }
-          .admin-wrap.mobile-open .rail { transform: translateX(322px); }
-          .admin-wrap.mobile-open .flyout { transform: translateX(322px); }
-          .content { width: 100%; margin-left: 0; padding: 5rem 1rem 1rem; overflow-x: hidden; }
+          .admin-wrap.mobile-open .rail,
+          .admin-wrap.mobile-open .flyout { 
+            transform: translateX(0); 
+          }
+          .content { 
+            width: 100%; 
+            margin-left: 0; 
+            padding: 5.5rem 1rem 1rem; 
+            overflow-x: hidden; 
+            transition: filter 0.3s;
+          }
+          .admin-wrap.mobile-open .content {
+            filter: blur(2px);
+            pointer-events: none;
+          }
           .content-hdr { padding: 0.5rem 0; margin-bottom: 2rem; border-bottom: 1px solid #e2e8f0; }
           .mobile-toggle { display: none; }
           .user-info-text { display: none; }
