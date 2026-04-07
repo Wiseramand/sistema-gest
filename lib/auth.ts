@@ -5,13 +5,6 @@ import bcrypt from "bcryptjs"
 import { checkRateLimit } from "./rateLimit"
 
 export const getAuthOptions = (portal: string = 'default'): NextAuthOptions => {
-    // In production (HTTPS) Next-Auth needs the __Secure- prefix on cookies.
-    // Detect environment based on NEXTAUTH_URL or NODE_ENV.
-    const isProduction = process.env.NODE_ENV === 'production';
-    const cookieName = isProduction
-        ? `__Secure-next-auth.session-token`
-        : 'next-auth.session-token';
-
     return {
         secret: process.env.NEXTAUTH_SECRET,
         session: {
@@ -20,17 +13,6 @@ export const getAuthOptions = (portal: string = 'default'): NextAuthOptions => {
         },
         pages: {
             signIn: portal === 'admin' ? '/admin/login' : (portal === 'professor' ? '/professor/login' : '/login'),
-        },
-        cookies: {
-            sessionToken: {
-                name: cookieName,
-                options: {
-                    httpOnly: true,
-                    sameSite: 'lax',
-                    path: '/',
-                    secure: isProduction,
-                },
-            },
         },
         providers: [
             CredentialsProvider({
@@ -156,25 +138,7 @@ import { getServerSession } from "next-auth"
  */
 export async function getAnySession() {
     const options = getAuthOptions();
-    
-    // Try all possible cookie names for robustness
-    const isProduction = process.env.NODE_ENV === 'production';
-    const possibleNames = isProduction
-        ? ['__Secure-next-auth.session-token', 'next-auth.session-token']
-        : ['next-auth.session-token', '__Secure-next-auth.session-token'];
-
-    for (const name of possibleNames) {
-        const session = await getServerSession({
-            ...options,
-            cookies: {
-                ...options.cookies,
-                sessionToken: {
-                    ...(options.cookies?.sessionToken as any),
-                    name: name
-                }
-            }
-        });
-        if (session) return session;
-    }
-    return null;
+    // O getServerSession usando as opções padrão é suficientemente inteligente
+    // para encontrar a sessão sem precisar forçar nomes de cookies.
+    return await getServerSession(options);
 }
