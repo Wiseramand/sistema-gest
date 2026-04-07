@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { signOut, useSession } from 'next-auth/react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 // ── SVG Icons ────────────────────────────────────────────────
 function IconDashboard() {
@@ -323,6 +323,23 @@ function AdminLayoutContent({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const { data: session, status } = useSession();
   const [activeModule, setActiveModule] = useState('cursos');
+  const [showMobileMenu, setShowMobileMenu] = useState(false);
+  const [userData, setUserData] = useState<any>(null);
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const res = await fetch('/api/user/role');
+        if (res.ok) {
+          const data = await res.json();
+          setUserData(data);
+        }
+      } catch (e) {
+        console.error('Error fetching user data:', e);
+      }
+    };
+    if (status === 'authenticated') fetchUser();
+  }, [status, pathname]); // Re-fetch on pathname change to catch up with updates
 
   const isLoginPage = pathname === '/admin/login';
 
@@ -369,7 +386,7 @@ function AdminLayoutContent({ children }: { children: React.ReactNode }) {
   };
 
   return (
-    <div className="admin-wrap">
+    <div className={`admin-wrap ${showMobileMenu ? 'mobile-open' : ''}`}>
 
       {/* ── RAIL (58px) ─────────────────────────────── */}
       <div className="rail">
@@ -478,6 +495,9 @@ function AdminLayoutContent({ children }: { children: React.ReactNode }) {
       <main className="content">
         <div className="content-hdr">
           <div className="breadcrumb">
+            <button className="mobile-toggle" onClick={() => setShowMobileMenu(!showMobileMenu)}>
+              {showMobileMenu ? '✕' : '☰'}
+            </button>
             <span>{currentFlyout.label}</span>
             {currentPageName && (
               <>
@@ -487,8 +507,8 @@ function AdminLayoutContent({ children }: { children: React.ReactNode }) {
             )}
           </div>
           <div className="hdr-user">
-            {user?.photo ? (
-              <img src={user.photo} className="user-photo" alt="Profile" />
+            {userData?.photo || user?.photo ? (
+              <img src={userData?.photo || user?.photo} className="user-photo" alt="Profile" />
             ) : (
               <div className="user-avatar-placeholder">
                 {(session?.user?.name || 'AM').slice(0, 2).toUpperCase()}
@@ -562,6 +582,45 @@ function AdminLayoutContent({ children }: { children: React.ReactNode }) {
           font-family: 'DM Sans', 'Inter', sans-serif;
           padding: 1.25rem;
           gap: 0;
+          transition: 0.3s;
+        }
+
+        .mobile-toggle {
+          display: none;
+          background: none;
+          border: none;
+          font-size: 1.5rem;
+          color: #0a2a5e;
+          cursor: pointer;
+          margin-right: 1rem;
+        }
+
+        @media (max-width: 768px) {
+          .admin-wrap { padding: 0.5rem; }
+          .rail {
+            position: fixed;
+            left: -80px;
+            z-index: 1001;
+            transition: 0.3s;
+            height: 100vh;
+            border-radius: 0;
+          }
+          .flyout {
+            position: fixed;
+            left: -280px;
+            z-index: 1000;
+            transition: 0.3s;
+            height: 100vh;
+            border-radius: 0;
+            box-shadow: 10px 0 30px rgba(0,0,0,0.1);
+          }
+          .admin-wrap.mobile-open .rail { left: 0; }
+          .admin-wrap.mobile-open .flyout { left: 72px; }
+          .content { width: 100%; margin-left: 0; }
+          .mobile-toggle { display: block; }
+          .user-info-text { display: none; }
+          .hdr-user { gap: 0.5rem; }
+          .breadcrumb span { font-size: 0.9rem; }
         }
 
         /* ── Rail (58px) ───────────────────────────────── */

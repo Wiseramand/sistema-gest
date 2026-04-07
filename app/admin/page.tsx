@@ -5,6 +5,7 @@ import {
   AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
   BarChart, Bar, Cell, Legend
 } from 'recharts';
+import Link from 'next/link';
 
 export default function AdminDashboard() {
   const [stats, setStats] = useState({
@@ -149,7 +150,9 @@ export default function AdminDashboard() {
             {expiringCerts.map(cert => (
               <div key={cert.id} className="alert-item">
                 <div className="alert-info">
-                  <span className="student-name">{cert.studentName}</span>
+                  <Link href={`/admin/students/${cert.studentId}`} className="student-name-link">
+                    <span className="student-name">{cert.studentName}</span>
+                  </Link>
                   <span className="course-title">{cert.courseTitle}</span>
                 </div>
                 <div className="alert-actions">
@@ -311,12 +314,21 @@ export default function AdminDashboard() {
               <h3>Por Formador</h3>
               <ul className="dist-list">
                 {Object.keys(formandosPorFormador).length > 0 ? (
-                  Object.entries(formandosPorFormador).map(([formador, total]) => (
-                    <li key={formador}>
-                      <span className="dist-name">{formador}</span>
-                      <span className="dist-count">{total} {total === 1 ? 'aluno' : 'alunos'}</span>
-                    </li>
-                  ))
+                  Object.entries(formandosPorFormador).map(([formador, total]) => {
+                    const tIndex = Array.isArray(stats.trainers) ? stats.trainers.find((t: any) => t.name === formador) : null;
+                    return (
+                      <li key={formador}>
+                        {tIndex ? (
+                          <Link href={`/admin/trainers/${tIndex.id}`} className="student-name-link">
+                            <span className="dist-name">{formador}</span>
+                          </Link>
+                        ) : (
+                          <span className="dist-name">{formador}</span>
+                        )}
+                        <span className="dist-count">{total} {total === 1 ? 'aluno' : 'alunos'}</span>
+                      </li>
+                    );
+                  })
                 ) : (
                   <li className="empty-li">Sem dados</li>
                 )}
@@ -432,6 +444,9 @@ export default function AdminDashboard() {
         .banner-content h1 { font-family: 'Outfit', sans-serif; font-size: 2.2rem; margin-bottom: 0.5rem; color: #F5C518; letter-spacing: -0.02em; }
         .banner-content p { font-size: 1.1rem; opacity: 0.9; color: #e2e8f0; }
         .maritime-illustration { font-size: 5rem; opacity: 0.2; }
+
+        .student-name-link { text-decoration: none; color: inherit; transition: 0.2s; }
+        .student-name-link:hover { color: #F5C518; }
 
         .analytics-row {
           display: grid;
