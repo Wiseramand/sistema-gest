@@ -29,11 +29,6 @@ export const getAuthOptions = (portal: string = 'default'): NextAuthOptions => {
                         throw new Error("Identificador e senha são obrigatórios")
                     }
 
-                    // const { allowed, retryAfter } = checkRateLimit(`login:${identifier}`);
-                    // if (!allowed) {
-                    //     throw new Error(`Demasiadas tentativas. Aguarde ${retryAfter} segundos.`);
-                    // }
-
                     console.log(`[AUTH] Login: ${identifier} em ${portal}`);
 
                     let collections: string[] = [];
@@ -46,6 +41,8 @@ export const getAuthOptions = (portal: string = 'default'): NextAuthOptions => {
                     } else {
                         collections = ['user', 'adminUser', 'student', 'trainer'];
                     }
+
+                    let lastDbError: any = null;
 
                     for (const col of collections) {
                         try {
@@ -93,7 +90,12 @@ export const getAuthOptions = (portal: string = 'default'): NextAuthOptions => {
                             }
                         } catch (err: any) {
                             console.error(`[AUTH] Erro em ${col}:`, err.message);
+                            lastDbError = err;
                         }
+                    }
+
+                    if (lastDbError) {
+                        throw new Error(`Erro Crítico de BD: ${lastDbError.message}`);
                     }
 
                     throw new Error("Utilizador não encontrado ou palavra-passe incorreta");
