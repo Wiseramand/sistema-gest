@@ -384,9 +384,12 @@ function AdminLayoutContent({ children }: { children: React.ReactNode }) {
     financeiro: <IconFinanceiro />,
     relatorios: <IconRelatorios />,
   };
-
   return (
     <div className={`admin-wrap ${showMobileMenu ? 'mobile-open' : ''}`}>
+      {/* Backdrop */}
+      {showMobileMenu && (
+        <div className="mobile-backdrop" onClick={() => setShowMobileMenu(false)} />
+      )}
 
       {/* ── RAIL (58px) ─────────────────────────────── */}
       <div className="rail">
@@ -495,7 +498,7 @@ function AdminLayoutContent({ children }: { children: React.ReactNode }) {
       <main className="content">
         <div className="content-hdr">
           <div className="breadcrumb">
-            <button className="mobile-toggle" onClick={() => setShowMobileMenu(!showMobileMenu)}>
+            <button className="mobile-toggle" onClick={() => setShowMobileMenu(!showMobileMenu)} style={{ zIndex: 10000 }}>
               {showMobileMenu ? '✕' : '☰'}
             </button>
             <span>{currentFlyout.label}</span>
@@ -596,32 +599,44 @@ function AdminLayoutContent({ children }: { children: React.ReactNode }) {
         }
 
         @media (max-width: 768px) {
-          .admin-wrap { padding: 0.5rem; }
+          .admin-wrap { padding: 0; }
           .rail {
             position: fixed;
             left: -80px;
-            z-index: 1001;
-            transition: 0.3s;
+            z-index: 1002;
+            transition: 0.3s transform ease;
             height: 100vh;
             border-radius: 0;
+            top: 0;
           }
           .flyout {
             position: fixed;
-            left: -280px;
-            z-index: 1000;
-            transition: 0.3s;
+            left: -300px;
+            z-index: 1001;
+            transition: 0.3s transform ease;
             height: 100vh;
             border-radius: 0;
+            top: 0;
             box-shadow: 10px 0 30px rgba(0,0,0,0.1);
           }
-          .admin-wrap.mobile-open .rail { left: 0; }
-          .admin-wrap.mobile-open .flyout { left: 72px; }
-          .content { width: 100%; margin-left: 0; }
-          .mobile-toggle { display: block; }
+          .admin-wrap.mobile-open .rail { transform: translateX(80px); }
+          .admin-wrap.mobile-open .flyout { transform: translateX(352px); }
+          .content { width: 100%; margin-left: 0; padding: 1rem; }
+          .content-hdr { padding: 1rem 0; }
+          .mobile-toggle { display: flex; align-items: center; justify-content: center; width: 44px; height: 44px; background: white; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
           .user-info-text { display: none; }
           .hdr-user { gap: 0.5rem; }
           .breadcrumb span { font-size: 0.9rem; }
+          .mobile-backdrop {
+            position: fixed;
+            inset: 0;
+            background: rgba(10, 42, 94, 0.4);
+            backdrop-filter: blur(4px);
+            z-index: 1000;
+            animation: fadeIn 0.3s;
+          }
         }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
         /* ── Rail (58px) ───────────────────────────────── */
         .rail {
