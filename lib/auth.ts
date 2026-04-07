@@ -65,12 +65,14 @@ export const getAuthOptions = (portal: string = 'default'): NextAuthOptions => {
                             const model = (db as any)[col];
                             if (!model) continue;
 
-                            console.log(`[AUTH] Procurando em ${col} por "${identifier}"...`);
+                            console.log(`[AUTH] Procurando em ${col} por "${identifier}" (case-insensitive)...`);
                             const user = await model.findFirst({
                                 where: {
                                     OR: [
                                         { email: identifier },
-                                        { username: identifier }
+                                        { username: identifier },
+                                        { email: identifier.toLowerCase() },
+                                        { username: identifier.toLowerCase() }
                                     ]
                                 }
                             });
