@@ -5,10 +5,15 @@ import bcrypt from "bcryptjs"
 import { checkRateLimit } from "./rateLimit"
 
 export const getAuthOptions = (portal: string = 'default'): NextAuthOptions => {
-    const isDefault = portal === 'default';
-    const cookieName = 'next-auth.session-token';
+    // In production (HTTPS) Next-Auth needs the __Secure- prefix on cookies.
+    // Detect environment based on NEXTAUTH_URL or NODE_ENV.
+    const isProduction = process.env.NODE_ENV === 'production';
+    const cookieName = isProduction
+        ? `__Secure-next-auth.session-token`
+        : 'next-auth.session-token';
 
     return {
+        secret: process.env.NEXTAUTH_SECRET,
         session: {
             strategy: "jwt",
             maxAge: 30 * 24 * 60 * 60, // 30 days
@@ -23,7 +28,7 @@ export const getAuthOptions = (portal: string = 'default'): NextAuthOptions => {
                     httpOnly: true,
                     sameSite: 'lax',
                     path: '/',
-                    secure: true, // Force secure since we are on HTTPS
+                    secure: isProduction,
                 },
             },
         },
@@ -152,12 +157,11 @@ import { getServerSession } from "next-auth"
 export async function getAnySession() {
     const options = getAuthOptions();
     
-    // Possíveis nomes de cookies em produção/HTTPS
-    const possibleNames = [
-        'next-auth.session-token',
-        '__Secure-next-auth.session-token',
-        '__Host-next-auth.session-token'
-    ];
+    // Try all possible cookie names for robustness
+    const isProduction = process.env.NODE_ENV === 'production';
+    const possibleNames = isProduction
+        ? ['__Secure-next-auth.session-token', 'next-auth.session-token']
+        : ['next-auth.session-token', '__Secure-next-auth.session-token'];
 
     for (const name of possibleNames) {
         const session = await getServerSession({
