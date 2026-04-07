@@ -42,10 +42,10 @@ export const getAuthOptions = (portal: string = 'default'): NextAuthOptions => {
                         throw new Error("Identificador e senha são obrigatórios")
                     }
 
-                    const { allowed, retryAfter } = checkRateLimit(`login:${identifier}`);
-                    if (!allowed) {
-                        throw new Error(`Demasiadas tentativas. Aguarde ${retryAfter} segundos.`);
-                    }
+                    // const { allowed, retryAfter } = checkRateLimit(`login:${identifier}`);
+                    // if (!allowed) {
+                    //     throw new Error(`Demasiadas tentativas. Aguarde ${retryAfter} segundos.`);
+                    // }
 
                     console.log(`[AUTH] Login: ${identifier} em ${portal}`);
 
@@ -65,12 +65,12 @@ export const getAuthOptions = (portal: string = 'default'): NextAuthOptions => {
                             const model = (db as any)[col];
                             if (!model) continue;
 
-                            // Tentar encontrar por email ou username
+                            console.log(`[AUTH] Procurando em ${col} por "${identifier}"...`);
                             const user = await model.findFirst({
                                 where: {
                                     OR: [
-                                        { email: { equals: identifier, mode: 'insensitive' } },
-                                        { username: { equals: identifier, mode: 'insensitive' } }
+                                        { email: identifier },
+                                        { username: identifier }
                                     ]
                                 }
                             });
@@ -99,6 +99,8 @@ export const getAuthOptions = (portal: string = 'default'): NextAuthOptions => {
                                 } else {
                                     console.log(`[AUTH] Senha incorreta para ${identifier} em ${col}`);
                                 }
+                            } else {
+                                console.log(`[AUTH] Não encontrado em ${col}.`);
                             }
                         } catch (err: any) {
                             console.error(`[AUTH] Erro em ${col}:`, err.message);
