@@ -425,7 +425,7 @@ export default function MatriculationPage() {
                         </tbody>
                     </table>
                     {data.matriculations.length === 0 && (
-                        <div className="empty-state">Nenhuma matrícula registada. Clique em "Nova Matrícula" para começar.</div>
+                        <div className="empty-state">Nenhuma matrícula registada. Clique em &quot;Nova Matrícula&quot; para começar.</div>
                     )}
                     {totalPages > 1 && !loading && data.matriculations.length > 0 && (
                         <div className="pagination">
@@ -620,7 +620,7 @@ export default function MatriculationPage() {
                                             </div>
                                         ))}
                                         {filteredStudents.length === 0 && (
-                                            <div className="no-results">Nenhum aluno encontrado para "{searchQuery}"</div>
+                                            <div className="no-results">Nenhum aluno encontrado para &quot;{searchQuery}&quot;</div>
                                         )}
                                     </div>
                                 )}

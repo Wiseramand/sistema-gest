@@ -10,9 +10,12 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
-        setIsLoading(true);
+        const handle = requestAnimationFrame(() => setIsLoading(true));
         const timer = setTimeout(() => setIsLoading(false), 800);
-        return () => clearTimeout(timer);
+        return () => {
+            cancelAnimationFrame(handle);
+            clearTimeout(timer);
+        };
     }, [pathname]);
 
     const getBasePath = () => {

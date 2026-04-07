@@ -1,4 +1,4 @@
-'use client';
+import Link from 'next/link';
 
 export default function Footer() {
     return (
@@ -18,21 +18,21 @@ export default function Footer() {
                 <div className="footer-links">
                     <h4>Navegação</h4>
                     <ul>
-                        <li><a href="/">Início</a></li>
-                        <li><a href="/cursos">Nossos Cursos</a></li>
-                        <li><a href="/sobre">Sobre a Instituição</a></li>
-                        <li><a href="/login">Portal do Aluno</a></li>
-                        <li><a href="/professor/login">Portal do Formador</a></li>
+                        <li><Link href="/">Início</Link></li>
+                        <li><Link href="/cursos">Nossos Cursos</Link></li>
+                        <li><Link href="/sobre">Sobre a Instituição</Link></li>
+                        <li><Link href="/login">Portal do Aluno</Link></li>
+                        <li><Link href="/professor/login">Portal do Formador</Link></li>
                     </ul>
                 </div>
 
                 <div className="footer-links">
                     <h4>Suporte</h4>
                     <ul>
-                        <li><a href="/faq">Perguntas Frequentes</a></li>
-                        <li><a href="/privacidade">Política de Privacidade</a></li>
-                        <li><a href="/termos">Termos de Uso</a></li>
-                        <li><a href="/contacto">Contacto</a></li>
+                        <li><Link href="/faq">Perguntas Frequentes</Link></li>
+                        <li><Link href="/privacidade">Política de Privacidade</Link></li>
+                        <li><Link href="/termos">Termos de Uso</Link></li>
+                        <li><Link href="/contacto">Contacto</Link></li>
                     </ul>
                 </div>
 

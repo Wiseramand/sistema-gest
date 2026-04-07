@@ -26,7 +26,7 @@ export async function GET() {
           username: 'admin',
           passwordHash: hash,
           role: 'SUPER_ADMIN',
-          responsibilities: ['Gestão total do sistema'],
+          responsibilities: JSON.stringify(['Gestão total do sistema']),
         },
       });
       return NextResponse.json({ message: 'Admin user created', email, password });

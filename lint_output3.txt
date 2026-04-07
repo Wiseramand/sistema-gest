@@ -1,0 +1,156 @@
+﻿
+> sistema-formacao@0.1.0 lint
+> eslint
+
+
+C:\Users\KMS-TIC-002\.gemini\antigravity\scratch\sistema-gest\app\admin\archive\page.tsx
+  84:25  error  Error: Cannot create components during render
+
+Components created during render will reset their state each time they are created. Declare components outside of render.
+
+C:\Users\KMS-TIC-002\.gemini\antigravity\scratch\sistema-gest\app\admin\archive\page.tsx:84:25
+  82 |       </div>
+  83 |
+> 84 |       {selectedItem && <ArchiveDetailModal item={selectedItem} onClose={() => setSelectedItem(null)} />}
+     |                         ^^^^^^^^^^^^^^^^^^ This component is created during render
+  85 |       
+  86 |       <div className="page-content card">
+  87 |         <div className="table-header">
+
+C:\Users\KMS-TIC-002\.gemini\antigravity\scratch\sistema-gest\app\admin\archive\page.tsx:13:30
+  11 |   const [selectedItem, setSelectedItem] = useState<any>(null);
+  12 |
+> 13 |   const ArchiveDetailModal = ({ item, onClose }: { item: any, onClose: () => void }) => (
+     |                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 14 |     <div className="modal-overlay" onClick={onClose}>
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 15 |       <div className="modal-card" onClick={e => e.stopPropagation()}>
+     ÔÇª
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 74 |     </div>
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 75 |   );
+     | ^^^^ The component is created during render here
+  76 |
+  77 |   return (
+  78 |     <div className="page-wrap">  react-hooks/static-components
+
+C:\Users\KMS-TIC-002\.gemini\antigravity\scratch\sistema-gest\app\admin\companies\page.tsx
+  131:51  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+C:\Users\KMS-TIC-002\.gemini\antigravity\scratch\sistema-gest\app\admin\feedbacks\page.tsx
+  178:36  error  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+  178:49  error  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+
+C:\Users\KMS-TIC-002\.gemini\antigravity\scratch\sistema-gest\app\admin\matriculations\page.tsx
+  428:93   error  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+  428:108  error  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+  623:102  error  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+  623:116  error  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+
+C:\Users\KMS-TIC-002\.gemini\antigravity\scratch\sistema-gest\app\admin\students\[id]\page.tsx
+  91:29  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+C:\Users\KMS-TIC-002\.gemini\antigravity\scratch\sistema-gest\app\admin\students\page.tsx
+  210:51  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+C:\Users\KMS-TIC-002\.gemini\antigravity\scratch\sistema-gest\app\admin\trainers\[id]\page.tsx
+  63:29  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+C:\Users\KMS-TIC-002\.gemini\antigravity\scratch\sistema-gest\app\admin\trainers\page.tsx
+  187:27  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+C:\Users\KMS-TIC-002\.gemini\antigravity\scratch\sistema-gest\app\admin\validations\page.tsx
+  99:24  error  Error: Cannot create components during render
+
+Components created during render will reset their state each time they are created. Declare components outside of render.
+
+C:\Users\KMS-TIC-002\.gemini\antigravity\scratch\sistema-gest\app\admin\validations\page.tsx:99:24
+   97 |       </div>
+   98 |       
+>  99 |       {selectedDoc && <CertificateModal doc={selectedDoc} onClose={() => setSelectedDoc(null)} />}
+      |                        ^^^^^^^^^^^^^^^^ This component is created during render
+  100 |
+  101 |       <div className="page-content card">
+  102 |         <div className="table-header">
+
+C:\Users\KMS-TIC-002\.gemini\antigravity\scratch\sistema-gest\app\admin\validations\page.tsx:13:28
+  11 |   const [selectedDoc, setSelectedDoc] = useState<any>(null);
+  12 |
+> 13 |   const CertificateModal = ({ doc, onClose }: { doc: any, onClose: () => void }) => (
+     |                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 14 |     <div className="modal-overlay" onClick={onClose}>
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 15 |       <div className="modal-card" onClick={e => e.stopPropagation()}>
+     ÔÇª
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 87 |     </div>
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 88 |   );
+     | ^^^^ The component is created during render here
+  89 |
+  90 |   return (
+  91 |     <div className="page-wrap">  react-hooks/static-components
+
+C:\Users\KMS-TIC-002\.gemini\antigravity\scratch\sistema-gest\app\components\ClientLayout.tsx
+  13:9  error  Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+C:\Users\KMS-TIC-002\.gemini\antigravity\scratch\sistema-gest\app\components\ClientLayout.tsx:13:9
+  11 |
+  12 |     useEffect(() => {
+> 13 |         setIsLoading(true);
+     |         ^^^^^^^^^^^^ Avoid calling setState() directly within an effect
+  14 |         const timer = setTimeout(() => setIsLoading(false), 800);
+  15 |         return () => clearTimeout(timer);
+  16 |     }, [pathname]);  react-hooks/set-state-in-effect
+
+C:\Users\KMS-TIC-002\.gemini\antigravity\scratch\sistema-gest\app\components\Footer.tsx
+  21:29  error  Do not use an `<a>` element to navigate to `/`. Use `<Link />` from `next/link` instead. See: https://nextjs.org/docs/messages/no-html-link-for-pages  @next/next/no-html-link-for-pages
+
+C:\Users\KMS-TIC-002\.gemini\antigravity\scratch\sistema-gest\app\layout.tsx
+  30:17  warning  Custom fonts not added in `pages/_document.js` will only load for a single page. This is discouraged. See: https://nextjs.org/docs/messages/no-page-custom-font  @next/next/no-page-custom-font
+
+C:\Users\KMS-TIC-002\.gemini\antigravity\scratch\sistema-gest\app\professor\attendance\page.tsx
+  13:5  error  Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+C:\Users\KMS-TIC-002\.gemini\antigravity\scratch\sistema-gest\app\professor\attendance\page.tsx:13:5
+  11 |   useEffect(() => {
+  12 |     // In real scenario, fetch('/api/courses?trainerId='+session.user.id)
+> 13 |     setClasses([
+     |     ^^^^^^^^^^ Avoid calling setState() directly within an effect
+  14 |       { id: '1', title: 'Seguran├ºa B├ísica (STCW)', students: [{name:'Jo├úo Silva'}, {name:'Maria Santos'}] },
+  15 |       { id: '2', title: 'Operador de R├ídio GMDSS', students: [{name:'Carlos Sousa'}, {name:'Ana Oliveira'}, {name:'Rui Costa'}] }
+  16 |     ]);  react-hooks/set-state-in-effect
+
+C:\Users\KMS-TIC-002\.gemini\antigravity\scratch\sistema-gest\app\professor\layout.tsx
+  288:15  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+C:\Users\KMS-TIC-002\.gemini\antigravity\scratch\sistema-gest\app\professor\profile\page.tsx
+  46:8   warning  React Hook useEffect has a missing dependency: 'fetchTrainer'. Either include it or remove the dependency array                                                                                                                                                                          react-hooks/exhaustive-deps
+  95:29  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+C:\Users\KMS-TIC-002\.gemini\antigravity\scratch\sistema-gest\app\professor\summaries\page.tsx
+  53:39  warning  React Hook useEffect has a missing dependency: 'fetchData'. Either include it or remove the dependency array       react-hooks/exhaustive-deps
+  59:8   warning  React Hook useEffect has a missing dependency: 'fetchSummaries'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+C:\Users\KMS-TIC-002\.gemini\antigravity\scratch\sistema-gest\app\student\layout.tsx
+  328:15  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+C:\Users\KMS-TIC-002\.gemini\antigravity\scratch\sistema-gest\app\student\profile\page.tsx
+   74:8   warning  React Hook useEffect has a missing dependency: 'fetchData'. Either include it or remove the dependency array                                                                                                                                                                             react-hooks/exhaustive-deps
+  122:29  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+Ô£û 25 problems (11 errors, 14 warnings)
+

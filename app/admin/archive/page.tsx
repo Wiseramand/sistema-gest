@@ -2,6 +2,70 @@
 
 import { useState } from 'react';
 
+const ArchiveDetailModal = ({ item, onClose }: { item: any, onClose: () => void }) => (
+  <div className="modal-overlay" onClick={onClose}>
+    <div className="modal-card" onClick={e => e.stopPropagation()}>
+      <div className="modal-close" onClick={onClose}>×</div>
+      <div className="archive-detail">
+        <div className="detail-header">
+          <span className="badge-id">{item.id}</span>
+          <h2>Detalhes do Registo Histórico</h2>
+        </div>
+        
+        <div className="detail-grid">
+          <div className="detail-section">
+            <h3>Informações do Formando</h3>
+            <div className="field"><label>Nome Completo:</label> <span>{item.student}</span></div>
+            <div className="field"><label>Curso Realizado:</label> <span>{item.course}</span></div>
+            <div className="field"><label>Data de Emissão:</label> <span>{item.issueDate}</span></div>
+          </div>
+          
+          <div className="detail-section">
+            <h3>Auditoria de Arquivo</h3>
+            <div className="field"><label>Tipo de Registo:</label> <span>{item.type}</span></div>
+            <div className="field"><label>Validado por:</label> <span>{item.validatedBy}</span></div>
+            <div className="field"><label>Estado Atual:</label> <span className="status-badge success">{item.status}</span></div>
+          </div>
+        </div>
+
+        <div className="hash-box">
+          <label>Assinatura Digital de Arquivo (SHA-256):</label>
+          <code>{item.hash}ed02937d5bd0c43c1ede23ee37df5c61</code>
+        </div>
+
+        <div className="actions-footer">
+          <button className="btn-primary" onClick={() => window.print()}>🖨️ Imprimir Ficha de Arquivo</button>
+          <button className="btn-outline" onClick={onClose}>Fechar Consulta</button>
+        </div>
+      </div>
+    </div>
+    <style jsx>{`
+      .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(10, 42, 94, 0.8); z-index: 1000; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(5px); }
+      .modal-card { background: white; border-radius: 20px; width: 90%; max-width: 700px; padding: 2.5rem; position: relative; animation: slideUp 0.3s ease; }
+      @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+      .modal-close { position: absolute; top: 1rem; right: 1.5rem; font-size: 2rem; cursor: pointer; color: #94a3b8; }
+
+      .detail-header { margin-bottom: 2rem; border-bottom: 2px solid #f1f5f9; padding-bottom: 1rem; }
+      .badge-id { font-size: 0.7rem; font-weight: 800; background: #0a2a5e; color: white; padding: 0.2rem 0.6rem; border-radius: 4px; margin-bottom: 0.5rem; display: inline-block; }
+      .detail-header h2 { font-family: 'Outfit', sans-serif; font-size: 1.4rem; color: #0a2a5e; margin: 0; }
+
+      .detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 2rem; }
+      .detail-section h3 { font-size: 0.8rem; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 1rem; }
+      .field { margin-bottom: 1rem; }
+      .field label { display: block; font-size: 0.75rem; color: #64748b; margin-bottom: 0.2rem; }
+      .field span { font-weight: 700; color: #0a2a5e; font-size: 1rem; }
+
+      .hash-box { background: #f8fafc; padding: 1.25rem; border-radius: 10px; border: 1px solid #e2e8f0; margin-bottom: 2rem; }
+      .hash-box label { font-size: 0.7rem; font-weight: 700; color: #94a3b8; display: block; margin-bottom: 0.5rem; }
+      .hash-box code { font-family: monospace; font-size: 0.8rem; color: #0a2a5e; }
+
+      .actions-footer { display: flex; gap: 1rem; justify-content: center; }
+      .btn-primary { background: #0a2a5e; color: white; border: none; padding: 0.75rem 1.5rem; border-radius: 8px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 0.5rem; }
+      .btn-outline { background: white; color: #64748b; border: 1px solid #e2e8f0; padding: 0.75rem 1.5rem; border-radius: 8px; font-weight: 700; cursor: pointer; }
+    `}</style>
+  </div>
+);
+
 export default function ArchivePage() {
   const dummyArchive = [
     { id: 'ARC-2023-001', student: 'Carlos Mendes', course: 'Segurança Básica', issueDate: '12-05-2023', type: 'Digitalizado', status: 'Arquivado', validatedBy: 'Ricardo', hash: '8f3e2a...9b' },
@@ -9,70 +73,6 @@ export default function ArchivePage() {
   ];
 
   const [selectedItem, setSelectedItem] = useState<any>(null);
-
-  const ArchiveDetailModal = ({ item, onClose }: { item: any, onClose: () => void }) => (
-    <div className="modal-overlay" onClick={onClose}>
-      <div className="modal-card" onClick={e => e.stopPropagation()}>
-        <div className="modal-close" onClick={onClose}>×</div>
-        <div className="archive-detail">
-          <div className="detail-header">
-            <span className="badge-id">{item.id}</span>
-            <h2>Detalhes do Registo Histórico</h2>
-          </div>
-          
-          <div className="detail-grid">
-            <div className="detail-section">
-              <h3>Informações do Formando</h3>
-              <div className="field"><label>Nome Completo:</label> <span>{item.student}</span></div>
-              <div className="field"><label>Curso Realizado:</label> <span>{item.course}</span></div>
-              <div className="field"><label>Data de Emissão:</label> <span>{item.issueDate}</span></div>
-            </div>
-            
-            <div className="detail-section">
-              <h3>Auditoria de Arquivo</h3>
-              <div className="field"><label>Tipo de Registo:</label> <span>{item.type}</span></div>
-              <div className="field"><label>Validado por:</label> <span>{item.validatedBy}</span></div>
-              <div className="field"><label>Estado Atual:</label> <span className="status-badge success">{item.status}</span></div>
-            </div>
-          </div>
-
-          <div className="hash-box">
-            <label>Assinatura Digital de Arquivo (SHA-256):</label>
-            <code>{item.hash}ed02937d5bd0c43c1ede23ee37df5c61</code>
-          </div>
-
-          <div className="actions-footer">
-            <button className="btn-primary" onClick={() => window.print()}>🖨️ Imprimir Ficha de Arquivo</button>
-            <button className="btn-outline" onClick={onClose}>Fechar Consulta</button>
-          </div>
-        </div>
-      </div>
-      <style jsx>{`
-        .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(10, 42, 94, 0.8); z-index: 1000; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(5px); }
-        .modal-card { background: white; border-radius: 20px; width: 90%; max-width: 700px; padding: 2.5rem; position: relative; animation: slideUp 0.3s ease; }
-        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-        .modal-close { position: absolute; top: 1rem; right: 1.5rem; font-size: 2rem; cursor: pointer; color: #94a3b8; }
-
-        .detail-header { margin-bottom: 2rem; border-bottom: 2px solid #f1f5f9; padding-bottom: 1rem; }
-        .badge-id { font-size: 0.7rem; font-weight: 800; background: #0a2a5e; color: white; padding: 0.2rem 0.6rem; border-radius: 4px; margin-bottom: 0.5rem; display: inline-block; }
-        .detail-header h2 { font-family: 'Outfit', sans-serif; font-size: 1.4rem; color: #0a2a5e; margin: 0; }
-
-        .detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 2rem; }
-        .detail-section h3 { font-size: 0.8rem; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 1rem; }
-        .field { margin-bottom: 1rem; }
-        .field label { display: block; font-size: 0.75rem; color: #64748b; margin-bottom: 0.2rem; }
-        .field span { font-weight: 700; color: #0a2a5e; font-size: 1rem; }
-
-        .hash-box { background: #f8fafc; padding: 1.25rem; border-radius: 10px; border: 1px solid #e2e8f0; margin-bottom: 2rem; }
-        .hash-box label { font-size: 0.7rem; font-weight: 700; color: #94a3b8; display: block; margin-bottom: 0.5rem; }
-        .hash-box code { font-family: monospace; font-size: 0.8rem; color: #0a2a5e; }
-
-        .actions-footer { display: flex; gap: 1rem; justify-content: center; }
-        .btn-primary { background: #0a2a5e; color: white; border: none; padding: 0.75rem 1.5rem; border-radius: 8px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 0.5rem; }
-        .btn-outline { background: white; color: #64748b; border: 1px solid #e2e8f0; padding: 0.75rem 1.5rem; border-radius: 8px; font-weight: 700; cursor: pointer; }
-      `}</style>
-    </div>
-  );
 
   return (
     <div className="page-wrap">

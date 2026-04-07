@@ -10,10 +10,13 @@ export default function TrainerAttendancePage() {
   // Fake Mock for classes assigned to trainer
   useEffect(() => {
     // In real scenario, fetch('/api/courses?trainerId='+session.user.id)
-    setClasses([
-      { id: '1', title: 'Segurança Básica (STCW)', students: [{name:'João Silva'}, {name:'Maria Santos'}] },
-      { id: '2', title: 'Operador de Rádio GMDSS', students: [{name:'Carlos Sousa'}, {name:'Ana Oliveira'}, {name:'Rui Costa'}] }
-    ]);
+    const timeout = setTimeout(() => {
+      setClasses([
+        { id: '1', title: 'Segurança Básica (STCW)', students: [{name:'João Silva'}, {name:'Maria Santos'}] },
+        { id: '2', title: 'Operador de Rádio GMDSS', students: [{name:'Carlos Sousa'}, {name:'Ana Oliveira'}, {name:'Rui Costa'}] }
+      ]);
+    }, 0);
+    return () => clearTimeout(timeout);
   }, [session]);
 
   const [selectedClass, setSelectedClass] = useState<any>(null);

@@ -175,7 +175,7 @@ export default function AdminFeedbacksPage() {
                         {f.comments && (
                             <div className="comment-box">
                                 <label>💬 Outros Comentários:</label>
-                                <p>"{f.comments}"</p>
+                                <p>&quot;{f.comments}&quot;</p>
                             </div>
                         )}
                     </div>
