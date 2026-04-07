@@ -386,6 +386,15 @@ function AdminLayoutContent({ children }: { children: React.ReactNode }) {
   };
   return (
     <div className={`admin-wrap ${showMobileMenu ? 'mobile-open' : ''}`}>
+      {/* Mobile Fixed Toggle */}
+      <button 
+        className="mobile-toggle-fixed" 
+        onClick={() => setShowMobileMenu(!showMobileMenu)}
+        aria-label="Toggle Menu"
+      >
+        {showMobileMenu ? '✕' : '☰'}
+      </button>
+
       {/* Backdrop */}
       {showMobileMenu && (
         <div className="mobile-backdrop" onClick={() => setShowMobileMenu(false)} />
@@ -498,9 +507,6 @@ function AdminLayoutContent({ children }: { children: React.ReactNode }) {
       <main className="content">
         <div className="content-hdr">
           <div className="breadcrumb">
-            <button className="mobile-toggle" onClick={() => setShowMobileMenu(!showMobileMenu)} style={{ zIndex: 10000 }}>
-              {showMobileMenu ? '✕' : '☰'}
-            </button>
             <span>{currentFlyout.label}</span>
             {currentPageName && (
               <>
@@ -588,18 +594,30 @@ function AdminLayoutContent({ children }: { children: React.ReactNode }) {
           transition: 0.3s;
         }
 
-        .mobile-toggle {
+        .mobile-toggle-fixed {
           display: none;
-          background: none;
-          border: none;
-          font-size: 1.5rem;
+          position: fixed;
+          top: 1rem;
+          left: 1rem;
+          width: 48px;
+          height: 48px;
+          background: #F5C518;
           color: #0a2a5e;
+          border: none;
+          border-radius: 12px;
+          font-size: 1.5rem;
+          font-weight: 800;
           cursor: pointer;
-          margin-right: 1rem;
+          z-index: 20000;
+          box-shadow: 0 4px 15px rgba(245, 197, 24, 0.4);
+          align-items: center;
+          justify-content: center;
+          transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
         @media (max-width: 768px) {
-          .admin-wrap { padding: 0; }
+          .admin-wrap { padding: 0.25rem; }
+          .mobile-toggle-fixed { display: flex; }
           .rail {
             position: fixed;
             left: -80px;
@@ -621,9 +639,9 @@ function AdminLayoutContent({ children }: { children: React.ReactNode }) {
           }
           .admin-wrap.mobile-open .rail { transform: translateX(80px); }
           .admin-wrap.mobile-open .flyout { transform: translateX(352px); }
-          .content { width: 100%; margin-left: 0; padding: 1rem; }
-          .content-hdr { padding: 1rem 0; }
-          .mobile-toggle { display: flex; align-items: center; justify-content: center; width: 44px; height: 44px; background: white; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
+          .content { width: 100%; margin-left: 0; padding: 5rem 1rem 1rem; }
+          .content-hdr { padding: 0; margin-bottom: 1rem; }
+          .mobile-toggle { display: none; }
           .user-info-text { display: none; }
           .hdr-user { gap: 0.5rem; }
           .breadcrumb span { font-size: 0.9rem; }
