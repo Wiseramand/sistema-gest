@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import { getToken } from 'next-auth/jwt';
 import type { NextRequest } from 'next/server';
 
-export default async function proxy(req: NextRequest) {
+export default async function middleware(req: NextRequest) {
     const path = req.nextUrl.pathname;
 
     const baseCookieName = 'next-auth.session-token';
