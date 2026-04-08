@@ -20,16 +20,23 @@ export async function POST(request: Request) {
             return NextResponse.json({ error: 'No file uploaded' }, { status: 400 });
         }
 
-        // ✅ CORRECÇÃO: Validar tipo de ficheiro — apenas imagens e PDFs
-        const allowedTypes = ['image/jpeg', 'image/png', 'image/webp', 'application/pdf'];
-        if (!allowedTypes.includes(file.type)) {
-            return NextResponse.json({ error: 'Tipo de ficheiro não permitido (apenas Imagens e PDFs)' }, { status: 400 });
+        // ✅ CORRECÇÃO: Validar tipo de ficheiro — Suporte alargado para documentos e vídeo
+        const allowedTypes = [
+            'image/jpeg', 'image/png', 'image/webp', 'application/pdf',
+            'application/vnd.openxmlformats-officedocument.wordprocessingml.document', // DOCX
+            'application/msword', // DOC
+            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', // XLSX
+            'application/vnd.openxmlformats-officedocument.presentationml.presentation', // PPTX
+            'video/mp4', 'video/webm', 'video/quicktime'
+        ];
+        if (!allowedTypes.includes(file.type) && !file.name.match(/\.(docx|doc|xlsx|xls|pptx|ppt|mp4|mov|webm)$/i)) {
+            return NextResponse.json({ error: `Tipo de ficheiro não permitido (${file.type}). Use PDF, Office ou Vídeos.` }, { status: 400 });
         }
 
-        // ✅ CORRECÇÃO: Limitar tamanho — máximo 5MB
-        const MAX_SIZE = 5 * 1024 * 1024; // 5MB
+        // ✅ CORRECÇÃO: Limitar tamanho — máximo 100MB para vídeos
+        const MAX_SIZE = 100 * 1024 * 1024; // 100MB
         if (file.size > MAX_SIZE) {
-            return NextResponse.json({ error: 'Ficheiro demasiado grande (máximo 5MB)' }, { status: 400 });
+            return NextResponse.json({ error: 'Ficheiro demasiado grande (máximo 100MB)' }, { status: 400 });
         }
 
         const bytes = await file.arrayBuffer();

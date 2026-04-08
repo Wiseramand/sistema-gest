@@ -36,8 +36,8 @@ export async function GET() {
         }
     });
 
-    // 2. Extract materials from courses
-    let trainerMaterials: any[] = [];
+    // 2. Extract materials from course JSON fields (Legacy/Direct)
+    let courseJsonMaterials: any[] = [];
     allCourses.forEach((course: any) => {
       if (course.materials) {
         try {
@@ -47,7 +47,7 @@ export async function GET() {
             
           if (Array.isArray(mats)) {
             mats.forEach(m => {
-              trainerMaterials.push({
+              courseJsonMaterials.push({
                 ...m,
                 courseName: course.title,
                 courseId: course.id
@@ -60,28 +60,39 @@ export async function GET() {
       }
     });
 
-    // 3. Fetch global materials for trainers
-    const globalMaterials = await db.material.findMany({
+    // 3. Fetch materials from Material Hub (New System)
+    const allCourseIds = allCourses.map(c => c.id);
+    const hubMaterials: any[] = await db.material.findMany({
       where: {
-        OR: [
-          { access: 'ALL' },
-          { access: 'PROFESSORS' }
+        AND: [
+          {
+            OR: [
+              { access: 'ALL' },
+              { access: 'PROFESSORS' }
+            ]
+          },
+          {
+            OR: [
+              { courseId: null } as any,
+              { courseId: { in: allCourseIds } } as any
+            ]
+          }
         ]
       }
     });
 
     // 4. Combine and deduplicate
     const combined = [
-      ...globalMaterials.map(m => ({
+      ...hubMaterials.map(m => ({
         id: m.id,
         name: m.name,
         url: m.url,
         type: m.type || (m.url?.endsWith('.mp4') ? 'Vídeo' : 'Documento'),
-        category: 'Geral',
-        courseName: 'Todos os Cursos',
+        category: m.courseId ? 'Curso' : 'Geral',
+        courseName: m.courseTitle || 'Materiais Gerais',
         createdAt: m.createdAt
       })),
-      ...trainerMaterials.map(m => ({
+      ...courseJsonMaterials.map(m => ({
         ...m,
         id: m.id || m.url,
         type: m.type || (m.url?.endsWith('.mp4') ? 'Vídeo' : 'Documento')

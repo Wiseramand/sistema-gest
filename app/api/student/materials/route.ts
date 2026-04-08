@@ -33,9 +33,8 @@ export async function GET() {
       }
     });
 
-    // 3. Extract materials from courses
-    // Course.materials is stored as a JSON string in the DB (based on api/[collection]/route.ts)
-    let studentMaterials: any[] = [];
+    // 3. Extract materials from course JSON fields (Legacy/Direct)
+    let courseJsonMaterials: any[] = [];
     
     courses.forEach((course: any) => {
       if (course.materials) {
@@ -46,7 +45,7 @@ export async function GET() {
             
           if (Array.isArray(mats)) {
             mats.forEach(m => {
-              studentMaterials.push({
+              courseJsonMaterials.push({
                 ...m,
                 courseName: course.title,
                 courseId: course.id
@@ -59,28 +58,41 @@ export async function GET() {
       }
     });
 
-    // 4. Fetch global materials for students
-    const globalMaterials = await db.material.findMany({
+    // 4. Fetch materials from Material Hub (New System)
+    // Fetch materials that are EITHER:
+    // - Targeted to students OR all, AND have NULL courseId (Global)
+    // - Targeted to students OR all, AND match student's enrolled courseIds
+    const hubMaterials: any[] = await db.material.findMany({
       where: {
-        OR: [
-          { access: 'ALL' },
-          { access: 'STUDENTS' }
+        AND: [
+          {
+            OR: [
+              { access: 'ALL' },
+              { access: 'STUDENTS' }
+            ]
+          },
+          {
+            OR: [
+              { courseId: null } as any,
+              { courseId: { in: allCourseIds } } as any
+            ]
+          }
         ]
       }
     });
 
     // 5. Combine and deduplicate
     const combined = [
-      ...globalMaterials.map(m => ({
+      ...hubMaterials.map(m => ({
         id: m.id,
         name: m.name,
         url: m.url,
         type: m.type || (m.url?.endsWith('.mp4') ? 'Vídeo' : 'Documento'),
-        category: 'Geral',
-        courseName: 'Todos os Cursos',
+        category: m.courseId ? 'Curso' : 'Geral',
+        courseName: m.courseTitle || 'Materiais Gerais',
         createdAt: m.createdAt
       })),
-      ...studentMaterials.map(m => ({
+      ...courseJsonMaterials.map(m => ({
         ...m,
         id: m.id || m.url, // Fallback to URL if ID missing
         type: m.type || (m.url?.endsWith('.mp4') ? 'Vídeo' : 'Documento')

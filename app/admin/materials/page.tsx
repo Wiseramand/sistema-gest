@@ -173,9 +173,10 @@ export default function AdminMaterialsPage() {
                 console.error('Save failed:', errData);
                 alert('Erro ao guardar material: ' + (errData.error || 'Erro desconhecido'));
             }
-        } catch (error) {
+        } catch (error: any) {
             console.error('Error in handleUpload:', error);
-            alert('Erro ao processar ficheiro ou guardar dados');
+            // Try to extract a more specific error if possible
+            alert('Erro ao guardar material: ' + (error.message || 'Erro de rede ou processamento'));
         } finally {
             setUploading(false);
         }
@@ -252,8 +253,8 @@ export default function AdminMaterialsPage() {
                             <div className="form-group">
                                 <label>Tipo</label>
                                 <select value={type} onChange={(e) => setType(e.target.value as any)}>
-                                    <option value="FILE">Ficheiro (PDF, Word, PPT)</option>
-                                    <option value="LINK">Link Externo (Vídeo, Link)</option>
+                                    <option value="FILE">Ficheiro Local (PDF, Office, MP4)</option>
+                                    <option value="LINK">Link de Vídeo Externo (YouTube, Drive, etc)</option>
                                 </select>
                             </div>
 
