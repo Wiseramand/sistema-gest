@@ -143,7 +143,7 @@ export default function AdminMaterialsPage() {
                 if (uploadData.url) {
                     finalUrl = uploadData.url;
                 } else {
-                    throw new Error('Upload failed');
+                    throw new Error(uploadData.error || 'Upload failed');
                 }
             }
 

@@ -27,10 +27,11 @@ export async function POST(request: Request) {
             'application/msword', // DOC
             'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', // XLSX
             'application/vnd.openxmlformats-officedocument.presentationml.presentation', // PPTX
+            'text/plain', 'application/rtf',
             'video/mp4', 'video/webm', 'video/quicktime'
         ];
-        if (!allowedTypes.includes(file.type) && !file.name.match(/\.(docx|doc|xlsx|xls|pptx|ppt|mp4|mov|webm)$/i)) {
-            return NextResponse.json({ error: `Tipo de ficheiro não permitido (${file.type}). Use PDF, Office ou Vídeos.` }, { status: 400 });
+        if (!allowedTypes.includes(file.type) && !file.name.match(/\.(docx|doc|xlsx|xls|pptx|ppt|mp4|mov|webm|txt|rtf|pdf)$/i)) {
+            return NextResponse.json({ error: `Tipo de ficheiro não permitido (${file.type || 'desconhecido'}). Use PDF, Office ou Vídeos.` }, { status: 400 });
         }
 
         // ✅ CORRECÇÃO: Limitar tamanho — máximo 100MB para vídeos
