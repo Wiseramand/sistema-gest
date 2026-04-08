@@ -95,11 +95,19 @@ export default function MaterialViewer({ isOpen, onClose, material }: MaterialVi
               allowFullScreen
             />
           ) : (
-            <iframe 
-              src={`${material.url}#toolbar=0`} 
-              className="doc-viewer"
-              title={material.name}
-            />
+            <div className="viewer-inner-wrap">
+              <iframe 
+                src={`${material.url}#toolbar=0`} 
+                className="doc-viewer"
+                title={material.name}
+              />
+              <div className="external-fallback">
+                <p>Se o conteúdo não carregar, use o botão abaixo para abrir externamente.</p>
+                <a href={material.url} target="_blank" rel="noopener noreferrer" className="external-link-btn">
+                  Abrir link em novo separador ↗
+                </a>
+              </div>
+            </div>
           )}
         </div>
         
@@ -167,9 +175,52 @@ export default function MaterialViewer({ isOpen, onClose, material }: MaterialVi
           max-height: 80vh;
           outline: none;
         }
-        .doc-viewer {
+        .viewer-inner-wrap {
           width: 100%;
           height: 75vh;
+          position: relative;
+          display: flex;
+          flex-direction: column;
+        }
+        .external-fallback {
+          position: absolute;
+          bottom: 2rem;
+          left: 50%;
+          transform: translateX(-50%);
+          background: rgba(15, 23, 42, 0.95);
+          padding: 1.5rem;
+          border-radius: 12px;
+          border: 1px solid #334155;
+          text-align: center;
+          color: white;
+          width: 80%;
+          max-width: 400px;
+          z-index: 10;
+          box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+        }
+        .external-fallback p {
+          margin: 0 0 1rem;
+          font-size: 0.85rem;
+          color: #94a3b8;
+        }
+        .external-link-btn {
+          display: inline-block;
+          background: #F5C518;
+          color: #000;
+          padding: 0.75rem 1.25rem;
+          border-radius: 8px;
+          font-weight: 700;
+          font-size: 0.9rem;
+          text-decoration: none;
+          transition: 0.2s;
+        }
+        .external-link-btn:hover {
+          background: #eab308;
+          transform: translateY(-2px);
+        }
+        .doc-viewer {
+          width: 100%;
+          flex: 1;
           border: none;
           background: white;
         }
