@@ -128,14 +128,19 @@ export default function AdminMaterialsPage() {
             let finalUrl = url;
 
             if (type === 'FILE' && file) {
-                // Determine if we should upload via proxy (small files) or direct (large files)
-                // Actually, let's always use direct for reliability on Vercel
                 try {
                     // 1. Get Signature from our API
                     const signRes = await fetch('/api/upload');
+                    if (!signRes.ok) {
+                        const errorText = await signRes.text();
+                        console.error('Signature fetch failed:', errorText);
+                        throw new Error(`Erro ao obter autorização (Status: ${signRes.status})`);
+                    }
                     const signData = await signRes.json();
                     
-                    if (!signRes.ok) throw new Error(signData.error || 'Failed to get upload signature');
+                    if (!signData.cloudName) {
+                        throw new Error('Configuração do Cloudinary incompleta (Cloud Name em falta). Verifique as variáveis no Vercel.');
+                    }
 
                     // 2. Upload directly to Cloudinary
                     const formData = new FormData();
@@ -145,16 +150,24 @@ export default function AdminMaterialsPage() {
                     formData.append('signature', signData.signature);
                     formData.append('folder', 'materials');
 
-                    const cloudRes = await fetch(`https://api.cloudinary.com/v1_1/${signData.cloudName}/auto/upload`, {
+                    const cloudinaryUrl = `https://api.cloudinary.com/v1_1/${signData.cloudName}/auto/upload`;
+                    console.log('Iniciando upload para:', cloudinaryUrl);
+
+                    const cloudRes = await fetch(cloudinaryUrl, {
                         method: 'POST',
                         body: formData
                     });
                     
-                    const cloudData = await cloudRes.json();
-                    if (!cloudRes.ok) throw new Error(cloudData.error?.message || 'Cloudinary upload failed');
+                    if (!cloudRes.ok) {
+                        const cloudError = await cloudRes.json();
+                        console.error('Cloudinary error response:', cloudError);
+                        throw new Error(cloudError.error?.message || 'Falha no servidor do Cloudinary');
+                    }
 
+                    const cloudData = await cloudRes.json();
                     finalUrl = cloudData.secure_url;
                 } catch (err: any) {
+                    console.error('Upload catch error:', err);
                     throw new Error(`Erro no upload: ${err.message}`);
                 }
             }
