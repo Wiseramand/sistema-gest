@@ -128,17 +128,34 @@ export default function AdminMaterialsPage() {
             let finalUrl = url;
 
             if (type === 'FILE' && file) {
-                const formData = new FormData();
-                formData.append('file', file);
-                const uploadRes = await fetch('/api/upload', {
-                    method: 'POST',
-                    body: formData,
-                });
-                const uploadData = await uploadRes.json();
-                if (uploadData.url) {
-                    finalUrl = uploadData.url;
-                } else {
-                    throw new Error(uploadData.error || 'Upload failed');
+                // Determine if we should upload via proxy (small files) or direct (large files)
+                // Actually, let's always use direct for reliability on Vercel
+                try {
+                    // 1. Get Signature from our API
+                    const signRes = await fetch('/api/upload');
+                    const signData = await signRes.json();
+                    
+                    if (!signRes.ok) throw new Error(signData.error || 'Failed to get upload signature');
+
+                    // 2. Upload directly to Cloudinary
+                    const formData = new FormData();
+                    formData.append('file', file);
+                    formData.append('api_key', signData.apiKey);
+                    formData.append('timestamp', signData.timestamp);
+                    formData.append('signature', signData.signature);
+                    formData.append('folder', 'materials');
+
+                    const cloudRes = await fetch(`https://api.cloudinary.com/v1_1/${signData.cloudName}/auto/upload`, {
+                        method: 'POST',
+                        body: formData
+                    });
+                    
+                    const cloudData = await cloudRes.json();
+                    if (!cloudRes.ok) throw new Error(cloudData.error?.message || 'Cloudinary upload failed');
+
+                    finalUrl = cloudData.secure_url;
+                } catch (err: any) {
+                    throw new Error(`Erro no upload: ${err.message}`);
                 }
             }
 
