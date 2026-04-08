@@ -39,6 +39,7 @@ export default function AdminAttendancePage() {
   const [courses, setCourses] = useState<Course[]>([]);
   const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
   const [attendanceRecords, setAttendanceRecords] = useState<AttendanceRecord[]>([]);
+  const [studentNames, setStudentNames] = useState<Record<string, string>>({});
   const [selectedStudent, setSelectedStudent] = useState<StudentSummary | null>(null);
 
   const [loading, setLoading] = useState(true);
@@ -70,9 +71,20 @@ export default function AdminAttendancePage() {
     setStudentPage(1);
     setLoadingRecords(true);
     try {
-      const res = await fetch(`/api/attendance?course=${course.id}`);
-      const data = await res.json();
-      setAttendanceRecords(Array.isArray(data) ? data : []);
+      const [attRes, matRes] = await Promise.all([
+        fetch(`/api/attendance?course=${course.id}`),
+        fetch(`/api/matriculations?courseId=${course.id}`)
+      ]);
+      const attData = await attRes.json();
+      const matData = await matRes.json();
+      
+      setAttendanceRecords(Array.isArray(attData) ? attData : []);
+      
+      const names: Record<string, string> = {};
+      if (Array.isArray(matData)) {
+        matData.forEach((m: any) => { names[m.studentId] = m.studentName || m.studentId; });
+      }
+      setStudentNames(names);
     } catch (e) {
       console.error(e);
     } finally {
@@ -88,7 +100,9 @@ export default function AdminAttendancePage() {
       try {
         const recs = JSON.parse(record.records || '{}');
         Object.entries(recs).forEach(([studentId, status]) => {
-          if (!studentMap[studentId]) studentMap[studentId] = { name: studentId, days: [] };
+          if (!studentMap[studentId]) {
+            studentMap[studentId] = { name: studentNames[studentId] || studentId, days: [] };
+          }
           studentMap[studentId].days.push({ date: record.date, status: status as string });
         });
       } catch (e) {}
