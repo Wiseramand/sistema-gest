@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { usePathname } from 'next/navigation';
 import LoadingOverlay from './LoadingOverlay';
 import { SessionProvider } from 'next-auth/react';
+import Chatbot from './Chatbot';
 
 export default function ClientLayout({ children }: { children: React.ReactNode }) {
     const pathname = usePathname();
@@ -29,6 +30,7 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
         <SessionProvider basePath={getBasePath()}>
             {isLoading && <LoadingOverlay />}
             {children}
+            {!pathname.startsWith('/admin') && !pathname.startsWith('/professor') && <Chatbot />}
         </SessionProvider>
     );
 }
