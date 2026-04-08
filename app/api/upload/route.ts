@@ -13,7 +13,6 @@ export async function GET() {
 
         const params = {
             folder: 'materials',
-            resource_type: 'auto'
         };
         
         const signData = generateCloudinarySignature(params);
