@@ -63,7 +63,7 @@ export default function TrainerAttendancePage() {
     setLoadingStudents(true);
     try {
       // Fetch enrolled students for this course
-      const res = await fetch(`/api/enrollments?courseId=${course.id}`);
+      const res = await fetch(`/api/matriculations?courseId=${course.id}`);
       const data = await res.json();
       const enrolled: Enrollment[] = Array.isArray(data) ? data : [];
       setEnrollments(enrolled);

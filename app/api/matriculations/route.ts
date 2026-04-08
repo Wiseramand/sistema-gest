@@ -5,7 +5,12 @@ import { getAnySession } from '../../../lib/auth';
 
 export async function GET(request: Request) {
     try {
+        const url = new URL(request.url);
+        const courseId = url.searchParams.get('courseId');
+        const whereClause = courseId ? { courseId } : {};
+
         const matriculations = await db.matriculation.findMany({
+            where: whereClause,
             orderBy: { createdAt: 'desc' }
         });
         return NextResponse.json(matriculations);
