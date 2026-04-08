@@ -1,153 +1,139 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import MaterialViewer from '../../components/MaterialViewer';
 
 interface Material {
-    id: string;
-    title: string;
-    type: 'FILE' | 'LINK';
-    url: string;
-    description: string;
-    createdAt: string;
-}
-function isVideoFile(url: string) {
-    if (!url) return false;
-    // Don't treat external video platforms (YouTube/Drive) as raw video files
-    if (url.includes('youtube.com') || url.includes('youtu.be') || url.includes('drive.google.com')) return false;
-    const videoRegex = /\.(mp4|webm|ogg|mov|m4v)(\?.*)?$/i;
-    return videoRegex.test(url);
-}
-
-function getEmbedUrl(url: string) {
-    if (!url) return '';
-    if (url.startsWith('/uploads/')) return url;
-    try {
-        const urlObj = new URL(url);
-
-        // YouTube Support
-        if (urlObj.hostname.includes('youtube.com') || urlObj.hostname.includes('youtu.be')) {
-            if (urlObj.hostname === 'youtu.be') {
-                return `https://www.youtube.com/embed${urlObj.pathname}`;
-            }
-            if (urlObj.pathname === '/watch') {
-                const videoId = urlObj.searchParams.get('v');
-                if (videoId) return `https://www.youtube.com/embed/${videoId}`;
-            }
-            if (urlObj.pathname.startsWith('/shorts/')) {
-                const videoId = urlObj.pathname.split('/')[2];
-                if (videoId) return `https://www.youtube.com/embed/${videoId}`;
-            }
-        }
-
-        // Google Drive Support
-        if (urlObj.hostname.includes('drive.google.com')) {
-            if (urlObj.pathname.includes('/file/d/')) {
-                const parts = urlObj.pathname.split('/');
-                const fileId = parts[parts.indexOf('d') + 1];
-                return `https://drive.google.com/file/d/${fileId}/preview`;
-            }
-        }
-
-        return url;
-    } catch (e) {
-        return url;
-    }
+  id: string;
+  name: string;
+  type: string;
+  url: string;
+  category: string;
+  courseName: string;
+  createdAt?: string;
 }
 
 export default function ProfessorMaterialsPage() {
-    const [materials, setMaterials] = useState<Material[]>([]);
-    const [loading, setLoading] = useState(true);
-    const [readingMaterial, setReadingMaterial] = useState<Material | null>(null);
+  const [materials, setMaterials] = useState<Material[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [viewerOpen, setViewerOpen] = useState(false);
+  const [selectedMaterial, setSelectedMaterial] = useState<Material | null>(null);
 
-    useEffect(() => {
-        fetchMaterials();
-    }, []);
+  useEffect(() => {
+    fetchMaterials();
+  }, []);
 
-    async function fetchMaterials() {
-        try {
-            const res = await fetch('/api/materials');
-            const data = await res.json();
-            setMaterials(Array.isArray(data) ? data : []);
-        } catch (error) {
-            console.error('Error fetching materials:', error);
-        } finally {
-            setLoading(false);
-        }
+  const fetchMaterials = async () => {
+    try {
+      const res = await fetch('/api/trainer/materials');
+      if (res.ok) {
+        const data = await res.json();
+        setMaterials(data);
+      }
+    } catch (error) {
+      console.error('Error fetching trainer materials:', error);
+    } finally {
+      setLoading(false);
     }
+  };
 
-    return (
-        <div className="materials-container">
-            <h1>Materiais de Apoio</h1>
+  const openViewer = (material: Material) => {
+    setSelectedMaterial(material);
+    setViewerOpen(true);
+  };
 
-            {loading ? (
-                <div className="loading">Carregando conteúdos...</div>
-            ) : (
-                <div className="materials-grid">
-                    {materials.map((m) => (
-                        <div key={m.id} className="material-card">
-                            <div className="card-icon">{m.type === 'FILE' ? '📁' : '🔗'}</div>
-                            <div className="card-content">
-                                <h3>{m.title}</h3>
-                                <p className="desc">{m.description || 'Sem descrição adicional'}</p>
-                                <div className="meta">
-                                    <span>Publicado em {new Date(m.createdAt).toLocaleDateString()}</span>
-                                    <button onClick={() => setReadingMaterial(m)} className="view-btn">Ler no Sistema</button>
-                                </div>
-                            </div>
-                        </div>
-                    ))}
-                    {materials.length === 0 && <p className="empty">Nenhum material disponível de momento.</p>}
-                </div>
-            )}
+  const getFileIcon = (type: string) => {
+    const t = type.toLowerCase();
+    if (t.includes('pdf')) return 'PDF';
+    if (t.includes('vídeo') || t.includes('video')) return '📽️';
+    if (t.includes('word') || t.includes('doc')) return 'DOC';
+    return '📄';
+  };
 
-            {readingMaterial && (
-                <div className="material-reader-overlay">
-                    <div className="reader-modal">
-                        <div className="reader-header">
-                            <div>
-                                <h3>Lendo: {readingMaterial.title}</h3>
-                                <small>O download está desabilitado para este material.</small>
-                            </div>
-                            <button className="close-btn" onClick={() => setReadingMaterial(null)}>&times;</button>
-                        </div>
-                        <div className="reader-content">
-                            {isVideoFile(readingMaterial.url) ? (
-                                <video src={readingMaterial.url} controls controlsList="nodownload" className="material-video" style={{ width: '100%', height: '100%', borderRadius: '8px', background: '#000' }} />
-                            ) : (
-                                <iframe src={getEmbedUrl(readingMaterial.url)} className="material-iframe" />
-                            )}
-                        </div>
-                    </div>
-                </div>
-            )}
+  return (
+    <div className="page-wrap">
+      <div className="page-header">
+        <h1>Centro de Conhecimento</h1>
+        <p>Aceda e verifique os materiais didáticos associados aos seus cursos no Marítimo Training Center.</p>
+      </div>
 
-            <style jsx>{`
-                .materials-container { padding: 1rem; }
-                h1 { color: #1e293b; margin-bottom: 2rem; font-weight: 800; }
-                
-                .materials-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.5rem; }
-                .material-card { background: white; border-radius: 12px; padding: 1.5rem; display: flex; gap: 1rem; border: 1px solid #e2e8f0; transition: 0.3s; }
-                .material-card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.05); }
-                .card-icon { font-size: 2.5rem; }
-                .card-content { flex: 1; }
-                .card-content h3 { margin: 0 0 0.5rem; color: #1e293b; font-size: 1.1rem; }
-                .desc { font-size: 0.85rem; color: #64748b; margin-bottom: 1rem; }
-                
-                .meta { display: flex; align-items: center; justify-content: space-between; font-size: 0.8rem; color: #94a3b8; }
-                .view-btn { background: #3b82f6; color: white; padding: 0.5rem 1rem; border-radius: 8px; text-decoration: none; font-weight: 700; transition: 0.2s; }
-                .view-btn:hover { background: #2563eb; transform: scale(1.05); }
-                .empty { color: #64748b; font-style: italic; }
-
-                .material-reader-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(8px); display: flex; align-items: center; justify-content: center; z-index: 2000; padding: 2rem; }
-                .reader-modal { background: #1e293b; width: 95%; max-width: 1200px; height: 90vh; border-radius: 16px; overflow: hidden; display: flex; flex-direction: column; }
-                .reader-header { padding: 1rem 1.5rem; background: #0f172a; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #334155; }
-                .reader-header h3 { color: white; margin: 0 0 0.25rem; font-size: 1.1rem; }
-                .reader-header small { color: #94a3b8; font-size: 0.8rem; }
-                .reader-content { flex: 1; padding: 1rem; background: #1e293b; }
-                .material-iframe { width: 100%; height: 100%; border: none; background: white; border-radius: 8px; }
-                .close-btn { background: none; border: none; color: #94a3b8; font-size: 2rem; cursor: pointer; line-height: 1; }
-                .close-btn:hover { color: white; }
-            `}</style>
+      {loading ? (
+        <div className="loader">A carregar conteúdos pedagógicos...</div>
+      ) : materials.length === 0 ? (
+        <div className="empty-state">
+          <span className="empty-icon">📂</span>
+          <h3>Sem materiais no momento</h3>
+          <p>Os materiais que carregar ou que lhe forem atribuídos pelo administrador aparecerão aqui.</p>
         </div>
-    );
+      ) : (
+        <div className="materials-grid">
+          {materials.map(item => (
+            <div key={item.id} className="material-card card">
+              <div className="card-top">
+                <div className={`file-type ${getFileIcon(item.type).toLowerCase()}`}>
+                  {getFileIcon(item.type)}
+                </div>
+                <span className="category-badge">{item.category}</span>
+              </div>
+              
+              <div className="card-body">
+                <h3>{item.name}</h3>
+                <p className="course-name">{item.courseName}</p>
+                <div className="meta">
+                  <span>Adicionado em {item.createdAt ? new Date(item.createdAt).toLocaleDateString() : 'Recente'}</span>
+                </div>
+              </div>
+
+              <div className="card-actions">
+                <button 
+                  className="btn-view" 
+                  onClick={() => openViewer(item)}
+                >
+                  👁️ Visualizar Material
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      <MaterialViewer 
+        isOpen={viewerOpen} 
+        onClose={() => setViewerOpen(false)} 
+        material={selectedMaterial} 
+      />
+
+      <style jsx>{`
+        .page-wrap { display: flex; flex-direction: column; gap: 2rem; max-width: 1200px; margin: 0 auto; padding: 0.5rem; }
+        .page-header { background: #0a2a5e; padding: 2.5rem; border-radius: 20px; color: white; box-shadow: 0 10px 30px rgba(10, 42, 94, 0.1); }
+        .page-header h1 { font-family: 'Outfit', sans-serif; font-size: 2.2rem; margin-bottom: 0.5rem; color: #F5C518; font-weight: 800; }
+        .page-header p { color: #cbd5e1; font-size: 1.1rem; opacity: 0.9; }
+
+        .loader, .empty-state { text-align: center; padding: 5rem 2rem; background: white; border-radius: 20px; border: 1px dashed #e2e8f0; color: #64748b; font-weight: 500; }
+        .empty-icon { font-size: 3.5rem; display: block; margin-bottom: 1.5rem; filter: grayscale(1); opacity: 0.5; }
+        .empty-state h3 { color: #0a2a5e; margin-bottom: 0.5rem; font-size: 1.3rem; }
+
+        .materials-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 1.5rem; }
+        .card { background: white; border-radius: 20px; border: 1px solid #e2e8f0; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); overflow: hidden; display: flex; flex-direction: column; position: relative; }
+        .card:hover { transform: translateY(-8px); box-shadow: 0 20px 40px rgba(10, 42, 94, 0.08); border-color: #F5C518; }
+
+        .card-top { padding: 1.5rem 1.5rem 0.5rem; display: flex; justify-content: space-between; align-items: flex-start; }
+        .file-type { width: 48px; height: 60px; background: #f8fafc; border: 2px solid #e2e8f0; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-family: 'Outfit', sans-serif; font-size: 0.65rem; font-weight: 900; }
+        .file-type.pdf { color: #dc2626; border-color: #fecaca; background: #fff1f2; }
+        .file-type.doc { color: #2563eb; border-color: #bfdbfe; background: #eff6ff; }
+        .file-type.📽️ { border: none; background: transparent; font-size: 1.8rem; }
+
+        .category-badge { font-size: 0.6rem; font-weight: 900; color: #475569; background: #e2e8f0; padding: 0.35rem 0.85rem; border-radius: 50px; text-transform: uppercase; letter-spacing: 0.05em; }
+
+        .card-body { padding: 1rem 1.5rem; flex: 1; }
+        .card-body h3 { font-family: 'Outfit', sans-serif; font-size: 1.1rem; color: #0a2a5e; margin: 0; font-weight: 800; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+        .course-name { font-size: 0.8rem; color: #64748b; font-weight: 700; margin: 0.75rem 0; background: #f1f5f9; display: inline-block; padding: 0.1rem 0.5rem; border-radius: 4px; }
+        .meta { display: flex; align-items: center; gap: 0.5rem; font-size: 0.75rem; color: #94a3b8; margin-top: 0.5rem; font-weight: 500; }
+
+        .card-actions { padding: 1.5rem; background: #fdfdfe; border-top: 1px solid #f1f5f9; display: flex; flex-direction: column; }
+        .btn-view { background: #0a2a5e; color: white; border: none; padding: 1rem; border-radius: 12px; font-size: 0.9rem; font-weight: 800; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 0.5rem; }
+        .btn-view:hover { background: #173b7d; box-shadow: 0 10px 20px -5px rgba(10, 42, 94, 0.3); }
+      `}</style>
+    </div>
+  );
 }
