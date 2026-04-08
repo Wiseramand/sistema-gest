@@ -21,38 +21,33 @@ interface Course {
     title: string;
 }
 
-function isVideoFile(url: string) {
-    if (!url) return false;
-    if (url.includes('youtube.com') || url.includes('youtu.be') || url.includes('drive.google.com')) return false;
-    const videoRegex = /\.(mp4|webm|ogg|mov|m4v)(\?.*)?$/i;
-    return videoRegex.test(url);
-}
-
 function getEmbedUrl(url: string) {
     if (!url) return '';
-    if (url.startsWith('/uploads/')) return url;
-    try {
-        const urlObj = new URL(url);
-        if (urlObj.hostname.includes('youtube.com') || urlObj.hostname.includes('youtu.be')) {
-            if (urlObj.hostname === 'youtu.be') { return `https://www.youtube.com/embed${urlObj.pathname}`; }
-            if (urlObj.pathname === '/watch') {
-                const videoId = urlObj.searchParams.get('v');
-                if (videoId) return `https://www.youtube.com/embed/${videoId}`;
-            }
-            if (urlObj.pathname.startsWith('/shorts/')) {
-                const videoId = urlObj.pathname.split('/')[2];
-                if (videoId) return `https://www.youtube.com/embed/${videoId}`;
-            }
-        }
-        if (urlObj.hostname.includes('drive.google.com')) {
-            if (urlObj.pathname.includes('/file/d/')) {
-                const parts = urlObj.pathname.split('/');
-                const fileId = parts[parts.indexOf('d') + 1];
-                return `https://drive.google.com/file/d/${fileId}/preview`;
-            }
-        }
-        return url;
-    } catch (e) { return url; }
+    // YouTube
+    const ytMatch = url.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|v\/|shorts\/))([\w-]{11})/);
+    if (ytMatch) return `https://www.youtube.com/embed/${ytMatch[1]}`;
+    
+    // Vimeo
+    const vimeoMatch = url.match(/vimeo\.com\/(?:video\/|)(\d+)/);
+    if (vimeoMatch) return `https://player.vimeo.com/video/${vimeoMatch[1]}`;
+
+    // Google Drive
+    if (url.includes('drive.google.com')) {
+        const driveMatch = url.match(/\/file\/d\/([\w-]+)/);
+        if (driveMatch) return `https://drive.google.com/file/d/${driveMatch[1]}/preview`;
+    }
+
+    return url;
+}
+
+function isVideoFile(url: string) {
+    if (!url) return false;
+    return url.toLowerCase().match(/\.(mp4|webm|ogg|mov|avi|mkv)$/i);
+}
+
+function isExternalVideo(url: string) {
+    if (!url) return false;
+    return url.includes('youtube.com') || url.includes('youtu.be') || url.includes('vimeo.com');
 }
 
 export default function AdminMaterialsPage() {
@@ -313,9 +308,14 @@ export default function AdminMaterialsPage() {
                         </div>
                         <div className="reader-content">
                             {isVideoFile(readingMaterial.url) ? (
-                                <video src={readingMaterial.url} controls controlsList="nodownload" className="material-video" style={{ width: '100%', height: '100%', borderRadius: '8px', background: '#000' }} />
+                                <video src={readingMaterial.url} controls controlsList="nodownload" className="material-video" style={{ width: '100%', height: '100%', borderRadius: '8px', background: '#000' }} autoPlay />
                             ) : (
-                                <iframe src={getEmbedUrl(readingMaterial.url)} className="material-iframe" />
+                                <iframe 
+                                    src={getEmbedUrl(readingMaterial.url)} 
+                                    className="material-iframe" 
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                    allowFullScreen
+                                />
                             )}
                         </div>
                     </div>

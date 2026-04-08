@@ -37,9 +37,34 @@ export default function MaterialViewer({ isOpen, onClose, material }: MaterialVi
 
   if (!isOpen || !material) return null;
 
-  const isVideo = material.name.toLowerCase().endsWith('.mp4') || 
-                  material.name.toLowerCase().endsWith('.webm') || 
-                  material.type.toLowerCase().includes('vídeo');
+  const getEmbedUrl = (url: string) => {
+    if (!url) return '';
+    // YouTube
+    const ytMatch = url.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|v\/|shorts\/))([\w-]{11})/);
+    if (ytMatch) return `https://www.youtube.com/embed/${ytMatch[1]}`;
+    
+    // Vimeo
+    const vimeoMatch = url.match(/vimeo\.com\/(?:video\/|)(\d+)/);
+    if (vimeoMatch) return `https://player.vimeo.com/video/${vimeoMatch[1]}`;
+
+    return url;
+  };
+
+  const isVideoFile = (url: string) => {
+    if (!url) return false;
+    return url.toLowerCase().match(/\.(mp4|webm|ogg|mov|avi|mkv)$/i);
+  };
+
+  const isExternalVideo = (url: string) => {
+    if (!url) return false;
+    return url.includes('youtube.com') || url.includes('youtu.be') || url.includes('vimeo.com');
+  };
+
+  const isVideo = isVideoFile(material.url) || 
+                  isExternalVideo(material.url) ||
+                  material.type.toLowerCase().includes('vídio') || 
+                  material.type.toLowerCase().includes('video') ||
+                  material.type === 'LINK';
 
   return (
     <div className="viewer-overlay" onClick={onClose}>
@@ -50,16 +75,25 @@ export default function MaterialViewer({ isOpen, onClose, material }: MaterialVi
         </div>
         
         <div className="viewer-content">
-          {isVideo ? (
+          {isVideoFile(material.url) ? (
             <video 
               src={material.url} 
               controls 
               controlsList="nodownload" 
               onContextMenu={e => e.preventDefault()}
               className="video-player"
+              autoPlay
             >
               O seu navegador não suporta a visualização deste vídeo.
             </video>
+          ) : isExternalVideo(material.url) ? (
+            <iframe 
+              src={getEmbedUrl(material.url)} 
+              className="doc-viewer"
+              title={material.name}
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+            />
           ) : (
             <iframe 
               src={`${material.url}#toolbar=0`} 
