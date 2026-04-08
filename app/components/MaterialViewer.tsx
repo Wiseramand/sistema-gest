@@ -172,8 +172,10 @@ export default function MaterialViewer({ isOpen, onClose, material }: MaterialVi
         }
         .video-player {
           width: 100%;
+          height: 100%;
           max-height: 80vh;
           outline: none;
+          object-fit: contain;
         }
         .viewer-inner-wrap {
           width: 100%;
@@ -220,6 +222,7 @@ export default function MaterialViewer({ isOpen, onClose, material }: MaterialVi
         }
         .doc-viewer {
           width: 100%;
+          height: 80vh;
           flex: 1;
           border: none;
           background: white;

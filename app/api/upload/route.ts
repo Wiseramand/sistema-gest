@@ -48,14 +48,16 @@ export async function POST(request: Request) {
         try {
             await mkdir(uploadDir, { recursive: true });
         } catch (err) {
-            // Ignore if directory already exists
+            console.error('Directory creation failed:', err);
         }
 
-        // Clean filename and add timestamp to avoid collisions
+        // Clean filename more aggressively and add timestamp
         const timestamp = Date.now();
-        const fileName = `${timestamp}-${file.name.replace(/\s+/g, '_')}`;
+        const safeName = file.name.replace(/[^a-z0-9.]/gi, '_').toLowerCase();
+        const fileName = `${timestamp}-${safeName}`;
         const path = join(uploadDir, fileName);
 
+        console.log(`Saving file to: ${path}`);
         await writeFile(path, buffer);
         const url = `/uploads/${fileName}`;
 
@@ -77,8 +79,11 @@ export async function POST(request: Request) {
         }
 
         return NextResponse.json({ url, name: file.name });
-    } catch (error) {
-        console.error('Upload Error:', error);
-        return NextResponse.json({ error: 'Falha no upload do ficheiro' }, { status: 500 });
+    } catch (error: any) {
+        console.error('Detailed Upload Error:', error);
+        return NextResponse.json({ 
+            error: `Falha no upload: ${error.message || 'Erro de processamento'}`,
+            details: error.stack 
+        }, { status: 500 });
     }
 }

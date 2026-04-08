@@ -308,7 +308,7 @@ export default function AdminMaterialsPage() {
                         </div>
                         <div className="reader-content">
                             {isVideoFile(readingMaterial.url) ? (
-                                <video src={readingMaterial.url} controls controlsList="nodownload" className="material-video" style={{ width: '100%', height: '100%', borderRadius: '8px', background: '#000' }} autoPlay />
+                                <video src={readingMaterial.url} controls controlsList="nodownload" className="material-video" autoPlay />
                             ) : (
                                 <iframe 
                                     src={getEmbedUrl(readingMaterial.url)} 
@@ -366,8 +366,9 @@ export default function AdminMaterialsPage() {
                 .reader-header { padding: 1rem 1.5rem; background: #0f172a; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #334155; }
                 .reader-header h3 { color: #f5c518; margin: 0 0 0.25rem; font-size: 1.1rem; }
                 .reader-header small { color: #94a3b8; font-size: 0.8rem; }
-                .reader-content { flex: 1; padding: 0; background: #000; }
-                .material-iframe { width: 100%; height: 100%; border: none; background: white; }
+                .reader-content { flex: 1; padding: 0; background: #000; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+                .material-video { width: 100%; height: 100%; max-height: 80vh; object-fit: contain; outline: none; }
+                .material-iframe { width: 100%; height: 80vh; border: none; background: white; }
                 .close-btn { background: none; border: none; color: #94a3b8; font-size: 2rem; cursor: pointer; line-height: 1; }
                 .close-btn:hover { color: white; }
             `}</style>
