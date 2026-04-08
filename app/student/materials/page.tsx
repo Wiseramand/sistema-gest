@@ -56,6 +56,14 @@ export default function StudentMaterialsPage() {
     return date.toLocaleDateString('pt-PT');
   };
 
+  // Group materials by courseName
+  const grouped = materials.reduce((acc: Record<string, Material[]>, mat) => {
+    const course = mat.courseName || 'Outros Materiais';
+    if (!acc[course]) acc[course] = [];
+    acc[course].push(mat);
+    return acc;
+  }, {});
+
   return (
     <div className="page-wrap">
       <div className="page-header">
@@ -65,38 +73,44 @@ export default function StudentMaterialsPage() {
 
       {loading ? (
         <div className="loader">A carregar os seus materiais...</div>
-      ) : materials.length === 0 ? (
+      ) : Object.keys(grouped).length === 0 ? (
         <div className="empty-state">
           <span className="empty-icon">📂</span>
           <h3>Ainda sem materiais disponíveis</h3>
           <p>Assim que o administrador disponibilizar conteúdos para os seus cursos, eles aparecerão aqui.</p>
         </div>
       ) : (
-        <div className="materials-grid">
-          {materials.map(item => (
-            <div key={item.id} className="material-card card">
-              <div className="card-top">
-                <div className={`file-type ${getFileIcon(item.type).toLowerCase()}`}>
-                  {getFileIcon(item.type)}
-                </div>
-                <span className="category-badge">{item.category}</span>
-              </div>
-              
-              <div className="card-body">
-                <h3>{item.name}</h3>
-                <p className="course-name">{item.courseName}</p>
-                <div className="meta">
-                  <span>{formatDate(item.createdAt)}</span>
-                </div>
-              </div>
+        <div className="courses-list">
+          {Object.entries(grouped).map(([courseName, courseMaterials]) => (
+            <div key={courseName} className="course-section">
+              <h2 className="course-title-header">{courseName}</h2>
+              <div className="materials-grid">
+                {courseMaterials.map(item => (
+                  <div key={item.id} className="material-card card">
+                    <div className="card-top">
+                      <div className={`file-type ${getFileIcon(item.type).toLowerCase()}`}>
+                        {getFileIcon(item.type)}
+                      </div>
+                      <span className="category-badge">{item.category}</span>
+                    </div>
+                    
+                    <div className="card-body">
+                      <h3>{item.name}</h3>
+                      <div className="meta">
+                        <span>{formatDate(item.createdAt)}</span>
+                      </div>
+                    </div>
 
-              <div className="card-actions">
-                <button 
-                  className="btn-view" 
-                  onClick={() => openViewer(item)}
-                >
-                  👁️ Abrir Conteúdo
-                </button>
+                    <div className="card-actions">
+                      <button 
+                        className="btn-view" 
+                        onClick={() => openViewer(item)}
+                      >
+                        👁️ Abrir Conteúdo
+                      </button>
+                    </div>
+                  </div>
+                ))}
               </div>
             </div>
           ))}
@@ -119,6 +133,10 @@ export default function StudentMaterialsPage() {
         .empty-icon { font-size: 3rem; display: block; margin-bottom: 1rem; }
         .empty-state h3 { color: #0a2a5e; margin-bottom: 0.5rem; }
 
+        .courses-list { display: flex; flex-direction: column; gap: 3rem; }
+        .course-section { display: flex; flex-direction: column; gap: 1.5rem; }
+        .course-title-header { font-family: 'Outfit', sans-serif; font-size: 1.5rem; color: #0a2a5e; border-left: 5px solid #F5C518; padding-left: 1rem; margin: 0; }
+
         .materials-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.5rem; }
         .card { background: white; border-radius: 16px; border: 1px solid #e2e8f0; transition: all 0.3s ease; overflow: hidden; display: flex; flex-direction: column; }
         .card:hover { transform: translateY(-5px); box-shadow: 0 15px 35px rgba(0,0,0,0.05); }
@@ -132,12 +150,10 @@ export default function StudentMaterialsPage() {
 
         .card-body { padding: 1rem 1.5rem; flex: 1; }
         .card-body h3 { font-family: 'Outfit', sans-serif; font-size: 1rem; color: #0a2a5e; margin: 0; font-weight: 700; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-        .course-name { font-size: 0.75rem; color: #64748b; font-weight: 600; margin: 0.5rem 0; }
-        .meta { display: flex; align-items: center; gap: 0.5rem; font-size: 0.7rem; color: #94a3b8; }
+        .meta { display: flex; align-items: center; gap: 0.5rem; font-size: 0.7rem; color: #94a3b8; margin-top: 0.5rem; }
 
         .card-actions { padding: 1.25rem 1.5rem; background: #fafbfc; border-top: 1px solid #f1f5f9; display: flex; flex-direction: column; gap: 0.5rem; }
         .btn-view { background: #0a2a5e; color: white; border: none; padding: 0.85rem; border-radius: 10px; font-size: 0.85rem; font-weight: 700; cursor: pointer; transition: 0.2s; }
-        .btn-view:hover { background: #173b7d; transform: scale(1.02); }
       `}</style>
     </div>
   );

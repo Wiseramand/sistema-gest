@@ -208,6 +208,8 @@ model Material {
   isFolder       Boolean  @default(false)
   parentId       String?
   targetRole     String?
+  courseId       String?
+  courseTitle    String?
 }
 
 model ChatMessage {

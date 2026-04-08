@@ -50,6 +50,14 @@ export default function ProfessorMaterialsPage() {
     return '📄';
   };
 
+  // Group materials by courseName
+  const grouped = materials.reduce((acc: Record<string, Material[]>, mat) => {
+    const course = mat.courseName || 'Materiais Gerais / Outros';
+    if (!acc[course]) acc[course] = [];
+    acc[course].push(mat);
+    return acc;
+  }, {});
+
   return (
     <div className="page-wrap">
       <div className="page-header">
@@ -59,38 +67,44 @@ export default function ProfessorMaterialsPage() {
 
       {loading ? (
         <div className="loader">A carregar conteúdos pedagógicos...</div>
-      ) : materials.length === 0 ? (
+      ) : Object.keys(grouped).length === 0 ? (
         <div className="empty-state">
           <span className="empty-icon">📂</span>
           <h3>Sem materiais no momento</h3>
           <p>Os materiais que carregar ou que lhe forem atribuídos pelo administrador aparecerão aqui.</p>
         </div>
       ) : (
-        <div className="materials-grid">
-          {materials.map(item => (
-            <div key={item.id} className="material-card card">
-              <div className="card-top">
-                <div className={`file-type ${getFileIcon(item.type).toLowerCase()}`}>
-                  {getFileIcon(item.type)}
-                </div>
-                <span className="category-badge">{item.category}</span>
-              </div>
-              
-              <div className="card-body">
-                <h3>{item.name}</h3>
-                <p className="course-name">{item.courseName}</p>
-                <div className="meta">
-                  <span>Adicionado em {item.createdAt ? new Date(item.createdAt).toLocaleDateString() : 'Recente'}</span>
-                </div>
-              </div>
+        <div className="courses-list">
+          {Object.entries(grouped).map(([courseName, courseMaterials]) => (
+            <div key={courseName} className="course-section">
+              <h2 className="course-title-header">{courseName}</h2>
+              <div className="materials-grid">
+                {courseMaterials.map(item => (
+                  <div key={item.id} className="material-card card">
+                    <div className="card-top">
+                      <div className={`file-type ${getFileIcon(item.type).toLowerCase()}`}>
+                        {getFileIcon(item.type)}
+                      </div>
+                      <span className="category-badge">{item.category}</span>
+                    </div>
+                    
+                    <div className="card-body">
+                      <h3>{item.name}</h3>
+                      <div className="meta">
+                        <span>{item.createdAt ? new Date(item.createdAt).toLocaleDateString() : 'Recente'}</span>
+                      </div>
+                    </div>
 
-              <div className="card-actions">
-                <button 
-                  className="btn-view" 
-                  onClick={() => openViewer(item)}
-                >
-                  👁️ Visualizar Material
-                </button>
+                    <div className="card-actions">
+                      <button 
+                        className="btn-view" 
+                        onClick={() => openViewer(item)}
+                      >
+                        👁️ Visualizar Material
+                      </button>
+                    </div>
+                  </div>
+                ))}
               </div>
             </div>
           ))}
@@ -113,8 +127,12 @@ export default function ProfessorMaterialsPage() {
         .empty-icon { font-size: 3.5rem; display: block; margin-bottom: 1.5rem; filter: grayscale(1); opacity: 0.5; }
         .empty-state h3 { color: #0a2a5e; margin-bottom: 0.5rem; font-size: 1.3rem; }
 
+        .courses-list { display: flex; flex-direction: column; gap: 4rem; }
+        .course-section { display: flex; flex-direction: column; gap: 1.5rem; }
+        .course-title-header { font-family: 'Outfit', sans-serif; font-size: 1.6rem; color: #0a2a5e; border-left: 6px solid #F5C518; padding-left: 1.25rem; margin: 0; font-weight: 800; }
+
         .materials-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 1.5rem; }
-        .card { background: white; border-radius: 20px; border: 1px solid #e2e8f0; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); overflow: hidden; display: flex; flex-direction: column; position: relative; }
+        .card { background: white; border-radius: 20px; border: 1px solid #e2e8f0; transition: all 0.3s ease; overflow: hidden; display: flex; flex-direction: column; position: relative; }
         .card:hover { transform: translateY(-8px); box-shadow: 0 20px 40px rgba(10, 42, 94, 0.08); border-color: #F5C518; }
 
         .card-top { padding: 1.5rem 1.5rem 0.5rem; display: flex; justify-content: space-between; align-items: flex-start; }
@@ -127,12 +145,10 @@ export default function ProfessorMaterialsPage() {
 
         .card-body { padding: 1rem 1.5rem; flex: 1; }
         .card-body h3 { font-family: 'Outfit', sans-serif; font-size: 1.1rem; color: #0a2a5e; margin: 0; font-weight: 800; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-        .course-name { font-size: 0.8rem; color: #64748b; font-weight: 700; margin: 0.75rem 0; background: #f1f5f9; display: inline-block; padding: 0.1rem 0.5rem; border-radius: 4px; }
         .meta { display: flex; align-items: center; gap: 0.5rem; font-size: 0.75rem; color: #94a3b8; margin-top: 0.5rem; font-weight: 500; }
 
         .card-actions { padding: 1.5rem; background: #fdfdfe; border-top: 1px solid #f1f5f9; display: flex; flex-direction: column; }
         .btn-view { background: #0a2a5e; color: white; border: none; padding: 1rem; border-radius: 12px; font-size: 0.9rem; font-weight: 800; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 0.5rem; }
-        .btn-view:hover { background: #173b7d; box-shadow: 0 10px 20px -5px rgba(10, 42, 94, 0.3); }
       `}</style>
     </div>
   );

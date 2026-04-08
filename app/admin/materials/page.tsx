@@ -11,11 +11,18 @@ interface Material {
     description: string;
     access: 'PROFESSORS' | 'STUDENTS' | 'ALL';
     uploadedByName: string;
+    courseId?: string;
+    courseTitle?: string;
     createdAt: string;
 }
+
+interface Course {
+    id: string;
+    title: string;
+}
+
 function isVideoFile(url: string) {
     if (!url) return false;
-    // Don't treat external video platforms (YouTube/Drive) as raw video files
     if (url.includes('youtube.com') || url.includes('youtu.be') || url.includes('drive.google.com')) return false;
     const videoRegex = /\.(mp4|webm|ogg|mov|m4v)(\?.*)?$/i;
     return videoRegex.test(url);
@@ -26,12 +33,8 @@ function getEmbedUrl(url: string) {
     if (url.startsWith('/uploads/')) return url;
     try {
         const urlObj = new URL(url);
-
-        // YouTube Support
         if (urlObj.hostname.includes('youtube.com') || urlObj.hostname.includes('youtu.be')) {
-            if (urlObj.hostname === 'youtu.be') {
-                return `https://www.youtube.com/embed${urlObj.pathname}`;
-            }
+            if (urlObj.hostname === 'youtu.be') { return `https://www.youtube.com/embed${urlObj.pathname}`; }
             if (urlObj.pathname === '/watch') {
                 const videoId = urlObj.searchParams.get('v');
                 if (videoId) return `https://www.youtube.com/embed/${videoId}`;
@@ -41,8 +44,6 @@ function getEmbedUrl(url: string) {
                 if (videoId) return `https://www.youtube.com/embed/${videoId}`;
             }
         }
-
-        // Google Drive Support
         if (urlObj.hostname.includes('drive.google.com')) {
             if (urlObj.pathname.includes('/file/d/')) {
                 const parts = urlObj.pathname.split('/');
@@ -50,16 +51,14 @@ function getEmbedUrl(url: string) {
                 return `https://drive.google.com/file/d/${fileId}/preview`;
             }
         }
-
         return url;
-    } catch (e) {
-        return url;
-    }
+    } catch (e) { return url; }
 }
 
 export default function AdminMaterialsPage() {
     const { data: session } = useSession();
     const [materials, setMaterials] = useState<Material[]>([]);
+    const [courses, setCourses] = useState<Course[]>([]);
     const [loading, setLoading] = useState(true);
     const [uploading, setUploading] = useState(false);
     const [showModal, setShowModal] = useState(false);
@@ -72,10 +71,12 @@ export default function AdminMaterialsPage() {
     const [type, setType] = useState<'FILE' | 'LINK'>('FILE');
     const [url, setUrl] = useState('');
     const [access, setAccess] = useState<'PROFESSORS' | 'STUDENTS' | 'ALL'>('ALL');
+    const [targetCourseId, setTargetCourseId] = useState('');
     const [file, setFile] = useState<File | null>(null);
 
     useEffect(() => {
         fetchMaterials();
+        fetchCourses();
     }, []);
 
     async function fetchMaterials() {
@@ -90,6 +91,16 @@ export default function AdminMaterialsPage() {
         }
     }
 
+    async function fetchCourses() {
+        try {
+            const res = await fetch('/api/courses');
+            const data = await res.json();
+            setCourses(Array.isArray(data) ? data : []);
+        } catch (error) {
+            console.error('Error fetching courses:', error);
+        }
+    }
+
     function handleOpenEdit(m: Material) {
         setEditingMaterial(m);
         setTitle(m.title);
@@ -97,6 +108,7 @@ export default function AdminMaterialsPage() {
         setType(m.type);
         setUrl(m.url);
         setAccess(m.access);
+        setTargetCourseId(m.courseId || '');
         setFile(null);
         setShowModal(true);
     }
@@ -108,6 +120,7 @@ export default function AdminMaterialsPage() {
         setType('FILE');
         setUrl('');
         setAccess('ALL');
+        setTargetCourseId('');
         setFile(null);
         setShowModal(true);
     }
@@ -134,28 +147,35 @@ export default function AdminMaterialsPage() {
                 }
             }
 
+            const selectedCourse = courses.find(c => c.id === targetCourseId);
+
+            const payload = {
+                title,
+                description,
+                type,
+                url: finalUrl,
+                access,
+                courseId: targetCourseId || null,
+                courseTitle: selectedCourse?.title || null,
+            };
+
             const res = await fetch(editingMaterial ? `/api/materials/${editingMaterial.id}` : '/api/materials', {
                 method: editingMaterial ? 'PATCH' : 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    title,
-                    description,
-                    type,
-                    url: finalUrl,
-                    access,
-                }),
+                body: JSON.stringify(payload),
             });
 
             if (res.ok) {
                 setShowModal(false);
-                setTitle('');
-                setDescription('');
-                setUrl('');
-                setFile(null);
                 fetchMaterials();
+            } else {
+                const errData = await res.json();
+                console.error('Save failed:', errData);
+                alert('Erro ao guardar material: ' + (errData.error || 'Erro desconhecido'));
             }
         } catch (error) {
-            alert('Erro ao guardar material');
+            console.error('Error in handleUpload:', error);
+            alert('Erro ao processar ficheiro ou guardar dados');
         } finally {
             setUploading(false);
         }
@@ -194,6 +214,7 @@ export default function AdminMaterialsPage() {
                             </div>
                             <div className="card-content">
                                 <h3>{m.title}</h3>
+                                {m.courseTitle && <p className="course-tag">📍 {m.courseTitle}</p>}
                                 <p className="desc">{m.description || 'Sem descrição'}</p>
                                 <div className="badges">
                                     <span className={`badge ${m.access.toLowerCase()}`}>
@@ -248,13 +269,24 @@ export default function AdminMaterialsPage() {
                                 </div>
                             )}
 
-                            <div className="form-group">
-                                <label>Acesso</label>
-                                <select value={access} onChange={(e) => setAccess(e.target.value as any)}>
-                                    <option value="ALL">Para Todos</option>
-                                    <option value="PROFESSORS">Apenas Formadores</option>
-                                    <option value="STUDENTS">Apenas Alunos</option>
-                                </select>
+                            <div className="form-row">
+                                <div className="form-group">
+                                    <label>Acesso</label>
+                                    <select value={access} onChange={(e) => setAccess(e.target.value as any)}>
+                                        <option value="ALL">Para Todos</option>
+                                        <option value="PROFESSORS">Apenas Formadores</option>
+                                        <option value="STUDENTS">Apenas Alunos</option>
+                                    </select>
+                                </div>
+                                <div className="form-group">
+                                    <label>Curso Destino (Opcional)</label>
+                                    <select value={targetCourseId} onChange={(e) => setTargetCourseId(e.target.value)}>
+                                        <option value="">Nenhum (Disponível Geral)</option>
+                                        {courses.map(c => (
+                                            <option key={c.id} value={c.id}>{c.title}</option>
+                                        ))}
+                                    </select>
+                                </div>
                             </div>
 
                             <div className="modal-actions">
@@ -292,22 +324,23 @@ export default function AdminMaterialsPage() {
             <style jsx>{`
                 .materials-container { padding: 1rem; }
                 .header-actions { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; }
-                .add-btn { background: #0074d9; color: white; border: none; padding: 0.75rem 1.5rem; border-radius: 8px; font-weight: 700; cursor: pointer; transition: 0.2s; }
-                .add-btn:hover { background: #0056b3; transform: translateY(-2px); }
+                .add-btn { background: #0a2a5e; color: white; border: none; padding: 0.75rem 1.5rem; border-radius: 8px; font-weight: 700; cursor: pointer; transition: 0.2s; }
+                .add-btn:hover { background: #173b7d; transform: translateY(-2px); }
 
                 .materials-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.5rem; }
                 .material-card { background: white; border-radius: 12px; padding: 1.5rem; display: flex; gap: 1rem; border: 1px solid #e2e8f0; transition: 0.3s; }
                 .material-card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.05); }
                 .card-icon { font-size: 2.5rem; }
-                .card-content { flex: 1; }
-                .card-content h3 { margin: 0 0 0.5rem; color: #1e293b; font-size: 1.1rem; }
-                .desc { font-size: 0.85rem; color: #64748b; margin-bottom: 1rem; }
+                .card-content { flex: 1; min-width: 0; }
+                .card-content h3 { margin: 0 0 0.25rem; color: #1e293b; font-size: 1.05rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+                .course-tag { font-size: 0.75rem; color: #0a2a5e; font-weight: 700; background: #e0f2fe; padding: 0.2rem 0.5rem; border-radius: 4px; display: inline-block; margin-bottom: 0.5rem; }
+                .desc { font-size: 0.85rem; color: #64748b; margin-bottom: 1rem; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
                 
                 .badges { margin-bottom: 1rem; }
                 .badge { padding: 0.25rem 0.6rem; border-radius: 6px; font-size: 0.7rem; font-weight: 800; text-transform: uppercase; }
-                .badge.all { background: #e0f2fe; color: #0369a1; }
+                .badge.all { background: #f1f5f9; color: #475569; }
                 .badge.professors { background: #fef3c7; color: #92400e; }
-                .badge.students { background: #dcfce7; color: #166534; }
+                .badge.students { background: #dcfce green; color: #166534; }
 
                 .meta { display: flex; align-items: center; justify-content: space-between; font-size: 0.8rem; color: #94a3b8; }
                 .view-btn { background: #f1f5f9; color: #334155; padding: 0.4rem 0.8rem; border-radius: 6px; text-decoration: none; font-weight: 600; font-size: 0.75rem; border: none; cursor: pointer; }
@@ -316,23 +349,24 @@ export default function AdminMaterialsPage() {
                 .delete-btn { background: none; border: none; cursor: pointer; font-size: 1.1rem; padding: 0.2rem; filter: grayscale(1); transition: 0.2s; }
                 .delete-btn:hover { filter: grayscale(0); transform: scale(1.1); }
 
-                .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; z-index: 1000; }
-                .modal { background: white; padding: 2.5rem; border-radius: 20px; width: 100%; max-width: 500px; }
+                .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; z-index: 1000; padding: 1rem; }
+                .modal { background: white; padding: 2rem; border-radius: 20px; width: 100%; max-width: 550px; max-height: 90vh; overflow-y: auto; }
+                .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
                 .form-group { margin-bottom: 1.25rem; }
-                .form-group label { display: block; margin-bottom: 0.5rem; font-weight: 600; font-size: 0.9rem; }
-                .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 0.75rem; border: 1px solid #e2e8f0; border-radius: 8px; font-family: inherit; }
+                .form-group label { display: block; margin-bottom: 0.5rem; font-weight: 600; font-size: 0.9rem; color: #1e293b; }
+                .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 0.75rem; border: 1px solid #e2e8f0; border-radius: 8px; font-family: inherit; font-size: 0.9rem; }
                 .modal-actions { display: flex; justify-content: flex-end; gap: 1rem; margin-top: 2rem; }
-                .cancel-btn { background: #f3f4f6; color: #4b5563; border: none; padding: 0.75rem 1.5rem; border-radius: 8px; cursor: pointer; }
-                .save-btn { background: #0074d9; color: white; border: none; padding: 0.75rem 1.5rem; border-radius: 8px; font-weight: 700; cursor: pointer; }
+                .cancel-btn { background: #f3f4f6; color: #4b5563; border: none; padding: 0.75rem 1.5rem; border-radius: 8px; cursor: pointer; font-weight: 600; }
+                .save-btn { background: #0a2a5e; color: white; border: none; padding: 0.75rem 1.5rem; border-radius: 8px; font-weight: 700; cursor: pointer; }
                 .save-btn:disabled { opacity: 0.7; cursor: not-allowed; }
 
-                .material-reader-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(8px); display: flex; align-items: center; justify-content: center; z-index: 2000; padding: 2rem; }
+                .material-reader-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(8px); display: flex; align-items: center; justify-content: center; z-index: 2000; padding: 1rem; }
                 .reader-modal { background: #1e293b; width: 95%; max-width: 1200px; height: 90vh; border-radius: 16px; overflow: hidden; display: flex; flex-direction: column; text-align: left; }
                 .reader-header { padding: 1rem 1.5rem; background: #0f172a; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #334155; }
-                .reader-header h3 { color: white; margin: 0 0 0.25rem; font-size: 1.1rem; }
+                .reader-header h3 { color: #f5c518; margin: 0 0 0.25rem; font-size: 1.1rem; }
                 .reader-header small { color: #94a3b8; font-size: 0.8rem; }
-                .reader-content { flex: 1; padding: 1rem; background: #1e293b; }
-                .material-iframe { width: 100%; height: 100%; border: none; background: white; border-radius: 8px; }
+                .reader-content { flex: 1; padding: 0; background: #000; }
+                .material-iframe { width: 100%; height: 100%; border: none; background: white; }
                 .close-btn { background: none; border: none; color: #94a3b8; font-size: 2rem; cursor: pointer; line-height: 1; }
                 .close-btn:hover { color: white; }
             `}</style>

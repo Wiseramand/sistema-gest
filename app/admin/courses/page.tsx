@@ -132,9 +132,10 @@ export default function CoursesPage() {
       }
     }
 
+    const { materialName, materialCategory, ...payload } = formData;
     const trainer = trainers.find(t => t.id === formData.trainerId);
     const courseData = {
-      ...formData,
+      ...payload,
       trainerName: trainer?.name || '',
       students: editingCourse?.students || 0,
       materials: finalMaterials

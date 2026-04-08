@@ -58,6 +58,16 @@ export const companySchema = z.object({
     logo:          z.string().optional().nullable(),
 });
 
+export const materialSchema = z.object({
+    title:       z.string().min(1),
+    description: z.string().optional().nullable(),
+    type:        z.string().optional().nullable(),
+    url:         z.string().optional().nullable(),
+    access:      z.string().optional(),
+    courseId:    z.string().optional().nullable(),
+    courseTitle: z.string().optional().nullable(),
+});
+
 export const schemas: Record<string, z.ZodObject<any>> = {
     'students': studentSchema,
     'inscriptions': inscriptionSchema,
@@ -65,4 +75,5 @@ export const schemas: Record<string, z.ZodObject<any>> = {
     'courses': courseSchema,
     'classrooms': classroomSchema,
     'companies': companySchema,
+    'materials': materialSchema,
 };
