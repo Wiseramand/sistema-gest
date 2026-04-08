@@ -52,7 +52,8 @@ export default function MaterialViewer({ isOpen, onClose, material }: MaterialVi
 
   const isVideoFile = (url: string) => {
     if (!url) return false;
-    return url.toLowerCase().match(/\.(mp4|webm|ogg|mov|avi|mkv)$/i);
+    // Check extension or presence of 'video' in the Cloudinary URL
+    return url.toLowerCase().match(/\.(mp4|webm|ogg|mov|avi|mkv)$/i) || url.includes('/video/upload/');
   };
 
   const isExternalVideo = (url: string) => {
@@ -60,11 +61,12 @@ export default function MaterialViewer({ isOpen, onClose, material }: MaterialVi
     return url.includes('youtube.com') || url.includes('youtu.be') || url.includes('vimeo.com');
   };
 
-  const isVideo = isVideoFile(material.url) || 
-                  isExternalVideo(material.url) ||
-                  material.type.toLowerCase().includes('vídio') || 
-                  material.type.toLowerCase().includes('video') ||
-                  material.type === 'LINK';
+  const isPDF = (url: string, name: string) => {
+    if (!url) return false;
+    return url.toLowerCase().includes('.pdf') || 
+           name.toLowerCase().endsWith('.pdf') ||
+           url.includes('/image/upload/') && !isVideoFile(url) && !url.match(/\.(jpg|jpeg|png|webp|gif)$/i);
+  };
 
   return (
     <div className="viewer-overlay" onClick={onClose}>
@@ -94,10 +96,25 @@ export default function MaterialViewer({ isOpen, onClose, material }: MaterialVi
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               allowFullScreen
             />
+          ) : isPDF(material.url, material.name) ? (
+            <div className="viewer-inner-wrap">
+              {/* Use Google Docs viewer for reliable PDF rendering from any URL including Cloudinary */}
+              <iframe 
+                src={`https://docs.google.com/viewer?url=${encodeURIComponent(material.url)}&embedded=true`}
+                className="doc-viewer"
+                title={material.name}
+              />
+              <div className="external-fallback">
+                <p>Se o PDF não carregar, abra diretamente:</p>
+                <a href={material.url} target="_blank" rel="noopener noreferrer" className="external-link-btn">
+                  Abrir PDF ↗
+                </a>
+              </div>
+            </div>
           ) : (
             <div className="viewer-inner-wrap">
               <iframe 
-                src={`${material.url}#toolbar=0`} 
+                src={material.url} 
                 className="doc-viewer"
                 title={material.name}
               />

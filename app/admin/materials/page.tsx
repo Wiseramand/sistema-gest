@@ -42,12 +42,19 @@ function getEmbedUrl(url: string) {
 
 function isVideoFile(url: string) {
     if (!url) return false;
-    return url.toLowerCase().match(/\.(mp4|webm|ogg|mov|avi|mkv)$/i);
+    return url.toLowerCase().match(/\.(mp4|webm|ogg|mov|avi|mkv)$/i) || url.includes('/video/upload/');
 }
 
 function isExternalVideo(url: string) {
     if (!url) return false;
     return url.includes('youtube.com') || url.includes('youtu.be') || url.includes('vimeo.com');
+}
+
+function isPDF(url: string, name?: string) {
+    if (!url) return false;
+    return url.toLowerCase().includes('.pdf') ||
+           (name || '').toLowerCase().endsWith('.pdf') ||
+           (url.includes('/image/upload/') && !isVideoFile(url) && !url.match(/\.(jpg|jpeg|png|webp|gif)$/i));
 }
 
 export default function AdminMaterialsPage() {
@@ -56,6 +63,7 @@ export default function AdminMaterialsPage() {
     const [courses, setCourses] = useState<Course[]>([]);
     const [loading, setLoading] = useState(true);
     const [uploading, setUploading] = useState(false);
+    const [uploadStatus, setUploadStatus] = useState('');
     const [showModal, setShowModal] = useState(false);
     const [editingMaterial, setEditingMaterial] = useState<Material | null>(null);
     const [readingMaterial, setReadingMaterial] = useState<Material | null>(null);
@@ -123,6 +131,7 @@ export default function AdminMaterialsPage() {
     async function handleUpload(e: React.FormEvent) {
         e.preventDefault();
         setUploading(true);
+        setUploadStatus('A preparar...');
 
         try {
             let finalUrl = url;
@@ -130,6 +139,7 @@ export default function AdminMaterialsPage() {
             if (type === 'FILE' && file) {
                 try {
                     // 1. Get Signature from our API
+                    setUploadStatus('A obter autorização...');
                     const signRes = await fetch('/api/upload');
                     if (!signRes.ok) {
                         const errorText = await signRes.text();
@@ -143,6 +153,7 @@ export default function AdminMaterialsPage() {
                     }
 
                     // 2. Upload directly to Cloudinary
+                    setUploadStatus(`A enviar ficheiro para a nuvem... (${(file.size / 1024 / 1024).toFixed(1)}MB)`);
                     const formData = new FormData();
                     formData.append('file', file);
                     formData.append('api_key', signData.apiKey);
@@ -151,7 +162,6 @@ export default function AdminMaterialsPage() {
                     formData.append('folder', 'materials');
 
                     const cloudinaryUrl = `https://api.cloudinary.com/v1_1/${signData.cloudName}/auto/upload`;
-                    console.log('Iniciando upload para:', cloudinaryUrl);
 
                     const cloudRes = await fetch(cloudinaryUrl, {
                         method: 'POST',
@@ -166,10 +176,13 @@ export default function AdminMaterialsPage() {
 
                     const cloudData = await cloudRes.json();
                     finalUrl = cloudData.secure_url;
+                    setUploadStatus('Ficheiro enviado! A guardar na base de dados...');
                 } catch (err: any) {
                     console.error('Upload catch error:', err);
                     throw new Error(`Erro no upload: ${err.message}`);
                 }
+            } else {
+                setUploadStatus('A guardar na base de dados...');
             }
 
             const selectedCourse = courses.find(c => c.id === targetCourseId);
@@ -204,6 +217,7 @@ export default function AdminMaterialsPage() {
             alert('Erro ao guardar material: ' + (error.message || 'Erro de rede ou processamento'));
         } finally {
             setUploading(false);
+            setUploadStatus('');
         }
     }
 
@@ -318,7 +332,7 @@ export default function AdminMaterialsPage() {
                             <div className="modal-actions">
                                 <button type="button" className="cancel-btn" onClick={() => setShowModal(false)}>Cancelar</button>
                                 <button type="submit" className="save-btn" disabled={uploading}>
-                                    {uploading ? 'A guardar...' : 'Guardar Conteúdo'}
+                                    {uploading ? uploadStatus || 'A guardar...' : 'Guardar Conteúdo'}
                                 </button>
                             </div>
                         </form>
@@ -339,10 +353,31 @@ export default function AdminMaterialsPage() {
                         <div className="reader-content">
                             {isVideoFile(readingMaterial.url) ? (
                                 <video src={readingMaterial.url} controls controlsList="nodownload" className="material-video" autoPlay />
+                            ) : isExternalVideo(readingMaterial.url) ? (
+                                <iframe
+                                    src={getEmbedUrl(readingMaterial.url)}
+                                    className="material-iframe"
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                    allowFullScreen
+                                />
+                            ) : isPDF(readingMaterial.url, readingMaterial.title) ? (
+                                <div style={{ width: '100%', height: '100%', position: 'relative' }}>
+                                    <iframe
+                                        src={`https://docs.google.com/viewer?url=${encodeURIComponent(readingMaterial.url)}&embedded=true`}
+                                        className="material-iframe"
+                                        title={readingMaterial.title}
+                                    />
+                                    <div style={{ position: 'absolute', bottom: '1rem', right: '1rem' }}>
+                                        <a href={readingMaterial.url} target="_blank" rel="noopener noreferrer"
+                                           style={{ background: '#F5C518', color: '#000', padding: '0.5rem 1rem', borderRadius: '8px', fontWeight: 700, textDecoration: 'none', fontSize: '0.85rem' }}>
+                                            Abrir PDF ↗
+                                        </a>
+                                    </div>
+                                </div>
                             ) : (
-                                <iframe 
-                                    src={getEmbedUrl(readingMaterial.url)} 
-                                    className="material-iframe" 
+                                <iframe
+                                    src={readingMaterial.url}
+                                    className="material-iframe"
                                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                                     allowFullScreen
                                 />
