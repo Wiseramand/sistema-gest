@@ -5,6 +5,22 @@ import InscriptionForm from './components/InscriptionForm';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import HeroCarousel from './components/HeroCarousel';
+import CompanyMarquee from './components/CompanyMarquee';
+import Testimonials from './components/Testimonials';
+
+const partnersData = [
+  { name: 'Sonangol', icon: '⛽' },
+  { name: 'Cabgoc', icon: '⚓' },
+  { name: 'TotalEnergies', icon: '⚡' },
+  { name: 'Angola LNG', icon: '❄️' }
+];
+
+const clientsData = [
+  { name: 'Somoil', icon: '🛢️' },
+  { name: 'BPAngola', icon: '🚢' },
+  { name: 'Eni Angola', icon: '🌊' },
+  { name: 'Sodiba', icon: '🏭' },
+];
 
 export default function Home() {
   return (
@@ -48,6 +64,15 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* Partners & Clients Section */}
+      <section style={{ backgroundColor: '#f8fafc', padding: '1rem 0' }}>
+        <CompanyMarquee title="Parceiros Institucionais" companies={partnersData} />
+        <CompanyMarquee title="Clientes de Excelência" companies={clientsData} reverse={true} />
+      </section>
+
+      {/* Testimonials Section */}
+      <Testimonials />
 
       {/* Call to Action Section */}
       <section className="cta-banner">
