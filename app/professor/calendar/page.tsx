@@ -227,7 +227,7 @@ export default function CalendarPage() {
                 .day-column:last-child { border-right: none; padding-right: 0; }
                 
                 .day-header { padding: 1rem; border-radius: 12px; background: #0a2a5e; color: white; text-align: center; margin-bottom: 1rem; }
-                .day-header h3 { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 800; margin: 0; }
+                .day-header h3 { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 800; margin: 0; color: white; }
                 
                 .day-classes { display: flex; flex-direction: column; gap: 1rem; }
                 .class-card { padding: 1rem; border-left: 4px solid var(--sand-gold); display: flex; flex-direction: column; gap: 0.75rem; transition: 0.2s; cursor: pointer; }
