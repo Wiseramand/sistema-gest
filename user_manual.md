@@ -1,76 +1,100 @@
-# Guia de Utilizador: Marítimo Training Center (MTC)
+# 📖 Manual de Utilizador Completo: Marítimo Training Center (MTC)
 
-Bem-vindo ao manual completo da plataforma MTC. Este guia foi desenhado para ajudar Administradores, Formadores e Alunos a tirar o máximo partido das ferramentas do centro.
-
----
-
-## 🔐 1. Portais e Acesso
-A plataforma divide-se em três áreas principais de acesso:
-- **Área Administrativa**: `[Domínio]/admin`
-- **Área do Formador**: `[Domínio]/professor`
-- **Área do Aluno**: `[Domínio]/student`
+Bem-vindo ao guia oficial da plataforma de gestão do Marítimo Training Center. Este documento detalha todas as funcionalidades disponíveis, como utilizá-las e o que esperar de cada ação dentro do sistema.
 
 ---
 
-## 🏛️ 2. Guia do Administrador
-O Administrador tem controlo total sobre a operação do centro. O menu lateral (Rail) divide-se em módulos:
+## 🌐 1. Website Público (Landing Page)
+O portal de entrada para o público em geral e potenciais formandos.
 
-### 📈 Dashboard & Alunos
-- **Inscrições**: Gerir novos interessados que chegam pelo site.
-- **Lista de Alunos**: Ficha completa de cada aluno, histórico de cursos e documentos.
-- **Matrículas**: Atribuição de alunos a turmas específicas.
+### 💬 Chatbot Assistente (FAQ Interativo)
+- **O que faz**: Assistente virtual flutuante que responde às dúvidas mais comuns de forma instantânea.
+- **Como usar**: Clique no ícone de chat no canto inferior direito e selecione um dos tópicos disponíveis (Inscrição, Cursos, Localização, etc.).
+- **Resultado esperado**: O bot apresenta uma resposta automática e guia o utilizador para a secção correta do site ou formulário.
 
-### ⚓ Cursos e Turmas
-- **Turmas Ativas**: Gestão de datas, horários e diário de atividades.
-- **Calendário**: Visão global de ocupação das salas e horários dos formadores.
-- **Formadores**: Gestão da base de dados de instrutores e suas especialidades.
+### 🚢 Marquees de Parceiros e Clientes
+- **O que faz**: Exibe logótipos e nomes de empresas parceiras e clientes em carrosséis de movimento contínuo.
+- **Resultado esperado**: Proporciona prova social e credibilidade visual imediata ao visitante.
 
-### 🎓 Certificados
-- **Emissão**: Gerar certificados digitais após a conclusão dos cursos.
-- **Validação STCW**: Ferramenta de verificação de conformidade com normas internacionais.
-
-### 📁 Administração & Média
-- **Gestão de Utilizadores**: Criar outros administradores e delegar responsabilidades.
-- **Hub de Média**: Central de ficheiros. Pode criar pastas e carregar manuais, designando-os especificamente para Alunos ou Formadores.
+### ✍️ Formulário de Candidatura Online
+- **O que faz**: Permite que interessados submetam os seus dados para pré-inscrição em cursos.
+- **Resultado esperado**: Os dados são salvos na base de dados e aparecem instantaneamente no Portal do Administrador (secção Inscrições).
 
 ---
 
-## 👨‍🏫 3. Guia do Formador (Corpo Docente)
-Focado na facilitação do ensino e registos pedagógicos.
+## 🏛️ 2. Portal do Administrador
+O centro operacional para a gestão total da instituição.
 
-- **Minhas Turmas**: Acesso rápido às turmas atribuídas no semestre/mês.
-- **Folha de Presenças**: Registo digital de faltas e presenças em tempo real.
-- **Sumários**: Escrita do diário de classe (matéria lecionada).
-- **Lançar Notas**: Avaliação final dos formandos para fins de certificação.
-- **Materiais de Apoio**: Acesso aos ficheiros partilhados pela administração no Hub de Média.
+### 📋 Gestão de Alunos e Formadores
+- **O que faz**: Listagem, criação e edição de fichas completas de alunos e instrutores.
+- **Resultado esperado**: Criação de perfis únicos com credenciais de acesso automáticas.
 
----
+### 🔗 Matrículas e Cursos
+- **O que faz**: Associa alunos a cursos específicos e gere as turmas ativas.
+- **Resultado esperado**: Alunos matriculados passam a ter acesso aos materiais do curso no seu portal.
 
-## 🎒 4. Guia do Aluno (Formando)
-Focado na aprendizagem e progresso.
+### 📊 Sistema de Assiduidade e Frequência
+- **O que faz**: Monitoriza as presenças marcadas pelos formadores. Permite visualizar o histórico diário e a percentagem total de presença de cada aluno.
+- **Resultado esperado**: Cálculo automático da taxa de assiduidade (% conforme normas STCW). Botão de **Imprimir/PDF** gera uma folha de frequência limpa para arquivo oficial.
 
-- **Meus Cursos**: Lista de formações em que está matriculado.
-- **Recursos**: Download de manuais, vídeos e exercícios partilhados pelo formador ou admin.
-- **Progresso**: Consulta de faltas e notas parciais/finais.
-- **Certificados**: Download dos diplomas obtidos em formato PDF.
+### 🎓 Gestão de Certificados
+- **O que faz**: Gera certificados baseados na conclusão do curso. Inclui fluxo de aprovação (Pendente -> Aprovado -> Emitido).
+- **Resultado esperado**: 
+    - Geração de PDF oficial com design premium.
+    - Inclui **QR Code de Verificação**, que permite a qualquer pessoa validar a autenticidade do documento usando um smartphone.
 
----
-
-## 💳 5. Financeiro e Pagamentos
-Módulo transversal para controlo de receitas:
-- **Pagamentos**: Validação de transferências (MBWay, Multibanco, etc).
-- **Ver Recibo**: Visualização detalhada de cada transação com botão de **Impressão** otimizado para arquivo físico.
-- **Faturas**: Emissão e controle de faturação por curso.
+### 💳 Financeiro (Faturas e Recibos)
+- **O que faz**: Emissão de faturas e controlo de pagamentos efetuados pelos alunos.
+- **Resultado esperado**: Geração de documentos financeiros prontos para impressão ou envio por email.
 
 ---
 
-## 🛠️ 6. Suporte e Comunicação
-- **Chat Interno**: Comunicação direta entre alunos, professores e coordenação.
-- **Feedback**: Sistema de melhoria contínua onde alunos podem avaliar os cursos de forma anónima.
+## 👨‍🏫 3. Portal do Formador (Corpo Docente)
+Ferramentas para a gestão pedagógica em sala de aula.
+
+### 📓 Diário de Classe (Assiduidade)
+- **O que faz**: Interface simples para marcar "Presente", "Falta" ou "Justificada" para cada aluno na data atual.
+- **Como usar**: Selecione o curso -> Marque o estado de cada aluno -> Confirme a veracidade -> Submeta.
+- **Resultado esperado**: Os dados são bloqueados para edição após submissão e ficam visíveis para a administração em tempo real.
+
+### 📁 Hub de Materiais Pedagogos
+- **O que faz**: Upload de manuais, vídeos e exercícios diretamente para a nuvem (Cloudinary).
+- **Resultado esperado**: Entrega de ficheiros otimizada e de alta velocidade para os alunos descarregarem no seu portal.
+
+### 📝 Sumários e Notas
+- **O que faz**: Registo da matéria lecionada e lançamento de avaliações.
+- **Resultado esperado**: Histórico pedagógico completo para consulta administrativa e emissão de certificados.
 
 ---
 
-### Notas de Segurança
-**Segurança de Credenciais**: O sistema gera senhas automáticas para novos utilizadores. Estas senhas devem ser copiadas imediatamente, pois o sistema utiliza encriptação de alta segurança e a senha original não pode ser recuperada após o fecho da janela de criação.
+## 🎒 4. Portal do Aluno (Formando)
+Portal focado na aprendizagem e progresso.
 
-**Impressão de Recibos**: Ao visualizar um recibo, utilize o botão "Imprimir". O sistema removerá automaticamente todos os elementos desnecessários (menus, botões) para garantir que o papel contenha apenas as informações fiscais e do cliente.
+### 📚 Meus Recursos e Aulas
+- **O que faz**: Acesso centralizado aos materiais partilhados pelos formadores (PDFs, Vídeos).
+- **Resultado esperado**: Acesso imediato ao conteúdo de estudo em qualquer dispositivo.
+
+### 📜 Meus Certificados
+- **O que faz**: Lista todos os certificados aprovados e emitidos pela direção.
+- **Resultado esperado**: Download direto do PDF certificado com o selo do centro e QR Code de segurança.
+
+### 💰 Área Financeira
+- **O que faz**: Consulta de pagamentos efetuados e download de faturas/recibos de matrícula.
+- **Resultado esperado**: Transparência total sobre a situação financeira do aluno com a instituição.
+
+---
+
+## 🔐 5. Segurança e Auditoria
+
+### 📑 Activity Logs (Logs de Atividade)
+- **Apenas Admin**: Regista quem fez o quê e quando (ex: "Admin X emitiu certificado para Aluno Y").
+- **Resultado esperado**: Rastreabilidade total para auditorias internas e segurança de dados.
+
+### 🛡️ Validação STCW
+- **O que faz**: Ferramenta dedicada para verificar se a documentação legal (ex: atestados médicos) está em conformidade.
+- **Resultado esperado**: Marcação do aluno como "Apto" para certificação internacional.
+
+---
+
+> [!NOTE]  
+> Este manual é atualizado automaticamente sempre que novas funcionalidades são integradas na plataforma. Se encontrar alguma dificuldade, contacte o suporte técnico via Chat Interno.
