@@ -19,6 +19,8 @@ interface Enrollment {
     amountDue: number;
     trainer: string;
     materials?: Material[];
+    grade?: number;
+    observations?: string;
 }
 function isVideoFile(url: string) {
     if (!url) return false;
@@ -97,11 +99,19 @@ export default function StudentDashboard() {
                 const allCerts = await resCerts.json();
                 const studentCerts = allCerts.filter((c: any) => (c.studentId === userId || c.studentName === session.user?.name) && c.status === 'APROVADO');
 
+                // 4. Fetch grades for this student
+                const resG = await fetch('/api/grades');
+                const allGrades = await resG.json();
+                const studentGrades = Array.isArray(allGrades) ? allGrades.filter((g: any) => g.studentId === userId || g.studentName === session.user?.name) : [];
+
                 const data = studentMatrics.map((m: any) => {
                     const courseInfo = allCourses.find((c: any) => c.title === m.course);
+                    const gradeInfo = studentGrades.find((g: any) => g.courseId === m.courseId || g.courseTitle === m.course);
                     return {
                         ...m,
-                        materials: courseInfo?.materials || []
+                        materials: courseInfo?.materials || [],
+                        grade: gradeInfo?.score,
+                        observations: gradeInfo?.observations
                     };
                 });
                 setEnrollments(data);
@@ -269,6 +279,15 @@ export default function StudentDashboard() {
                                         <p><strong>⏰ Horário:</strong> {en.schedule}</p>
                                         <p><strong>📅 Início:</strong> {en.startDate}</p>
                                         <p><strong>👨‍🏫 Formador:</strong> {en.trainer}</p>
+                                        
+                                        {en.grade !== undefined && (
+                                            <div className="student-grade-box">
+                                                <span>Nota Final:</span>
+                                                <div className={`grade-badge ${en.grade >= 10 ? 'pass' : 'fail'}`}>
+                                                    {en.grade} / 20
+                                                </div>
+                                            </div>
+                                        )}
                                     </div>
 
                                     {en.amountDue > 0 && (
@@ -439,6 +458,12 @@ export default function StudentDashboard() {
 
         .btn-comprovante { display: flex; align-items: center; gap: 0.5rem; background: linear-gradient(135deg, #0f172a, #1e3a5f); color: white; border: none; padding: 0.65rem 1.25rem; border-radius: 10px; font-size: 0.82rem; font-weight: 700; cursor: pointer; transition: 0.3s; box-shadow: 0 4px 10px rgba(0,0,0,0.12); width: 100%; justify-content: center; }
         .btn-comprovante:hover { background: linear-gradient(135deg, #1e3a5f, #0074d9); transform: translateY(-2px); box-shadow: 0 6px 16px rgba(0,116,217,0.25); }
+
+        .student-grade-box { margin-top: 1rem; padding-top: 1rem; border-top: 1px dashed #cbd5e1; display: flex; align-items: center; justify-content: space-between; }
+        .student-grade-box span { font-size: 0.85rem; font-weight: 800; color: #64748b; text-transform: uppercase; }
+        .grade-badge { padding: 0.4rem 0.8rem; border-radius: 8px; font-weight: 800; font-family: 'Outfit', sans-serif; font-size: 1rem; }
+        .grade-badge.pass { background: #dcfce7; color: #166534; }
+        .grade-badge.fail { background: #fee2e2; color: #991b1b; }
 
         /* Reader Modal */
         .material-reader-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(8px); display: flex; align-items: center; justify-content: center; z-index: 2000; padding: 2rem; }
