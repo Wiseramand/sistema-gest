@@ -48,30 +48,51 @@ export default function CalendarPage() {
                     matriculationCourseTitles.has(c.title)
                 );
 
-                // 2. Create schedule entries based on the courses and their matriculation details
-                const uniqueSchedules: Record<string, ClassSchedule> = {};
+                // 2. Create schedule entries based on both Course defaults and specific Matriculations
+                const uniqueSchedulesSet = new Set<string>();
+                const list: ClassSchedule[] = [];
                 
                 profCourses.forEach((c: any) => {
-                    // Try to find the most representative matriculation for this course and trainer
-                    const m = allMatrics.find((m: any) => 
+                    // Collect schedules from the course itself
+                    if (c.schedule && c.schedule !== 'Sem horário') {
+                        const key = `${c.title}-${c.schedule}-${c.classroom || 'Sala a definir'}`;
+                        if (!uniqueSchedulesSet.has(key)) {
+                            uniqueSchedulesSet.add(key);
+                            list.push({
+                                id: `${c.id}-default`,
+                                course: c.title,
+                                classroom: c.classroom || 'Sala a definir',
+                                schedule: c.schedule,
+                                startDate: c.startDate || 'A definir',
+                                endDate: c.endDate
+                            });
+                        }
+                    }
+
+                    // Collect schedules from matriculations (which might have individual updates)
+                    const relatedMatrics = allMatrics.filter((m: any) => 
                         (m.courseId === c.id || m.course === c.title) && 
-                        (m.trainerId === userId || m.trainer === userName)
+                        (m.trainerId === userId || m.trainer === userName) &&
+                        m.schedule && m.schedule !== 'Sem horário'
                     );
 
-                    const key = `${c.title}-${m?.schedule || 'N/A'}-${m?.classroom || 'N/A'}`;
-                    if (!uniqueSchedules[key]) {
-                        uniqueSchedules[key] = {
-                            id: c.id,
-                            course: c.title,
-                            classroom: m?.classroom || c.classroom || 'Sala a definir',
-                            schedule: m?.schedule || c.schedule || 'Sem horário',
-                            startDate: m?.startDate || c.startDate || 'A definir',
-                            endDate: m?.endDate || c.endDate
-                        };
-                    }
+                    relatedMatrics.forEach((m: any) => {
+                        const key = `${c.title}-${m.schedule}-${m.classroom || 'Sala a definir'}`;
+                        if (!uniqueSchedulesSet.has(key)) {
+                            uniqueSchedulesSet.add(key);
+                            list.push({
+                                id: m.id,
+                                course: c.title,
+                                classroom: m.classroom || 'Sala a definir',
+                                schedule: m.schedule,
+                                startDate: m.startDate || 'A definir',
+                                endDate: m.endDate
+                            });
+                        }
+                    });
                 });
                 
-                setSchedules(Object.values(uniqueSchedules));
+                setSchedules(list);
             } catch (e) {
                 console.error(e);
             } finally {
@@ -81,36 +102,66 @@ export default function CalendarPage() {
         fetchSchedules();
     }, [session]);
 
+    const normalize = (str: string) => {
+        return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().trim();
+    };
+
     const matchesDay = (schedule: string, day: string) => {
-        const s = schedule.toLowerCase();
-        const d = day.split('-')[0].toLowerCase(); // e.g., "segunda"
+        if (!schedule || schedule === 'Sem horário') return false;
         
-        // Basic contains
+        const s = normalize(schedule);
+        const d = normalize(day.split('-')[0]); // e.g., "segunda"
+        
+        // 1. Direct match (e.g., "Segunda")
         if (s.includes(d)) return true;
         
-        // Handlers for common ranges like "Segunda a Sexta"
-        if (s.includes('segunda a sexta')) {
-            const weekdays = ['segunda', 'terça', 'quarta', 'quinta', 'sexta'];
+        // 2. Ranges (e.g., "Segunda a Sexta", "Segunda-Sexta")
+        if (s.includes('segunda a sexta') || s.includes('segunda-sexta')) {
+            const weekdays = ['segunda', 'terça', 'quarta', 'quinta', 'sexta'].map(normalize);
             return weekdays.includes(d);
         }
-
-        // Handlers for "Terça e Quinta"
-        if (s.includes('terça') && s.includes('quinta')) {
-            return d === 'terça' || d === 'quinta';
+        
+        // 3. Specific combined patterns
+        const terca = normalize('terça');
+        const quinta = normalize('quinta');
+        if (s.includes(terca) && s.includes(quinta)) {
+            return d === terca || d === quinta;
         }
 
-        // Abbreviation handlers (Seg, Ter, Qua, Qui, Sex, Sab)
+        // 4. Abbreviation mapping
         const mapping: Record<string, string> = {
             'seg': 'segunda',
             'ter': 'terça',
             'qua': 'quarta',
             'qui': 'quinta',
             'sex': 'sexta',
-            'sab': 'sábado'
+            'sab': 'sábado',
+            'dom': 'domingo'
         };
         
         for (const [abbr, full] of Object.entries(mapping)) {
-            if (s.includes(abbr) && d.startsWith(full)) return true;
+            const na = normalize(abbr);
+            const nf = normalize(full);
+            // Check if abbreviation exists as a word in the schedule
+            const words = s.split(/[\s,/-]+/);
+            if (words.includes(na) && d.startsWith(nf)) return true;
+        }
+
+        // 5. Special case for "2ª", "3ª" etc (common in PT)
+        const ptMapping: Record<string, string> = {
+            '2a': 'segunda',
+            '3a': 'terça',
+            '4a': 'quarta',
+            '5a': 'quinta',
+            '6a': 'sexta',
+            '2ª': 'segunda',
+            '3ª': 'terça',
+            '4ª': 'quarta',
+            '5ª': 'quinta',
+            '6ª': 'sexta',
+        };
+        for (const [abbr, full] of Object.entries(ptMapping)) {
+            if (s.includes(normalize(abbr)) && d === normalize(full)) return true;
         }
 
         return false;
@@ -144,8 +195,8 @@ export default function CalendarPage() {
                                 </div>
                                 <div className="day-classes">
                                     {schedules.filter(s => matchesDay(s.schedule, day)).length > 0 ? (
-                                        schedules.filter(s => matchesDay(s.schedule, day)).map(s => (
-                                            <div key={s.id} className="class-card card shadow-sm">
+                                        schedules.filter(s => matchesDay(s.schedule, day)).map((s, idx) => (
+                                            <div key={`${s.id}-${idx}`} className="class-card card shadow-sm">
                                                 <div className="time-badge">{s.schedule.split(' ').pop()}</div>
                                                 <div className="class-info">
                                                     <span className="course-name">{s.course}</span>
