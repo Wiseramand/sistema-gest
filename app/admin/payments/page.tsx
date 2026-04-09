@@ -131,8 +131,8 @@ export default function PaymentsPage() {
               </div>
 
               <div className="modal-footer">
-                <button type="button" className="btn-close" onClick={() => setIsManualModalOpen(false)}>Cancelar</button>
-                <button type="submit" className="btn-print" style={{ margin: 0 }}>✓ Gravar Pagamento</button>
+                <button type="button" className="btn btn-secondary" onClick={() => setIsManualModalOpen(false)}>Cancelar</button>
+                <button type="submit" className="btn btn-primary" style={{ margin: 0 }}>✓ Gravar Pagamento</button>
               </div>
             </form>
           </div>
@@ -191,9 +191,9 @@ export default function PaymentsPage() {
               </div>
             </div>
 
-            <div className="receipt-footer">
-               <button className="btn-print" onClick={handlePrint}>🖨️ Imprimir Recibo</button>
-               <button className="btn-close" onClick={() => setSelectedPayment(null)}>Fechar</button>
+            <div className="modal-footer">
+               <button className="btn btn-primary" onClick={handlePrint}>🖨️ Imprimir Recibo</button>
+               <button className="btn btn-secondary" onClick={() => setSelectedPayment(null)}>Fechar</button>
             </div>
           </div>
         </div>
@@ -245,45 +245,6 @@ export default function PaymentsPage() {
         .action-btn.view { background: #f0f9ff; color: #0a2a5e; border: none; padding: 0.4rem 0.8rem; border-radius: 6px; font-weight: 700; cursor: pointer; }
         .action-btn.view:hover { background: #e0f2fe; }
 
-        /* Modal Settings */
-        .modal-overlay { position: fixed; inset: 0; background: rgba(0,20,50,0.5); display: flex; align-items: center; justify-content: center; z-index: 1000; padding: 20px; }
-        .receipt-box { background: white; width: 100%; max-width: 480px; border-radius: 16px; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); overflow: hidden; }
-        
-        .receipt-header { background: #f8fafc; padding: 2rem; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px dashed #e2e8f0; }
-        .logo-placeholder { background: #0a2a5e; color: #F5C518; padding: 8px 12px; border-radius: 8px; font-weight: 800; font-family: 'Outfit', sans-serif; }
-        .receipt-title { text-align: right; }
-        .receipt-title h2 { margin: 0; font-size: 1.1rem; color: #0a2a5e; font-family: 'Outfit', sans-serif; }
-        .receipt-title span { font-size: 0.75rem; color: #94a3b8; font-weight: 600; }
-
-        .receipt-body { padding: 2rem; }
-        .info-row { display: flex; justify-content: space-between; margin-bottom: 2rem; }
-        .col label { display: block; font-size: 0.75rem; color: #94a3b8; text-transform: uppercase; font-weight: 600; margin-bottom: 4px; }
-        .col strong { font-size: 1rem; color: #0a2a5e; }
-        .align-right { text-align: right; }
-
-        .course-detail { background: #f8fafc; border-radius: 12px; padding: 1.5rem; margin-bottom: 2rem; border: 1px solid #f1f5f9; }
-        .detail-row { display: flex; justify-content: space-between; margin-bottom: 12px; font-size: 0.9rem; }
-        .detail-row.header { font-size: 0.75rem; color: #94a3b8; font-weight: 700; border-bottom: 1px solid #e2e8f0; padding-bottom: 8px; margin-bottom: 12px; }
-        .detail-row strong { color: #0a2a5e; font-size: 1.1rem; font-family: 'Outfit', sans-serif; }
-
-        .payment-meta { display: flex; gap: 2rem; margin-bottom: 2rem; border-top: 1px solid #f1f5f9; padding-top: 1rem; }
-        .meta-item label { display: block; font-size: 0.7rem; color: #94a3b8; font-weight: 600; margin-bottom: 2px; }
-        .meta-item span { font-size: 0.85rem; font-weight: 700; color: #475569; }
-        .status-success { color: #059669 !important; }
-
-        .total-box { text-align: center; border-top: 2px solid #0a2a5e; padding-top: 1.5rem; }
-        .total-box label { font-size: 0.75rem; color: #94a3b8; font-weight: 700; }
-        .total-val { font-size: 2.2rem; color: #0a2a5e; font-weight: 800; font-family: 'Outfit', sans-serif; margin-top: 5px; }
-
-        .btn-print:hover { background: #173b7d; }
-        .btn-close:hover { background: #cbd5e1; }
-
-        .small-modal { max-width: 500px !important; }
-        .modal-top { display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 2px solid #f1f5f9; padding-bottom: 1.5rem; margin-bottom: 2rem; }
-        .modal-top h2 { margin: 0; font-size: 1.4rem; color: #0a2a5e; font-weight: 800; font-family: 'Outfit', sans-serif;}
-        .modal-top p { margin: 0.25rem 0 0; font-size: 0.85rem; color: #64748b; }
-        .close-x { background: #f1f5f9; border: none; width: 36px; height: 36px; border-radius: 50%; font-size: 1.4rem; cursor: pointer; color: #64748b; display: flex; align-items: center; justify-content: center; transition: 0.2s; }
-        .close-x:hover { background: #e2e8f0; color: #0a2a5e; }
 
         .modal-form { display: flex; flex-direction: column; gap: 1.25rem; }
         .field { display: flex; flex-direction: column; gap: 0.4rem; }

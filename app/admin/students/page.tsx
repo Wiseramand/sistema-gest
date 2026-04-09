@@ -276,9 +276,8 @@ export default function StudentsPage() {
                 </div>
             )}
 
-            {/* Modal */}
             {isModalOpen && (
-                <div className="overlay">
+                <div className="modal-overlay">
                     <div className="modal-box">
                         <div className="modal-top">
                             <div>
@@ -360,8 +359,8 @@ export default function StudentsPage() {
                             </div>
 
                             <div className="modal-footer">
-                                <button type="button" className="btn-cancel" onClick={() => setIsModalOpen(false)}>Cancelar</button>
-                                <button type="submit" className="btn-save">{editingStudent ? '✓ Guardar' : '+ Registar Aluno'}</button>
+                                <button type="button" className="btn btn-secondary" onClick={() => setIsModalOpen(false)}>Cancelar</button>
+                                <button type="submit" className="btn btn-primary">{editingStudent ? '✓ Guardar' : '+ Registar Aluno'}</button>
                             </div>
                         </form>
                     </div>
@@ -369,8 +368,8 @@ export default function StudentsPage() {
             )}
 
             {accessModal && (
-                <div className="overlay" onClick={() => setAccessModal(null)}>
-                    <div className="modal-box credentials" onClick={e => e.stopPropagation()}>
+                <div className="modal-overlay" onClick={() => setAccessModal(null)}>
+                    <div className="modal-box small-modal" onClick={e => e.stopPropagation()}>
                         <button className="close-x" style={{ position: 'absolute', top: '1.5rem', right: '1.5rem' }} onClick={() => setAccessModal(null)}>×</button>
                         <div className="creds-icon">{accessModal.loading ? '⏳' : '✅'}</div>
                         <h2>{accessModal.loading ? 'A preparar acessos...' : 'Acesso Ativado!'}</h2>
@@ -408,7 +407,7 @@ export default function StudentsPage() {
                         <div className="warning-note">
                             ⚠️ *Atenção:* A senha é gerada aleatoriamente e não pode ser recuperada. Certifique-se de que o aluno a guarde em local seguro.
                         </div>
-                        <button className="btn-save" style={{ width: '100%', marginTop: '1rem' }} onClick={() => setAccessModal(null)}>✓ Concluído</button>
+                        <button className="btn btn-primary" style={{ width: '100%', marginTop: '1rem' }} onClick={() => setAccessModal(null)}>✓ Concluído</button>
                     </div>
                 </div>
             )}
@@ -460,39 +459,7 @@ export default function StudentsPage() {
                 .page-btn:disabled { opacity: 0.5; cursor: not-allowed; }
                 .page-info { font-size: 0.85rem; color: #64748b; font-weight: 500; }
 
-                /* Modal */
-                .overlay { position: fixed; inset: 0; background: rgba(0,20,50,0.5); backdrop-filter: blur(8px); display: flex; align-items: center; justify-content: center; z-index: 1000; padding: 1rem; }
-                .modal-box { background: white; width: 100%; max-width: 820px; max-height: 90vh; overflow-y: auto; border-radius: 20px; padding: 2.5rem; box-shadow: 0 25px 60px -10px rgba(0,0,0,0.3); }
-                .modal-top { display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 2px solid #f1f5f9; padding-bottom: 1.5rem; margin-bottom: 2rem; }
-                .modal-top h2 { margin: 0; font-size: 1.4rem; color: var(--navy-deep); font-weight: 800; }
-                .modal-top p { margin: 0.25rem 0 0; font-size: 0.875rem; color: #64748b; }
-                .close-x { background: #f1f5f9; border: none; width: 36px; height: 36px; border-radius: 50%; font-size: 1.4rem; cursor: pointer; color: #64748b; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: 0.2s; }
-                .close-x:hover { background: #e2e8f0; color: var(--navy-deep); }
-
-                .modal-form { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
-                .form-col { display: flex; flex-direction: column; }
-                .section-label { font-size: 0.8rem; font-weight: 800; color: var(--ocean-blue); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 1.5rem; padding-bottom: 0.75rem; border-bottom: 2px solid #f1f5f9; }
-                .field { margin-bottom: 1.2rem; display: flex; flex-direction: column; gap: 0.4rem; }
-                .field label { font-weight: 700; font-size: 0.82rem; color: #475569; }
-                .field input, .field select { padding: 0.8rem 1rem; border: 1.5px solid #e2e8f0; border-radius: 10px; font-size: 0.9rem; background: #f8fafc; color: var(--navy-deep); font-family: inherit; transition: all 0.2s; }
-                .field input:focus, .field select:focus { outline: none; background: white; border-color: var(--ocean-blue); box-shadow: 0 0 0 3px rgba(0,116,217,0.12); }
-
-                .upload-box { background: #f8fafc; border: 1.5px dashed #cbd5e0; border-radius: 10px; padding: 0.85rem 1rem; display: flex; flex-direction: column; gap: 0.4rem; }
-                .upload-box input { border: none; padding: 0; background: transparent; font-size: 0.85rem; }
-                .upload-status { font-size: 0.8rem; color: var(--ocean-blue); font-weight: 600; }
-                .photo-ok { font-size: 0.8rem; color: #059669; font-weight: 600; }
-
-                .modal-footer { grid-column: span 2; display: flex; justify-content: flex-end; gap: 1rem; padding-top: 1.5rem; border-top: 2px solid #f1f5f9; }
-                .btn-cancel { padding: 0.85rem 1.75rem; border-radius: 12px; border: 1.5px solid #e2e8f0; background: white; color: #64748b; font-weight: 700; font-size: 0.9rem; cursor: pointer; transition: 0.2s; }
-                .btn-cancel:hover { background: #f8fafc; }
-                .btn-save { padding: 0.85rem 2rem; border-radius: 12px; border: none; background: var(--navy-deep); color: white; font-weight: 700; font-size: 0.9rem; cursor: pointer; transition: 0.3s; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.15); }
-                .btn-save:hover { background: var(--ocean-blue); transform: translateY(-2px); }
-
-                /* Credentials Modal */
-                .modal-box.credentials { background: white; width: 100%; max-width: 440px; border-radius: 20px; padding: 2.5rem; box-shadow: 0 25px 60px rgba(0,0,0,0.25); text-align: center; }
                 .creds-icon { font-size: 3rem; margin-bottom: 0.75rem; }
-                .modal-box.credentials h2 { margin: 0 0 0.5rem; color: var(--navy-deep); font-weight: 800; }
-                .modal-box.credentials p { margin: 0 0 1.75rem; color: #64748b; font-size: 0.9rem; }
                 .cred-field { text-align: left; margin-bottom: 1.25rem; }
                 .cred-field label { font-size: 0.75rem; font-weight: 800; color: #94a3b8; text-transform: uppercase; display: block; margin-bottom: 0.4rem; }
                 .cred-value { background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 10px; padding: 0.85rem 1rem; font-size: 1rem; font-weight: 700; letter-spacing: 0.05em; color: var(--navy-deep); }

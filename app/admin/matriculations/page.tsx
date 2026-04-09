@@ -643,8 +643,8 @@ export default function MatriculationPage() {
                             </div>
 
                             <div className="modal-footer">
-                                <button type="button" className="btn-cancel" onClick={() => setIsPaymentModalOpen(false)}>Cancelar</button>
-                                <button type="submit" className="btn-save">✓ Confirmar Recebimento</button>
+                                <button type="button" className="btn btn-secondary" onClick={() => setIsPaymentModalOpen(false)}>Cancelar</button>
+                                <button type="submit" className="btn btn-primary">✓ Confirmar Recebimento</button>
                             </div>
                         </form>
                     </div>
@@ -653,12 +653,12 @@ export default function MatriculationPage() {
 
             {/* Modal */}
             {isModalOpen && (
-                <div className="overlay">
+                <div className="modal-overlay">
                     <div className="modal-box">
                         <div className="modal-top">
                             <div>
                                 <h2>⚓ Efetivar Matrícula</h2>
-                                <p>Vincule um aluno a um curso, sala e formador</p>
+                                <p>Preencha os dados do aluno e do curso para efetivar a inscrição.</p>
                             </div>
                             <button className="close-x" onClick={() => setIsModalOpen(false)}>×</button>
                         </div>
@@ -766,8 +766,8 @@ export default function MatriculationPage() {
                                 </div>
 
                                 <div className="modal-footer">
-                                    <button type="button" className="btn-cancel" onClick={() => setIsModalOpen(false)}>Cancelar</button>
-                                    <button type="submit" className="btn-save">⚓ Efetivar Matrícula</button>
+                                    <button type="button" className="btn btn-secondary" onClick={() => setIsModalOpen(false)}>Cancelar</button>
+                                    <button type="submit" className="btn btn-primary">⚓ Efetivar Matrícula</button>
                                 </div>
                             </form>
                         )}
@@ -776,18 +776,7 @@ export default function MatriculationPage() {
             )}
 
             <style jsx>{`
-                .page-wrapper { padding: 0.5rem; }
-                .page-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 2.5rem; }
-                .page-top h1 { font-size: 1.8rem; color: var(--navy-deep); margin: 0.25rem 0; font-weight: 800; }
-                .page-top p { color: #64748b; margin: 0; font-size: 0.95rem; }
-
-                .new-btn { background: var(--navy-deep); color: white; border: none; padding: 0.85rem 1.75rem; border-radius: 12px; font-weight: 800; font-size: 0.95rem; cursor: pointer; transition: 0.3s; white-space: nowrap; box-shadow: 0 4px 12px rgba(10, 42, 94, 0.2); border: 2px solid transparent; }
-                .new-btn:hover { background: var(--ocean-blue); transform: translateY(-2px); border-color: rgba(255,255,255,0.2); }
-
-                .print-btn, .report-btn { background: white; color: var(--navy-deep); border: 1.5px solid #cbd5e1; padding: 0.85rem 1.5rem; border-radius: 12px; font-weight: 700; font-size: 0.9rem; cursor: pointer; transition: 0.3s; }
-                .print-btn:hover, .report-btn:hover { background: #f8fafc; border-color: var(--navy-deep); transform: translateY(-1px); }
-
-                .header-actions { display: flex; gap: 0.75rem; align-items: center; }
+                .loader { text-align: center; padding: 4rem; color: #94a3b8; font-weight: 500; }
 
                 .loader { text-align: center; padding: 4rem; color: #94a3b8; font-weight: 500; }
                 .empty-state { text-align: center; padding: 3rem; color: #94a3b8; font-weight: 500; }
@@ -825,14 +814,12 @@ export default function MatriculationPage() {
                 .align-right { text-align: right; }
                 .actions-cell { display: flex; justify-content: flex-end; gap: 0.5rem; }
                 .row-btn {background: none; border: none; cursor: pointer; font-size: 1rem; padding: 0.5rem; border-radius: 8px; transition: 0.2s; display: inline-flex; align-items: center; justify-content: center; margin-left: 0.25rem; }
-                .pay-btn { background: #ecfdf5; color: #059669; }
+                .pay-btn { background: var(--color-success-bg); color: var(--color-success-text); }
                 .pay-btn:hover { background: #d1fae5; transform: scale(1.1); }
-                .action-print { color: var(--ocean-blue); background: #f0f9ff; }
+                .action-print { color: var(--color-primary-mid); background: var(--color-primary-light); }
                 .action-print:hover { background: #e0f2fe; transform: scale(1.1); }
                 .row-btn.delete { color: #dc2626; background: #fef2f2; }
                 .row-btn.delete:hover { background: #fee2e2; transform: scale(1.1); }
-
-                .small-modal { max-width: 450px !important; }
 
                 /* Receipt Modal */
                 .receipt-modal { max-width: 600px; }

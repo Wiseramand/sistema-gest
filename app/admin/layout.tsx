@@ -208,7 +208,7 @@ const MODULE_FLYOUTS: Record<string, { label: string; groups: FlyoutGroup[] }> =
         label: 'GESTÃO',
         items: [
           { name: 'Lista de Formadores', href: '/admin/trainers', responsibility: 'trainers' },
-          { name: 'Acessos ao Portal', href: '/admin/trainers', responsibility: 'trainers' },
+          { name: 'Acessos ao Portal', href: '/admin/trainers?view=access', responsibility: 'trainers' },
         ],
       },
     ],

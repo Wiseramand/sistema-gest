@@ -248,11 +248,11 @@ export default function CoursesPage() {
 
       {/* Modal */}
       {isModalOpen && (
-        <div className="overlay">
+        <div className="modal-overlay">
           <div className="modal-box">
             <div className="modal-top">
               <div>
-                <h2>{editingCourse ? '✎ Editar Curso' : '+ Novo Curso'}</h2>
+                <h2>{editingCourse ? '✎ Editar Curso' : '⚓ Novo Curso Marítimo'}</h2>
                 <p>{editingCourse ? 'Atualize as informações do curso' : 'Preencha os dados para criar um novo curso'}</p>
               </div>
               <button className="close-x" onClick={() => setIsModalOpen(false)}>×</button>
@@ -414,8 +414,8 @@ export default function CoursesPage() {
 
               {/* Footer */}
               <div className="modal-footer">
-                <button type="button" className="btn-cancel" onClick={() => setIsModalOpen(false)}>Cancelar</button>
-                <button type="submit" className="btn-save">
+                <button type="button" className="btn btn-secondary" onClick={() => setIsModalOpen(false)}>Cancelar</button>
+                <button type="submit" className="btn btn-primary">
                   {editingCourse ? '✓ Guardar Alterações' : '⚓ Criar Curso'}
                 </button>
               </div>
@@ -518,30 +518,7 @@ export default function CoursesPage() {
         .page-btn:disabled { opacity: 0.5; cursor: not-allowed; }
         .page-info { font-size: 0.85rem; color: #64748b; font-weight: 500; }
 
-        /* ===== Modal ===== */
-        .overlay {
-          position: fixed;
-          inset: 0;
-          background: rgba(0, 20, 50, 0.5);
-          backdrop-filter: blur(8px);
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          z-index: 1000;
-          padding: 1rem;
-        }
-
-        .modal-box {
-          background: white;
-          width: 100%;
-          max-width: 900px;
-          max-height: 90vh;
-          overflow-y: auto;
-          border-radius: 20px;
-          padding: 2.5rem;
-          box-shadow: 0 25px 60px -10px rgba(0,0,0,0.3);
-        }
-
+        /* Modal Overrides */
         .modal-top {
           display: flex;
           justify-content: space-between;

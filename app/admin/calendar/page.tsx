@@ -72,8 +72,8 @@ export default function CalendarPage() {
       </div>
 
       {isModalOpen && (
-        <div className="overlay">
-          <div className="modal-box">
+        <div className="modal-overlay">
+          <div className="modal-box small-modal">
             <div className="modal-top">
               <div>
                 <h2>⚓ Novo Agendamento</h2>
@@ -137,8 +137,8 @@ export default function CalendarPage() {
               </div>
 
               <div className="modal-footer">
-                <button type="button" className="btn-cancel" onClick={() => setIsModalOpen(false)}>Cancelar</button>
-                <button type="submit" className="btn-save">✓ Confirmar Agendamento</button>
+                <button type="button" className="btn btn-secondary" onClick={() => setIsModalOpen(false)}>Cancelar</button>
+                <button type="submit" className="btn btn-primary">✓ Confirmar Agendamento</button>
               </div>
             </form>
           </div>
@@ -168,23 +168,7 @@ export default function CalendarPage() {
         .action-btn.view { background: #f0f9ff; color: #0a2a5e; border: none; padding: 0.5rem 1rem; border-radius: 8px; font-weight: 700; cursor: pointer; transition: 0.2s; }
         .action-btn.view:hover { background: #e0f2fe; }
 
-        .overlay { position: fixed; inset: 0; background: rgba(0,20,50,0.5); backdrop-filter: blur(8px); display: flex; align-items: center; justify-content: center; z-index: 1000; padding: 1rem; }
-        .modal-box { background: white; width: 100%; max-width: 500px; border-radius: 20px; padding: 2.5rem; box-shadow: 0 25px 60px rgba(0,0,0,0.3); }
-        .modal-top { display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 2px solid #f1f5f9; padding-bottom: 1.5rem; margin-bottom: 2rem; }
-        .modal-top h2 { margin: 0; font-size: 1.4rem; color: var(--navy-deep); font-weight: 800; }
-        .modal-top p { margin: 0.25rem 0 0; font-size: 0.875rem; color: #64748b; }
-        .close-x { background: #f1f5f9; border: none; width: 36px; height: 36px; border-radius: 50%; font-size: 1.4rem; cursor: pointer; color: #64748b; display: flex; align-items: center; justify-content: center; }
-        
-        .modal-form { display: flex; flex-direction: column; gap: 1.25rem; }
-        .field { display: flex; flex-direction: column; gap: 0.4rem; }
-        .field label { font-weight: 700; font-size: 0.82rem; color: #475569; }
-        .field input, .field select { padding: 0.8rem 1rem; border: 1.5px solid #e2e8f0; border-radius: 10px; font-size: 0.9rem; background: #f8fafc; }
-        .field input:focus, .field select:focus { border-color: #0a2a5e; outline: none; background: white; }
-        .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
-
-        .modal-footer { display: flex; justify-content: flex-end; gap: 1rem; padding-top: 1.5rem; border-top: 2px solid #f1f5f9; margin-top: 0.5rem; }
-        .btn-cancel { padding: 0.8rem 1.5rem; border-radius: 10px; border: 1.5px solid #e2e8f0; background: white; font-weight: 700; cursor: pointer; }
-        .btn-save { padding: 0.8rem 1.5rem; border-radius: 10px; border: none; background: #0a2a5e; color: white; font-weight: 700; cursor: pointer; }
+        .action-btn.view:hover { background: #e0f2fe; }
         .empty-state { text-align: center; padding: 2rem; color: #94a3b8; font-style: italic; }
       `}</style>
     </div>

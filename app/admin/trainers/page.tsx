@@ -1,7 +1,8 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
 import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
 
 interface Trainer {
   id: string;
@@ -19,6 +20,15 @@ interface Trainer {
 }
 
 export default function TrainersPage() {
+  return (
+    <Suspense fallback={<div>Carregando...</div>}>
+      <TrainersContent />
+    </Suspense>
+  );
+}
+
+function TrainersContent() {
+  const searchParams = useSearchParams();
   const [trainers, setTrainers] = useState<Trainer[]>([]);
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -34,6 +44,13 @@ export default function TrainersPage() {
   const [isAccessLogOpen, setIsAccessLogOpen] = useState(false);
   const [accessLogs, setAccessLogs] = useState<any[]>([]);
   const [loadingLogs, setLoadingLogs] = useState(false);
+
+  useEffect(() => {
+    if (searchParams.get('view') === 'access') {
+      setIsAccessLogOpen(true);
+      fetchLogs();
+    }
+  }, [searchParams]);
 
   const fetchLogs = async () => {
     setLoadingLogs(true);
@@ -63,7 +80,9 @@ export default function TrainersPage() {
     }
   };
 
-  useEffect(() => { fetchTrainers(); }, []);
+  useEffect(() => {
+    fetchTrainers();
+  }, []);
 
   const handleOpenModal = (trainer?: Trainer) => {
     if (trainer) {
@@ -291,7 +310,7 @@ export default function TrainersPage() {
             </div>
 
             <div className="modal-footer">
-              <button className="btn-save" onClick={() => setIsAccessLogOpen(false)}>Fechar Listagem</button>
+              <button className="btn btn-primary" onClick={() => setIsAccessLogOpen(false)}>Fechar Janela</button>
             </div>
           </div>
         </div>
@@ -424,8 +443,10 @@ export default function TrainersPage() {
               </div>
 
               <div className="modal-footer">
-                <button type="button" className="btn-cancel" onClick={() => setIsModalOpen(false)}>Cancelar</button>
-                <button type="submit" className="btn-save">{editingTrainer ? '✓ Guardar Alterações' : '⚓ Registar Formador'}</button>
+                <button type="button" className="btn btn-secondary" onClick={() => setIsModalOpen(false)}>Cancelar</button>
+                <button type="submit" className="btn btn-primary" disabled={uploading}>
+                  {uploading ? 'A guardar...' : (editingTrainer ? 'Atualizar Formador' : 'Adicionar Formador')}
+                </button>
               </div>
             </form>
           </div>
