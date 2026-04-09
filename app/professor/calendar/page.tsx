@@ -25,24 +25,48 @@ export default function CalendarPage() {
             setLoading(true);
             try {
                 const userId = (session?.user as any)?.id;
+                const userName = session?.user?.name;
                 if (!userId) return;
-                const res = await fetch('/api/matriculations');
-                const data = await res.json();
+
+                const [resM, resC] = await Promise.all([
+                    fetch('/api/matriculations'),
+                    fetch('/api/courses')
+                ]);
+                const allMatrics = await resM.json();
+                const allCourses = await resC.json();
                 
-                // Group by teacher and course/schedule
-                const myMatrics = data.filter((m: any) => m.trainerId === userId);
+                // 1. Identify courses where this trainer is involved
+                const matriculationCourseTitles = new Set(
+                    allMatrics
+                        .filter((m: any) => (m.trainerId === userId || m.trainer === userName))
+                        .map((m: any) => m.course)
+                );
+
+                const profCourses = allCourses.filter((c: any) => 
+                    (c.trainerId === userId) || 
+                    (c.trainerName === userName) || 
+                    matriculationCourseTitles.has(c.title)
+                );
+
+                // 2. Create schedule entries based on the courses and their matriculation details
                 const uniqueSchedules: Record<string, ClassSchedule> = {};
                 
-                myMatrics.forEach((m: any) => {
-                    const key = `${m.course}-${m.schedule}-${m.classroom}`;
+                profCourses.forEach((c: any) => {
+                    // Try to find the most representative matriculation for this course and trainer
+                    const m = allMatrics.find((m: any) => 
+                        (m.courseId === c.id || m.course === c.title) && 
+                        (m.trainerId === userId || m.trainer === userName)
+                    );
+
+                    const key = `${c.title}-${m?.schedule || 'N/A'}-${m?.classroom || 'N/A'}`;
                     if (!uniqueSchedules[key]) {
                         uniqueSchedules[key] = {
-                            id: m.id,
-                            course: m.course,
-                            classroom: m.classroom || 'A definir',
-                            schedule: m.schedule || 'Sem horário',
-                            startDate: m.startDate || 'N/A',
-                            endDate: m.endDate
+                            id: c.id,
+                            course: c.title,
+                            classroom: m?.classroom || c.classroom || 'Sala a definir',
+                            schedule: m?.schedule || c.schedule || 'Sem horário',
+                            startDate: m?.startDate || c.startDate || 'A definir',
+                            endDate: m?.endDate || c.endDate
                         };
                     }
                 });
@@ -56,6 +80,41 @@ export default function CalendarPage() {
         };
         fetchSchedules();
     }, [session]);
+
+    const matchesDay = (schedule: string, day: string) => {
+        const s = schedule.toLowerCase();
+        const d = day.split('-')[0].toLowerCase(); // e.g., "segunda"
+        
+        // Basic contains
+        if (s.includes(d)) return true;
+        
+        // Handlers for common ranges like "Segunda a Sexta"
+        if (s.includes('segunda a sexta')) {
+            const weekdays = ['segunda', 'terça', 'quarta', 'quinta', 'sexta'];
+            return weekdays.includes(d);
+        }
+
+        // Handlers for "Terça e Quinta"
+        if (s.includes('terça') && s.includes('quinta')) {
+            return d === 'terça' || d === 'quinta';
+        }
+
+        // Abbreviation handlers (Seg, Ter, Qua, Qui, Sex, Sab)
+        const mapping: Record<string, string> = {
+            'seg': 'segunda',
+            'ter': 'terça',
+            'qua': 'quarta',
+            'qui': 'quinta',
+            'sex': 'sexta',
+            'sab': 'sábado'
+        };
+        
+        for (const [abbr, full] of Object.entries(mapping)) {
+            if (s.includes(abbr) && d.startsWith(full)) return true;
+        }
+
+        return false;
+    };
 
     if (status === 'loading') {
         return <div className="p-8 text-center text-gray-500">A carregar...</div>;
@@ -84,8 +143,8 @@ export default function CalendarPage() {
                                     <h3>{day}</h3>
                                 </div>
                                 <div className="day-classes">
-                                    {schedules.filter(s => s.schedule.includes(day.split('-')[0])).length > 0 ? (
-                                        schedules.filter(s => s.schedule.includes(day.split('-')[0])).map(s => (
+                                    {schedules.filter(s => matchesDay(s.schedule, day)).length > 0 ? (
+                                        schedules.filter(s => matchesDay(s.schedule, day)).map(s => (
                                             <div key={s.id} className="class-card card shadow-sm">
                                                 <div className="time-badge">{s.schedule.split(' ').pop()}</div>
                                                 <div className="class-info">

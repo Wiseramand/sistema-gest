@@ -95,6 +95,45 @@ export default function GradesPage() {
         setStudentGrades(prev => prev.map(sg => sg.studentId === studentId ? { ...sg, observations: value } : sg));
     };
 
+    const saveSingleGrade = async (studentId: string) => {
+        const sg = studentGrades.find(s => s.studentId === studentId);
+        if (!sg || !selectedCourse) return;
+        
+        setSaving(true);
+        try {
+            const userId = (session?.user as any)?.id;
+            if (!userId) return;
+            
+            const body = {
+                studentId: sg.studentId,
+                studentName: sg.studentName,
+                courseId: selectedCourse.id,
+                courseTitle: selectedCourse.title,
+                score: sg.score === '' ? null : sg.score,
+                observations: sg.observations,
+                trainerId: userId
+            };
+            
+            const res = await (sg.gradeId 
+                ? fetch(`/api/grades/${sg.gradeId}`, { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) })
+                : fetch('/api/grades', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) }));
+            
+            if (res.ok) {
+                // Refresh list to get new IDs if they were POSTed
+                const newGrade = await res.json();
+                if (!sg.gradeId && newGrade.id) {
+                    setStudentGrades(prev => prev.map(s => s.studentId === studentId ? { ...s, gradeId: newGrade.id } : s));
+                }
+                alert(`Nota de ${sg.studentName} guardada!`);
+            }
+        } catch (e) {
+            console.error(e);
+            alert('Erro ao guardar nota.');
+        } finally {
+            setSaving(false);
+        }
+    };
+
     const saveGrades = async () => {
         if (!selectedCourse) return;
         setSaving(true);
@@ -128,7 +167,7 @@ export default function GradesPage() {
             });
 
             await Promise.all(promises);
-            alert('Notas guardadas com sucesso!');
+            alert('Todas as notas foram guardadas com sucesso!');
         } catch (e) {
             console.error(e);
             alert('Erro ao guardar notas.');
@@ -176,8 +215,8 @@ export default function GradesPage() {
                         <div className="grades-table-card card shadow-sm">
                             <div className="card-top">
                                 <h2>Turma: {selectedCourse.title}</h2>
-                                <button className="btn-save" onClick={saveGrades} disabled={saving}>
-                                    {saving ? 'A guardar...' : '✓ Guardar Todas as Notas'}
+                                <button className="btn btn-primary" onClick={saveGrades} disabled={saving}>
+                                    {saving ? 'A guardar...' : '✓ Guardar Todas'}
                                 </button>
                             </div>
 
@@ -187,6 +226,7 @@ export default function GradesPage() {
                                         <th>Nome do Aluno</th>
                                         <th style={{ width: '120px' }}>Nota (0-20)</th>
                                         <th>Observações</th>
+                                        <th style={{ width: '100px' }}>Ação</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -209,16 +249,34 @@ export default function GradesPage() {
                                                     value={sg.observations}
                                                     onChange={e => handleObsChange(sg.studentId, e.target.value)}
                                                     className="obs-input"
-                                                    placeholder="Ex: Bom desempenho, Falta participação..."
+                                                    placeholder="Observações..."
                                                 />
+                                            </td>
+                                            <td>
+                                                <button 
+                                                    className="btn btn-primary btn-sm" 
+                                                    onClick={() => saveSingleGrade(sg.studentId)}
+                                                    disabled={saving}
+                                                    title="Guardar esta nota"
+                                                >
+                                                    {saving ? '...' : '✓ Salvar'}
+                                                </button>
                                             </td>
                                         </tr>
                                     ))}
                                     {studentGrades.length === 0 && (
-                                        <tr><td colSpan={3} className="empty-msg">Nenhum aluno inscrito nesta turma.</td></tr>
+                                        <tr><td colSpan={4} className="empty-msg">Nenhum aluno inscrito nesta turma.</td></tr>
                                     )}
                                 </tbody>
                             </table>
+
+                            {studentGrades.length > 0 && (
+                                <div className="table-footer-actions">
+                                    <button className="btn btn-primary" onClick={saveGrades} disabled={saving}>
+                                        {saving ? 'A guardar...' : '✓ Guardar Todas as Notas'}
+                                    </button>
+                                </div>
+                            )}
                         </div>
                     ) : (
                         <div className="empty-state card">
@@ -262,6 +320,9 @@ export default function GradesPage() {
                 
                 .empty-msg { text-align: center; color: #94a3b8; padding: 3rem; font-style: italic; }
                 .empty-state { padding: 5rem; text-align: center; color: #94a3b8; font-weight: 600; }
+                
+                .table-footer-actions { margin-top: 2rem; display: flex; justify-content: flex-end; padding-top: 1.5rem; border-top: 1px solid #f1f5f9; }
+                .btn-sm { padding: 0.4rem 0.8rem; font-size: 0.75rem; border-radius: 6px; }
             `}</style>
         </div>
     );
