@@ -599,15 +599,15 @@ function AdminLayoutContent({ children }: { children: React.ReactNode }) {
         .mobile-toggle-fixed {
           display: none;
           position: fixed;
-          top: 1rem;
-          left: 1rem;
-          width: 48px;
-          height: 48px;
+          top: 0.75rem;
+          left: 0.75rem;
+          width: 42px;
+          height: 42px;
           background: #F5C518;
           color: #0a2a5e;
           border: none;
-          border-radius: 12px;
-          font-size: 1.5rem;
+          border-radius: 10px;
+          font-size: 1.25rem;
           font-weight: 800;
           cursor: pointer;
           z-index: 20000;
@@ -712,6 +712,12 @@ function AdminLayoutContent({ children }: { children: React.ReactNode }) {
           gap: 4px;
           width: 100%;
           padding: 0 10px;
+          overflow-y: auto;
+          scrollbar-width: none;
+        }
+
+        .rail-modules::-webkit-scrollbar {
+          display: none;
         }
 
         .rail-btn {

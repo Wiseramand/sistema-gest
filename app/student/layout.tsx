@@ -190,6 +190,7 @@ function StudentLayoutContent({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const { data: session, status } = useSession();
   const [activeModule, setActiveModule] = useState('academico');
+  const [showMobileMenu, setShowMobileMenu] = useState(false);
 
   // Notifications state
   const [notifications, setNotifications] = useState<any[]>([]);
@@ -288,7 +289,20 @@ function StudentLayoutContent({ children }: { children: React.ReactNode }) {
   };
 
   return (
-    <div className="admin-wrap">
+    <div className={`admin-wrap ${showMobileMenu ? 'mobile-open' : ''}`}>
+      {/* Mobile Fixed Toggle */}
+      <button 
+        className="mobile-toggle-fixed" 
+        onClick={() => setShowMobileMenu(!showMobileMenu)}
+        aria-label="Toggle Menu"
+      >
+        {showMobileMenu ? '✕' : '☰'}
+      </button>
+
+      {/* Backdrop */}
+      {showMobileMenu && (
+        <div className="mobile-backdrop" onClick={() => setShowMobileMenu(false)} />
+      )}
 
       {/* ── RAIL (58px) ─────────────────────────────── */}
       <div className="rail">
@@ -301,7 +315,7 @@ function StudentLayoutContent({ children }: { children: React.ReactNode }) {
             <button
               key={id}
               className={`rail-btn${activeModule === id ? ' active' : ''}`}
-              onClick={() => setActiveModule(id)}
+              onClick={() => { setActiveModule(id); setShowMobileMenu(false); }}
               title={MODULE_FLYOUTS[id]?.label}
             >
               {railIconMap[id]}
@@ -314,7 +328,7 @@ function StudentLayoutContent({ children }: { children: React.ReactNode }) {
             <button
               key={id}
               className={`rail-btn${activeModule === id ? ' active' : ''}`}
-              onClick={() => setActiveModule(id)}
+              onClick={() => { setActiveModule(id); setShowMobileMenu(false); }}
               title={MODULE_FLYOUTS[id]?.label}
             >
               {railIconMap[id]}
@@ -351,6 +365,7 @@ function StudentLayoutContent({ children }: { children: React.ReactNode }) {
                   key={ii}
                   href={item.href}
                   className={`flyout-item${pathname === item.href ? ' active' : ''}`}
+                  onClick={() => setShowMobileMenu(false)}
                 >
                   <div className="flyout-icon">{getFlyoutIcon(item.name)}</div>
                   <span className="flyout-label">{item.name}</span>
@@ -363,12 +378,12 @@ function StudentLayoutContent({ children }: { children: React.ReactNode }) {
 
         <div className="flyout-foot">
           <button
-            onClick={() => signOut({ callbackUrl: '/login' })}
+            onClick={() => { signOut({ callbackUrl: '/login' }); setShowMobileMenu(false); }}
             className="flyout-action"
           >
             <IconSignOut /> Sair
           </button>
-          <Link href="/" className="flyout-action">
+          <Link href="/" className="flyout-action" onClick={() => setShowMobileMenu(false)}>
             <IconHome /> Site
           </Link>
         </div>
@@ -436,13 +451,35 @@ function StudentLayoutContent({ children }: { children: React.ReactNode }) {
 
       <style jsx>{`
         /* ── Container ── */
-        .admin-wrap { display: flex; height: 100vh; overflow: hidden; background: #f4f7fb; font-family: 'DM Sans', sans-serif; padding: 1.25rem; gap: 0; }
+        .admin-wrap { display: flex; height: 100vh; overflow: hidden; background: #f4f7fb; font-family: 'DM Sans', sans-serif; padding: 1.25rem; gap: 0; transition: 0.3s; }
+
+        .mobile-toggle-fixed {
+          display: none;
+          position: fixed;
+          top: 0.75rem;
+          left: 0.75rem;
+          width: 42px;
+          height: 42px;
+          background: #F5C518;
+          color: #0a2a5e;
+          border: none;
+          border-radius: 10px;
+          font-size: 1.25rem;
+          font-weight: 800;
+          cursor: pointer;
+          z-index: 20000;
+          box-shadow: 0 4px 15px rgba(245, 197, 24, 0.4);
+          align-items: center;
+          justify-content: center;
+          transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
 
         /* ── Rail ── */
-        .rail { width: 58px; background: #0a2a5e; border-radius: 14px 0 0 14px; display: flex; flex-direction: column; align-items: center; padding: 14px 0; flex-shrink: 0; height: calc(100vh - 2.5rem); }
+        .rail { width: 72px; background: #0a2a5e; border-radius: 14px 0 0 14px; display: flex; flex-direction: column; align-items: center; padding: 16px 0; flex-shrink: 0; height: calc(100vh - 2.5rem); }
         .rail-logo { width: 34px; height: 34px; background: #F5C518; border-radius: 9px; display: flex; align-items: center; justify-content: center; margin-bottom: 20px; flex-shrink: 0; }
-        .rail-modules { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; width: 100%; padding: 0 10px; }
-        .rail-btn { width: 38px; height: 38px; border-radius: 9px; display: flex; align-items: center; justify-content: center; background: transparent; border: none; cursor: pointer; color: rgba(255, 255, 255, 0.6); transition: all 0.2s ease; }
+        .rail-modules { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; width: 100%; padding: 0 10px; overflow-y: auto; scrollbar-width: none; }
+        .rail-modules::-webkit-scrollbar { display: none; }
+        .rail-btn { width: 46px; height: 46px; border-radius: 12px; display: flex; align-items: center; justify-content: center; background: transparent; border: none; cursor: pointer; color: rgba(255, 255, 255, 0.6); transition: all 0.2s ease; }
         .rail-btn:hover { background: rgba(255, 255, 255, 0.10); color: rgba(255, 255, 255, 0.9); }
         .rail-btn.active { background: #ffffff; color: #0a2a5e; }
         .rail-sep { width: 24px; height: 0.5px; background: rgba(255, 255, 255, 0.12); margin: 8px 0; flex-shrink: 0; }
@@ -452,7 +489,7 @@ function StudentLayoutContent({ children }: { children: React.ReactNode }) {
         .rail-avatar { width: 100%; height: 100%; color: #ffffff; font-size: 10px; font-weight: 600; font-family: 'Outfit', sans-serif; display: flex; align-items: center; justify-content: center; cursor: default; letter-spacing: 0.5px; }
 
         /* ── Flyout ── */
-        .flyout { width: 200px; background: #ffffff; border-right: 0.5px solid rgba(0, 0, 0, 0.07); display: flex; flex-direction: column; flex-shrink: 0; height: calc(100vh - 2.5rem); overflow: hidden; }
+        .flyout { width: 200px; background: #ffffff; border-right: 0.5px solid rgba(0, 0, 0, 0.07); display: flex; flex-direction: column; flex-shrink: 0; height: calc(100vh - 2.5rem); }
         .flyout-hdr { padding: 16px; border-bottom: 0.5px solid rgba(0, 0, 0, 0.06); flex-shrink: 0; }
         .flyout-pre { display: block; font-size: 10px; text-transform: uppercase; letter-spacing: 0.12em; color: #94a3b8; margin-bottom: 4px; font-weight: 500; }
         .flyout-title { display: block; font-family: 'Outfit', sans-serif; font-size: 16px; font-weight: 600; color: #0a2a5e; letter-spacing: -0.02em; }
@@ -481,30 +518,6 @@ function StudentLayoutContent({ children }: { children: React.ReactNode }) {
         
         .hdr-right { display: flex; align-items: center; gap: 1.25rem; }
         
-        /* ── Notifications ── */
-        .notif-wrap { position:relative; }
-        .notif-bell { position:relative; background:#f4f7fb; border:1px solid #edf2f7; border-radius:50%; width:36px; height:36px; display:flex; align-items:center; justify-content:center; font-size:1rem; cursor:pointer; transition:all 0.2s; color:#0a2a5e; }
-        .notif-bell:hover { background:#e8f0fb; border-color:#0a2a5e; transform: scale(1.05); }
-        .notif-badge { position:absolute; top:-2px; right:-2px; background:#F5C518; color:#0a2a5e; font-size:0.65rem; font-weight:800; width:16px; height:16px; border-radius:50%; display:flex; align-items:center; justify-content:center; border:2px solid #fff; }
-        
-        .notif-dropdown { position:absolute; right:0; top:calc(100% + 12px); width:320px; background:#fff; border:1px solid #dce6f0; border-radius:14px; box-shadow:0 15px 40px rgba(10,42,94,0.15); z-index:2000; overflow:hidden; animation: slideDown 0.3s ease-out; }
-        @keyframes slideDown { from { opacity:0; transform: translateY(-10px); } to { opacity:1; transform: translateY(0); } }
-        .notif-hdr { display:flex; align-items:center; justify-content:space-between; padding:1rem; border-bottom:1px solid #f0faf8; background: #fafbfc; }
-        .notif-title { font-weight:800; font-size:0.85rem; color:#0a2a5e; font-family:'Outfit',sans-serif; }
-        .mark-all { font-size:0.7rem; color:#0a2a5e; background:#F5C518; border:none; cursor:pointer; font-weight:700; padding: 0.2rem 0.6rem; border-radius: 50px; }
-        
-        .notif-list { max-height:300px; overflow-y:auto; }
-        .notif-empty { padding:2rem; text-align:center; color:#94a3b8; font-size:0.85rem; }
-        .notif-item { display:flex; align-items:flex-start; gap:0.8rem; padding:1rem; cursor:pointer; transition:all 0.15s; border-bottom:1px solid #f8fafc; }
-        .notif-item.unread { background:#fff9e620; border-left: 3px solid #F5C518; }
-        .notif-item:hover { background:#f4f7fb; }
-        .ni-icon { font-size:1.2rem; flex-shrink:0; display: flex; align-items: center; justify-content: center; width: 34px; height: 34px; background: #f0f4f8; border-radius: 8px; }
-        .ni-body { flex:1; min-width:0; }
-        .ni-body strong { display:block; font-size:0.85rem; color:#0f1e35; font-weight:700; margin-bottom:2px; }
-        .ni-body p { font-size:0.75rem; color:#64748b; line-height:1.4; margin:0 0 4px; }
-        .ni-body small { font-size:0.65rem; color:#94a3b8; font-weight: 600; }
-        .ni-dot { width:6px; height:6px; background:#F5C518; border-radius:50%; flex-shrink:0; margin-top:6px; box-shadow: 0 0 8px rgba(245, 197, 24, 0.5); }
-
         .hdr-user { display: flex; align-items: center; gap: 8px; }
         .user-name { font-size: 13px; font-weight: 500; color: #0f1e35; }
         .user-badge { font-size: 9px; font-weight: 600; color: #0a2a5e; background: #F5C518; padding: 2px 6px; border-radius: 4px; letter-spacing: 0.05em; }
@@ -514,11 +527,68 @@ function StudentLayoutContent({ children }: { children: React.ReactNode }) {
           .admin-wrap { padding: 0.75rem; }
           .flyout { width: 160px; }
         }
+
         @media (max-width: 768px) {
-          .flyout { display: none; }
-          .rail { border-radius: 14px; }
-          .content { border-radius: 14px; }
+          .admin-wrap { padding: 0.25rem; }
+          .mobile-toggle-fixed { display: flex; }
+          .rail {
+            position: fixed;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 72px;
+            z-index: 10005;
+            transform: translateX(-352px);
+            transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            border-radius: 0;
+            background: #0a2a5e;
+          }
+          .flyout {
+            position: fixed;
+            left: 72px;
+            top: 0;
+            bottom: 0;
+            width: 250px;
+            z-index: 10004;
+            transform: translateX(-352px);
+            transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            border-radius: 0;
+            box-shadow: 10px 0 30px rgba(0,0,0,0.2);
+            background: white;
+            display: flex !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+          }
+          .admin-wrap.mobile-open .rail,
+          .admin-wrap.mobile-open .flyout { 
+            transform: translateX(0); 
+          }
+          .content { 
+            width: 100%; 
+            margin-left: 0; 
+            padding: 5.5rem 1rem 1rem; 
+            overflow-x: hidden; 
+            transition: filter 0.3s;
+          }
+          .admin-wrap.mobile-open .content {
+            filter: blur(2px);
+            pointer-events: none;
+          }
+          .content-hdr { padding: 0.5rem 0; margin-bottom: 2rem; border-bottom: 1px solid #e2e8f0; }
+          .mobile-toggle { display: none; }
+          .user-info-text { display: none; }
+          .hdr-user { gap: 0.5rem; }
+          .breadcrumb span { font-size: 0.9rem; }
+          .mobile-backdrop {
+            position: fixed;
+            inset: 0;
+            background: rgba(10, 42, 94, 0.4);
+            backdrop-filter: blur(4px);
+            z-index: 1000;
+            animation: fadeIn 0.3s;
+          }
         }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
       `}</style>
     </div>
   );

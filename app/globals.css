@@ -97,23 +97,46 @@ h1, h2, h3, h4, h5, h6 {
 .btn-primary {
   background-color: var(--color-primary);
   color: var(--color-white);
+  box-shadow: 0 4px 12px rgba(10, 42, 94, 0.15);
 }
 
 .btn-primary:hover {
   background-color: var(--color-primary-mid);
-  transform: translateY(-1px);
-  box-shadow: var(--shadow-md);
+  transform: translateY(-1.5px);
+  box-shadow: 0 6px 16px rgba(10, 42, 94, 0.2);
 }
 
 .btn-secondary {
   background-color: var(--color-white);
   color: var(--color-primary);
-  border: 1px solid var(--color-border);
+  border: 1.5px solid var(--color-border);
 }
 
 .btn-secondary:hover {
   border-color: var(--color-primary);
   box-shadow: var(--shadow-sm);
+  background-color: var(--color-primary-light);
+}
+
+/* Table Responsiveness */
+.table-wrap {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border-radius: var(--radius-md);
+  background: var(--color-white);
+  margin-bottom: 1rem;
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-border) transparent;
+}
+
+.table-wrap::-webkit-scrollbar {
+  height: 6px;
+}
+
+.table-wrap::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: 10px;
 }
 
 .card {
