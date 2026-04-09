@@ -83,6 +83,46 @@ export async function PATCH(
             }
         }
 
+        // Specific logic for Classroom Conflict Detection in Matriculations
+        if (collection === 'matriculations') {
+            const { classroom, startDate, endDate, course } = body;
+            
+            // To properly check conflict, we need at least classroom and one date.
+            // If they are missing in body, we might need to fetch the existing record.
+            if (classroom || startDate || endDate) {
+                const existing = await (model as any).findUnique({ where: { id } });
+                const currentClassroom = classroom || existing?.classroom;
+                const currentStartDate = startDate || existing?.startDate;
+                const currentEndDate = endDate || existing?.endDate;
+                const currentCourse = course || existing?.course;
+
+                if (currentClassroom && currentStartDate && currentEndDate && currentClassroom !== 'Sem sala' && currentClassroom !== 'A designar') {
+                    const conflict = await (model as any).findFirst({
+                        where: {
+                            id: { not: id }, // Exclude self
+                            classroom: currentClassroom,
+                            course: { not: currentCourse }, // Different course
+                            OR: [
+                                {
+                                    AND: [
+                                        { startDate: { lte: currentEndDate } },
+                                        { endDate: { gte: currentStartDate } }
+                                    ]
+                                }
+                            ]
+                        }
+                    });
+
+                    if (conflict) {
+                        return NextResponse.json({ 
+                            error: `Conflito de Sala: A sala '${currentClassroom}' já está ocupada pelo curso '${conflict.course}' entre ${conflict.startDate} e ${conflict.endDate}.`,
+                            details: `Por favor, escolha outra sala ou aguarde até ${conflict.endDate}.`
+                        }, { status: 400 });
+                    }
+                }
+            }
+        }
+
         const dataToUpdate = { ...body };
         if (collection === 'courses' && Array.isArray(dataToUpdate.materials)) {
             dataToUpdate.materials = JSON.stringify(dataToUpdate.materials);

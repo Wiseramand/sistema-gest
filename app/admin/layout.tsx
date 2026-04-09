@@ -190,6 +190,7 @@ const MODULE_FLYOUTS: Record<string, { label: string; groups: FlyoutGroup[] }> =
           { name: 'Lista de Alunos', href: '/admin/students', responsibility: 'students' },
           { name: 'Matrículas', href: '/admin/matriculations', responsibility: 'matriculations' },
           { name: 'Frequência', href: '/admin/attendance', responsibility: 'matriculations' },
+          { name: 'Notas dos Alunos', href: '/admin/grades', responsibility: 'courses' },
         ],
       },
       {

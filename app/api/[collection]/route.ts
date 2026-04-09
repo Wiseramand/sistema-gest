@@ -106,6 +106,34 @@ export async function POST(
             }
         }
 
+        // Specific logic for Classroom Conflict Detection in Matriculations
+        if (collection === 'matriculations') {
+            const { classroom, startDate, endDate, course } = body;
+            if (classroom && startDate && endDate && classroom !== 'Sem sala' && classroom !== 'A designar') {
+                const conflict = await (model as any).findFirst({
+                    where: {
+                        classroom: classroom,
+                        course: { not: course }, // Different course
+                        OR: [
+                            {
+                                AND: [
+                                    { startDate: { lte: endDate } },
+                                    { endDate: { gte: startDate } }
+                                ]
+                            }
+                        ]
+                    }
+                });
+
+                if (conflict) {
+                    return NextResponse.json({ 
+                        error: `Conflito de Sala: A sala '${classroom}' já está ocupada pelo curso '${conflict.course}' entre ${conflict.startDate} e ${conflict.endDate}.`,
+                        details: `Por favor, escolha outra sala ou aguarde até ${conflict.endDate}.`
+                    }, { status: 400 });
+                }
+            }
+        }
+
         const dataToSave = { ...body };
         if (collection === 'courses' && Array.isArray(dataToSave.materials)) {
             dataToSave.materials = JSON.stringify(dataToSave.materials);

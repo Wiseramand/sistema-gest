@@ -11,6 +11,8 @@ interface Course {
     description: string;
     duration: string;
     status: string;
+    startDate?: string;
+    endDate?: string;
     materials: Material[];
 }
 interface Trainer { id: string; name: string; }
@@ -49,7 +51,7 @@ export default function MatriculationPage() {
     const [paymentData, setPaymentData] = useState({ amount: 0, method: 'Dinheiro', date: new Date().toISOString().split('T')[0] });
     const [formData, setFormData] = useState({
         course: '', classroom: '', trainer: '', schedule: '',
-        duration: '', startDate: '', paymentStatus: 'Pendente' as string, amountDue: 0
+        duration: '', startDate: '', endDate: '', paymentStatus: 'Pendente' as string, amountDue: 0
     });
 
     // Pagination state
@@ -109,7 +111,8 @@ export default function MatriculationPage() {
                     trainerId: tObj?.id || '',
                     courseId: cObj?.id || '',
                     classroomId: clObj?.id || '',
-                    ...formData
+                    ...formData,
+                    endDate: cObj?.endDate || formData.endDate,
                 })
             });
             if (res.ok) {
@@ -117,7 +120,7 @@ export default function MatriculationPage() {
                 setIsModalOpen(false);
                 setSelectedStudent(null);
                 setSearchQuery('');
-                setFormData({ course: '', classroom: '', trainer: '', schedule: '', duration: '', startDate: '', paymentStatus: 'Pendente', amountDue: 0 });
+                setFormData({ course: '', classroom: '', trainer: '', schedule: '', duration: '', startDate: '', endDate: '', paymentStatus: 'Pendente', amountDue: 0 });
                 fetchData();
                 // Show receipt modal with the newly created matriculation
                 setReceiptMatriculation(created);
