@@ -31,6 +31,24 @@ export default function TrainersPage() {
     address: '', nationality: '', phone: '', email: '', status: 'Ativo'
   });
   const [generatingId, setGeneratingId] = useState<string | null>(null);
+  const [isAccessLogOpen, setIsAccessLogOpen] = useState(false);
+  const [accessLogs, setAccessLogs] = useState<any[]>([]);
+  const [loadingLogs, setLoadingLogs] = useState(false);
+
+  const fetchLogs = async () => {
+    setLoadingLogs(true);
+    try {
+      const res = await fetch('/api/activity-logs');
+      const data = await res.json();
+      // Filter for Trainer roles or actions related to trainers
+      const filtered = Array.isArray(data) ? data.filter((l: any) => l.role === 'TRAINER' || l.role === 'PROFESSOR') : [];
+      setAccessLogs(filtered);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoadingLogs(false);
+    }
+  };
 
   const fetchTrainers = async () => {
     setLoading(true);
@@ -157,6 +175,7 @@ export default function TrainersPage() {
           <p>Corpo docente e instrutores da formação marítima.</p>
         </div>
         <div className="header-actions">
+          <button className="log-btn" onClick={() => { setIsAccessLogOpen(true); fetchLogs(); }}>🕒 Acessos ao Portal</button>
           <button className="print-btn" onClick={() => window.print()}>🖨️ Imprimir Lista</button>
           <button className="new-btn" onClick={() => handleOpenModal()}>+ Novo Formador</button>
         </div>
@@ -227,6 +246,54 @@ export default function TrainersPage() {
             </tbody>
           </table>
           {trainers.length === 0 && <div className="empty-state">Nenhum formador registado ainda.</div>}
+        </div>
+      )}
+
+      {/* Portal Access Logs Modal */}
+      {isAccessLogOpen && (
+        <div className="overlay" onClick={() => setIsAccessLogOpen(false)}>
+          <div className="modal-box log-modal" onClick={e => e.stopPropagation()}>
+            <div className="modal-top">
+              <div>
+                <h2>🕒 Registos de Acesso ao Portal</h2>
+                <p>Histórico de entradas e atividades dos formadores no sistema.</p>
+              </div>
+              <button className="close-x" onClick={() => setIsAccessLogOpen(false)}>×</button>
+            </div>
+
+            <div className="log-container">
+              {loadingLogs ? (
+                <div className="log-loader">A carregar registos...</div>
+              ) : accessLogs.length === 0 ? (
+                <div className="log-empty">Nenhum registo de acesso encontrado.</div>
+              ) : (
+                <table className="log-table">
+                  <thead>
+                    <tr>
+                      <th>Formador</th>
+                      <th>Ação</th>
+                      <th>Data / Hora</th>
+                      <th>Detalhes</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {accessLogs.map((log: any) => (
+                      <tr key={log.id}>
+                        <td className="bold">{log.userName || '—'}</td>
+                        <td className="action-tag">{log.action}</td>
+                        <td className="date-col">{new Date(log.timestamp).toLocaleString('pt-BR')}</td>
+                        <td className="details-col">{log.details || '—'}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              )}
+            </div>
+
+            <div className="modal-footer">
+              <button className="btn-save" onClick={() => setIsAccessLogOpen(false)}>Fechar Listagem</button>
+            </div>
+          </div>
         </div>
       )}
 
@@ -366,7 +433,6 @@ export default function TrainersPage() {
       )}
 
       <style jsx>{`
-                .page-wrapper { padding: 0.5rem; }
                 .page-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 2.5rem; }
                 .page-top h1 { font-size: 1.8rem; color: var(--navy-deep); margin: 0.25rem 0; font-weight: 800; }
                 .page-top p { color: #64748b; margin: 0; font-size: 0.95rem; }
@@ -462,9 +528,12 @@ export default function TrainersPage() {
 
                 @media (max-width: 768px) { .modal-form { grid-template-columns: 1fr; } .modal-footer { grid-column: span 1; } }
 
-                .header-actions { display: flex; gap: 1rem; }
-                .print-btn { background: white; color: #1e293b; border: 1px solid #e2e8f0; padding: 0.85rem 1.5rem; border-radius: 12px; font-weight: 700; font-size: 0.9rem; cursor: pointer; transition: 0.3s; display: flex; align-items: center; gap: 0.5rem; }
-                .print-btn:hover { background: #f8fafc; border-color: #cbd5e1; }
+                .header-actions { display: flex; gap: 1rem; align-items: center; }
+                .print-btn { background: white; color: #1e293b; border: 1.5px solid #cbd5e1; padding: 0.85rem 1.5rem; border-radius: 12px; font-weight: 700; font-size: 0.9rem; cursor: pointer; transition: 0.3s; display: flex; align-items: center; gap: 0.5rem; }
+                .print-btn:hover { background: #f1f5f9; transform: translateY(-1px); }
+                
+                .log-btn { background: #eff6ff; color: #1e40af; border: 1.5px solid #bfdbfe; padding: 0.85rem 1.5rem; border-radius: 12px; font-weight: 700; font-size: 0.9rem; cursor: pointer; transition: 0.3s; display: flex; align-items: center; gap: 0.5rem; }
+                .log-btn:hover { background: #dbeafe; transform: translateY(-1px); }
 
                 @media print {
                     :global(.sidebar), :global(.admin-header), .header-actions, .row-actions, .maritime-accent {
@@ -479,6 +548,16 @@ export default function TrainersPage() {
                     .table-wrap { border: none; }
                     .data-table th { background: #eee !important; -webkit-print-color-adjust: exact; }
                 }
+
+                /* Logs Styles */
+                .log-modal { max-width: 900px !important; }
+                .log-container { min-height: 300px; max-height: 500px; overflow-y: auto; background: #f8fafc; border-radius: 12px; border: 1px solid #e2e8f0; }
+                .log-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+                .log-table th { padding: 1rem; background: #f1f5f9; text-align: left; color: #475569; border-bottom: 2px solid #e2e8f0; sticky; top: 0; }
+                .log-table td { padding: 1rem; border-bottom: 1px solid #e2e8f0; color: #1e293b; }
+                .action-tag { color: #2563eb; font-weight: 700; }
+                .date-col { font-family: monospace; color: #64748b; }
+                .log-loader, .log-empty { padding: 4rem; text-align: center; color: #94a3b8; font-weight: 500; }
             `}</style>
     </div>
   );

@@ -414,13 +414,7 @@ export default function StudentsPage() {
             )}
 
             <style jsx>{`
-                .page-wrapper { padding: 0.5rem; }
-                .page-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 2.5rem; }
-                .page-top h1 { font-size: 1.8rem; color: var(--navy-deep); margin: 0.25rem 0; font-weight: 800; }
                 .page-top p { color: #64748b; margin: 0; font-size: 0.95rem; }
-
-                .new-btn { background: var(--navy-deep); color: white; border: none; padding: 0.85rem 1.5rem; border-radius: 12px; font-weight: 700; font-size: 0.9rem; cursor: pointer; transition: 0.3s; white-space: nowrap; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.15); }
-                .new-btn:hover { background: var(--ocean-blue); transform: translateY(-2px); }
 
                 .loader { text-align: center; padding: 4rem 2rem; color: #94a3b8; font-weight: 500; }
                 .empty-state { text-align: center; padding: 3rem; color: #94a3b8; font-weight: 500; }
@@ -522,8 +516,8 @@ export default function StudentsPage() {
                 @media (max-width: 768px) { .modal-form { grid-template-columns: 1fr; } .modal-footer { grid-column: span 1; } }
 
                 .header-actions { display: flex; gap: 1rem; }
-                .print-btn { background: white; color: #1e293b; border: 1px solid #e2e8f0; padding: 0.85rem 1.5rem; border-radius: 12px; font-weight: 700; font-size: 0.9rem; cursor: pointer; transition: 0.3s; display: flex; align-items: center; gap: 0.5rem; }
-                .print-btn:hover { background: #f8fafc; border-color: #cbd5e1; }
+                .print-btn { background: white; color: #1e293b; border: 1.5px solid #cbd5e1; padding: 0.85rem 1.5rem; border-radius: 12px; font-weight: 700; font-size: 0.9rem; cursor: pointer; transition: 0.3s; display: flex; align-items: center; gap: 0.5rem; }
+                .print-btn:hover { background: #f8fafc; border-color: var(--navy-deep); }
 
                 @media print {
                     :global(.sidebar), :global(.admin-header), .header-actions, .row-actions, .maritime-accent {

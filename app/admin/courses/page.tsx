@@ -186,10 +186,8 @@ export default function CoursesPage() {
           <h1>Gestão de Cursos</h1>
           <p>Administre o catálogo de formações e materiais didáticos.</p>
         </div>
-        <div className="header-actions" style={{ display: 'flex', gap: '1rem' }}>
-          <button className="print-btn" onClick={() => window.print()} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', background: '#e2e8f0', color: '#0f172a', border: 'none', padding: '0.85rem 1.5rem', borderRadius: '12px', fontWeight: 700, fontSize: '0.9rem', cursor: 'pointer' }}>
-            🖨️ Imprimir Lista
-          </button>
+        <div className="header-actions">
+          <button className="print-btn" onClick={() => window.print()}>🖨️ Imprimir Lista</button>
           <button className="new-btn" onClick={() => handleOpenModal()}>+ Novo Curso</button>
         </div>
       </div>
@@ -435,23 +433,7 @@ export default function CoursesPage() {
           align-items: flex-start;
           margin-bottom: 2.5rem;
         }
-        .page-top h1 { font-size: 1.8rem; color: var(--navy-deep); margin: 0.25rem 0; font-weight: 800; }
         .page-top p { color: #64748b; margin: 0; font-size: 0.95rem; }
-
-        .new-btn {
-          background: var(--navy-deep);
-          color: white;
-          border: none;
-          padding: 0.85rem 1.5rem;
-          border-radius: 12px;
-          font-weight: 700;
-          font-size: 0.9rem;
-          cursor: pointer;
-          transition: 0.3s;
-          white-space: nowrap;
-          box-shadow: 0 4px 6px -1px rgba(0,0,0,0.15);
-        }
-        .new-btn:hover { background: var(--ocean-blue); transform: translateY(-2px); }
 
         .loader, .empty {
           text-align: center;

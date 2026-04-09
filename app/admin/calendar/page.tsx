@@ -1,11 +1,31 @@
-'use client';
+import React, { useState, useEffect } from 'react';
 
 export default function CalendarPage() {
-  const dummyEvents = [
-    { date: '07-04-2026', time: '09:00', event: 'Início Turma STCW-2026-A', type: 'Aula Teórica', location: 'Sala 101' },
-    { date: '08-04-2026', time: '14:30', event: 'Exame de GMDSS', type: 'Avaliação', location: 'Laboratório Rádio' },
-    { date: '10-04-2026', time: '10:00', event: 'Prática de Sobrevivência', type: 'Aula Prática', location: 'Piscina Municipal' }
-  ];
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [events, setEvents] = useState([
+    { id: '1', date: '2026-04-07', time: '09:00', event: 'Início Turma STCW-2026-A', type: 'Aula Teórica', location: 'Sala 101' },
+    { id: '2', date: '2026-04-08', time: '14:30', event: 'Exame de GMDSS', type: 'Avaliação', location: 'Laboratório Rádio' },
+    { id: '3', date: '2026-04-10', time: '10:00', event: 'Prática de Sobrevivência', type: 'Aula Prática', location: 'Piscina Municipal' }
+  ]);
+
+  const [formData, setFormData] = useState({
+    date: '',
+    time: '',
+    event: '',
+    type: 'Aula Teórica',
+    location: ''
+  });
+
+  const handleSave = (e: React.FormEvent) => {
+    e.preventDefault();
+    const newEvent = {
+      id: Math.random().toString(36).substr(2, 9),
+      ...formData
+    };
+    setEvents([...events, newEvent]);
+    setIsModalOpen(false);
+    setFormData({ date: '', time: '', event: '', type: 'Aula Teórica', location: '' });
+  };
 
   return (
     <div className="page-wrap">
@@ -17,7 +37,7 @@ export default function CalendarPage() {
       <div className="page-content card">
         <div className="table-header">
           <h2>Próximos Eventos Agendados</h2>
-          <button className="btn-primary">+ Novo Agendamento</button>
+          <button className="btn-primary" onClick={() => setIsModalOpen(true)}>+ Novo Agendamento</button>
         </div>
 
         <table className="data-table">
@@ -32,8 +52,8 @@ export default function CalendarPage() {
             </tr>
           </thead>
           <tbody>
-            {dummyEvents.map((p, i) => (
-              <tr key={i}>
+            {events.map((p) => (
+              <tr key={p.id}>
                 <td className="bold">{p.date}</td>
                 <td>{p.time}</td>
                 <td className="bold">{p.event}</td>
@@ -46,30 +66,124 @@ export default function CalendarPage() {
             ))}
           </tbody>
         </table>
+        {events.length === 0 && <div className="empty-state">Nenhum evento agendado.</div>}
       </div>
+
+      {isModalOpen && (
+        <div className="overlay">
+          <div className="modal-box">
+            <div className="modal-top">
+              <div>
+                <h2>⚓ Novo Agendamento</h2>
+                <p>Registe um novo evento ou atividade no calendário.</p>
+              </div>
+              <button className="close-x" onClick={() => setIsModalOpen(false)}>×</button>
+            </div>
+
+            <form onSubmit={handleSave} className="modal-form">
+              <div className="field">
+                <label>Título do Evento *</label>
+                <input 
+                  type="text" 
+                  required 
+                  value={formData.event} 
+                  onChange={e => setFormData({...formData, event: e.target.value})}
+                  placeholder="Ex: Aula de Navegação"
+                />
+              </div>
+
+              <div className="field-row">
+                <div className="field">
+                  <label>Data *</label>
+                  <input 
+                    type="date" 
+                    required 
+                    value={formData.date} 
+                    onChange={e => setFormData({...formData, date: e.target.value})}
+                  />
+                </div>
+                <div className="field">
+                  <label>Hora *</label>
+                  <input 
+                    type="time" 
+                    required 
+                    value={formData.time} 
+                    onChange={e => setFormData({...formData, time: e.target.value})}
+                  />
+                </div>
+              </div>
+
+              <div className="field">
+                <label>Tipo de Evento</label>
+                <select value={formData.type} onChange={e => setFormData({...formData, type: e.target.value})}>
+                  <option value="Aula Teórica">Aula Teórica</option>
+                  <option value="Aula Prática">Aula Prática</option>
+                  <option value="Avaliação">Avaliação</option>
+                  <option value="Formatura">Formatura</option>
+                  <option value="Outro">Outro</option>
+                </select>
+              </div>
+
+              <div className="field">
+                <label>Localização</label>
+                <input 
+                  type="text" 
+                  value={formData.location} 
+                  onChange={e => setFormData({...formData, location: e.target.value})}
+                  placeholder="Ex: Sala 102 ou Porto de Luanda"
+                />
+              </div>
+
+              <div className="modal-footer">
+                <button type="button" className="btn-cancel" onClick={() => setIsModalOpen(false)}>Cancelar</button>
+                <button type="submit" className="btn-save">✓ Confirmar Agendamento</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
 
       <style jsx>{`
         .page-wrap { display: flex; flex-direction: column; gap: 2rem; position: relative; }
         .page-header { position: sticky; top: -10px; z-index: 10; background: linear-gradient(135deg, #0a2a5e 0%, #173b7d 100%); padding: 2rem; border-radius: 14px; color: white; box-shadow: 0 10px 30px rgba(10, 42, 94, 0.15); }
         .page-header h1 { font-family: 'Outfit', sans-serif; font-size: 1.8rem; margin-bottom: 0.5rem; color: #F5C518; }
-        .page-header p { color: #e2e8f0; }
+        .page-header p { color: #e2e8f0; font-size: 0.95rem; }
         
-        .card { background: #ffffff; border-radius: 14px; padding: 2rem; border: 1px solid #e2e8f0; }
+        .card { background: #ffffff; border-radius: 14px; padding: 2rem; border: 1px solid #e2e8f0; box-shadow: 0 4px 12px rgba(0,0,0,0.03); }
         
-        .table-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; border-bottom: 2px solid #f1f5f9; padding-bottom: 1rem; }
+        .table-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; border-bottom: 2px solid #f1f5f9; padding-bottom: 1.25rem; }
         .table-header h2 { color: #0a2a5e; font-family: 'Outfit', sans-serif; font-size: 1.25rem; margin: 0; }
-        .btn-primary { background: #0a2a5e; color: white; border: none; padding: 0.6rem 1.2rem; border-radius: 8px; font-weight: 700; cursor: pointer; transition: 0.2s; }
-        .btn-primary:hover { background: #173b7d; }
+        .btn-primary { background: #0a2a5e; color: white; border: none; padding: 0.8rem 1.5rem; border-radius: 10px; font-weight: 700; cursor: pointer; transition: 0.3s; box-shadow: 0 4px 6px rgba(10, 42, 94, 0.2); }
+        .btn-primary:hover { background: #173b7d; transform: translateY(-2px); }
 
         .data-table { width: 100%; border-collapse: collapse; text-align: left; }
-        .data-table th { padding: 1rem; background: #f8fafc; color: #475569; font-size: 0.8rem; text-transform: uppercase; border-bottom: 1px solid #e2e8f0; }
-        .data-table td { padding: 1rem; border-bottom: 1px solid #f1f5f9; font-size: 0.9rem; color: #0f1e35; }
+        .data-table th { padding: 1rem; background: #f8fafc; color: #64748b; font-size: 0.75rem; text-transform: uppercase; border-bottom: 1px solid #e2e8f0; font-weight: 700; }
+        .data-table td { padding: 1.1rem 1rem; border-bottom: 1px solid #f1f5f9; font-size: 0.9rem; color: #0f1e35; }
         .bold { font-weight: 700; color: #0a2a5e; }
 
-        .type-badge { background: #fef3c7; color: #92400e; padding: 0.2rem 0.6rem; border-radius: 4px; font-size: 0.75rem; font-weight: 700; }
+        .type-badge { background: #fff7ed; color: #c2410c; padding: 0.3rem 0.75rem; border-radius: 50px; font-size: 0.7rem; font-weight: 800; }
 
-        .action-btn.view { background: #f0f9ff; color: #0a2a5e; border: none; padding: 0.4rem 0.8rem; border-radius: 6px; font-weight: 700; cursor: pointer; }
+        .action-btn.view { background: #f0f9ff; color: #0a2a5e; border: none; padding: 0.5rem 1rem; border-radius: 8px; font-weight: 700; cursor: pointer; transition: 0.2s; }
         .action-btn.view:hover { background: #e0f2fe; }
+
+        .overlay { position: fixed; inset: 0; background: rgba(0,20,50,0.5); backdrop-filter: blur(8px); display: flex; align-items: center; justify-content: center; z-index: 1000; padding: 1rem; }
+        .modal-box { background: white; width: 100%; max-width: 500px; border-radius: 20px; padding: 2.5rem; box-shadow: 0 25px 60px rgba(0,0,0,0.3); }
+        .modal-top { display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 2px solid #f1f5f9; padding-bottom: 1.5rem; margin-bottom: 2rem; }
+        .modal-top h2 { margin: 0; font-size: 1.4rem; color: var(--navy-deep); font-weight: 800; }
+        .modal-top p { margin: 0.25rem 0 0; font-size: 0.875rem; color: #64748b; }
+        .close-x { background: #f1f5f9; border: none; width: 36px; height: 36px; border-radius: 50%; font-size: 1.4rem; cursor: pointer; color: #64748b; display: flex; align-items: center; justify-content: center; }
+        
+        .modal-form { display: flex; flex-direction: column; gap: 1.25rem; }
+        .field { display: flex; flex-direction: column; gap: 0.4rem; }
+        .field label { font-weight: 700; font-size: 0.82rem; color: #475569; }
+        .field input, .field select { padding: 0.8rem 1rem; border: 1.5px solid #e2e8f0; border-radius: 10px; font-size: 0.9rem; background: #f8fafc; }
+        .field input:focus, .field select:focus { border-color: #0a2a5e; outline: none; background: white; }
+        .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+
+        .modal-footer { display: flex; justify-content: flex-end; gap: 1rem; padding-top: 1.5rem; border-top: 2px solid #f1f5f9; margin-top: 0.5rem; }
+        .btn-cancel { padding: 0.8rem 1.5rem; border-radius: 10px; border: 1.5px solid #e2e8f0; background: white; font-weight: 700; cursor: pointer; }
+        .btn-save { padding: 0.8rem 1.5rem; border-radius: 10px; border: none; background: #0a2a5e; color: white; font-weight: 700; cursor: pointer; }
+        .empty-state { text-align: center; padding: 2rem; color: #94a3b8; font-style: italic; }
       `}</style>
     </div>
   );

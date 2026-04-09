@@ -44,6 +44,9 @@ export default function MatriculationPage() {
     const [searchQuery, setSearchQuery] = useState('');
     const [selectedStudent, setSelectedStudent] = useState<Student | null>(null);
     const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
+    const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
+    const [paymentMatriculation, setPaymentMatriculation] = useState<Matriculation | null>(null);
+    const [paymentData, setPaymentData] = useState({ amount: 0, method: 'Dinheiro', date: new Date().toISOString().split('T')[0] });
     const [formData, setFormData] = useState({
         course: '', classroom: '', trainer: '', schedule: '',
         duration: '', startDate: '', paymentStatus: 'Pendente' as string, amountDue: 0
@@ -132,6 +135,32 @@ export default function MatriculationPage() {
         if (!confirm('Remover esta matrícula?')) return;
         await fetch(`/api/matriculations/${id}`, { method: 'DELETE' });
         fetchData();
+    };
+
+    const handleRegisterPayment = async (e: React.FormEvent) => {
+        e.preventDefault();
+        if (!paymentMatriculation) return;
+        
+        const newAmountDue = Math.max(0, (paymentMatriculation.amountDue || 0) - paymentData.amount);
+        const newStatus = newAmountDue === 0 ? 'Pago Total' : 'Parcial';
+
+        try {
+            const res = await fetch(`/api/matriculations/${paymentMatriculation.id}`, {
+                method: 'PATCH',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    amountDue: newAmountDue,
+                    paymentStatus: newStatus
+                })
+            });
+            if (res.ok) {
+                setIsPaymentModalOpen(false);
+                fetchData();
+                alert('Pagamento registado com sucesso!');
+            }
+        } catch (error) {
+            console.error(error);
+        }
     };
 
     const handlePrintReceipt = (m: Matriculation) => {
@@ -309,16 +338,10 @@ export default function MatriculationPage() {
                     <h1>Gestão de Matrículas</h1>
                     <p>Inscreva alunos em turmas, defina horários e controle pagamentos.</p>
                 </div>
-                <div className="header-actions" style={{ display: 'flex', gap: '1rem' }}>
-                    <button className="print-report-btn print-btn" onClick={() => window.print()} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                        🖨️ Imprimir Lista
-                    </button>
-                    <button className="print-report-btn" onClick={() => handlePrintAll()}>
-                        📊 Relatório Geral
-                    </button>
-                    <button className="new-btn" onClick={() => { setIsModalOpen(true); setSelectedStudent(null); setSearchQuery(''); }}>
-                        + Nova Matrícula
-                    </button>
+                <div className="header-actions">
+                    <button className="print-btn" onClick={() => window.print()}>🖨️ Imprimir Lista</button>
+                    <button className="report-btn" onClick={() => handlePrintAll()}>📊 Relatório Geral</button>
+                    <button className="new-btn" onClick={() => { setIsModalOpen(true); setSelectedStudent(null); setSearchQuery(''); }}>+ Nova Matrícula</button>
                 </div>
             </div>
 
@@ -417,6 +440,7 @@ export default function MatriculationPage() {
                                         </div>
                                     </td>
                                     <td className="align-right actions-cell">
+                                        <button className="row-btn pay-btn" onClick={() => { setPaymentMatriculation(m); setPaymentData({...paymentData, amount: m.amountDue}); setIsPaymentModalOpen(true); }} title="Registar Pagamento">💰</button>
                                         <button className="row-btn action-print" onClick={() => handlePrintReceipt(m)} title="Imprimir Comprovativo">📄</button>
                                         <button className="row-btn delete" onClick={() => handleDelete(m.id)} title="Remover">🗑️</button>
                                     </td>
@@ -582,6 +606,50 @@ export default function MatriculationPage() {
                     </div>
                 </div>
             )}
+            {/* Manual Payment Modal */}
+            {isPaymentModalOpen && paymentMatriculation && (
+                <div className="overlay">
+                    <div className="modal-box small-modal">
+                        <div className="modal-top">
+                            <div>
+                                <h2>💰 Registar Pagamento</h2>
+                                <p>Atualize o saldo da matrícula de <strong>{paymentMatriculation.studentName}</strong></p>
+                            </div>
+                            <button className="close-x" onClick={() => setIsPaymentModalOpen(false)}>×</button>
+                        </div>
+
+                        <form onSubmit={handleRegisterPayment} className="modal-form">
+                            <div className="field">
+                                <label>Valor a Pagar (Saldo Atual: {paymentMatriculation.amountDue} KZ) *</label>
+                                <input 
+                                    type="number" 
+                                    required 
+                                    max={paymentMatriculation.amountDue} 
+                                    value={paymentData.amount} 
+                                    onChange={e => setPaymentData({...paymentData, amount: parseInt(e.target.value) || 0})}
+                                />
+                            </div>
+                            <div className="field">
+                                <label>Método de Pagamento</label>
+                                <select value={paymentData.method} onChange={e => setPaymentData({...paymentData, method: e.target.value})}>
+                                    <option value="Dinheiro">Dinheiro</option>
+                                    <option value="TPA">TPA / Multibanco</option>
+                                    <option value="Transferência">Transferência Bancária</option>
+                                </select>
+                            </div>
+                            <div className="field">
+                                <label>Data do Pagamento</label>
+                                <input type="date" value={paymentData.date} onChange={e => setPaymentData({...paymentData, date: e.target.value})} />
+                            </div>
+
+                            <div className="modal-footer">
+                                <button type="button" className="btn-cancel" onClick={() => setIsPaymentModalOpen(false)}>Cancelar</button>
+                                <button type="submit" className="btn-save">✓ Confirmar Recebimento</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            )}
 
             {/* Modal */}
             {isModalOpen && (
@@ -713,11 +781,13 @@ export default function MatriculationPage() {
                 .page-top h1 { font-size: 1.8rem; color: var(--navy-deep); margin: 0.25rem 0; font-weight: 800; }
                 .page-top p { color: #64748b; margin: 0; font-size: 0.95rem; }
 
-                .new-btn { background: var(--navy-deep); color: white; border: none; padding: 0.85rem 1.5rem; border-radius: 12px; font-weight: 700; font-size: 0.9rem; cursor: pointer; transition: 0.3s; white-space: nowrap; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.15); margin-right: 0.75rem; }
-                .new-btn:hover { background: var(--ocean-blue); transform: translateY(-2px); }
+                .new-btn { background: var(--navy-deep); color: white; border: none; padding: 0.85rem 1.75rem; border-radius: 12px; font-weight: 800; font-size: 0.95rem; cursor: pointer; transition: 0.3s; white-space: nowrap; box-shadow: 0 4px 12px rgba(10, 42, 94, 0.2); border: 2px solid transparent; }
+                .new-btn:hover { background: var(--ocean-blue); transform: translateY(-2px); border-color: rgba(255,255,255,0.2); }
 
-                .print-report-btn { background: white; color: var(--navy-deep); border: 1.5px solid var(--navy-deep); padding: 0.85rem 1.5rem; border-radius: 12px; font-weight: 700; font-size: 0.9rem; cursor: pointer; transition: 0.3s; }
-                .print-report-btn:hover { background: #f0f7ff; transform: translateY(-2px); }
+                .print-btn, .report-btn { background: white; color: var(--navy-deep); border: 1.5px solid #cbd5e1; padding: 0.85rem 1.5rem; border-radius: 12px; font-weight: 700; font-size: 0.9rem; cursor: pointer; transition: 0.3s; }
+                .print-btn:hover, .report-btn:hover { background: #f8fafc; border-color: var(--navy-deep); transform: translateY(-1px); }
+
+                .header-actions { display: flex; gap: 0.75rem; align-items: center; }
 
                 .loader { text-align: center; padding: 4rem; color: #94a3b8; font-weight: 500; }
                 .empty-state { text-align: center; padding: 3rem; color: #94a3b8; font-weight: 500; }
@@ -754,12 +824,15 @@ export default function MatriculationPage() {
 
                 .align-right { text-align: right; }
                 .actions-cell { display: flex; justify-content: flex-end; gap: 0.5rem; }
-                .row-btn {background: none; border: none; cursor: pointer; font-size: 1.1rem; padding: 0.35rem; border-radius: 6px; transition: 0.2s; display: inline-flex; align-items: center; justify-content: center; opacity: 0.8; }
-                .row-btn:hover { opacity: 1; }
+                .row-btn {background: none; border: none; cursor: pointer; font-size: 1rem; padding: 0.5rem; border-radius: 8px; transition: 0.2s; display: inline-flex; align-items: center; justify-content: center; margin-left: 0.25rem; }
+                .pay-btn { background: #ecfdf5; color: #059669; }
+                .pay-btn:hover { background: #d1fae5; transform: scale(1.1); }
                 .action-print { color: var(--ocean-blue); background: #f0f9ff; }
-                .action-print:hover { background: #e0f2fe; }
+                .action-print:hover { background: #e0f2fe; transform: scale(1.1); }
                 .row-btn.delete { color: #dc2626; background: #fef2f2; }
-                .row-btn.delete:hover { background: #fee2e2; }
+                .row-btn.delete:hover { background: #fee2e2; transform: scale(1.1); }
+
+                .small-modal { max-width: 450px !important; }
 
                 /* Receipt Modal */
                 .receipt-modal { max-width: 600px; }

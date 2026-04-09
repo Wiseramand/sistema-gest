@@ -1,15 +1,33 @@
-'use client';
-
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 export default function PaymentsPage() {
   const [selectedPayment, setSelectedPayment] = useState<any>(null);
-  
-  const dummyPayments = [
+  const [isManualModalOpen, setIsManualModalOpen] = useState(false);
+  const [payments, setPayments] = useState([
     { id: 'PAY-001', student: 'Rui Silva', course: 'Segurança Básica (STCW)', amount: '150.00', method: 'MBWay', date: '06-04-2026', status: 'Processado' },
     { id: 'PAY-002', student: 'Ana Pereira', course: 'Operador GMDSS', amount: '320.00', method: 'Multibanco', date: '05-04-2026', status: 'Processado' },
     { id: 'PAY-003', student: 'Carlos Costa', course: 'Mergulho Profissional', amount: '500.00', method: 'Transferência Bancária', date: '04-04-2026', status: 'Aguardando Validação' }
-  ];
+  ]);
+
+  const [formData, setFormData] = useState({
+    student: '',
+    course: '',
+    amount: '',
+    method: 'Dinheiro',
+    date: new Date().toISOString().split('T')[0]
+  });
+
+  const handleManualSave = (e: React.FormEvent) => {
+    e.preventDefault();
+    const newPay = {
+      id: `PAY-${Math.floor(1000 + Math.random() * 9000)}`,
+      status: 'Processado',
+      ...formData
+    };
+    setPayments([newPay, ...payments]);
+    setIsManualModalOpen(false);
+    setFormData({ student: '', course: '', amount: '', method: 'Dinheiro', date: new Date().toISOString().split('T')[0] });
+  };
 
   const handlePrint = () => {
     window.print();
@@ -28,7 +46,7 @@ export default function PaymentsPage() {
       <div className="page-content card no-print">
         <div className="table-header">
           <h2>Últimos Pagamentos Recebidos</h2>
-          <button className="btn-primary">+ Registar Pagamento Manual</button>
+          <button className="btn-primary" onClick={() => setIsManualModalOpen(true)}>+ Registar Pagamento Manual</button>
         </div>
 
         <table className="data-table">
@@ -45,7 +63,7 @@ export default function PaymentsPage() {
             </tr>
           </thead>
           <tbody>
-            {dummyPayments.map((p, i) => (
+            {payments.map((p, i) => (
               <tr key={i}>
                 <td className="mono">{p.id}</td>
                 <td className="bold">{p.student}</td>
@@ -68,6 +86,56 @@ export default function PaymentsPage() {
           </tbody>
         </table>
       </div>
+
+      {/* Manual Payment Modal */}
+      {isManualModalOpen && (
+        <div className="modal-overlay no-print">
+          <div className="modal-box small-modal">
+            <div className="modal-top">
+              <div>
+                <h2>⚓ Pagamento Manual</h2>
+                <p>Registe uma entrada de caixa física ou transferência.</p>
+              </div>
+              <button className="close-x" onClick={() => setIsManualModalOpen(false)}>×</button>
+            </div>
+
+            <form onSubmit={handleManualSave} className="modal-form">
+              <div className="field">
+                <label>Nome do Formando *</label>
+                <input type="text" required value={formData.student} onChange={e => setFormData({...formData, student: e.target.value})} placeholder="Ex: João Ratão" />
+              </div>
+              <div className="field">
+                <label>Curso / Serviço *</label>
+                <input type="text" required value={formData.course} onChange={e => setFormData({...formData, course: e.target.value})} placeholder="Ex: Inscrição STCW" />
+              </div>
+              <div className="field-row">
+                <div className="field">
+                  <label>Valor (€) *</label>
+                  <input type="number" step="0.01" required value={formData.amount} onChange={e => setFormData({...formData, amount: e.target.value})} />
+                </div>
+                <div className="field">
+                  <label>Data *</label>
+                  <input type="date" required value={formData.date} onChange={e => setFormData({...formData, date: e.target.value})} />
+                </div>
+              </div>
+              <div className="field">
+                <label>Método de Pagamento</label>
+                <select value={formData.method} onChange={e => setFormData({...formData, method: e.target.value})}>
+                  <option value="Dinheiro">Dinheiro (Numerário)</option>
+                  <option value="Transferência">Transferência Bancária</option>
+                  <option value="TPA">Terminal Depósito/TPA</option>
+                  <option value="Outro">Outro</option>
+                </select>
+              </div>
+
+              <div className="modal-footer">
+                <button type="button" className="btn-close" onClick={() => setIsManualModalOpen(false)}>Cancelar</button>
+                <button type="submit" className="btn-print" style={{ margin: 0 }}>✓ Gravar Pagamento</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
 
       {/* Modal Recibo */}
       {selectedPayment && (
@@ -205,11 +273,22 @@ export default function PaymentsPage() {
         .total-box label { font-size: 0.75rem; color: #94a3b8; font-weight: 700; }
         .total-val { font-size: 2.2rem; color: #0a2a5e; font-weight: 800; font-family: 'Outfit', sans-serif; margin-top: 5px; }
 
-        .receipt-footer { padding: 1.5rem 2rem; background: #f8fafc; display: flex; gap: 1rem; border-top: 1px solid #e2e8f0; }
-        .btn-print { flex: 2; background: #0a2a5e; color: white; border: none; padding: 12px; border-radius: 8px; font-weight: 700; cursor: pointer; transition: 0.2s; }
-        .btn-close { flex: 1; background: #e2e8f0; color: #475569; border: none; padding: 12px; border-radius: 8px; font-weight: 700; cursor: pointer; }
         .btn-print:hover { background: #173b7d; }
         .btn-close:hover { background: #cbd5e1; }
+
+        .small-modal { max-width: 500px !important; }
+        .modal-top { display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 2px solid #f1f5f9; padding-bottom: 1.5rem; margin-bottom: 2rem; }
+        .modal-top h2 { margin: 0; font-size: 1.4rem; color: #0a2a5e; font-weight: 800; font-family: 'Outfit', sans-serif;}
+        .modal-top p { margin: 0.25rem 0 0; font-size: 0.85rem; color: #64748b; }
+        .close-x { background: #f1f5f9; border: none; width: 36px; height: 36px; border-radius: 50%; font-size: 1.4rem; cursor: pointer; color: #64748b; display: flex; align-items: center; justify-content: center; transition: 0.2s; }
+        .close-x:hover { background: #e2e8f0; color: #0a2a5e; }
+
+        .modal-form { display: flex; flex-direction: column; gap: 1.25rem; }
+        .field { display: flex; flex-direction: column; gap: 0.4rem; }
+        .field label { font-weight: 700; font-size: 0.82rem; color: #475569; }
+        .field input, .field select { padding: 0.8rem 1rem; border: 1.5px solid #e2e8f0; border-radius: 10px; font-size: 0.9rem; background: #f8fafc; font-family: inherit; }
+        .field input:focus, .field select:focus { border-color: #0a2a5e; outline: none; background: #fff; }
+        .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
 
         .print-only { display: none; }
 
