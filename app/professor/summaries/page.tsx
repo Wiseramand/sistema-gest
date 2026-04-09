@@ -87,6 +87,7 @@ export default function SummariesPage() {
             if (res.ok) {
                 setNewSummary({ ...newSummary, content: '' });
                 fetchSummaries();
+                alert('Sumário guardado com sucesso!');
             }
         } catch (e) { console.error(e); }
         finally { setSaving(false); }
@@ -153,7 +154,7 @@ export default function SummariesPage() {
                                 ></textarea>
                             </div>
                             <div className="form-actions">
-                                <button type="submit" className="btn-save" disabled={saving || !selectedCourse}>
+                                <button type="submit" className="btn btn-primary" disabled={saving || !selectedCourse}>
                                     {saving ? 'A guardar...' : '✓ Guardar Sumário'}
                                 </button>
                             </div>
@@ -204,9 +205,6 @@ export default function SummariesPage() {
                 .field input:focus, .field textarea:focus { outline: none; border-color: var(--ocean-blue); background: white; }
                 
                 .form-actions { display: flex; justify-content: flex-end; }
-                .btn-save { background: var(--navy-deep); color: white; border: none; padding: 0.85rem 2rem; border-radius: 12px; font-weight: 700; cursor: pointer; transition: 0.3s; }
-                .btn-save:hover { background: var(--ocean-blue); transform: translateY(-2px); }
-                .btn-save:disabled { opacity: 0.5; cursor: not-allowed; }
                 
                 .history-box h3 { font-size: 1.2rem; color: var(--navy-deep); margin-bottom: 1rem; }
                 .summary-list { display: flex; flex-direction: column; gap: 1rem; }
