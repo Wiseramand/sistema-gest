@@ -42,6 +42,7 @@ export async function POST(request: Request) {
                         status: 'PENDENTE',
                         validUntil: fiveYearsFromNow,
                         generatedAt: new Date(),
+                        certification: body.certification || 'Bahamas',
                     }
                 })
             )

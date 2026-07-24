@@ -165,6 +165,7 @@ model Certificate {
   createdAt       DateTime  @default(now())
   updatedAt       DateTime  @updatedAt
   trainingCenter  String    @default("Marítimo Training Center")
+  certification   String?   @default("Bahamas")
 }
 
 model Company {

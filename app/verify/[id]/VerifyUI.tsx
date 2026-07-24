@@ -83,9 +83,7 @@ export default function VerifyUI({ certificate, student, id }: VerifyUIProps) {
             letter-spacing: 1px;
             margin: 0 0 1.5rem;
           }
-          .error-body {
-            text-align: left;
-          }
+          .error-body { text-align: left; }
           .error-msg {
             color: #D1D5DB;
             font-size: 1rem;
@@ -110,53 +108,16 @@ export default function VerifyUI({ certificate, student, id }: VerifyUIProps) {
             padding: 1.25rem;
             margin-bottom: 2rem;
           }
-          .help-box h3 {
-            font-size: 0.95rem;
-            color: #F59E0B;
-            margin: 0 0 0.75rem;
-          }
-          .help-box ul {
-            margin: 0;
-            padding-left: 1.25rem;
-            color: #9CA3AF;
-            font-size: 0.875rem;
-            line-height: 1.6;
-          }
-          .actions {
-            display: flex;
-            flex-direction: column;
-            gap: 0.75rem;
-          }
+          .help-box h3 { font-size: 0.95rem; color: #F59E0B; margin: 0 0 0.75rem; }
+          .help-box ul { margin: 0; padding-left: 1.25rem; color: #9CA3AF; font-size: 0.875rem; line-height: 1.6; }
+          .actions { display: flex; flex-direction: column; gap: 0.75rem; }
           .btn-primary {
-            display: block;
-            text-align: center;
-            background: linear-gradient(135deg, #EA580C 0%, #C2410C 100%);
-            color: white;
-            padding: 0.875rem;
-            border-radius: 12px;
-            font-weight: 700;
-            text-decoration: none;
-            transition: all 0.2s;
-          }
-          .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(234, 88, 12, 0.4);
+            display: block; text-align: center; background: linear-gradient(135deg, #EA580C 0%, #C2410C 100%);
+            color: white; padding: 0.875rem; border-radius: 12px; font-weight: 700; text-decoration: none; transition: all 0.2s;
           }
           .btn-secondary {
-            display: block;
-            text-align: center;
-            background: rgba(255, 255, 255, 0.05);
-            color: #D1D5DB;
-            padding: 0.875rem;
-            border-radius: 12px;
-            font-weight: 600;
-            text-decoration: none;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            transition: all 0.2s;
-          }
-          .btn-secondary:hover {
-            background: rgba(255, 255, 255, 0.1);
-            color: white;
+            display: block; text-align: center; background: rgba(255, 255, 255, 0.05); color: #D1D5DB;
+            padding: 0.875rem; border-radius: 12px; font-weight: 600; text-decoration: none; border: 1px solid rgba(255, 255, 255, 0.1); transition: all 0.2s;
           }
         `}</style>
       </div>
@@ -174,8 +135,18 @@ export default function VerifyUI({ certificate, student, id }: VerifyUIProps) {
     ? new Date(certificate.validUntil).toLocaleDateString('pt-PT', { day: '2-digit', month: 'long', year: 'numeric' })
     : 'Vitalício / Sem Validade';
 
+  // 1. Nome completo do formando
   const studentName = certificate.studentName || student?.name || 'Formando Registado';
-  const studentDoc = student?.bi || student?.idDocument || 'Documento Autenticado';
+  const studentDoc = student?.bi || student?.idDocument || '';
+
+  // 2. Foto do formando
+  const studentPhoto = student?.photo || student?.image || null;
+
+  // 4. Certificação Marítima (Bahamas ou Vanuatu)
+  const rawCertType = certificate.certification || certificate.certificationType || certificate.flagState || 'Bahamas';
+  const maritimeCertification = rawCertType.toLowerCase().includes('vanuatu') ? 'Vanuatu' : 'Bahamas';
+  const flagEmoji = maritimeCertification === 'Vanuatu' ? '🇻🇺' : '🇧🇸';
+  const flagAuthority = maritimeCertification === 'Vanuatu' ? 'Vanuatu Maritime Services (VMSL)' : 'Bahamas Maritime Authority (BMA)';
 
   return (
     <div className="verify-container">
@@ -210,56 +181,71 @@ export default function VerifyUI({ certificate, student, id }: VerifyUIProps) {
           </div>
         </div>
 
-        {/* Formando Profile */}
-        <div className="student-box">
-          <div className="avatar-circle">
-            {student?.photo ? (
-              <img src={student.photo} alt={studentName} className="avatar-img" />
-            ) : (
-              <span>{studentName.charAt(0).toUpperCase()}</span>
-            )}
-          </div>
-          <div className="student-info">
-            <span className="info-label">FORMANDO CERTIFICADO</span>
-            <h3 className="student-name">{studentName}</h3>
-            {studentDoc && <span className="student-doc">Doc. ID: {studentDoc}</span>}
-          </div>
-        </div>
+        {/* CARTÃO DE COMPROVAÇÃO DE DADOS SOLICITADOS */}
+        <div className="proof-card">
+          {/* 1. Nome Completo e 2. Foto do Formando */}
+          <div className="student-profile-header">
+            <div className="avatar-wrapper">
+              {studentPhoto ? (
+                <img src={studentPhoto} alt={studentName} className="avatar-img" />
+              ) : (
+                <div className="avatar-placeholder">
+                  <span>{studentName.charAt(0).toUpperCase()}</span>
+                </div>
+              )}
+              <div className="avatar-seal-badge">⚓</div>
+            </div>
 
-        {/* Details Grid */}
-        <div className="details-grid">
-          <div className="detail-item full">
-            <span className="label">Curso / Formação Marítima</span>
-            <span className="val highlight">{certificate.courseTitle}</span>
-          </div>
-
-          <div className="detail-item">
-            <span className="label">ID de Autenticação</span>
-            <span className="val code">{certificate.id}</span>
+            <div className="student-meta">
+              <span className="section-badge">👤 FORMANDO DIPLOMADO</span>
+              <h1 className="student-full-name">{studentName}</h1>
+              {studentDoc && <span className="student-doc-tag">Documento ID / BI: {studentDoc}</span>}
+            </div>
           </div>
 
-          <div className="detail-item">
-            <span className="label">Estado no Sistema</span>
-            <span className={`val status-tag ${certificate.status?.toLowerCase()}`}>
-              {certificate.status || 'APROVADO'}
-            </span>
-          </div>
+          <div className="proof-divider"></div>
 
-          <div className="detail-item">
-            <span className="label">Data de Emissão</span>
-            <span className="val">{issueDateFormatted}</span>
-          </div>
+          {/* Grid de Comprovação: Curso, Certificação Marítima (Bahamas/Vanuatu) e Validade */}
+          <div className="proof-grid">
+            {/* 3. Curso Que Ele Fez */}
+            <div className="proof-box full-width">
+              <span className="box-label">🎓 CURSO / FORMAÇÃO REALIZADA</span>
+              <div className="box-value course-title">{certificate.courseTitle}</div>
+            </div>
 
-          <div className="detail-item">
-            <span className="label">Válido Até</span>
-            <span className={`val ${isExpired ? 'text-expired' : 'text-valid'}`}>
-              {validUntilFormatted}
-            </span>
-          </div>
+            {/* 4. Certificação Marítima (Bahamas ou Vanuatu) */}
+            <div className="proof-box flag-box">
+              <span className="box-label">⚓ CERTIFICAÇÃO MARÍTIMA</span>
+              <div className={`flag-badge-large ${maritimeCertification.toLowerCase()}`}>
+                <span className="flag-emoji">{flagEmoji}</span>
+                <div className="flag-text">
+                  <span className="flag-country">{maritimeCertification}</span>
+                  <span className="flag-authority">{flagAuthority}</span>
+                </div>
+              </div>
+            </div>
 
-          <div className="detail-item full">
-            <span className="label">Entidade Emissora</span>
-            <span className="val">Marítimo Training Center — Centro de Formação Marítima</span>
+            {/* 5. Data de Validade do Certificado */}
+            <div className="proof-box validity-box">
+              <span className="box-label">📅 DATA DE VALIDADE</span>
+              <div className={`box-value validity-date ${isExpired ? 'expired-text' : 'valid-text'}`}>
+                {validUntilFormatted}
+              </div>
+              <span className="validity-badge">
+                {isExpired ? '⚠️ Expirado' : '✅ Válido no Sistema'}
+              </span>
+            </div>
+
+            {/* ID do Certificado e Data de Emissão */}
+            <div className="proof-box">
+              <span className="box-label">🆔 ID DO CERTIFICADO</span>
+              <div className="box-value code-value">{certificate.id}</div>
+            </div>
+
+            <div className="proof-box">
+              <span className="box-label">🗓️ DATA DE EMISSÃO</span>
+              <div className="box-value">{issueDateFormatted}</div>
+            </div>
           </div>
         </div>
 
@@ -268,8 +254,8 @@ export default function VerifyUI({ certificate, student, id }: VerifyUIProps) {
           <div className="stamp-seal">
             <span className="seal-icon">🛡️</span>
             <div className="seal-info">
-              <strong>Homologação Digital Garantida</strong>
-              <p>Esta consulta confirma diretamente os dados em tempo real na base de dados oficial.</p>
+              <strong>Homologação Digital Marítima Confirmada</strong>
+              <p>Os dados apresentados acima foram verificados em tempo real na base de dados do Marítimo Training Center.</p>
             </div>
           </div>
         </div>
@@ -277,7 +263,7 @@ export default function VerifyUI({ certificate, student, id }: VerifyUIProps) {
         {/* Footer Actions */}
         <div className="actions no-print">
           <button onClick={() => window.print()} className="btn-primary">
-            🖨️ Imprimir / Guardar PDF
+            🖨️ Imprimir / Guardar Comprovativo PDF
           </button>
           <Link href="/" className="btn-secondary">
             ⚓ Voltar ao Início
@@ -300,18 +286,18 @@ export default function VerifyUI({ certificate, student, id }: VerifyUIProps) {
           background: rgba(28, 15, 10, 0.95);
           border: 1px solid rgba(234, 88, 12, 0.25);
           border-radius: 24px;
-          max-width: 620px;
+          max-width: 680px;
           width: 100%;
           padding: 2.5rem;
-          box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+          box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.75);
           backdrop-filter: blur(16px);
         }
 
         .brand-header {
           text-align: center;
-          margin-bottom: 2rem;
+          margin-bottom: 1.75rem;
           border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-          padding-bottom: 1.5rem;
+          padding-bottom: 1.25rem;
         }
         .logo-badge {
           font-size: 2.5rem;
@@ -358,11 +344,9 @@ export default function VerifyUI({ certificate, student, id }: VerifyUIProps) {
           background: rgba(14, 165, 233, 0.12);
           border: 1px solid rgba(14, 165, 233, 0.4);
         }
-        .status-icon {
-          font-size: 2.25rem;
-        }
+        .status-icon { font-size: 2.25rem; }
         .status-title {
-          font-size: 1rem;
+          font-size: 1.05rem;
           font-weight: 800;
           letter-spacing: 0.5px;
         }
@@ -375,90 +359,130 @@ export default function VerifyUI({ certificate, student, id }: VerifyUIProps) {
           margin-top: 0.2rem;
         }
 
-        .student-box {
-          display: flex;
-          align-items: center;
-          gap: 1.25rem;
-          background: rgba(255, 255, 255, 0.03);
-          border: 1px solid rgba(255, 255, 255, 0.08);
-          padding: 1.25rem 1.5rem;
-          border-radius: 16px;
-          margin-bottom: 1.75rem;
+        /* CARTÃO DE COMPROVAÇÃO DE DADOS */
+        .proof-card {
+          background: rgba(0, 0, 0, 0.4);
+          border: 1px solid rgba(234, 88, 12, 0.2);
+          border-radius: 20px;
+          padding: 1.75rem;
+          margin-bottom: 2rem;
         }
-        .avatar-circle {
-          width: 64px;
-          height: 64px;
-          border-radius: 50%;
-          background: linear-gradient(135deg, #EA580C 0%, #D97706 100%);
+
+        .student-profile-header {
           display: flex;
           align-items: center;
-          justify-content: center;
-          font-size: 1.75rem;
-          font-weight: 800;
-          color: white;
-          border: 2px solid rgba(255, 255, 255, 0.2);
-          overflow: hidden;
+          gap: 1.5rem;
+        }
+        .avatar-wrapper {
+          position: relative;
+          width: 90px;
+          height: 90px;
           flex-shrink: 0;
         }
         .avatar-img {
           width: 100%;
           height: 100%;
+          border-radius: 50%;
           object-fit: cover;
+          border: 3px solid #EA580C;
+          box-shadow: 0 4px 15px rgba(234, 88, 12, 0.3);
         }
-        .info-label {
-          font-size: 0.7rem;
+        .avatar-placeholder {
+          width: 100%;
+          height: 100%;
+          border-radius: 50%;
+          background: linear-gradient(135deg, #EA580C 0%, #D97706 100%);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 2.5rem;
+          font-weight: 900;
+          color: white;
+          border: 3px solid rgba(255, 255, 255, 0.2);
+          box-shadow: 0 4px 15px rgba(234, 88, 12, 0.3);
+        }
+        .avatar-seal-badge {
+          position: absolute;
+          bottom: 0;
+          right: 0;
+          background: #EA580C;
+          color: white;
+          width: 28px;
+          height: 28px;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 0.9rem;
+          border: 2px solid #1C0F0A;
+        }
+
+        .student-meta {
+          display: flex;
+          flex-direction: column;
+          gap: 0.3rem;
+        }
+        .section-badge {
+          font-size: 0.75rem;
           text-transform: uppercase;
           letter-spacing: 1px;
           color: #EA580C;
           font-weight: 800;
         }
-        .student-name {
-          font-size: 1.35rem;
-          font-weight: 800;
+        .student-full-name {
+          font-size: 1.6rem;
+          font-weight: 900;
           color: #FFFFFF;
-          margin: 0.1rem 0 0.25rem;
+          margin: 0;
+          line-height: 1.2;
         }
-        .student-doc {
+        .student-doc-tag {
           font-size: 0.85rem;
           color: #9CA3AF;
         }
 
-        .details-grid {
+        .proof-divider {
+          height: 1px;
+          background: rgba(255, 255, 255, 0.08);
+          margin: 1.5rem 0;
+        }
+
+        .proof-grid {
           display: grid;
           grid-template-columns: 1fr 1fr;
-          gap: 1rem;
-          background: rgba(0, 0, 0, 0.3);
-          padding: 1.5rem;
-          border-radius: 16px;
-          border: 1px solid rgba(255, 255, 255, 0.06);
-          margin-bottom: 1.75rem;
+          gap: 1.25rem;
         }
-        .detail-item {
+        .proof-box {
+          background: rgba(255, 255, 255, 0.03);
+          border: 1px solid rgba(255, 255, 255, 0.08);
+          border-radius: 14px;
+          padding: 1.15rem;
           display: flex;
           flex-direction: column;
-          gap: 0.25rem;
+          gap: 0.4rem;
         }
-        .detail-item.full {
+        .proof-box.full-width {
           grid-column: 1 / -1;
         }
-        .label {
+        .box-label {
           font-size: 0.75rem;
           text-transform: uppercase;
-          letter-spacing: 0.5px;
+          letter-spacing: 0.75px;
           color: #9CA3AF;
-          font-weight: 600;
+          font-weight: 700;
         }
-        .val {
-          font-size: 0.95rem;
-          color: #E5E7EB;
-          font-weight: 600;
+        .box-value {
+          font-size: 1.05rem;
+          color: #F3F4F6;
+          font-weight: 700;
         }
-        .val.highlight {
+        .box-value.course-title {
+          font-size: 1.3rem;
+          font-weight: 900;
           color: #F59E0B;
-          font-size: 1.1rem;
-          font-weight: 800;
+          line-height: 1.3;
         }
-        .val.code {
+        .box-value.code-value {
           font-family: monospace;
           background: rgba(255, 255, 255, 0.06);
           padding: 0.2rem 0.5rem;
@@ -466,21 +490,54 @@ export default function VerifyUI({ certificate, student, id }: VerifyUIProps) {
           color: #F97316;
           width: fit-content;
         }
-        .status-tag {
-          display: inline-block;
-          width: fit-content;
-          padding: 0.15rem 0.6rem;
-          border-radius: 6px;
-          font-size: 0.8rem;
-          font-weight: 800;
-          text-transform: uppercase;
-        }
-        .status-tag.aprovado { background: rgba(16, 185, 129, 0.2); color: #34D399; }
-        .status-tag.pendente { background: rgba(245, 158, 11, 0.2); color: #FBBF24; }
-        .status-tag.rejeitado { background: rgba(239, 68, 68, 0.2); color: #FCA5A5; }
 
-        .text-valid { color: #34D399; font-weight: 700; }
-        .text-expired { color: #FBBF24; font-weight: 700; }
+        /* Flag Badge for Bahamas / Vanuatu */
+        .flag-box {
+          background: linear-gradient(135deg, rgba(234, 88, 12, 0.08) 0%, rgba(217, 119, 6, 0.04) 100%);
+          border: 1px solid rgba(234, 88, 12, 0.3);
+        }
+        .flag-badge-large {
+          display: flex;
+          align-items: center;
+          gap: 0.85rem;
+          margin-top: 0.2rem;
+        }
+        .flag-emoji {
+          font-size: 2.2rem;
+          line-height: 1;
+        }
+        .flag-text {
+          display: flex;
+          flex-direction: column;
+        }
+        .flag-country {
+          font-size: 1.2rem;
+          font-weight: 900;
+          color: #FFFFFF;
+          letter-spacing: 0.5px;
+        }
+        .flag-authority {
+          font-size: 0.75rem;
+          color: #F59E0B;
+          font-weight: 600;
+        }
+
+        /* Validity Date */
+        .validity-box {
+          background: rgba(16, 185, 129, 0.05);
+          border: 1px solid rgba(16, 185, 129, 0.25);
+        }
+        .validity-date {
+          font-size: 1.25rem;
+          font-weight: 900;
+        }
+        .valid-text { color: #34D399; }
+        .expired-text { color: #FBBF24; }
+        .validity-badge {
+          font-size: 0.75rem;
+          color: #34D399;
+          font-weight: 700;
+        }
 
         .stamp-box {
           background: rgba(234, 88, 12, 0.06);
@@ -494,9 +551,7 @@ export default function VerifyUI({ certificate, student, id }: VerifyUIProps) {
           align-items: center;
           gap: 1rem;
         }
-        .seal-icon {
-          font-size: 2rem;
-        }
+        .seal-icon { font-size: 2rem; }
         .seal-info strong {
           display: block;
           font-size: 0.9rem;
@@ -558,20 +613,19 @@ export default function VerifyUI({ certificate, student, id }: VerifyUIProps) {
             color: black !important;
             max-width: 100% !important;
           }
+          .proof-card { background: white !important; border: 1px solid #ccc !important; }
+          .proof-box { background: #f8fafc !important; border: 1px solid #eee !important; }
+          .student-full-name { color: #000 !important; }
+          .flag-country { color: #000 !important; }
           .brand-name { color: #000 !important; }
-          .student-name { color: #000 !important; }
-          .val { color: #000 !important; }
-          .val.highlight { color: #d97706 !important; }
-          .status-sub { color: #555 !important; }
-          .student-doc { color: #555 !important; }
-          .label { color: #666 !important; }
-          .details-grid { background: #f8fafc !important; border: 1px solid #ddd !important; }
-          .student-box { background: #f8fafc !important; border: 1px solid #ddd !important; }
+          .box-value { color: #000 !important; }
+          .box-value.course-title { color: #d97706 !important; }
         }
 
         @media (max-width: 640px) {
           .verify-card { padding: 1.5rem 1.25rem; }
-          .details-grid { grid-template-columns: 1fr; }
+          .student-profile-header { flex-direction: column; text-align: center; }
+          .proof-grid { grid-template-columns: 1fr; }
           .actions { grid-template-columns: 1fr; }
         }
       `}</style>
