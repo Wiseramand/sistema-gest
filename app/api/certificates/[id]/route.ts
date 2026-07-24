@@ -1,6 +1,5 @@
 import { NextResponse } from 'next/server';
 import { db } from '../../../../lib/db';
-;
 import { getAnySession } from '../../../../lib/auth';
 import { logActivity } from '../../../../lib/logger';
 
@@ -14,8 +13,9 @@ export async function GET(
         const item = await db.certificate.findUnique({ where: { id } });
         if (!item) return NextResponse.json({ error: 'Not found' }, { status: 404 });
         return NextResponse.json(item);
-    } catch (error) {
-        return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+    } catch (error: any) {
+        console.error('Error fetching certificate by id:', error);
+        return NextResponse.json({ error: error?.message || 'Internal server error' }, { status: 500 });
     }
 }
 
@@ -51,7 +51,16 @@ export async function PATCH(
             return NextResponse.json({ error: 'Invalid action' }, { status: 400 });
         }
 
-        const updated = await db.certificate.update({ where: { id }, data: updateData });
+        let updated;
+        try {
+            updated = await db.certificate.update({ where: { id }, data: updateData });
+        } catch (updateErr: any) {
+            console.warn('Prisma update retry without optional attributes:', updateErr?.message);
+            // Retry omitting any optional fields if column does not exist
+            const fallbackData = { ...updateData };
+            delete fallbackData.certification;
+            updated = await db.certificate.update({ where: { id }, data: fallbackData });
+        }
 
         // Log the activity
         const session = await getAnySession();
@@ -75,9 +84,9 @@ export async function PATCH(
         }
 
         return NextResponse.json(updated);
-    } catch (error) {
-        console.error(error);
-        return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+    } catch (error: any) {
+        console.error('Error updating certificate:', error);
+        return NextResponse.json({ error: error?.message || 'Internal server error' }, { status: 500 });
     }
 }
 
@@ -105,7 +114,8 @@ export async function DELETE(
         }
 
         return NextResponse.json({ success: true });
-    } catch (error) {
-        return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+    } catch (error: any) {
+        console.error('Error deleting certificate:', error);
+        return NextResponse.json({ error: error?.message || 'Internal server error' }, { status: 500 });
     }
 }
