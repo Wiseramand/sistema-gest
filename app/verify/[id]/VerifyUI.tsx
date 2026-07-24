@@ -139,8 +139,9 @@ export default function VerifyUI({ certificate, student, id }: VerifyUIProps) {
   const studentName = certificate.studentName || student?.name || 'Formando Registado';
   const studentDoc = student?.bi || student?.idDocument || '';
 
-  // 2. Foto do formando
-  const studentPhoto = student?.photo || student?.image || null;
+  // 2. Foto do formando - tenta todos os campos possíveis onde a foto pode estar guardada
+  const studentPhoto = student?.photo || student?.image || student?.photoUrl || student?.avatar || null;
+  const hasPhoto = !!studentPhoto;
 
   // 4. Certificação Marítima (Bahamas ou Vanuatu)
   const rawCertType = certificate.certification || certificate.certificationType || certificate.flagState || 'Bahamas';
@@ -187,12 +188,22 @@ export default function VerifyUI({ certificate, student, id }: VerifyUIProps) {
           <div className="student-profile-header">
             <div className="avatar-wrapper">
               {studentPhoto ? (
-                <img src={studentPhoto} alt={studentName} className="avatar-img" />
-              ) : (
-                <div className="avatar-placeholder">
-                  <span>{studentName.charAt(0).toUpperCase()}</span>
-                </div>
-              )}
+                <img
+                  src={studentPhoto}
+                  alt={studentName}
+                  className="avatar-img"
+                  onError={(e) => {
+                    // Se a imagem falhar ao carregar, mostrar o placeholder com inicial
+                    const target = e.currentTarget as HTMLImageElement;
+                    target.style.display = 'none';
+                    const placeholder = target.nextElementSibling as HTMLElement;
+                    if (placeholder) placeholder.style.display = 'flex';
+                  }}
+                />
+              ) : null}
+              <div className="avatar-placeholder" style={studentPhoto ? { display: 'none' } : {}}>
+                <span>{studentName.charAt(0).toUpperCase()}</span>
+              </div>
               <div className="avatar-seal-badge">⚓</div>
             </div>
 
@@ -380,14 +391,21 @@ export default function VerifyUI({ certificate, student, id }: VerifyUIProps) {
           flex-shrink: 0;
         }
         .avatar-img {
+          position: absolute;
+          top: 0;
+          left: 0;
           width: 100%;
           height: 100%;
           border-radius: 50%;
           object-fit: cover;
           border: 3px solid #EA580C;
           box-shadow: 0 4px 15px rgba(234, 88, 12, 0.3);
+          z-index: 1;
         }
         .avatar-placeholder {
+          position: absolute;
+          top: 0;
+          left: 0;
           width: 100%;
           height: 100%;
           border-radius: 50%;
@@ -400,6 +418,7 @@ export default function VerifyUI({ certificate, student, id }: VerifyUIProps) {
           color: white;
           border: 3px solid rgba(255, 255, 255, 0.2);
           box-shadow: 0 4px 15px rgba(234, 88, 12, 0.3);
+          z-index: 0;
         }
         .avatar-seal-badge {
           position: absolute;

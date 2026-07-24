@@ -26,6 +26,21 @@ const nextConfig: NextConfig = {
             bodySizeLimit: '5mb',
         },
     },
+    // Permitir imagens externas (Cloudinary para fotos de alunos)
+    images: {
+        remotePatterns: [
+            {
+                protocol: 'https',
+                hostname: 'res.cloudinary.com',
+                pathname: '/**',
+            },
+            {
+                protocol: 'https',
+                hostname: '*.cloudinary.com',
+                pathname: '/**',
+            },
+        ],
+    },
 };
 
 export default nextConfig;
