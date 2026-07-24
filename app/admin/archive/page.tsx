@@ -46,21 +46,21 @@ const ArchiveDetailModal = ({ item, onClose }: { item: any, onClose: () => void 
       .modal-close { position: absolute; top: 1rem; right: 1.5rem; font-size: 2rem; cursor: pointer; color: #94a3b8; }
 
       .detail-header { margin-bottom: 2rem; border-bottom: 2px solid #f1f5f9; padding-bottom: 1rem; }
-      .badge-id { font-size: 0.7rem; font-weight: 800; background: #0a2a5e; color: white; padding: 0.2rem 0.6rem; border-radius: 4px; margin-bottom: 0.5rem; display: inline-block; }
-      .detail-header h2 { font-family: 'Outfit', sans-serif; font-size: 1.4rem; color: #0a2a5e; margin: 0; }
+      .badge-id { font-size: 0.7rem; font-weight: 800; background: #2D180F; color: white; padding: 0.2rem 0.6rem; border-radius: 4px; margin-bottom: 0.5rem; display: inline-block; }
+      .detail-header h2 { font-family: 'Outfit', sans-serif; font-size: 1.4rem; color: #2D180F; margin: 0; }
 
       .detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 2rem; }
       .detail-section h3 { font-size: 0.8rem; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 1rem; }
       .field { margin-bottom: 1rem; }
       .field label { display: block; font-size: 0.75rem; color: #64748b; margin-bottom: 0.2rem; }
-      .field span { font-weight: 700; color: #0a2a5e; font-size: 1rem; }
+      .field span { font-weight: 700; color: #2D180F; font-size: 1rem; }
 
       .hash-box { background: #f8fafc; padding: 1.25rem; border-radius: 10px; border: 1px solid #e2e8f0; margin-bottom: 2rem; }
       .hash-box label { font-size: 0.7rem; font-weight: 700; color: #94a3b8; display: block; margin-bottom: 0.5rem; }
-      .hash-box code { font-family: monospace; font-size: 0.8rem; color: #0a2a5e; }
+      .hash-box code { font-family: monospace; font-size: 0.8rem; color: #2D180F; }
 
       .actions-footer { display: flex; gap: 1rem; justify-content: center; }
-      .btn-primary { background: #0a2a5e; color: white; border: none; padding: 0.75rem 1.5rem; border-radius: 8px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 0.5rem; }
+      .btn-primary { background: #2D180F; color: white; border: none; padding: 0.75rem 1.5rem; border-radius: 8px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 0.5rem; }
       .btn-outline { background: white; color: #64748b; border: 1px solid #e2e8f0; padding: 0.75rem 1.5rem; border-radius: 8px; font-weight: 700; cursor: pointer; }
     `}</style>
   </div>
@@ -128,26 +128,26 @@ export default function ArchivePage() {
 
       <style jsx>{`
         .page-wrap { display: flex; flex-direction: column; gap: 2rem; position: relative; }
-        .page-header { position: sticky; top: -10px; z-index: 10; background: linear-gradient(135deg, #0a2a5e 0%, #173b7d 100%); padding: 2rem; border-radius: 14px; color: white; box-shadow: 0 10px 30px rgba(10, 42, 94, 0.15); }
-        .page-header h1 { font-family: 'Outfit', sans-serif; font-size: 1.8rem; margin-bottom: 0.5rem; color: #F5C518; }
+        .page-header { position: sticky; top: -10px; z-index: 10; background: linear-gradient(135deg, #2D180F 0%, #173b7d 100%); padding: 2rem; border-radius: 14px; color: white; box-shadow: 0 10px 30px rgba(10, 42, 94, 0.15); }
+        .page-header h1 { font-family: 'Outfit', sans-serif; font-size: 1.8rem; margin-bottom: 0.5rem; color: #E6C5A8; }
         .page-header p { color: #e2e8f0; }
         
         .card { background: #ffffff; border-radius: 14px; padding: 2rem; border: 1px solid #e2e8f0; }
         
         .table-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; }
-        .table-header h2 { color: #0a2a5e; font-family: 'Outfit', sans-serif; font-size: 1.25rem; margin: 0; }
+        .table-header h2 { color: #2D180F; font-family: 'Outfit', sans-serif; font-size: 1.25rem; margin: 0; }
         .search-box input { padding: 0.5rem 1rem; border: 1px solid #e2e8f0; border-radius: 8px; width: 250px; font-family: 'Outfit', sans-serif; }
 
         .data-table { width: 100%; border-collapse: collapse; text-align: left; }
         .data-table th { padding: 1rem; background: #f8fafc; color: #475569; font-size: 0.8rem; text-transform: uppercase; border-bottom: 1px solid #e2e8f0; }
         .data-table td { padding: 1rem; border-bottom: 1px solid #f1f5f9; font-size: 0.9rem; color: #0f1e35; }
         .mono { font-family: monospace; font-size: 0.85rem; color: #64748b; }
-        .bold { font-weight: 700; color: #0a2a5e; }
+        .bold { font-weight: 700; color: #2D180F; }
 
         .status-badge { padding: 0.2rem 0.6rem; border-radius: 50px; font-size: 0.75rem; font-weight: 800; background: #ecfdf5; color: #059669; }
 
-        .action-btn.view { background: #f0f9ff; color: #0a2a5e; border: none; padding: 0.4rem 0.8rem; border-radius: 6px; font-weight: 700; cursor: pointer; }
-        .action-btn.view:hover { background: #e0f2fe; }
+        .action-btn.view { background: #FDF2E9; color: #2D180F; border: none; padding: 0.4rem 0.8rem; border-radius: 6px; font-weight: 700; cursor: pointer; }
+        .action-btn.view:hover { background: #FDF2E9; }
       `}</style>
     </div>
   );

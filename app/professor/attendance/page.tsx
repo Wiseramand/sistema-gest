@@ -242,25 +242,25 @@ export default function TrainerAttendancePage() {
 
       <style jsx>{`
         .attendance-wrap { display: flex; flex-direction: column; gap: 1.5rem; max-width: 1000px; margin: 0 auto; }
-        .header { background: linear-gradient(135deg, #0a2a5e 0%, #173b7d 100%); padding: 2rem; border-radius: 16px; color: white; }
-        .header h1 { font-family: 'Outfit', sans-serif; font-size: 1.8rem; margin-bottom: 0.5rem; color: #F5C518; }
+        .header { background: linear-gradient(135deg, #2D180F 0%, #173b7d 100%); padding: 2rem; border-radius: 16px; color: white; }
+        .header h1 { font-family: 'Outfit', sans-serif; font-size: 1.8rem; margin-bottom: 0.5rem; color: #E6C5A8; }
         .header p { color: #cbd5e1; margin-bottom: 0.5rem; }
         .header-date { background: rgba(255,255,255,0.1); display: inline-block; padding: 0.35rem 0.85rem; border-radius: 20px; font-size: 0.85rem; color: white; font-weight: 600; margin-top: 0.5rem; }
 
         .card { background: white; border-radius: 16px; padding: 2rem; border: 1px solid #e2e8f0; }
-        .card h2 { color: #0a2a5e; font-family: 'Outfit', sans-serif; margin-bottom: 1.5rem; }
+        .card h2 { color: #2D180F; font-family: 'Outfit', sans-serif; margin-bottom: 1.5rem; }
 
         .courses-grid { display: flex; flex-direction: column; gap: 0.75rem; }
         .course-card { display: flex; align-items: center; gap: 1rem; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.25rem 1.5rem; cursor: pointer; transition: 0.2s; text-align: left; }
-        .course-card:hover { border-color: #0a2a5e; background: #eff6ff; transform: translateX(4px); }
-        .course-card h3 { color: #0a2a5e; font-family: 'Outfit', sans-serif; margin: 0 0 0.25rem; }
+        .course-card:hover { border-color: #2D180F; background: #FDF2E9; transform: translateX(4px); }
+        .course-card h3 { color: #2D180F; font-family: 'Outfit', sans-serif; margin: 0 0 0.25rem; }
         .course-card span { font-size: 0.8rem; color: #64748b; }
         .course-icon { font-size: 1.5rem; }
         .arrow { margin-left: auto; color: #94a3b8; font-size: 1.2rem; }
 
         .list-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1.5rem; }
-        .list-top h2 { margin: 0 0 0.5rem; color: #0a2a5e; font-family: 'Outfit', sans-serif; }
-        .date-badge { background: #fef3c7; color: #92400e; padding: 0.3rem 0.75rem; border-radius: 20px; font-size: 0.8rem; font-weight: 700; }
+        .list-top h2 { margin: 0 0 0.5rem; color: #2D180F; font-family: 'Outfit', sans-serif; }
+        .date-badge { background: #F7ECE1; color: #9A3412; padding: 0.3rem 0.75rem; border-radius: 20px; font-size: 0.8rem; font-weight: 700; }
 
         .stats-bar { display: flex; gap: 1.5rem; margin-bottom: 1.5rem; padding: 1rem; background: #f8fafc; border-radius: 10px; }
         .stat-present { color: #059669; font-size: 0.9rem; }
@@ -273,23 +273,23 @@ export default function TrainerAttendancePage() {
         td { padding: 0.85rem 1rem; border-bottom: 1px solid #f1f5f9; font-size: 0.9rem; }
         .absent-row { background: #fff5f5; }
         .row-num { color: #94a3b8; font-size: 0.8rem; width: 40px; }
-        .student-name { font-weight: 700; color: #0a2a5e; }
+        .student-name { font-weight: 700; color: #2D180F; }
 
         .toggle-group { display: flex; gap: 0.4rem; justify-content: center; flex-wrap: wrap; }
         .toggle-btn { border: 1px solid #e2e8f0; background: white; padding: 0.35rem 0.65rem; border-radius: 8px; font-size: 0.78rem; font-weight: 600; cursor: pointer; transition: 0.15s; color: #475569; }
         .toggle-btn:hover { background: #f1f5f9; }
         .toggle-btn.selected.presente { background: #ecfdf5; border-color: #059669; color: #059669; }
         .toggle-btn.selected.falta { background: #fff1f2; border-color: #dc2626; color: #dc2626; }
-        .toggle-btn.selected.justificada { background: #fffbeb; border-color: #d97706; color: #d97706; }
+        .toggle-btn.selected.justificada { background: #F7ECE1; border-color: #9A3412; color: #9A3412; }
 
         .submit-card { display: flex; flex-direction: column; gap: 1.25rem; }
         .confirm-check { display: flex; align-items: flex-start; gap: 0.75rem; font-size: 0.9rem; color: #475569; cursor: pointer; line-height: 1.5; }
         .confirm-check input { margin-top: 3px; width: 16px; height: 16px; cursor: pointer; flex-shrink: 0; }
-        .btn-submit { background: #0a2a5e; color: white; border: none; padding: 1.1rem 2rem; border-radius: 10px; font-weight: 800; font-size: 1rem; cursor: pointer; transition: 0.2s; font-family: 'Outfit', sans-serif; }
+        .btn-submit { background: #2D180F; color: white; border: none; padding: 1.1rem 2rem; border-radius: 10px; font-weight: 800; font-size: 1rem; cursor: pointer; transition: 0.2s; font-family: 'Outfit', sans-serif; }
         .btn-submit:hover:not(:disabled) { background: #173b7d; transform: translateY(-2px); }
         .btn-submit:disabled { opacity: 0.6; cursor: not-allowed; }
 
-        .btn-back { background: #0a2a5e; color: white; border: none; padding: 0.85rem 1.75rem; border-radius: 10px; font-weight: 700; cursor: pointer; margin-top: 1rem; }
+        .btn-back { background: #2D180F; color: white; border: none; padding: 0.85rem 1.75rem; border-radius: 10px; font-weight: 700; cursor: pointer; margin-top: 1rem; }
         .btn-back-sm { background: white; border: 1px solid #e2e8f0; color: #64748b; padding: 0.5rem 1rem; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 0.85rem; }
         .btn-back-sm:hover { background: #f1f5f9; }
 

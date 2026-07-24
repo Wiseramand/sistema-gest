@@ -424,8 +424,8 @@ export default function CertificatesPage() {
             {/* Stats Filters */}
             <div className="stats-row">
                 {[
-                    { label: 'Todos os Certificados', value: certs.length, color: '#3b82f6', f: 'ALL' },
-                    { label: 'Pendentes de Aprovação', value: statusCount.pending, color: '#f59e0b', f: 'PENDENTE' },
+                    { label: 'Todos os Certificados', value: certs.length, color: '#EA580C', f: 'ALL' },
+                    { label: 'Pendentes de Aprovação', value: statusCount.pending, color: '#EA580C', f: 'PENDENTE' },
                     { label: 'Aprovados & Homologados', value: statusCount.approved, color: '#10b981', f: 'APROVADO' },
                     { label: 'Rejeitados', value: statusCount.rejected, color: '#ef4444', f: 'REJEITADO' },
                 ].map((s, i) => (
@@ -675,7 +675,7 @@ export default function CertificatesPage() {
 
             <style jsx>{`
                 .page-wrapper { display: flex; flex-direction: column; gap: 1.5rem; color: #1e293b; }
-                .page-top h1 { font-size: 1.85rem; color: #0a2a5e; font-weight: 800; margin: 0; }
+                .page-top h1 { font-size: 1.85rem; color: #2D180F; font-weight: 800; margin: 0; }
                 .page-top p { color: #64748b; margin-top: 0.2rem; }
 
                 .btn-create-manual {
@@ -700,7 +700,7 @@ export default function CertificatesPage() {
                     align-items: center;
                     gap: 1.5rem;
                 }
-                .selector-title { font-weight: 700; color: #0a2a5e; font-size: 0.9rem; }
+                .selector-title { font-weight: 700; color: #2D180F; font-size: 0.9rem; }
                 .selector-options { display: flex; gap: 0.75rem; }
                 .cert-type-btn {
                     padding: 0.6rem 1.25rem;
@@ -714,9 +714,9 @@ export default function CertificatesPage() {
                     transition: all 0.2s;
                 }
                 .cert-type-btn.active {
-                    background: #0a2a5e;
+                    background: #2D180F;
                     color: white;
-                    border-color: #0a2a5e;
+                    border-color: #2D180F;
                     box-shadow: 0 4px 10px rgba(10, 42, 94, 0.2);
                 }
 
@@ -730,7 +730,7 @@ export default function CertificatesPage() {
                     flex-direction: column;
                     gap: 1rem;
                 }
-                .gen-info h3 { margin: 0; font-size: 1.1rem; color: #0a2a5e; }
+                .gen-info h3 { margin: 0; font-size: 1.1rem; color: #2D180F; }
                 .gen-info p { margin: 0.2rem 0 0; font-size: 0.85rem; color: #64748b; }
                 .gen-controls { display: flex; gap: 0.75rem; }
                 .gen-controls select {
@@ -741,7 +741,7 @@ export default function CertificatesPage() {
                     font-size: 0.9rem;
                 }
                 .gen-btn {
-                    background: #0ea5e9;
+                    background: #EA580C;
                     color: white;
                     border: none;
                     padding: 0.75rem 1.25rem;
@@ -761,7 +761,7 @@ export default function CertificatesPage() {
                     border-top-width: 4px;
                     transition: all 0.2s;
                 }
-                .stat-card.selected { background: #f0f9ff; }
+                .stat-card.selected { background: #FDF2E9; }
                 .stat-val { font-size: 1.75rem; font-weight: 900; }
                 .stat-label { font-size: 0.8rem; color: #64748b; font-weight: 700; text-transform: uppercase; margin-top: 0.2rem; }
 
@@ -769,16 +769,16 @@ export default function CertificatesPage() {
                 .data-table { width: 100%; border-collapse: collapse; text-align: left; }
                 .data-table th { background: #f8fafc; padding: 1rem 1.25rem; font-size: 0.75rem; color: #64748b; text-transform: uppercase; font-weight: 800; border-bottom: 1px solid #e2e8f0; }
                 .data-table td { padding: 1.1rem 1.25rem; border-bottom: 1px solid #f1f5f9; font-size: 0.9rem; }
-                .bold { font-weight: 800; color: #0a2a5e; }
+                .bold { font-weight: 800; color: #2D180F; }
                 .flag-tag { background: #f1f5f9; padding: 0.25rem 0.6rem; border-radius: 6px; font-weight: 700; font-size: 0.8rem; color: #334155; }
                 .validity-cell { display: flex; align-items: center; gap: 0.5rem; }
                 .validity-date.expired { color: #ef4444; font-weight: 800; }
-                .validity-date.warning { color: #f59e0b; font-weight: 800; }
+                .validity-date.warning { color: #EA580C; font-weight: 800; }
                 .edit-mini { background: none; border: none; cursor: pointer; font-size: 0.85rem; }
 
                 .cert-badge { display: inline-block; padding: 0.3rem 0.75rem; border-radius: 50px; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; }
                 .cert-badge.aprovado { background: #d1fae5; color: #059669; }
-                .cert-badge.pendente { background: #fef3c7; color: #d97706; }
+                .cert-badge.pendente { background: #F7ECE1; color: #9A3412; }
                 .cert-badge.rejeitado { background: #fee2e2; color: #dc2626; }
                 .cert-sub { font-size: 0.75rem; color: #64748b; margin-top: 0.2rem; }
                 .cert-sub.red { color: #dc2626; }
@@ -786,7 +786,7 @@ export default function CertificatesPage() {
                 .align-right { text-align: right; }
                 .row-actions { display: flex; gap: 0.4rem; justify-content: flex-end; }
                 .row-btn { border: none; padding: 0.4rem 0.75rem; border-radius: 8px; font-weight: 700; font-size: 0.8rem; cursor: pointer; }
-                .row-btn.view { background: #f1f5f9; color: #0a2a5e; }
+                .row-btn.view { background: #f1f5f9; color: #2D180F; }
                 .row-btn.approve { background: #10b981; color: white; }
                 .row-btn.reject { background: #ef4444; color: white; }
                 .row-btn.delete { background: #fee2e2; color: #dc2626; }
@@ -795,7 +795,7 @@ export default function CertificatesPage() {
                 .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.6); z-index: 1000; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(4px); }
                 .modal-card { background: white; padding: 2rem; border-radius: 20px; width: 90%; max-width: 550px; box-shadow: 0 25px 50px rgba(0,0,0,0.25); }
                 .modal-card.small { max-width: 400px; }
-                .modal-card h2 { margin: 0 0 0.25rem; color: #0a2a5e; font-size: 1.4rem; }
+                .modal-card h2 { margin: 0 0 0.25rem; color: #2D180F; font-size: 1.4rem; }
                 .modal-sub { color: #64748b; font-size: 0.85rem; margin: 0 0 1.5rem; }
 
                 .manual-form { display: flex; flex-direction: column; gap: 1rem; }
@@ -812,20 +812,20 @@ export default function CertificatesPage() {
 
                 /* Cert Preview Modal */
                 .cert-preview-modal { background: white; padding: 2rem; border-radius: 20px; max-width: 700px; width: 90%; }
-                .cert-sheet { background: #fffdf5; border: 10px double #0a2a5e; padding: 2.5rem; text-align: center; color: #0a2a5e; }
+                .cert-sheet { background: #fffdf5; border: 10px double #2D180F; padding: 2.5rem; text-align: center; color: #2D180F; }
                 .anchor-logo { font-size: 2.5rem; color: #ea580c; margin-bottom: 0.5rem; }
                 .cert-top-branding h2 { font-size: 1.5rem; margin: 0; font-weight: 900; }
                 .cert-top-branding p { font-size: 0.75rem; color: #64748b; font-weight: 800; letter-spacing: 1px; margin-top: 0.2rem; }
                 .cert-main-body { margin: 2rem 0; }
-                .cert-main-body h3 { color: #d97706; font-size: 1.1rem; font-weight: 900; text-decoration: underline; margin-bottom: 1rem; }
-                .cert-student-name { font-size: 2rem; font-weight: 900; color: #0a2a5e; margin: 1rem 0; }
+                .cert-main-body h3 { color: #9A3412; font-size: 1.1rem; font-weight: 900; text-decoration: underline; margin-bottom: 1rem; }
+                .cert-student-name { font-size: 2rem; font-weight: 900; color: #2D180F; margin: 1rem 0; }
                 .cert-course-name { font-size: 1.3rem; color: #ea580c; font-weight: 800; margin: 0.5rem 0 1rem; }
-                .cert-flag-note { font-size: 0.85rem; font-weight: 700; color: #0369a1; background: #e0f2fe; padding: 0.4rem 1rem; border-radius: 50px; display: inline-block; }
+                .cert-flag-note { font-size: 0.85rem; font-weight: 700; color: #EA580C; background: #FDF2E9; padding: 0.4rem 1rem; border-radius: 50px; display: inline-block; }
                 .cert-sheet-footer { display: flex; justify-content: space-between; align-items: center; margin-top: 2rem; border-top: 1px solid #cbd5e1; padding-top: 1rem; font-size: 0.8rem; }
                 .qr-box { display: flex; flex-direction: column; align-items: center; gap: 0.3rem; }
                 .qr-caption { font-size: 0.65rem; font-weight: 800; color: #64748b; }
                 .preview-actions { display: flex; justify-content: flex-end; gap: 1rem; margin-top: 1.5rem; }
-                .btn-print { background: #0a2a5e; color: white; border: none; padding: 0.75rem 1.5rem; border-radius: 10px; font-weight: 700; cursor: pointer; }
+                .btn-print { background: #2D180F; color: white; border: none; padding: 0.75rem 1.5rem; border-radius: 10px; font-weight: 700; cursor: pointer; }
                 .btn-close { background: #f1f5f9; color: #475569; border: none; padding: 0.75rem 1.5rem; border-radius: 10px; font-weight: 700; cursor: pointer; }
 
                 .loader, .empty-state { padding: 3rem; text-align: center; color: #94a3b8; font-weight: 600; background: white; border-radius: 16px; }

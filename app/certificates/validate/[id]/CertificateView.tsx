@@ -108,7 +108,7 @@ export default function CertificateView({ certificate, user, validUntil }: Certi
                 }
                 .card-header p {
                     margin: 0.5rem 0 0;
-                    color: var(--sand-gold, #eab308);
+                    color: var(--sand-gold, #EA580C);
                     font-size: 0.85rem;
                     font-weight: 700;
                     letter-spacing: 1px;
@@ -128,7 +128,7 @@ export default function CertificateView({ certificate, user, validUntil }: Certi
                     box-shadow: 0 4px 10px rgba(0,0,0,0.1);
                 }
                 .badge.approved { background: #10b981; color: white; }
-                .badge.pending { background: #f59e0b; color: white; }
+                .badge.pending { background: #EA580C; color: white; }
                 .badge.rejected { background: #ef4444; color: white; }
                 
                 .card-body {
@@ -144,7 +144,7 @@ export default function CertificateView({ certificate, user, validUntil }: Certi
                     margin: 0 auto 1.5rem;
                     border-radius: 50%;
                     padding: 4px;
-                    background: linear-gradient(135deg, var(--ocean-blue, #0ea5e9), var(--navy-deep, #0a192f));
+                    background: linear-gradient(135deg, var(--ocean-blue, #EA580C), var(--navy-deep, #0a192f));
                 }
                 .avatar-img {
                     width: 100%;
@@ -203,7 +203,7 @@ export default function CertificateView({ certificate, user, validUntil }: Certi
                     font-weight: 600;
                 }
                 .value.course {
-                    color: var(--ocean-blue, #0ea5e9);
+                    color: var(--ocean-blue, #EA580C);
                     font-weight: 800;
                     font-size: 1.1rem;
                 }

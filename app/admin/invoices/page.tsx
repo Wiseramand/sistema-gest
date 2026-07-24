@@ -101,9 +101,9 @@ export default function InvoicesPage() {
         @keyframes zoomIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
         .modal-close { position: absolute; top: 1rem; right: 1.5rem; font-size: 2rem; cursor: pointer; color: #94a3b8; }
 
-        .invoice-doc { color: #0a2a5e; font-family: 'Inter', sans-serif; }
-        .inv-header { display: flex; justify-content: space-between; border-bottom: 2px solid #F5C518; padding-bottom: 2rem; margin-bottom: 2rem; }
-        .inv-logo { font-size: 2rem; font-weight: 900; color: #0a2a5e; }
+        .invoice-doc { color: #2D180F; font-family: 'Inter', sans-serif; }
+        .inv-header { display: flex; justify-content: space-between; border-bottom: 2px solid #E6C5A8; padding-bottom: 2rem; margin-bottom: 2rem; }
+        .inv-logo { font-size: 2rem; font-weight: 900; color: #2D180F; }
         .inv-title { text-align: right; }
         .inv-title h1 { font-family: 'Outfit', sans-serif; font-size: 1.5rem; margin: 0; }
         
@@ -117,12 +117,12 @@ export default function InvoicesPage() {
 
         .inv-summary { margin-left: auto; width: 250px; }
         .summary-row { display: flex; justify-content: space-between; padding: 0.5rem 0; font-size: 0.95rem; }
-        .summary-row.total { border-top: 2px solid #0a2a5e; margin-top: 0.5rem; padding-top: 1rem; font-weight: 900; font-size: 1.1rem; }
+        .summary-row.total { border-top: 2px solid #2D180F; margin-top: 0.5rem; padding-top: 1rem; font-weight: 900; font-size: 1.1rem; }
 
         .inv-footer { margin-top: 4rem; padding-top: 2rem; border-top: 1px dashed #e2e8f0; font-size: 0.85rem; color: #64748b; }
         
         .modal-actions { margin-top: 3rem; display: flex; justify-content: center; }
-        .btn-print { background: #0a2a5e; color: white; border: none; padding: 0.75rem 2rem; border-radius: 10px; font-weight: 700; cursor: pointer; transition: 0.2s; }
+        .btn-print { background: #2D180F; color: white; border: none; padding: 0.75rem 2rem; border-radius: 10px; font-weight: 700; cursor: pointer; transition: 0.2s; }
         .btn-print:hover { background: #173b7d; }
 
         @media print {
@@ -205,29 +205,29 @@ export default function InvoicesPage() {
 
       <style jsx>{`
         .page-wrap { display: flex; flex-direction: column; gap: 2rem; position: relative; }
-        .page-header { position: sticky; top: -10px; z-index: 10; background: linear-gradient(135deg, #0a2a5e 0%, #173b7d 100%); padding: 2rem; border-radius: 14px; color: white; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 10px 30px rgba(10, 42, 94, 0.15); }
-        .page-header h1 { font-family: 'Outfit', sans-serif; font-size: 1.8rem; margin-bottom: 0.5rem; color: #F5C518; }
+        .page-header { position: sticky; top: -10px; z-index: 10; background: linear-gradient(135deg, #2D180F 0%, #173b7d 100%); padding: 2rem; border-radius: 14px; color: white; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 10px 30px rgba(10, 42, 94, 0.15); }
+        .page-header h1 { font-family: 'Outfit', sans-serif; font-size: 1.8rem; margin-bottom: 0.5rem; color: #E6C5A8; }
         .page-header p { color: #e2e8f0; max-width: 800px; }
         
         .card { background: #ffffff; border-radius: 14px; padding: 2rem; border: 1px solid #e2e8f0; }
         
         .table-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; border-bottom: 2px solid #f1f5f9; padding-bottom: 1rem; }
-        .table-header h2 { color: #0a2a5e; font-family: 'Outfit', sans-serif; font-size: 1.25rem; }
-        .btn-primary { background: #0a2a5e; color: white; border: none; padding: 0.6rem 1.2rem; border-radius: 8px; font-weight: 700; font-family: 'DM Sans', sans-serif; cursor: pointer; transition: 0.2s; }
+        .table-header h2 { color: #2D180F; font-family: 'Outfit', sans-serif; font-size: 1.25rem; }
+        .btn-primary { background: #2D180F; color: white; border: none; padding: 0.6rem 1.2rem; border-radius: 8px; font-weight: 700; font-family: 'DM Sans', sans-serif; cursor: pointer; transition: 0.2s; }
         .btn-primary:hover { background: #173b7d; }
 
         .data-table { width: 100%; border-collapse: collapse; text-align: left; }
         .data-table th { padding: 1rem; background: #f8fafc; color: #475569; font-size: 0.8rem; text-transform: uppercase; border-bottom: 1px solid #e2e8f0; }
         .data-table td { padding: 1rem; border-bottom: 1px solid #f1f5f9; font-size: 0.9rem; color: #0f1e35; }
         .mono { font-family: monospace; font-size: 0.85rem; color: #64748b; }
-        .bold { font-weight: 700; color: #0a2a5e; }
+        .bold { font-weight: 700; color: #2D180F; }
 
         .status-badge { padding: 0.2rem 0.6rem; border-radius: 50px; font-size: 0.75rem; font-weight: 800; }
         .status-badge.success { background: #ecfdf5; color: #059669; }
-        .status-badge.warning { background: #fffbeb; color: #d97706; }
+        .status-badge.warning { background: #F7ECE1; color: #9A3412; }
 
-        .action-btn.download { background: #f0f9ff; color: #0a2a5e; border: none; padding: 0.4rem 0.8rem; border-radius: 6px; font-weight: 700; cursor: pointer; }
-        .action-btn.download:hover { background: #e0f2fe; }
+        .action-btn.download { background: #FDF2E9; color: #2D180F; border: none; padding: 0.4rem 0.8rem; border-radius: 6px; font-weight: 700; cursor: pointer; }
+        .action-btn.download:hover { background: #FDF2E9; }
 
         .action-btn.email-mini { background: #ecfdf5; color: #059669; border: none; padding: 0.4rem 0.8rem; border-radius: 6px; font-weight: 700; cursor: pointer; }
         .action-btn.email-mini:hover { background: #d1fae5; }

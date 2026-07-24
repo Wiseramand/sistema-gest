@@ -229,7 +229,7 @@ export default function AdminAttendancePage() {
                       <td><span className="badge-absent">{s.absenceCount} faltas</span></td>
                       <td>
                         <div className="progress-wrap">
-                          <div className="progress-bar" style={{ width: `${s.percentage}%`, background: s.percentage >= 75 ? '#10b981' : s.percentage >= 50 ? '#f59e0b' : '#ef4444' }} />
+                          <div className="progress-bar" style={{ width: `${s.percentage}%`, background: s.percentage >= 75 ? '#10b981' : s.percentage >= 50 ? '#EA580C' : '#ef4444' }} />
                           <span>{s.percentage}%</span>
                         </div>
                       </td>
@@ -298,31 +298,31 @@ export default function AdminAttendancePage() {
 
       <style jsx>{`
         .page-wrap { display: flex; flex-direction: column; gap: 1.5rem; }
-        .page-header { background: linear-gradient(135deg, #0a2a5e 0%, #173b7d 100%); padding: 1.5rem 2rem; border-radius: 16px; color: white; display: flex; justify-content: space-between; align-items: flex-start; }
-        .page-header h1 { font-family: 'Outfit', sans-serif; font-size: 1.7rem; margin-bottom: 0.25rem; color: #F5C518; }
+        .page-header { background: linear-gradient(135deg, #2D180F 0%, #173b7d 100%); padding: 1.5rem 2rem; border-radius: 16px; color: white; display: flex; justify-content: space-between; align-items: flex-start; }
+        .page-header h1 { font-family: 'Outfit', sans-serif; font-size: 1.7rem; margin-bottom: 0.25rem; color: #E6C5A8; }
         .page-header p { color: #cbd5e1; font-size: 0.9rem; }
         .header-nav { display: flex; flex-direction: column; gap: 0.75rem; }
 
         .breadcrumb { display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; }
         .crumb { background: rgba(255,255,255,0.15); border: none; color: white; padding: 0.3rem 0.75rem; border-radius: 20px; font-size: 0.8rem; cursor: pointer; font-weight: 600; transition: 0.2s; }
         .crumb:hover { background: rgba(255,255,255,0.25); }
-        .crumb.active { background: #F5C518; color: #000; cursor: default; }
+        .crumb.active { background: #E6C5A8; color: #000; cursor: default; }
         .breadcrumb span { color: rgba(255,255,255,0.5); }
 
-        .btn-print { background: #F5C518; color: #000; border: none; padding: 0.65rem 1.25rem; border-radius: 10px; font-weight: 800; cursor: pointer; transition: 0.2s; font-size: 0.9rem; white-space: nowrap; }
-        .btn-print:hover { background: #eab308; transform: translateY(-2px); }
+        .btn-print { background: #E6C5A8; color: #000; border: none; padding: 0.65rem 1.25rem; border-radius: 10px; font-weight: 800; cursor: pointer; transition: 0.2s; font-size: 0.9rem; white-space: nowrap; }
+        .btn-print:hover { background: #EA580C; transform: translateY(-2px); }
 
         .card { background: white; border-radius: 16px; padding: 2rem; border: 1px solid #e2e8f0; }
-        .card h2 { color: #0a2a5e; font-family: 'Outfit', sans-serif; margin-bottom: 1.25rem; }
+        .card h2 { color: #2D180F; font-family: 'Outfit', sans-serif; margin-bottom: 1.25rem; }
         .card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem; }
         .card-header h2 { margin: 0 0 0.35rem; }
         .course-label { color: #64748b; font-size: 0.85rem; margin: 0; }
 
         .courses-list { display: flex; flex-direction: column; gap: 0.6rem; }
         .course-row { display: flex; align-items: center; gap: 1rem; padding: 1.1rem 1.5rem; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; cursor: pointer; transition: 0.2s; text-align: left; }
-        .course-row:hover { border-color: #0a2a5e; background: #eff6ff; transform: translateX(4px); }
+        .course-row:hover { border-color: #2D180F; background: #FDF2E9; transform: translateX(4px); }
         .course-icon { font-size: 1.2rem; }
-        .course-name { font-weight: 700; color: #0a2a5e; font-family: 'Outfit', sans-serif; flex: 1; }
+        .course-name { font-weight: 700; color: #2D180F; font-family: 'Outfit', sans-serif; flex: 1; }
         .arrow { font-size: 0.85rem; color: #64748b; font-weight: 600; white-space: nowrap; }
         .total-badge { font-size: 0.8rem; color: #64748b; background: #f1f5f9; padding: 0.35rem 0.85rem; border-radius: 20px; font-weight: 600; white-space: nowrap; }
 
@@ -336,7 +336,7 @@ export default function AdminAttendancePage() {
         .data-table td { padding: 0.9rem 1rem; border-bottom: 1px solid #f1f5f9; font-size: 0.9rem; color: #0f1e35; }
         .absent-row { background: #fff8f8; }
         .row-num { color: #94a3b8; font-size: 0.8rem; width: 40px; }
-        .bold { font-weight: 700; color: #0a2a5e; }
+        .bold { font-weight: 700; color: #2D180F; }
 
         .badge-present { background: #ecfdf5; color: #059669; padding: 0.25rem 0.65rem; border-radius: 20px; font-size: 0.8rem; font-weight: 700; }
         .badge-absent { background: #fff1f2; color: #dc2626; padding: 0.25rem 0.65rem; border-radius: 20px; font-size: 0.8rem; font-weight: 700; }
@@ -347,11 +347,11 @@ export default function AdminAttendancePage() {
 
         .status-badge { padding: 0.25rem 0.65rem; border-radius: 20px; font-size: 0.78rem; font-weight: 800; }
         .status-badge.success { background: #ecfdf5; color: #059669; }
-        .status-badge.warning { background: #fffbeb; color: #d97706; }
+        .status-badge.warning { background: #F7ECE1; color: #9A3412; }
         .status-badge.danger { background: #fff1f2; color: #dc2626; }
 
-        .btn-history { background: #eff6ff; color: #0a2a5e; border: 1px solid #bfdbfe; padding: 0.4rem 0.8rem; border-radius: 8px; font-weight: 700; font-size: 0.8rem; cursor: pointer; transition: 0.15s; }
-        .btn-history:hover { background: #dbeafe; }
+        .btn-history { background: #FDF2E9; color: #2D180F; border: 1px solid #E6DDD4; padding: 0.4rem 0.8rem; border-radius: 8px; font-weight: 700; font-size: 0.8rem; cursor: pointer; transition: 0.15s; }
+        .btn-history:hover { background: #FDF2E9; }
 
         .loader, .empty { text-align: center; padding: 3rem; color: #94a3b8; }
 
@@ -365,8 +365,8 @@ export default function AdminAttendancePage() {
           .absent-row { background: #fff0f0 !important; -webkit-print-color-adjust: exact; }
         }
         .print-only { display: none; }
-        .print-header { text-align: center; border-bottom: 2px solid #0a2a5e; padding-bottom: 1rem; margin-bottom: 1.5rem; }
-        .print-header h1 { color: #0a2a5e; font-size: 1.5rem; margin-bottom: 0.25rem; }
+        .print-header { text-align: center; border-bottom: 2px solid #2D180F; padding-bottom: 1rem; margin-bottom: 1.5rem; }
+        .print-header h1 { color: #2D180F; font-size: 1.5rem; margin-bottom: 0.25rem; }
         .print-header h2 { color: #334155; font-size: 1.2rem; margin-bottom: 0.25rem; }
         .print-header p { color: #64748b; font-size: 0.85rem; }
       `}</style>

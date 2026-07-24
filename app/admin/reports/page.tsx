@@ -107,7 +107,7 @@ export default function ReportsPage() {
 
     const paymentStats = [
         { name: 'Pago Total', value: filtered.matriculations.filter(m => m.paymentStatus === 'Pago Total').length, color: '#10b981' },
-        { name: 'Metade', value: filtered.matriculations.filter(m => m.paymentStatus === 'Metade').length, color: '#f59e0b' },
+        { name: 'Metade', value: filtered.matriculations.filter(m => m.paymentStatus === 'Metade').length, color: '#EA580C' },
         { name: 'Pendente', value: filtered.matriculations.filter(m => m.paymentStatus === 'Pendente').length, color: '#ef4444' },
     ].filter(s => s.value > 0);
 
@@ -194,7 +194,7 @@ export default function ReportsPage() {
                                 <XAxis dataKey="name" fontSize={10} interval={0} />
                                 <YAxis fontSize={10} />
                                 <Tooltip />
-                                <Bar dataKey="alunos" fill="#3b82f6" radius={[4, 4, 0, 0]} />
+                                <Bar dataKey="alunos" fill="#EA580C" radius={[4, 4, 0, 0]} />
                             </BarChart>
                         </ResponsiveContainer>
                     </div>
@@ -225,9 +225,9 @@ export default function ReportsPage() {
             {/* Summary Cards */}
             <div className="stats-row">
                 {[
-                    { label: 'Alunos (Período)', value: filtered.students.length, icon: '👥', color: '#3b82f6' },
+                    { label: 'Alunos (Período)', value: filtered.students.length, icon: '👥', color: '#EA580C' },
                     { label: 'Matrículas (Período)', value: filtered.matriculations.length, icon: '🖋️', color: '#8b5cf6' },
-                    { label: 'Inscrições (Período)', value: filtered.inscriptions.length, icon: '📝', color: '#f59e0b' },
+                    { label: 'Inscrições (Período)', value: filtered.inscriptions.length, icon: '📝', color: '#EA580C' },
                     { label: 'Formadores Ativos', value: data.trainers.filter(t => t.status === 'Ativo').length, icon: '👨‍🏫', color: '#10b981' },
                 ].map((s, i) => (
                     <div key={i} className="stat-card" style={{ borderTopColor: s.color }}>
@@ -336,8 +336,8 @@ export default function ReportsPage() {
                 .top-actions { display: flex; gap: 0.75rem; }
                 .print-btn, .csv-btn { background: white; border: 1.5px solid #e2e8f0; color: #475569; padding: 0.75rem 1.25rem; border-radius: 10px; font-weight: 700; cursor: pointer; font-size: 0.9rem; transition: 0.2s; }
                 .print-btn:hover, .csv-btn:hover { background: #f8fafc; border-color: var(--navy-deep); transform: translateY(-1px); }
-                .csv-btn { border-color: #bae6fd; color: var(--ocean-blue); }
-                .csv-btn:hover { background: #f0f9ff; border-color: var(--ocean-blue); }
+                .csv-btn { border-color: #E6C5A8; color: var(--ocean-blue); }
+                .csv-btn:hover { background: #FDF2E9; border-color: var(--ocean-blue); }
 
                 .filter-bar { display: flex; align-items: center; gap: 1.5rem; background: white; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1rem 1.25rem; margin-bottom: 2rem; flex-wrap: wrap; }
                 .filter-pills { display: flex; gap: 0.5rem; flex-wrap: wrap; }
@@ -379,7 +379,7 @@ export default function ReportsPage() {
 
                 .pay-badge { padding: 0.3rem 0.65rem; border-radius: 50px; font-size: 0.7rem; font-weight: 800; }
                 .pay-badge.paid { background: #ecfdf5; color: #059669; }
-                .pay-badge.half { background: #fffbeb; color: #d97706; }
+                .pay-badge.half { background: #F7ECE1; color: #9A3412; }
                 .pay-badge.pending { background: #fef2f2; color: #dc2626; }
 
                 @media print {

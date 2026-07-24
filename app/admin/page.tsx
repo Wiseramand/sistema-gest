@@ -221,8 +221,8 @@ export default function AdminDashboard() {
               <AreaChart data={monthlyData}>
                 <defs>
                   <linearGradient id="colorInsc" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#0a2a5e" stopOpacity={0.1}/>
-                    <stop offset="95%" stopColor="#0a2a5e" stopOpacity={0}/>
+                    <stop offset="5%" stopColor="#2D180F" stopOpacity={0.1}/>
+                    <stop offset="95%" stopColor="#2D180F" stopOpacity={0}/>
                   </linearGradient>
                 </defs>
                 <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
@@ -231,7 +231,7 @@ export default function AdminDashboard() {
                 <Tooltip 
                   contentStyle={{borderRadius: '12px', border: 'none', boxShadow: '0 10px 15px rgba(0,0,0,0.1)'}}
                 />
-                <Area type="monotone" dataKey="inscricoes" stroke="#0a2a5e" strokeWidth={3} fillOpacity={1} fill="url(#colorInsc)" />
+                <Area type="monotone" dataKey="inscricoes" stroke="#2D180F" strokeWidth={3} fillOpacity={1} fill="url(#colorInsc)" />
               </AreaChart>
             </ResponsiveContainer>
           </div>
@@ -249,7 +249,7 @@ export default function AdminDashboard() {
               <BarChart data={categoryData} layout="vertical" margin={{left: 20}}>
                 <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke="#f1f5f9" />
                 <XAxis type="number" hide />
-                <YAxis dataKey="name" type="category" axisLine={false} tickLine={false} tick={{fill: '#0a2a5e', fontSize: 12, fontWeight: 600}} width={90} />
+                <YAxis dataKey="name" type="category" axisLine={false} tickLine={false} tick={{fill: '#2D180F', fontSize: 12, fontWeight: 600}} width={90} />
                 <Tooltip cursor={{fill: '#f8fafc'}} contentStyle={{borderRadius: '12px', border: 'none'}} />
                 <Bar dataKey="value" radius={[0, 4, 4, 0]} barSize={20}>
                   {categoryData.map((entry, index) => (
@@ -473,7 +473,7 @@ export default function AdminDashboard() {
         .card-header h3 {
           font-family: 'Outfit', sans-serif;
           font-size: 1.1rem;
-          color: #0a2a5e;
+          color: #2D180F;
           margin: 0;
           font-weight: 700;
         }
@@ -526,8 +526,8 @@ export default function AdminDashboard() {
 
         .stat-info { display: flex; flex-direction: column; }
         .stat-label { font-size: 0.85rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; }
-        .stat-value { font-size: 2.5rem; font-family: 'Outfit', sans-serif; font-weight: 800; color: #0a2a5e; margin: 0.35rem 0; }
-        .stat-sublabel { font-size: 0.75rem; color: #3b82f6; font-weight: 600; }
+        .stat-value { font-size: 2.5rem; font-family: 'Outfit', sans-serif; font-weight: 800; color: #2D180F; margin: 0.35rem 0; }
+        .stat-sublabel { font-size: 0.75rem; color: #EA580C; font-weight: 600; }
 
         .stat-icon-box {
           width: 60px; height: 60px;
@@ -553,21 +553,21 @@ export default function AdminDashboard() {
         }
 
         .main-card, .side-card { padding: 2rem; background: #ffffff; border-radius: 14px; border: 1px solid #e2e8f0; }
-        h2 { font-family: 'Outfit', sans-serif; font-size: 1.25rem; color: #0a2a5e; margin-bottom: 2rem; font-weight: 700; border-left: 4px solid #F5C518; padding-left: 1rem; }
+        h2 { font-family: 'Outfit', sans-serif; font-size: 1.25rem; color: #2D180F; margin-bottom: 2rem; font-weight: 700; border-left: 4px solid #E6C5A8; padding-left: 1rem; }
 
         .timeline { display: flex; flex-direction: column; gap: 2rem; position: relative; }
         .timeline::before { content: ''; position: absolute; left: 7px; top: 0; bottom: 0; width: 2px; background: #edf2f7; }
 
         .timeline-item { display: flex; gap: 1.5rem; position: relative; padding-left: 2rem; }
-        .timeline-marker { position: absolute; left: 0; top: 5px; width: 16px; height: 16px; border-radius: 50%; background: #3b82f6; border: 3px solid white; box-shadow: 0 0 0 1px #edf2f7; z-index: 1; }
+        .timeline-marker { position: absolute; left: 0; top: 5px; width: 16px; height: 16px; border-radius: 50%; background: #EA580C; border: 3px solid white; box-shadow: 0 0 0 1px #edf2f7; z-index: 1; }
         .timeline-marker.success { background: #10b981; }
-        .timeline-marker.warning { background: #F5C518; }
+        .timeline-marker.warning { background: #E6C5A8; }
 
         .timeline-content h3 { font-family: 'Outfit', sans-serif; font-size: 1rem; color: #0f1e35; margin-bottom: 0.25rem; font-weight: 600;}
         .timeline-content p { font-size: 0.9rem; color: #64748b; }
 
         .status-list { display: flex; flex-direction: column; gap: 1rem; }
-        .status-item { display: flex; justify-content: space-between; align-items: center; padding: 1rem; background: #f8fafc; border-radius: 8px; font-size: 0.9rem; font-weight: 600; color: #0a2a5e; }
+        .status-item { display: flex; justify-content: space-between; align-items: center; padding: 1rem; background: #f8fafc; border-radius: 8px; font-size: 0.9rem; font-weight: 600; color: #2D180F; }
         .status-tag { font-size: 0.65rem; padding: 0.25rem 0.6rem; border-radius: 4px; font-weight: 800; }
         .status-tag.online { background: #ecfdf5; color: #059669; }
 
@@ -577,15 +577,15 @@ export default function AdminDashboard() {
 
         .filter-group { display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 1.5rem; }
         .filter-group label { font-size: 0.85rem; font-weight: 700; color: #475569; }
-        .filter-group select { padding: 0.75rem 1rem; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 0.9rem; background: #f8fafc; color: #0a2a5e; outline: none; }
+        .filter-group select { padding: 0.75rem 1rem; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 0.9rem; background: #f8fafc; color: #2D180F; outline: none; }
 
         .list-card { padding: 2.5rem 2rem; background: #ffffff; border-radius: 14px; border: 1px solid #e2e8f0; }
         .distribution-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
-        .dist-section h3 { font-size: 0.95rem; font-weight: 600; color: #0a2a5e; margin-bottom: 1rem; padding-bottom: 0.5rem; border-bottom: 2px solid #f1f5f9; }
+        .dist-section h3 { font-size: 0.95rem; font-weight: 600; color: #2D180F; margin-bottom: 1rem; padding-bottom: 0.5rem; border-bottom: 2px solid #f1f5f9; }
         .dist-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 0.75rem; }
         .dist-list li { display: flex; justify-content: space-between; align-items: center; font-size: 0.85rem; padding: 0.5rem; background: #f8fafc; border-radius: 6px; }
         .dist-name { font-weight: 600; color: #334155; }
-        .dist-count { background: #e0f2fe; color: #0284c7; padding: 0.2rem 0.6rem; border-radius: 50px; font-size: 0.75rem; font-weight: 800; }
+        .dist-count { background: #FDF2E9; color: #EA580C; padding: 0.2rem 0.6rem; border-radius: 50px; font-size: 0.75rem; font-weight: 800; }
         .empty-li { color: #94a3b8; font-style: italic; background: transparent !important; }
 
         @media (max-width: 1024px) {

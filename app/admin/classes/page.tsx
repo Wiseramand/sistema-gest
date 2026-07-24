@@ -290,7 +290,7 @@ export default function AdminClassesPage() {
                 
                 .card-header { padding: 1.5rem; background: #f8fafc; border-bottom: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center; }
                 .course-name { font-weight: 800; color: var(--navy-deep); font-size: 1.1rem; }
-                .student-count { font-size: 0.75rem; font-weight: 700; color: var(--ocean-blue); background: #f0f9ff; padding: 0.3rem 0.6rem; border-radius: 50px; }
+                .student-count { font-size: 0.75rem; font-weight: 700; color: var(--ocean-blue); background: #FDF2E9; padding: 0.3rem 0.6rem; border-radius: 50px; }
                 
                 .card-body { padding: 1.5rem; flex: 1; display: flex; flex-direction: column; gap: 0.75rem; }
                 .info-row { display: flex; justify-content: space-between; font-size: 0.9rem; }

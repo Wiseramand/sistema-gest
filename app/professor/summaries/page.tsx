@@ -192,7 +192,7 @@ export default function SummariesPage() {
                 .course-tabs { display: flex; flex-direction: column; gap: 0.5rem; }
                 .course-tab { padding: 1rem; border-radius: 10px; border: 1.5px solid #e2e8f0; background: white; text-align: left; font-weight: 600; color: #475569; cursor: pointer; transition: 0.2s; }
                 .course-tab:hover { background: #f8fafc; border-color: var(--ocean-blue); }
-                .course-tab.active { background: #f0f7ff; border-color: var(--ocean-blue); color: var(--ocean-blue); box-shadow: 0 4px 12px rgba(0,116,217,0.1); }
+                .course-tab.active { background: #FDF2E9; border-color: var(--ocean-blue); color: var(--ocean-blue); box-shadow: 0 4px 12px rgba(0,116,217,0.1); }
                 
                 .summaries-content { display: flex; flex-direction: column; gap: 2rem; }
                 
@@ -209,7 +209,7 @@ export default function SummariesPage() {
                 .history-box h3 { font-size: 1.2rem; color: var(--navy-deep); margin-bottom: 1rem; }
                 .summary-list { display: flex; flex-direction: column; gap: 1rem; }
                 .summary-card { padding: 1.5rem; border-left: 4px solid var(--sand-gold); }
-                .date-badge { font-family: 'Outfit', sans-serif; font-weight: 800; color: var(--ocean-blue); background: #f0f9ff; padding: 0.25rem 0.75rem; border-radius: 50px; font-size: 0.75rem; }
+                .date-badge { font-family: 'Outfit', sans-serif; font-weight: 800; color: var(--ocean-blue); background: #FDF2E9; padding: 0.25rem 0.75rem; border-radius: 50px; font-size: 0.75rem; }
                 .summary-body { margin-top: 1rem; color: #334155; line-height: 1.6; white-space: pre-wrap; font-size: 1rem; }
                 
                 .empty-state { padding: 3rem; text-align: center; color: #94a3b8; background: white; border-radius: 16px; border: 2px dashed #e2e8f0; }

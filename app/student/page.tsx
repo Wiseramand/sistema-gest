@@ -416,10 +416,10 @@ export default function StudentDashboard() {
         .dashboard-header { margin-bottom: 3rem; display: flex; justify-content: space-between; align-items: flex-start; }
         .dashboard-header h1 { font-size: 2.2rem; color: var(--navy-deep); margin-top: 0.5rem; }
         
-        .student-alert-box { margin-top: 1.5rem; background: #fffbeb; border: 1.5px solid #fef3c7; border-radius: 12px; padding: 1.25rem; display: flex; gap: 1rem; align-items: flex-start; animation: slideDown 0.4s ease-out; }
+        .student-alert-box { margin-top: 1.5rem; background: #F7ECE1; border: 1.5px solid #F7ECE1; border-radius: 12px; padding: 1.25rem; display: flex; gap: 1rem; align-items: flex-start; animation: slideDown 0.4s ease-out; }
         .student-alert-box .alert-icon { font-size: 1.5rem; }
-        .student-alert-box strong { display: block; color: #92400e; margin-bottom: 0.25rem; font-size: 1rem; }
-        .student-alert-box p { margin: 0; color: #b45309; font-size: 0.9rem; line-height: 1.5; }
+        .student-alert-box strong { display: block; color: #9A3412; margin-bottom: 0.25rem; font-size: 1rem; }
+        .student-alert-box p { margin: 0; color: #9A3412; font-size: 0.9rem; line-height: 1.5; }
         
         @keyframes slideDown { from { transform: translateY(-20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
 
@@ -438,7 +438,7 @@ export default function StudentDashboard() {
         
         .payment-badge { font-size: 0.7rem; font-weight: 800; padding: 0.4rem 0.8rem; border-radius: 50px; text-transform: uppercase; white-space: nowrap; }
         .payment-badge.pago-total { background: #ecfdf5; color: #059669; }
-        .payment-badge.metade { background: #fffbeb; color: #d97706; }
+        .payment-badge.metade { background: #F7ECE1; color: #9A3412; }
         .payment-badge.pendente { background: #fef2f2; color: #dc2626; }
 
         .schedule-info { display: flex; flex-direction: column; gap: 0.75rem; background: #f8fafc; padding: 1.25rem; border-radius: 10px; font-size: 0.95rem; }
@@ -457,7 +457,7 @@ export default function StudentDashboard() {
         .btn-read:hover { background: var(--ocean-blue); }
 
         .btn-comprovante { display: flex; align-items: center; gap: 0.5rem; background: linear-gradient(135deg, #0f172a, #1e3a5f); color: white; border: none; padding: 0.65rem 1.25rem; border-radius: 10px; font-size: 0.82rem; font-weight: 700; cursor: pointer; transition: 0.3s; box-shadow: 0 4px 10px rgba(0,0,0,0.12); width: 100%; justify-content: center; }
-        .btn-comprovante:hover { background: linear-gradient(135deg, #1e3a5f, #0074d9); transform: translateY(-2px); box-shadow: 0 6px 16px rgba(0,116,217,0.25); }
+        .btn-comprovante:hover { background: linear-gradient(135deg, #1e3a5f, #EA580C); transform: translateY(-2px); box-shadow: 0 6px 16px rgba(0,116,217,0.25); }
 
         .student-grade-box { margin-top: 1rem; padding-top: 1rem; border-top: 1px dashed #cbd5e1; display: flex; align-items: center; justify-content: space-between; }
         .student-grade-box span { font-size: 0.85rem; font-weight: 800; color: #64748b; text-transform: uppercase; }

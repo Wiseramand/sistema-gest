@@ -55,7 +55,7 @@ export default function AdminLoginPage() {
             display: flex;
             align-items: center;
             justify-content: center;
-            background-color: #0a2a5e;
+            background-color: #2D180F;
             color: white;
             font-family: 'Outfit', sans-serif;
           }
@@ -156,7 +156,7 @@ export default function AdminLoginPage() {
           font-family: 'Outfit', sans-serif;
           font-size: 2.2rem;
           margin-bottom: 2px;
-          color: #0a2a5e;
+          color: #2D180F;
           font-weight: 700;
           letter-spacing: -0.02em;
         }
@@ -173,7 +173,7 @@ export default function AdminLoginPage() {
         .brand-accent {
           width: 40px;
           height: 3px;
-          background: #F5C518;
+          background: #E6C5A8;
           margin: 1.25rem auto 0;
           border-radius: 2px;
         }
@@ -225,7 +225,7 @@ export default function AdminLoginPage() {
         }
 
         .login-submit {
-          background: #0a2a5e;
+          background: #2D180F;
           color: #ffffff;
           border: none;
           padding: 1rem;
@@ -257,7 +257,7 @@ export default function AdminLoginPage() {
           display: inline-flex;
           align-items: center;
           gap: 0.75rem;
-          color: #0a2a5e;
+          color: #2D180F;
           text-decoration: none;
           font-weight: 700;
           font-size: 0.9rem;

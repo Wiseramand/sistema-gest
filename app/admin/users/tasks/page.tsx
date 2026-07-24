@@ -112,8 +112,8 @@ export default function UserTasksPage() {
 
             <style jsx>{`
                 .page-wrap { display: flex; flex-direction: column; gap: 2rem; }
-                .page-header { background: #0a2a5e; padding: 2rem; border-radius: 16px; color: white; }
-                .page-header h1 { font-family: 'Outfit', sans-serif; font-size: 1.8rem; margin: 0 0 0.5rem; color: #F5C518; }
+                .page-header { background: #2D180F; padding: 2rem; border-radius: 16px; color: white; }
+                .page-header h1 { font-family: 'Outfit', sans-serif; font-size: 1.8rem; margin: 0 0 0.5rem; color: #E6C5A8; }
                 .page-header p { color: #cbd5e1; font-size: 0.95rem; margin: 0; }
 
                 .delegation-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(360px, 1fr)); gap: 1.5rem; }
@@ -122,8 +122,8 @@ export default function UserTasksPage() {
                 .admin-task-card.syncing { opacity: 0.7; pointer-events: none; }
 
                 .card-head { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem; border-bottom: 1px solid #f1f5f9; padding-bottom: 1rem; }
-                .avatar { width: 44px; height: 44px; border-radius: 12px; background: #e0f2fe; color: #0369a1; display: flex; align-items: center; justify-content: center; font-weight: 800; font-family: 'Outfit', sans-serif; }
-                .info h3 { margin: 0; font-size: 1.05rem; color: #0a2a5e; font-weight: 700; }
+                .avatar { width: 44px; height: 44px; border-radius: 12px; background: #FDF2E9; color: #EA580C; display: flex; align-items: center; justify-content: center; font-weight: 800; font-family: 'Outfit', sans-serif; }
+                .info h3 { margin: 0; font-size: 1.05rem; color: #2D180F; font-weight: 700; }
                 .info p { margin: 0; font-size: 0.8rem; color: #64748b; }
 
                 .responsibilities-list h4 { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: #94a3b8; font-weight: 800; margin-bottom: 1rem; }
@@ -131,11 +131,11 @@ export default function UserTasksPage() {
                 
                 .role-item { display: flex; align-items: center; gap: 0.6rem; padding: 0.6rem; border-radius: 10px; background: #f8fafc; border: 1.5px solid transparent; cursor: pointer; transition: 0.2s; }
                 .role-item:hover { background: #f1f5f9; }
-                .role-item.active { background: #e0f2fe; border-color: #0ea5e9; }
+                .role-item.active { background: #FDF2E9; border-color: #EA580C; }
                 .role-item input { display: none; }
                 .role-item .icon { font-size: 1.1rem; }
                 .role-item .label { font-size: 0.85rem; font-weight: 600; color: #475569; }
-                .role-item.active .label { color: #0369a1; }
+                .role-item.active .label { color: #EA580C; }
                 
                 .loading { grid-column: 1 / -1; text-align: center; padding: 5rem; color: #94a3b8; font-weight: 600; }
                 .text-ellipsis { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }

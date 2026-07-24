@@ -490,9 +490,9 @@ function TrainersContent() {
                 .row-actions { display: flex; gap: 0.75rem; justify-content: flex-end; }
                 .row-btn { background: none; border: none; cursor: pointer; font-weight: 700; font-size: 0.82rem; padding: 0.35rem 0.65rem; border-radius: 6px; transition: 0.2s; }
                 .row-btn.edit { color: var(--ocean-blue); }
-                .row-btn.edit:hover { background: #eff6ff; }
+                .row-btn.edit:hover { background: #FDF2E9; }
                 .row-btn.access { color: var(--ocean-blue); font-size: 1.1rem; }
-                .row-btn.access:hover { background: #f0f9ff; }
+                .row-btn.access:hover { background: #FDF2E9; }
                 .row-btn.access.loading { opacity: 0.5; cursor: wait; filter: grayscale(1); }
                 .row-btn.delete { color: #dc2626; }
                 .row-btn.delete:hover { background: #fef2f2; }
@@ -504,13 +504,13 @@ function TrainersContent() {
                 .cred-label { font-size: 0.75rem; font-weight: 800; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.05em; }
                 .cred-val { font-size: 1.15rem; font-weight: 700; color: var(--navy-deep); font-family: monospace; }
                 .cred-value.password { color: var(--ocean-blue); letter-spacing: 1.5px; }
-                .cred-info { background: #f0f9ff; border: 1px solid #bae6fd; border-radius: 12px; padding: 1rem; font-size: 0.9rem; color: #0369a1; text-align: left; margin-bottom: 2rem; }
+                .cred-info { background: #FDF2E9; border: 1px solid #E6C5A8; border-radius: 12px; padding: 1rem; font-size: 0.9rem; color: #EA580C; text-align: left; margin-bottom: 2rem; }
                 
                 .sharing-actions { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-bottom: 2rem; }
                 .share-btn { display: flex; align-items: center; justify-content: center; gap: 0.5rem; padding: 0.85rem; border-radius: 12px; border: none; font-weight: 700; font-size: 0.85rem; cursor: pointer; transition: 0.2s; }
                 .share-btn.copy { background: #f1f5f9; color: #475569; }
                 .share-btn.whatsapp { background: #dcfce7; color: #166534; }
-                .share-btn.email { background: #e0f2fe; color: #0369a1; }
+                .share-btn.email { background: #FDF2E9; color: #EA580C; }
                 .share-btn:hover { transform: translateY(-2px); filter: brightness(0.95); }
                 .sharing-actions.disabled { opacity: 0.5; pointer-events: none; }
 
@@ -518,7 +518,7 @@ function TrainersContent() {
                 .skeleton-text::after { content: ''; position: absolute; inset: 0; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.6), transparent); animation: shimer 1.5s infinite; }
                 @keyframes shimer { 0% { transform: translateX(-100%); } 100% { transform: translateX(100%); } }
 
-                .warning-note { background: #fffbeb; border: 1px solid #fde68a; color: #92400e; padding: 1rem; border-radius: 12px; font-size: 0.82rem; line-height: 1.5; text-align: left; margin-bottom: 1rem; }
+                .warning-note { background: #F7ECE1; border: 1px solid #E6C5A8; color: #9A3412; padding: 1rem; border-radius: 12px; font-size: 0.82rem; line-height: 1.5; text-align: left; margin-bottom: 1rem; }
 
                 .overlay { position: fixed; inset: 0; background: rgba(0,20,50,0.5); backdrop-filter: blur(8px); display: flex; align-items: center; justify-content: center; z-index: 1000; padding: 1rem; }
                 .modal-box { background: white; width: 100%; max-width: 850px; max-height: 90vh; overflow-y: auto; border-radius: 20px; padding: 2.5rem; box-shadow: 0 25px 60px -10px rgba(0,0,0,0.3); }
@@ -553,8 +553,8 @@ function TrainersContent() {
                 .print-btn { background: white; color: #1e293b; border: 1.5px solid #cbd5e1; padding: 0.85rem 1.5rem; border-radius: 12px; font-weight: 700; font-size: 0.9rem; cursor: pointer; transition: 0.3s; display: flex; align-items: center; gap: 0.5rem; }
                 .print-btn:hover { background: #f1f5f9; transform: translateY(-1px); }
                 
-                .log-btn { background: #eff6ff; color: #1e40af; border: 1.5px solid #bfdbfe; padding: 0.85rem 1.5rem; border-radius: 12px; font-weight: 700; font-size: 0.9rem; cursor: pointer; transition: 0.3s; display: flex; align-items: center; gap: 0.5rem; }
-                .log-btn:hover { background: #dbeafe; transform: translateY(-1px); }
+                .log-btn { background: #FDF2E9; color: #2D180F; border: 1.5px solid #E6DDD4; padding: 0.85rem 1.5rem; border-radius: 12px; font-weight: 700; font-size: 0.9rem; cursor: pointer; transition: 0.3s; display: flex; align-items: center; gap: 0.5rem; }
+                .log-btn:hover { background: #FDF2E9; transform: translateY(-1px); }
 
                 @media print {
                     :global(.sidebar), :global(.admin-header), .header-actions, .row-actions, .maritime-accent {
@@ -576,7 +576,7 @@ function TrainersContent() {
                 .log-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
                 .log-table th { padding: 1rem; background: #f1f5f9; text-align: left; color: #475569; border-bottom: 2px solid #e2e8f0; sticky; top: 0; }
                 .log-table td { padding: 1rem; border-bottom: 1px solid #e2e8f0; color: #1e293b; }
-                .action-tag { color: #2563eb; font-weight: 700; }
+                .action-tag { color: #EA580C; font-weight: 700; }
                 .date-col { font-family: monospace; color: #64748b; }
                 .log-loader, .log-empty { padding: 4rem; text-align: center; color: #94a3b8; font-weight: 500; }
             `}</style>

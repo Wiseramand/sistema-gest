@@ -15,7 +15,7 @@ export default function LoadingOverlay() {
         .loading-overlay {
           position: fixed;
           inset: 0;
-          background: #0a2a5e;
+          background: #2D180F;
           display: flex;
           align-items: center;
           justify-content: center;
@@ -32,7 +32,7 @@ export default function LoadingOverlay() {
 
         .anchor-spinner {
           font-size: 3.5rem;
-          color: #F5C518;
+          color: #E6C5A8;
           animation: anchor-rotate 2.5s ease-in-out infinite;
           filter: drop-shadow(0 0 20px rgba(245, 197, 24, 0.4));
         }

@@ -232,7 +232,7 @@ export default function CompaniesPage() {
 
                 .maritime-accent { width: 40px; height: 4px; background: #ff4136; border-radius: 2px; margin-bottom: 0.5rem; }
                 .new-btn { background: #001f3f; color: white; border: none; padding: 0.85rem 1.5rem; border-radius: 12px; font-weight: 700; cursor: pointer; transition: 0.3s; }
-                .new-btn:hover { background: #0074d9; transform: translateY(-2px); }
+                .new-btn:hover { background: #EA580C; transform: translateY(-2px); }
 
                 .table-wrap { background: white; border-radius: 16px; border: 1px solid #e2e8f0; overflow: hidden; }
                 .data-table { width: 100%; border-collapse: collapse; }
@@ -252,8 +252,8 @@ export default function CompaniesPage() {
                 .align-right { text-align: right; }
                 .row-actions { display: flex; gap: 0.75rem; justify-content: flex-end; }
                 .row-btn { background: none; border: none; cursor: pointer; font-weight: 700; font-size: 0.82rem; padding: 0.35rem 0.65rem; border-radius: 6px; transition: 0.2s; }
-                .row-btn.edit { color: #0074d9; }
-                .row-btn.edit:hover { background: #eff6ff; }
+                .row-btn.edit { color: #EA580C; }
+                .row-btn.edit:hover { background: #FDF2E9; }
                 .row-btn.delete { color: #dc2626; }
                 .row-btn.delete:hover { background: #fef2f2; }
 
@@ -264,7 +264,7 @@ export default function CompaniesPage() {
                 .close-x { background: #f1f5f9; border: none; width: 36px; height: 36px; border-radius: 50%; cursor: pointer; font-size: 1.2rem; }
 
                 .modal-form { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
-                .section-label { font-size: 0.7rem; font-weight: 800; color: #0074d9; text-transform: uppercase; margin-bottom: 1.5rem; border-bottom: 2px solid #f1f5f9; padding-bottom: 0.5rem; }
+                .section-label { font-size: 0.7rem; font-weight: 800; color: #EA580C; text-transform: uppercase; margin-bottom: 1.5rem; border-bottom: 2px solid #f1f5f9; padding-bottom: 0.5rem; }
                 .field { margin-bottom: 1.2rem; display: flex; flex-direction: column; gap: 0.4rem; }
                 .field label { font-weight: 700; font-size: 0.82rem; color: #475569; }
                 .field input { padding: 0.8rem 1rem; border: 1.5px solid #e2e8f0; border-radius: 10px; background: #f8fafc; }
@@ -273,7 +273,7 @@ export default function CompaniesPage() {
                 .modal-footer { grid-column: span 2; display: flex; justify-content: flex-end; gap: 1rem; border-top: 2px solid #f1f5f9; padding-top: 1.5rem; }
                 .btn-cancel { padding: 0.85rem 1.75rem; border-radius: 12px; border: 1.5px solid #e2e8f0; background: white; font-weight: 700; cursor: pointer; }
                 .btn-save { padding: 0.85rem 2rem; border-radius: 12px; border: none; background: #001f3f; color: white; font-weight: 700; cursor: pointer; transition: 0.3s; }
-                .btn-save:hover { background: #0074d9; transform: translateY(-2px); }
+                .btn-save:hover { background: #EA580C; transform: translateY(-2px); }
 
                 .loader, .empty-state { text-align: center; padding: 4rem; color: #94a3b8; }
 

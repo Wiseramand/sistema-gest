@@ -103,7 +103,7 @@ function AttendanceListContent() {
                     <div className="logo-group">
                         <div className="maritime-logo" style={{ fontSize: '2rem' }}>⚓</div>
                         <div className="logo-text" style={{ display: 'flex', flexDirection: 'column' }}>
-                            <span className="main-logo" style={{ fontSize: '1.2rem', fontWeight: 900, color: '#1e3a8a', letterSpacing: '2px' }}>MARÍTIMO</span>
+                            <span className="main-logo" style={{ fontSize: '1.2rem', fontWeight: 900, color: '#2D180F', letterSpacing: '2px' }}>MARÍTIMO</span>
                             <span className="sub-logo" style={{ fontSize: '0.7rem', fontWeight: 700, color: '#64748b' }}>Training Center</span>
                         </div>
                     </div>
@@ -189,7 +189,7 @@ function AttendanceListContent() {
                 }
 
                 .print-btn {
-                    background: #1e3a8a;
+                    background: #2D180F;
                     color: white;
                     border: none;
                     padding: 0.75rem 1.5rem;
@@ -223,7 +223,7 @@ function AttendanceListContent() {
                     display: flex;
                     justify-content: space-between;
                     align-items: flex-start;
-                    border-bottom: 2px solid #1e3a8a;
+                    border-bottom: 2px solid #2D180F;
                     padding-bottom: 1rem;
                     margin-bottom: 1.5rem;
                 }
@@ -231,7 +231,7 @@ function AttendanceListContent() {
                 .logo-placeholder {
                     font-size: 1.5rem;
                     font-weight: 900;
-                    color: #1e3a8a;
+                    color: #2D180F;
                     letter-spacing: 1px;
                 }
 

@@ -108,7 +108,7 @@ export default function VerifyUI({ certificate, student, id }: VerifyUIProps) {
             padding: 1.25rem;
             margin-bottom: 2rem;
           }
-          .help-box h3 { font-size: 0.95rem; color: #F59E0B; margin: 0 0 0.75rem; }
+          .help-box h3 { font-size: 0.95rem; color: #EA580C; margin: 0 0 0.75rem; }
           .help-box ul { margin: 0; padding-left: 1.25rem; color: #9CA3AF; font-size: 0.875rem; line-height: 1.6; }
           .actions { display: flex; flex-direction: column; gap: 0.75rem; }
           .btn-primary {
@@ -317,7 +317,7 @@ export default function VerifyUI({ certificate, student, id }: VerifyUIProps) {
         }
         .brand-tag {
           font-size: 0.8rem;
-          color: #F59E0B;
+          color: #EA580C;
           text-transform: uppercase;
           letter-spacing: 1px;
           margin: 0;
@@ -352,7 +352,7 @@ export default function VerifyUI({ certificate, student, id }: VerifyUIProps) {
         }
         .status-banner.valid .status-title { color: #34D399; }
         .status-banner.expired .status-title { color: #FBBF24; }
-        .status-banner.pending .status-title { color: #38BDF8; }
+        .status-banner.pending .status-title { color: #EA580C; }
         .status-sub {
           font-size: 0.85rem;
           color: #9CA3AF;
@@ -391,7 +391,7 @@ export default function VerifyUI({ certificate, student, id }: VerifyUIProps) {
           width: 100%;
           height: 100%;
           border-radius: 50%;
-          background: linear-gradient(135deg, #EA580C 0%, #D97706 100%);
+          background: linear-gradient(135deg, #EA580C 0%, #9A3412 100%);
           display: flex;
           align-items: center;
           justify-content: center;
@@ -479,7 +479,7 @@ export default function VerifyUI({ certificate, student, id }: VerifyUIProps) {
         .box-value.course-title {
           font-size: 1.3rem;
           font-weight: 900;
-          color: #F59E0B;
+          color: #EA580C;
           line-height: 1.3;
         }
         .box-value.code-value {
@@ -518,7 +518,7 @@ export default function VerifyUI({ certificate, student, id }: VerifyUIProps) {
         }
         .flag-authority {
           font-size: 0.75rem;
-          color: #F59E0B;
+          color: #EA580C;
           font-weight: 600;
         }
 
@@ -555,7 +555,7 @@ export default function VerifyUI({ certificate, student, id }: VerifyUIProps) {
         .seal-info strong {
           display: block;
           font-size: 0.9rem;
-          color: #F59E0B;
+          color: #EA580C;
         }
         .seal-info p {
           margin: 0.2rem 0 0;
@@ -619,7 +619,7 @@ export default function VerifyUI({ certificate, student, id }: VerifyUIProps) {
           .flag-country { color: #000 !important; }
           .brand-name { color: #000 !important; }
           .box-value { color: #000 !important; }
-          .box-value.course-title { color: #d97706 !important; }
+          .box-value.course-title { color: #9A3412 !important; }
         }
 
         /* ── MOBILE (≤ 480px) ── */

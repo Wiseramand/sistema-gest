@@ -286,7 +286,7 @@ export default function StudentDetailsPage() {
                 .profile-main-info h1 { margin: 0; font-size: 2.2rem; color: var(--navy-deep); font-weight: 800; }
                 .profile-type { margin: 0.5rem 0 1.5rem; }
                 .badge { padding: 0.4rem 1rem; border-radius: 50px; font-size: 0.8rem; font-weight: 700; }
-                .corporate { background: #eff6ff; color: #2563eb; }
+                .corporate { background: #FDF2E9; color: #EA580C; }
                 .personal { background: #f0fdf4; color: #16a34a; }
                 
                 .quick-stats { display: flex; gap: 3rem; }
@@ -316,7 +316,7 @@ export default function StudentDetailsPage() {
                 .pay-badge.pagototal { background: #ecfdf5; color: #059669; }
                 .pay-badge.pendente { background: #fff7ed; color: #c2410c; }
 
-                .client-card { background: linear-gradient(to bottom, white 0%, #f0f9ff 100%); text-align: center; }
+                .client-card { background: linear-gradient(to bottom, white 0%, #FDF2E9 100%); text-align: center; }
                 .company-details { padding: 2.5rem; display: flex; flex-direction: column; align-items: center; }
                 .company-icon { font-size: 3rem; margin-bottom: 1rem; }
                 .company-details h4 { margin: 0 0 0.5rem; font-size: 1.25rem; color: var(--navy-deep); }

@@ -113,7 +113,7 @@ export default function VerifyCertificatePage() {
             <style jsx>{`
                 .verify-page { padding: 1rem 0; }
                 .page-header { margin-bottom: 3rem; }
-                .page-header h1 { font-size: 1.8rem; color: #0a2a5e; margin-top: 0.5rem; }
+                .page-header h1 { font-size: 1.8rem; color: #2D180F; margin-top: 0.5rem; }
                 
                 .verify-layout { display: grid; grid-template-columns: 400px 1fr; gap: 3rem; align-items: start; }
                 
@@ -128,11 +128,11 @@ export default function VerifyCertificatePage() {
                 
                 .verify-form { display: flex; flex-direction: column; gap: 1.5rem; }
                 .field label { display: block; font-size: 0.8rem; font-weight: 800; color: #64748b; margin-bottom: 0.5rem; text-transform: uppercase; }
-                .field input { width: 100%; padding: 1rem; border-radius: 12px; border: 2px solid #edf2f7; background: #f8fafc; font-family: 'Outfit', sans-serif; font-weight: 700; letter-spacing: 0.05em; font-size: 1rem; color: #0a2a5e; }
-                .field input:focus { outline: none; border-color: #3b82f6; background: white; }
+                .field input { width: 100%; padding: 1rem; border-radius: 12px; border: 2px solid #edf2f7; background: #f8fafc; font-family: 'Outfit', sans-serif; font-weight: 700; letter-spacing: 0.05em; font-size: 1rem; color: #2D180F; }
+                .field input:focus { outline: none; border-color: #EA580C; background: white; }
                 
-                .btn-verify { background: #0a2a5e; color: white; border: none; padding: 1rem; border-radius: 12px; font-weight: 800; cursor: pointer; transition: 0.3s; box-shadow: 0 5px 15px rgba(10,42,94,0.15); }
-                .btn-verify:hover { background: #3b82f6; transform: translateY(-2px); }
+                .btn-verify { background: #2D180F; color: white; border: none; padding: 1rem; border-radius: 12px; font-weight: 800; cursor: pointer; transition: 0.3s; box-shadow: 0 5px 15px rgba(10,42,94,0.15); }
+                .btn-verify:hover { background: #EA580C; transform: translateY(-2px); }
                 .btn-verify:disabled { opacity: 0.6; cursor: not-allowed; }
                 
                 .result-area { min-height: 400px; }
@@ -157,9 +157,9 @@ export default function VerifyCertificatePage() {
                 .result-card.invalid h3 { color: #991b1b; font-weight: 800; }
                 .result-card.invalid p { color: #b91c1c; font-weight: 500; }
                 
-                .verify-instructions { padding: 2rem; background: #eff6ff; border: 1px solid #dbeafe; }
-                .verify-instructions h4 { margin-top: 0; color: #1e3a8a; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; font-size: 0.8rem; margin-bottom: 1rem; }
-                .verify-instructions ul { padding-left: 1.25rem; color: #1e40af; font-size: 0.9rem; display: flex; flex-direction: column; gap: 0.75rem; }
+                .verify-instructions { padding: 2rem; background: #FDF2E9; border: 1px solid #FDF2E9; }
+                .verify-instructions h4 { margin-top: 0; color: #2D180F; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; font-size: 0.8rem; margin-bottom: 1rem; }
+                .verify-instructions ul { padding-left: 1.25rem; color: #2D180F; font-size: 0.9rem; display: flex; flex-direction: column; gap: 0.75rem; }
             `}</style>
         </div>
     );

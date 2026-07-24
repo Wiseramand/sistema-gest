@@ -100,7 +100,7 @@ export default function TrainerLoginPage() {
           display: flex;
           align-items: center;
           justify-content: center;
-          background: linear-gradient(135deg, #1e293b 0%, #3b82f6 100%);
+          background: linear-gradient(135deg, #1e293b 0%, #EA580C 100%);
           padding: 1.5rem;
         }
 
@@ -122,7 +122,7 @@ export default function TrainerLoginPage() {
         .maritime-accent {
             width: 50px;
             height: 5px;
-            background: #3b82f6;
+            background: #EA580C;
             border-radius: 10px;
             margin-bottom: 1rem;
         }

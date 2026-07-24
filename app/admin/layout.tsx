@@ -544,13 +544,13 @@ function AdminLayoutContent({ children }: { children: React.ReactNode }) {
           height: 38px;
           border-radius: 50%;
           object-fit: cover;
-          border: 2px solid #F5C518;
+          border: 2px solid var(--color-accent);
           cursor: pointer;
           transition: 0.2s;
         }
         .user-photo:hover {
           transform: scale(1.05);
-          box-shadow: 0 0 12px rgba(245, 197, 24, 0.3);
+          box-shadow: 0 0 12px rgba(234, 88, 12, 0.3);
         }
         .user-avatar-placeholder {
           width: 38px;
@@ -1004,14 +1004,14 @@ function AdminLayoutContent({ children }: { children: React.ReactNode }) {
         .user-name {
           font-size: 13px;
           font-weight: 500;
-          color: #0f1e35;
+          color: var(--color-primary);
         }
 
         .user-badge {
           font-size: 9px;
           font-weight: 600;
-          color: #0a2a5e;
-          background: #F5C518;
+          color: var(--color-primary);
+          background: var(--color-sandstone);
           padding: 2px 6px;
           border-radius: 4px;
           letter-spacing: 0.05em;

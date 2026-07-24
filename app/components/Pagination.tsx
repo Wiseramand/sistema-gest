@@ -60,13 +60,13 @@ export default function Pagination({ total, perPage, page, onChange }: Paginatio
         }
         .page-btn:hover:not(:disabled) {
           background: #f1f5f9;
-          border-color: #0a2a5e;
-          color: #0a2a5e;
+          border-color: #2D180F;
+          color: #2D180F;
         }
         .page-btn.active {
-          background: #0a2a5e;
+          background: #2D180F;
           color: white;
-          border-color: #0a2a5e;
+          border-color: #2D180F;
         }
         .page-btn:disabled {
           opacity: 0.4;

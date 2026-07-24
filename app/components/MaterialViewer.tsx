@@ -168,7 +168,7 @@ export default function MaterialViewer({ isOpen, onClose, material }: MaterialVi
           margin: 0;
           font-size: 1.1rem;
           font-family: 'Outfit', sans-serif;
-          color: #F5C518;
+          color: #E6C5A8;
         }
         .close-btn {
           background: none;
@@ -224,7 +224,7 @@ export default function MaterialViewer({ isOpen, onClose, material }: MaterialVi
         }
         .external-link-btn {
           display: inline-block;
-          background: #F5C518;
+          background: #E6C5A8;
           color: #000;
           padding: 0.75rem 1.25rem;
           border-radius: 8px;
@@ -234,7 +234,7 @@ export default function MaterialViewer({ isOpen, onClose, material }: MaterialVi
           transition: 0.2s;
         }
         .external-link-btn:hover {
-          background: #eab308;
+          background: #EA580C;
           transform: translateY(-2px);
         }
         .doc-viewer {

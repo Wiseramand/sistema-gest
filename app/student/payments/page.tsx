@@ -114,7 +114,7 @@ export default function StudentPaymentsPage() {
             <style jsx>{`
                 .payments-page { padding: 1rem 0; }
                 .page-header { margin-bottom: 2rem; }
-                .page-header h1 { font-size: 1.8rem; color: #0a2a5e; margin-top: 0.5rem; }
+                .page-header h1 { font-size: 1.8rem; color: #2D180F; margin-top: 0.5rem; }
                 
                 .financial-summary { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; margin-bottom: 2.5rem; }
                 .stat-box { padding: 2rem; border-left: 6px solid #e2e8f0; }
@@ -126,21 +126,21 @@ export default function StudentPaymentsPage() {
                 .stat-box.pending .stat-val { color: #991b1b; }
                 
                 .payments-table-card { padding: 2rem; }
-                .payments-table-card h3 { margin-top: 0; color: #0a2a5e; font-size: 1.1rem; margin-bottom: 1.5rem; font-weight: 800; }
+                .payments-table-card h3 { margin-top: 0; color: #2D180F; font-size: 1.1rem; margin-bottom: 1.5rem; font-weight: 800; }
                 
                 .table-wrapper { overflow-x: auto; }
                 .payments-table { width: 100%; border-collapse: collapse; min-width: 800px; }
                 .payments-table th { text-align: left; padding: 1rem; background: #f8fafc; border-bottom: 2px solid #edf2f7; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: #94a3b8; font-weight: 800; }
                 .payments-table td { padding: 1.25rem 1rem; border-bottom: 1px solid #f1f5f9; font-size: 0.9rem; font-weight: 600; color: #475569; }
                 
-                .course-name { color: #0a2a5e; font-weight: 800; }
+                .course-name { color: #2D180F; font-weight: 800; }
                 .paid-val { color: #059669; }
                 .due-val { color: #dc2626; }
                 
                 .status-badge { padding: 0.4rem 0.85rem; border-radius: 50px; font-size: 0.7rem; font-weight: 800; text-transform: uppercase; }
                 .status-badge.pagototal { background: #d1fae5; color: #065f46; }
                 .status-badge.pendente { background: #fee2e2; color: #991b1b; }
-                .status-badge.parcial { background: #fef3c7; color: #92400e; }
+                .status-badge.parcial { background: #F7ECE1; color: #9A3412; }
                 
                 .empty-msg { text-align: center; color: #94a3b8; padding: 4rem; font-style: italic; }
             `}</style>

@@ -474,7 +474,7 @@ export default function CoursesPage() {
           letter-spacing: 0.05em;
         }
         .badge-open { background: #ecfdf5; color: #059669; }
-        .badge-progress { background: #eff6ff; color: #1e40af; }
+        .badge-progress { background: #FDF2E9; color: #2D180F; }
         .badge-done { background: #f1f5f9; color: #64748b; }
 
         .card-title { font-size: 1.1rem; font-weight: 800; color: var(--navy-deep); margin: 0; line-height: 1.3; }
@@ -504,8 +504,8 @@ export default function CoursesPage() {
           border: none;
           transition: 0.2s;
         }
-        .action-print { background: #fef3c7; color: #92400e; }
-        .action-print:hover { background: #fde68a; }
+        .action-print { background: #F7ECE1; color: #9A3412; }
+        .action-print:hover { background: #E6C5A8; }
         .action-edit { background: #f1f5f9; color: var(--navy-deep); }
         .action-edit:hover { background: #e2e8f0; }
         .action-delete { background: #fef2f2; color: #dc2626; }

@@ -93,18 +93,18 @@ export default function StudentCertificatesPage() {
 
       <style jsx>{`
         .page-wrap { display: flex; flex-direction: column; gap: 2rem; max-width: 1200px; margin: 0 auto; }
-        .page-header { background: linear-gradient(135deg, #0a2a5e 0%, #173b7d 100%); padding: 2.5rem; border-radius: 16px; color: white; box-shadow: 0 10px 30px rgba(10, 42, 94, 0.1); }
-        .page-header h1 { font-family: 'Outfit', sans-serif; font-size: 2rem; margin-bottom: 0.5rem; color: #F5C518; }
+        .page-header { background: linear-gradient(135deg, #2D180F 0%, #173b7d 100%); padding: 2.5rem; border-radius: 16px; color: white; box-shadow: 0 10px 30px rgba(10, 42, 94, 0.1); }
+        .page-header h1 { font-family: 'Outfit', sans-serif; font-size: 2rem; margin-bottom: 0.5rem; color: #E6C5A8; }
         .page-header p { color: #e2e8f0; font-size: 1.1rem; }
 
         .card { background: white; border-radius: 16px; padding: 2rem; border: 1px solid #e2e8f0; box-shadow: 0 4px 6px rgba(0,0,0,0.02); }
         
         .restriction-card { text-align: center; max-width: 600px; margin: 4rem auto; }
         .restriction-card .icon { font-size: 3rem; display: block; margin-bottom: 1.5rem; }
-        .restriction-card h2 { color: #0a2a5e; font-family: 'Outfit', sans-serif; margin-bottom: 1rem; }
+        .restriction-card h2 { color: #2D180F; font-family: 'Outfit', sans-serif; margin-bottom: 1rem; }
         .restriction-card p { color: #64748b; line-height: 1.6; margin-bottom: 1rem; }
         .notice { font-weight: 600; color: #475569; }
-        .btn-contact { background: #0a2a5e; color: white; border: none; padding: 0.8rem 2rem; border-radius: 8px; font-weight: 700; cursor: pointer; margin-top: 1rem; }
+        .btn-contact { background: #2D180F; color: white; border: none; padding: 0.8rem 2rem; border-radius: 8px; font-weight: 700; cursor: pointer; margin-top: 1rem; }
 
         .cert-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 1.5rem; }
         .cert-card { display: flex; flex-direction: column; gap: 1.5rem; transition: transform 0.2s; }
@@ -112,9 +112,9 @@ export default function StudentCertificatesPage() {
         
         .badge { padding: 0.3rem 0.7rem; border-radius: 50px; font-size: 0.75rem; font-weight: 800; }
         .badge.success { background: #ecfdf5; color: #059669; }
-        .badge.pending { background: #fffbeb; color: #d97706; }
+        .badge.pending { background: #F7ECE1; color: #9A3412; }
 
-        .cert-main h3 { color: #0a2a5e; font-family: 'Outfit', sans-serif; font-size: 1.2rem; margin-bottom: 0.5rem; }
+        .cert-main h3 { color: #2D180F; font-family: 'Outfit', sans-serif; font-size: 1.2rem; margin-bottom: 0.5rem; }
         .id-tag { font-family: monospace; color: #94a3b8; font-size: 0.8rem; margin-bottom: 1rem; }
         .validity { display: flex; justify-content: space-between; font-size: 0.9rem; padding-top: 1rem; border-top: 1px solid #f1f5f9; }
         .validity span { color: #64748b; }
@@ -122,11 +122,11 @@ export default function StudentCertificatesPage() {
 
         .cert-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
         .btn-action { border: none; padding: 0.6rem; border-radius: 8px; font-weight: 700; font-size: 0.85rem; cursor: pointer; transition: 0.2s; }
-        .btn-action.view { background: #f0f9ff; color: #0a2a5e; }
+        .btn-action.view { background: #FDF2E9; color: #2D180F; }
         .btn-action.download { background: #fffae6; color: #b48a04; }
         .btn-action:hover { filter: brightness(0.95); }
 
-        .loader { padding: 5rem; text-align: center; font-weight: 700; color: #0a2a5e; }
+        .loader { padding: 5rem; text-align: center; font-weight: 700; color: #2D180F; }
         .empty-state { text-align: center; padding: 4rem; color: #94a3b8; }
         .empty-state .icon { font-size: 3rem; display: block; margin-bottom: 1rem; }
       `}</style>

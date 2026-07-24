@@ -233,7 +233,7 @@ export default function StudentProfilePage() {
                 .card { background: white; border-radius: 20px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05), 0 2px 4px -1px rgba(0,0,0,0.03); overflow: hidden; margin-bottom: 2rem; border: 1px solid #f1f5f9; }
                 
                 .profile-header { position: relative; }
-                .profile-bg { height: 160px; background: linear-gradient(135deg, #0f172a 0%, #3b82f6 100%); }
+                .profile-bg { height: 160px; background: linear-gradient(135deg, #0f172a 0%, #EA580C 100%); }
                 .profile-top-content { padding: 0 3rem 3rem; display: flex; align-items: flex-end; gap: 2.5rem; margin-top: -60px; position: relative; z-index: 2; }
                 
                 .photo-container { position: relative; }
@@ -241,7 +241,7 @@ export default function StudentProfilePage() {
                 .photo-placeholder { width: 180px; height: 180px; border-radius: 50%; border: 6px solid white; background: #f8fafc; display: flex; align-items: center; justify-content: center; font-size: 5rem; font-weight: 800; color: #cbd5e0; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
                 
                 .photo-edit-btn { position: absolute; bottom: 10px; left: 10px; width: 36px; height: 36px; background: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.1); border: 1.5px solid #e2e8f0; transition: 0.2s; z-index: 10; font-size: 1.1rem; }
-                .photo-edit-btn:hover { transform: scale(1.1); background: #f8fafc; border-color: #3b82f6; }
+                .photo-edit-btn:hover { transform: scale(1.1); background: #f8fafc; border-color: #EA580C; }
 
                 .status-badge { position: absolute; bottom: 10px; right: 10px; padding: 0.5rem 1rem; border-radius: 50px; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; border: 3px solid white; }
                 .status-badge.ativo { background: #10b981; color: white; }
@@ -251,7 +251,7 @@ export default function StudentProfilePage() {
                 .profile-main-info h1 { margin: 0; font-size: 2.2rem; color: #0f172a; font-weight: 800; }
                 .profile-type { margin: 0.5rem 0 1.5rem; }
                 .badge { padding: 0.4rem 1rem; border-radius: 50px; font-size: 0.8rem; font-weight: 700; }
-                .corporate { background: #eff6ff; color: #2563eb; }
+                .corporate { background: #FDF2E9; color: #EA580C; }
                 .personal { background: #f0fdf4; color: #16a34a; }
                 
                 .quick-stats { display: flex; gap: 3rem; }
@@ -277,7 +277,7 @@ export default function StudentProfilePage() {
                 .pay-badge.pagototal { background: #ecfdf5; color: #059669; }
                 .pay-badge.pendente { background: #fff7ed; color: #c2410c; }
 
-                .client-card { background: linear-gradient(to bottom, white 0%, #f0f9ff 100%); text-align: center; }
+                .client-card { background: linear-gradient(to bottom, white 0%, #FDF2E9 100%); text-align: center; }
                 .company-details { padding: 2.5rem; display: flex; flex-direction: column; align-items: center; }
                 .company-icon { font-size: 3rem; margin-bottom: 1rem; }
                 .company-details h4 { margin: 0 0 0.5rem; font-size: 1.25rem; color: #0f172a; }
@@ -285,8 +285,8 @@ export default function StudentProfilePage() {
 
                 .notes-box { padding: 2rem; }
                 .notes-box p { font-size: 0.9rem; color: #64748b; line-height: 1.6; margin-bottom: 1.5rem; }
-                .btn-support { width: 100%; padding: 0.8rem; border-radius: 12px; border: 2px solid #3b82f6; background: transparent; color: #3b82f6; font-weight: 700; cursor: pointer; transition: 0.2s; }
-                .btn-support:hover { background: #3b82f6; color: white; }
+                .btn-support { width: 100%; padding: 0.8rem; border-radius: 12px; border: 2px solid #EA580C; background: transparent; color: #EA580C; font-weight: 700; cursor: pointer; transition: 0.2s; }
+                .btn-support:hover { background: #EA580C; color: white; }
 
                 .loader { padding: 5rem; text-align: center; color: #94a3b8; font-weight: 600; }
                 .error { padding: 5rem; text-align: center; color: #ef4444; font-weight: 700; }

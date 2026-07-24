@@ -32,10 +32,10 @@ function IconProfile() {
 function IconAnchor() {
   return (
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-      <circle cx="12" cy="5" r="2.5" stroke="#0a2a5e" strokeWidth="2"/>
-      <line x1="12" y1="7.5" x2="12" y2="19" stroke="#0a2a5e" strokeWidth="2" strokeLinecap="round"/>
-      <path d="M7 12H5a7 7 0 0014 0h-2" stroke="#0a2a5e" strokeWidth="2" strokeLinecap="round"/>
-      <line x1="8" y1="8.5" x2="16" y2="8.5" stroke="#0a2a5e" strokeWidth="2" strokeLinecap="round"/>
+      <circle cx="12" cy="5" r="2.5" stroke="#2D180F" strokeWidth="2"/>
+      <line x1="12" y1="7.5" x2="12" y2="19" stroke="#2D180F" strokeWidth="2" strokeLinecap="round"/>
+      <path d="M7 12H5a7 7 0 0014 0h-2" stroke="#2D180F" strokeWidth="2" strokeLinecap="round"/>
+      <line x1="8" y1="8.5" x2="16" y2="8.5" stroke="#2D180F" strokeWidth="2" strokeLinecap="round"/>
     </svg>
   );
 }
@@ -259,9 +259,9 @@ function StudentLayoutContent({ children }: { children: React.ReactNode }) {
           .denied-screen { height:100vh; display:flex; align-items:center; justify-content:center; background:#f4f7fb; font-family:'DM Sans',sans-serif; }
           .denied-card { text-align:center; background:white; padding:3rem; border-radius:20px; border:1px solid #dce6f0; max-width:400px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
           .denied-icon { font-size:3.5rem; display:block; margin-bottom:1.25rem; }
-          h1 { color:#0a2a5e; font-family:'Outfit',sans-serif; margin-bottom:0.75rem; font-weight: 800; }
+          h1 { color:#2D180F; font-family:'Outfit',sans-serif; margin-bottom:0.75rem; font-weight: 800; }
           p { color:#6b7ea0; margin-bottom:1.75rem; }
-          .denied-btn { background:#0a2a5e; color:white; padding:0.7rem 2rem; border-radius:10px; font-weight:600; display:inline-block; }
+          .denied-btn { background:#2D180F; color:white; padding:0.7rem 2rem; border-radius:10px; font-weight:600; display:inline-block; }
         `}</style>
       </div>
     );
@@ -460,8 +460,8 @@ function StudentLayoutContent({ children }: { children: React.ReactNode }) {
           left: 0.75rem;
           width: 42px;
           height: 42px;
-          background: #F5C518;
-          color: #0a2a5e;
+          background: #E6C5A8;
+          color: #2D180F;
           border: none;
           border-radius: 10px;
           font-size: 1.25rem;
@@ -475,13 +475,13 @@ function StudentLayoutContent({ children }: { children: React.ReactNode }) {
         }
 
         /* ── Rail ── */
-        .rail { width: 72px; background: #0a2a5e; border-radius: 14px 0 0 14px; display: flex; flex-direction: column; align-items: center; padding: 16px 0; flex-shrink: 0; height: calc(100vh - 2.5rem); }
-        .rail-logo { width: 34px; height: 34px; background: #F5C518; border-radius: 9px; display: flex; align-items: center; justify-content: center; margin-bottom: 20px; flex-shrink: 0; }
+        .rail { width: 72px; background: #2D180F; border-radius: 14px 0 0 14px; display: flex; flex-direction: column; align-items: center; padding: 16px 0; flex-shrink: 0; height: calc(100vh - 2.5rem); }
+        .rail-logo { width: 34px; height: 34px; background: #E6C5A8; border-radius: 9px; display: flex; align-items: center; justify-content: center; margin-bottom: 20px; flex-shrink: 0; }
         .rail-modules { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; width: 100%; padding: 0 10px; overflow-y: auto; scrollbar-width: none; }
         .rail-modules::-webkit-scrollbar { display: none; }
         .rail-btn { width: 46px; height: 46px; border-radius: 12px; display: flex; align-items: center; justify-content: center; background: transparent; border: none; cursor: pointer; color: rgba(255, 255, 255, 0.6); transition: all 0.2s ease; }
         .rail-btn:hover { background: rgba(255, 255, 255, 0.10); color: rgba(255, 255, 255, 0.9); }
-        .rail-btn.active { background: #ffffff; color: #0a2a5e; }
+        .rail-btn.active { background: #ffffff; color: #2D180F; }
         .rail-sep { width: 24px; height: 0.5px; background: rgba(255, 255, 255, 0.12); margin: 8px 0; flex-shrink: 0; }
         .rail-footer { display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 0 10px; flex-shrink: 0; }
         .rail-avatar-container { width: 30px; height: 30px; border-radius: 50%; border: 2px solid rgba(255, 255, 255, 0.2); overflow: hidden; display: flex; align-items: center; justify-content: center; background: #1a4fa0; }
@@ -492,7 +492,7 @@ function StudentLayoutContent({ children }: { children: React.ReactNode }) {
         .flyout { width: 200px; background: #ffffff; border-right: 0.5px solid rgba(0, 0, 0, 0.07); display: flex; flex-direction: column; flex-shrink: 0; height: calc(100vh - 2.5rem); }
         .flyout-hdr { padding: 16px; border-bottom: 0.5px solid rgba(0, 0, 0, 0.06); flex-shrink: 0; }
         .flyout-pre { display: block; font-size: 10px; text-transform: uppercase; letter-spacing: 0.12em; color: #94a3b8; margin-bottom: 4px; font-weight: 500; }
-        .flyout-title { display: block; font-family: 'Outfit', sans-serif; font-size: 16px; font-weight: 600; color: #0a2a5e; letter-spacing: -0.02em; }
+        .flyout-title { display: block; font-family: 'Outfit', sans-serif; font-size: 16px; font-weight: 600; color: #2D180F; letter-spacing: -0.02em; }
         .flyout-nav { flex: 1; overflow-y: auto; padding: 12px 8px; scrollbar-width: none; }
         .flyout-nav::-webkit-scrollbar { display: none; }
         .flyout-group { margin-bottom: 16px; }
@@ -500,10 +500,10 @@ function StudentLayoutContent({ children }: { children: React.ReactNode }) {
         .flyout-item { display: flex; align-items: center; gap: 9px; padding: 8px; border-radius: 7px; text-decoration: none; transition: background 0.15s; margin-bottom: 1px; width: 100%; cursor: pointer; }
         .flyout-item:hover { background: #f8fafc; }
         .flyout-item.active { background: #e8f0fb; }
-        .flyout-item.active .flyout-label { color: #0a2a5e; font-weight: 500; }
-        .flyout-item.active .flyout-icon { background: #0a2a5e; color: #ffffff; }
+        .flyout-item.active .flyout-label { color: #2D180F; font-weight: 500; }
+        .flyout-item.active .flyout-icon { background: #2D180F; color: #ffffff; }
         .flyout-icon { width: 24px; height: 24px; border-radius: 6px; background: #f8fafc; display: flex; align-items: center; justify-content: center; color: #64748b; flex-shrink: 0; transition: all 0.15s; }
-        .flyout-label { font-size: 13px; color: #0a2a5e; font-weight: 500; flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; line-height: 1; }
+        .flyout-label { font-size: 13px; color: #2D180F; font-weight: 500; flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; line-height: 1; }
         .flyout-badge { font-size: 10px; background: #f1f5f9; color: #94a3b8; padding: 2px 5px; border-radius: 4px; font-weight: 500; flex-shrink: 0; }
         .flyout-foot { padding: 10px 8px; border-top: 0.5px solid rgba(0, 0, 0, 0.06); display: flex; flex-direction: column; gap: 2px; flex-shrink: 0; }
         .flyout-action { display: flex; align-items: center; gap: 8px; padding: 8px; border-radius: 7px; font-size: 12px; color: #94a3b8; background: none; border: none; cursor: pointer; text-decoration: none; width: 100%; transition: all 0.15s; font-family: 'DM Sans', sans-serif; }
@@ -520,7 +520,7 @@ function StudentLayoutContent({ children }: { children: React.ReactNode }) {
         
         .hdr-user { display: flex; align-items: center; gap: 8px; }
         .user-name { font-size: 13px; font-weight: 500; color: #0f1e35; }
-        .user-badge { font-size: 9px; font-weight: 600; color: #0a2a5e; background: #F5C518; padding: 2px 6px; border-radius: 4px; letter-spacing: 0.05em; }
+        .user-badge { font-size: 9px; font-weight: 600; color: #2D180F; background: #E6C5A8; padding: 2px 6px; border-radius: 4px; letter-spacing: 0.05em; }
         .content-body { flex: 1; overflow-y: auto; padding: 20px; }
 
         @media (max-width: 1024px) {
@@ -541,7 +541,7 @@ function StudentLayoutContent({ children }: { children: React.ReactNode }) {
             transform: translateX(-352px);
             transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             border-radius: 0;
-            background: #0a2a5e;
+            background: #2D180F;
           }
           .flyout {
             position: fixed;

@@ -298,7 +298,7 @@ export default function GradesPage() {
                 .nav-list { display: flex; flex-direction: column; gap: 0.5rem; }
                 .nav-item { padding: 1rem; border-radius: 10px; border: 1.5px solid #e2e8f0; background: white; text-align: left; font-weight: 700; color: #475569; cursor: pointer; transition: 0.2s; }
                 .nav-item:hover { background: #f8fafc; border-color: var(--ocean-blue); }
-                .nav-item.active { background: #f0f7ff; border-color: var(--ocean-blue); color: var(--ocean-blue); }
+                .nav-item.active { background: #FDF2E9; border-color: var(--ocean-blue); color: var(--ocean-blue); }
                 
                 .grades-table-card { padding: 2rem; }
                 .card-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; border-bottom: 2px solid #f1f5f9; padding-bottom: 1.5rem; }
@@ -313,7 +313,7 @@ export default function GradesPage() {
                 
                 .student-name { font-weight: 700; color: var(--navy-deep); font-size: 0.95rem; }
                 .score-input { width: 80px; padding: 0.6rem; border: 1.5px solid #e2e8f0; border-radius: 8px; text-align: center; font-weight: 800; font-family: 'Outfit', sans-serif; color: var(--ocean-blue); font-size: 1.1rem; }
-                .score-input:focus { outline: none; border-color: var(--ocean-blue); background: #f0f9ff; }
+                .score-input:focus { outline: none; border-color: var(--ocean-blue); background: #FDF2E9; }
                 
                 .obs-input { width: 100%; padding: 0.6rem 1rem; border: 1.5px solid #e2e8f0; border-radius: 8px; font-size: 0.9rem; color: #475569; }
                 .obs-input:focus { outline: none; border-color: var(--ocean-blue); background: #f8fafc; }

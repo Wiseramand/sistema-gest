@@ -171,7 +171,7 @@ export default function TrainerProfilePage() {
                 .card { background: white; border-radius: 20px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); overflow: hidden; margin-bottom: 2rem; border: 1px solid #e2e8f0; }
                 
                 .profile-header { position: relative; }
-                .profile-bg { height: 160px; background: linear-gradient(135deg, #1e293b 0%, #3b82f6 100%); }
+                .profile-bg { height: 160px; background: linear-gradient(135deg, #1e293b 0%, #EA580C 100%); }
                 .profile-top-content { padding: 0 3rem 3rem; display: flex; align-items: flex-end; gap: 2.5rem; margin-top: -60px; position: relative; z-index: 2; }
                 
                 .photo-container { position: relative; }
@@ -187,7 +187,7 @@ export default function TrainerProfilePage() {
 
                 .profile-main-info { flex: 1; padding-bottom: 0.5rem; }
                 .profile-main-info h1 { margin: 0; font-size: 2.2rem; color: #1e293b; font-weight: 800; }
-                .specialty-text { margin: 0.25rem 0 1.5rem; color: #3b82f6; font-weight: 700; font-size: 1.1rem; }
+                .specialty-text { margin: 0.25rem 0 1.5rem; color: #EA580C; font-weight: 700; font-size: 1.1rem; }
                 
                 .quick-stats { display: flex; gap: 3rem; }
                 .stat { display: flex; flex-direction: column; }

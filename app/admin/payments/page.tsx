@@ -219,38 +219,38 @@ export default function PaymentsPage() {
 
       <style jsx>{`
         .page-wrap { display: flex; flex-direction: column; gap: 2rem; position: relative; }
-        .page-header { background: linear-gradient(135deg, #0a2a5e 0%, #173b7d 100%); padding: 2rem; border-radius: 14px; color: white; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 10px 30px rgba(10, 42, 94, 0.15); }
-        .page-header h1 { font-family: 'Outfit', sans-serif; font-size: 1.8rem; margin-bottom: 0.5rem; color: #F5C518; }
+        .page-header { background: linear-gradient(135deg, #2D180F 0%, #173b7d 100%); padding: 2rem; border-radius: 14px; color: white; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 10px 30px rgba(10, 42, 94, 0.15); }
+        .page-header h1 { font-family: 'Outfit', sans-serif; font-size: 1.8rem; margin-bottom: 0.5rem; color: #E6C5A8; }
         .page-header p { color: #e2e8f0; }
         .gateway-status { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); padding: 0.5rem 1rem; border-radius: 50px; font-weight: 700; font-size: 0.85rem;}
         
         .card { background: #ffffff; border-radius: 14px; padding: 2rem; border: 1px solid #e2e8f0; }
         
         .table-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; border-bottom: 2px solid #f1f5f9; padding-bottom: 1rem; }
-        .table-header h2 { color: #0a2a5e; font-family: 'Outfit', sans-serif; font-size: 1.25rem; }
-        .btn-primary { background: #0a2a5e; color: white; border: none; padding: 0.6rem 1.2rem; border-radius: 8px; font-weight: 700; font-family: 'DM Sans', sans-serif; cursor: pointer; transition: 0.2s; }
+        .table-header h2 { color: #2D180F; font-family: 'Outfit', sans-serif; font-size: 1.25rem; }
+        .btn-primary { background: #2D180F; color: white; border: none; padding: 0.6rem 1.2rem; border-radius: 8px; font-weight: 700; font-family: 'DM Sans', sans-serif; cursor: pointer; transition: 0.2s; }
         .btn-primary:hover { background: #173b7d; }
 
         .data-table { width: 100%; border-collapse: collapse; text-align: left; }
         .data-table th { padding: 1rem; background: #f8fafc; color: #475569; font-size: 0.8rem; text-transform: uppercase; border-bottom: 1px solid #e2e8f0; }
         .data-table td { padding: 1rem; border-bottom: 1px solid #f1f5f9; font-size: 0.9rem; color: #0f1e35; }
         .mono { font-family: monospace; font-size: 0.85rem; color: #64748b; }
-        .bold { font-weight: 700; color: #0a2a5e; }
+        .bold { font-weight: 700; color: #2D180F; }
 
-        .method-badge { background: #e0f2fe; color: #0284c7; padding: 0.2rem 0.6rem; border-radius: 4px; font-size: 0.75rem; font-weight: 700; }
+        .method-badge { background: #FDF2E9; color: #EA580C; padding: 0.2rem 0.6rem; border-radius: 4px; font-size: 0.75rem; font-weight: 700; }
         .status-badge { padding: 0.2rem 0.6rem; border-radius: 50px; font-size: 0.75rem; font-weight: 800; }
         .status-badge.success { background: #ecfdf5; color: #059669; }
-        .status-badge.warning { background: #fffbeb; color: #d97706; }
+        .status-badge.warning { background: #F7ECE1; color: #9A3412; }
 
-        .action-btn.view { background: #f0f9ff; color: #0a2a5e; border: none; padding: 0.4rem 0.8rem; border-radius: 6px; font-weight: 700; cursor: pointer; }
-        .action-btn.view:hover { background: #e0f2fe; }
+        .action-btn.view { background: #FDF2E9; color: #2D180F; border: none; padding: 0.4rem 0.8rem; border-radius: 6px; font-weight: 700; cursor: pointer; }
+        .action-btn.view:hover { background: #FDF2E9; }
 
 
         .modal-form { display: flex; flex-direction: column; gap: 1.25rem; }
         .field { display: flex; flex-direction: column; gap: 0.4rem; }
         .field label { font-weight: 700; font-size: 0.82rem; color: #475569; }
         .field input, .field select { padding: 0.8rem 1rem; border: 1.5px solid #e2e8f0; border-radius: 10px; font-size: 0.9rem; background: #f8fafc; font-family: inherit; }
-        .field input:focus, .field select:focus { border-color: #0a2a5e; outline: none; background: #fff; }
+        .field input:focus, .field select:focus { border-color: #2D180F; outline: none; background: #fff; }
         .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
 
         .print-only { display: none; }

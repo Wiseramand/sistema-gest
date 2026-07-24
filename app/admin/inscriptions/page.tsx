@@ -178,8 +178,8 @@ export default function InscriptionsPage() {
 
                 .course-chip {
                     display: inline-block;
-                    background-color: #e0f2fe;
-                    color: #0369a1;
+                    background-color: #FDF2E9;
+                    color: #EA580C;
                     padding: 0.25rem 0.75rem;
                     border-radius: 4px;
                     font-size: 0.85rem;

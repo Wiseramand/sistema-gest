@@ -369,7 +369,7 @@ export default function AdminMaterialsPage() {
                                     />
                                     <div style={{ position: 'absolute', bottom: '1rem', right: '1rem' }}>
                                         <a href={readingMaterial.url} target="_blank" rel="noopener noreferrer"
-                                           style={{ background: '#F5C518', color: '#000', padding: '0.5rem 1rem', borderRadius: '8px', fontWeight: 700, textDecoration: 'none', fontSize: '0.85rem' }}>
+                                           style={{ background: '#E6C5A8', color: '#000', padding: '0.5rem 1rem', borderRadius: '8px', fontWeight: 700, textDecoration: 'none', fontSize: '0.85rem' }}>
                                             Abrir PDF ↗
                                         </a>
                                     </div>
@@ -390,7 +390,7 @@ export default function AdminMaterialsPage() {
             <style jsx>{`
                 .materials-container { padding: 1rem; }
                 .header-actions { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; }
-                .add-btn { background: #0a2a5e; color: white; border: none; padding: 0.75rem 1.5rem; border-radius: 8px; font-weight: 700; cursor: pointer; transition: 0.2s; }
+                .add-btn { background: #2D180F; color: white; border: none; padding: 0.75rem 1.5rem; border-radius: 8px; font-weight: 700; cursor: pointer; transition: 0.2s; }
                 .add-btn:hover { background: #173b7d; transform: translateY(-2px); }
 
                 .materials-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.5rem; }
@@ -399,13 +399,13 @@ export default function AdminMaterialsPage() {
                 .card-icon { font-size: 2.5rem; }
                 .card-content { flex: 1; min-width: 0; }
                 .card-content h3 { margin: 0 0 0.25rem; color: #1e293b; font-size: 1.05rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-                .course-tag { font-size: 0.75rem; color: #0a2a5e; font-weight: 700; background: #e0f2fe; padding: 0.2rem 0.5rem; border-radius: 4px; display: inline-block; margin-bottom: 0.5rem; }
+                .course-tag { font-size: 0.75rem; color: #2D180F; font-weight: 700; background: #FDF2E9; padding: 0.2rem 0.5rem; border-radius: 4px; display: inline-block; margin-bottom: 0.5rem; }
                 .desc { font-size: 0.85rem; color: #64748b; margin-bottom: 1rem; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
                 
                 .badges { margin-bottom: 1rem; }
                 .badge { padding: 0.25rem 0.6rem; border-radius: 6px; font-size: 0.7rem; font-weight: 800; text-transform: uppercase; }
                 .badge.all { background: #f1f5f9; color: #475569; }
-                .badge.professors { background: #fef3c7; color: #92400e; }
+                .badge.professors { background: #F7ECE1; color: #9A3412; }
                 .badge.students { background: #dcfce green; color: #166534; }
 
                 .meta { display: flex; align-items: center; justify-content: space-between; font-size: 0.8rem; color: #94a3b8; }
@@ -423,13 +423,13 @@ export default function AdminMaterialsPage() {
                 .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 0.75rem; border: 1px solid #e2e8f0; border-radius: 8px; font-family: inherit; font-size: 0.9rem; }
                 .modal-actions { display: flex; justify-content: flex-end; gap: 1rem; margin-top: 2rem; }
                 .cancel-btn { background: #f3f4f6; color: #4b5563; border: none; padding: 0.75rem 1.5rem; border-radius: 8px; cursor: pointer; font-weight: 600; }
-                .save-btn { background: #0a2a5e; color: white; border: none; padding: 0.75rem 1.5rem; border-radius: 8px; font-weight: 700; cursor: pointer; }
+                .save-btn { background: #2D180F; color: white; border: none; padding: 0.75rem 1.5rem; border-radius: 8px; font-weight: 700; cursor: pointer; }
                 .save-btn:disabled { opacity: 0.7; cursor: not-allowed; }
 
                 .material-reader-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(8px); display: flex; align-items: center; justify-content: center; z-index: 2000; padding: 1rem; }
                 .reader-modal { background: #1e293b; width: 95%; max-width: 1200px; height: 90vh; border-radius: 16px; overflow: hidden; display: flex; flex-direction: column; text-align: left; }
                 .reader-header { padding: 1rem 1.5rem; background: #0f172a; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #334155; }
-                .reader-header h3 { color: #f5c518; margin: 0 0 0.25rem; font-size: 1.1rem; }
+                .reader-header h3 { color: #E6C5A8; margin: 0 0 0.25rem; font-size: 1.1rem; }
                 .reader-header small { color: #94a3b8; font-size: 0.8rem; }
                 .reader-content { flex: 1; padding: 0; background: #000; display: flex; align-items: center; justify-content: center; overflow: hidden; }
                 .material-video { width: 100%; height: 100%; max-height: 80vh; object-fit: contain; outline: none; }

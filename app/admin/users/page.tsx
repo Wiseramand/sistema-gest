@@ -295,7 +295,7 @@ export default function AdminUsersPage() {
 
                 .role-legend { display: flex; gap: 0.75rem; flex-wrap: wrap; margin-bottom: 2rem; }
                 .role-chip { display: flex; align-items: center; gap: 0.4rem; background: #f1f5f9; border: 1px solid #e2e8f0; border-radius: 50px; padding: 0.35rem 0.85rem; font-size: 0.8rem; font-weight: 600; color: #475569; }
-                .role-chip.super { background: #fffbeb; border-color: #fde68a; color: #92400e; }
+                .role-chip.super { background: #F7ECE1; border-color: #E6C5A8; color: #9A3412; }
 
                 .access-denied { text-align: center; padding: 6rem 2rem; }
                 .denied-icon { font-size: 4rem; margin-bottom: 1rem; }
@@ -316,14 +316,14 @@ export default function AdminUsersPage() {
                 .admin-avatar { width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(135deg, var(--navy-deep), var(--ocean-blue)); color: white; display: flex; align-items: center; justify-content: center; font-weight: 800; flex-shrink: 0; }
 
                 .resp-chips { display: flex; flex-wrap: wrap; gap: 0.35rem; }
-                .resp-chip { background: #eff6ff; color: #1e40af; padding: 0.2rem 0.6rem; border-radius: 50px; font-size: 0.72rem; font-weight: 700; }
+                .resp-chip { background: #FDF2E9; color: #2D180F; padding: 0.2rem 0.6rem; border-radius: 50px; font-size: 0.72rem; font-weight: 700; }
                 .no-resp { color: #94a3b8; font-size: 0.82rem; }
 
                 .align-right { text-align: right; }
                 .row-actions { display: flex; gap: 0.75rem; justify-content: flex-end; }
                 .row-btn { background: none; border: none; cursor: pointer; font-weight: 700; font-size: 0.82rem; padding: 0.35rem 0.65rem; border-radius: 6px; transition: 0.2s; }
                 .row-btn.edit { color: var(--ocean-blue); }
-                .row-btn.edit:hover { background: #eff6ff; }
+                .row-btn.edit:hover { background: #FDF2E9; }
                 .row-btn.delete { color: #dc2626; }
                 .row-btn.delete:hover { background: #fef2f2; }
 
@@ -345,8 +345,8 @@ export default function AdminUsersPage() {
                 .section-label { font-size: 0.8rem; font-weight: 800; color: var(--ocean-blue); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 1rem; }
                 .resp-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
                 .resp-toggle { border: 1.5px solid #e2e8f0; border-radius: 10px; padding: 1rem; cursor: pointer; display: flex; align-items: center; gap: 0.75rem; transition: 0.2s; background: #f8fafc; }
-                .resp-toggle:hover { border-color: var(--ocean-blue); background: #eff6ff; }
-                .resp-toggle.selected { border-color: var(--ocean-blue); background: #eff6ff; }
+                .resp-toggle:hover { border-color: var(--ocean-blue); background: #FDF2E9; }
+                .resp-toggle.selected { border-color: var(--ocean-blue); background: #FDF2E9; }
                 .resp-icon { font-size: 1.25rem; }
                 .resp-label { flex: 1; font-weight: 600; font-size: 0.88rem; color: #475569; }
                 .resp-check { width: 20px; height: 20px; border-radius: 50%; background: var(--ocean-blue); color: white; display: flex; align-items: center; justify-content: center; font-size: 0.7rem; font-weight: 800; opacity: 0; transition: 0.2s; }
@@ -365,14 +365,14 @@ export default function AdminUsersPage() {
                 .cred-field { text-align: left; margin-bottom: 1.25rem; }
                 .cred-field label { font-size: 0.8rem; font-weight: 800; color: #64748b; text-transform: uppercase; display: block; margin-bottom: 0.35rem; }
                 .cred-value { background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 10px; padding: 0.85rem 1rem; font-size: 1rem; font-weight: 700; letter-spacing: 0.05em; color: var(--navy-deep); }
-                .cred-value.senha { background: #fffbeb; border-color: #fde68a; color: #92400e; letter-spacing: 0.12em; font-size: 1.1rem; }
-                .cred-info { background: #f0f9ff; border: 1px solid #bae6fd; border-radius: 10px; padding: 0.85rem 1rem; font-size: 0.88rem; color: #1e40af; margin-bottom: 1.5rem; text-align: left; }
+                .cred-value.senha { background: #F7ECE1; border-color: #E6C5A8; color: #9A3412; letter-spacing: 0.12em; font-size: 1.1rem; }
+                .cred-info { background: #FDF2E9; border: 1px solid #E6C5A8; border-radius: 10px; padding: 0.85rem 1rem; font-size: 0.88rem; color: #2D180F; margin-bottom: 1.5rem; text-align: left; }
 
                 .sharing-actions { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-bottom: 2rem; }
                 .share-btn { display: flex; align-items: center; justify-content: center; gap: 0.5rem; padding: 0.85rem; border-radius: 12px; border: none; font-weight: 700; font-size: 0.85rem; cursor: pointer; transition: 0.2s; }
                 .share-btn.copy { background: #f1f5f9; color: #475569; }
                 .share-btn.whatsapp { background: #dcfce7; color: #166534; }
-                .share-btn.email { background: #e0f2fe; color: #0369a1; }
+                .share-btn.email { background: #FDF2E9; color: #EA580C; }
                 .share-btn:hover { transform: translateY(-2px); filter: brightness(0.95); }
                 .sharing-actions.disabled { opacity: 0.5; pointer-events: none; }
 

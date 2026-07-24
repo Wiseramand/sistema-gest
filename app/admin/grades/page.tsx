@@ -173,7 +173,7 @@ export default function AdminGradesPage() {
                 .sub { font-size: 0.75rem; color: #94a3b8; }
                 .bold { font-weight: 700; color: var(--navy-deep); }
                 
-                .course-tag { background: #f0f7ff; color: var(--ocean-blue); padding: 0.25rem 0.75rem; border-radius: 50px; font-weight: 700; font-size: 0.8rem; }
+                .course-tag { background: #FDF2E9; color: var(--ocean-blue); padding: 0.25rem 0.75rem; border-radius: 50px; font-weight: 700; font-size: 0.8rem; }
                 
                 .grade-badge { display: inline-block; padding: 0.4rem 1rem; border-radius: 8px; font-weight: 800; font-family: 'Outfit', sans-serif; }
                 .grade-badge.pass { background: #dcfce7; color: #166534; }

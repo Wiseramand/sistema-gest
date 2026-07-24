@@ -125,17 +125,17 @@ export default function StudentMaterialsPage() {
 
       <style jsx>{`
         .page-wrap { display: flex; flex-direction: column; gap: 2rem; max-width: 1200px; margin: 0 auto; }
-        .page-header { background: #0a2a5e; padding: 2.5rem; border-radius: 16px; color: white; box-shadow: 0 10px 30px rgba(10, 42, 94, 0.1); }
-        .page-header h1 { font-family: 'Outfit', sans-serif; font-size: 2rem; margin-bottom: 0.5rem; color: #F5C518; }
+        .page-header { background: #2D180F; padding: 2.5rem; border-radius: 16px; color: white; box-shadow: 0 10px 30px rgba(10, 42, 94, 0.1); }
+        .page-header h1 { font-family: 'Outfit', sans-serif; font-size: 2rem; margin-bottom: 0.5rem; color: #E6C5A8; }
         .page-header p { color: #e2e8f0; font-size: 1.1rem; opacity: 0.9; }
 
         .loader, .empty-state { text-align: center; padding: 5rem 2rem; background: white; border-radius: 16px; border: 1px dashed #e2e8f0; color: #64748b; }
         .empty-icon { font-size: 3rem; display: block; margin-bottom: 1rem; }
-        .empty-state h3 { color: #0a2a5e; margin-bottom: 0.5rem; }
+        .empty-state h3 { color: #2D180F; margin-bottom: 0.5rem; }
 
         .courses-list { display: flex; flex-direction: column; gap: 3rem; }
         .course-section { display: flex; flex-direction: column; gap: 1.5rem; }
-        .course-title-header { font-family: 'Outfit', sans-serif; font-size: 1.5rem; color: #0a2a5e; border-left: 5px solid #F5C518; padding-left: 1rem; margin: 0; }
+        .course-title-header { font-family: 'Outfit', sans-serif; font-size: 1.5rem; color: #2D180F; border-left: 5px solid #E6C5A8; padding-left: 1rem; margin: 0; }
 
         .materials-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.5rem; }
         .card { background: white; border-radius: 16px; border: 1px solid #e2e8f0; transition: all 0.3s ease; overflow: hidden; display: flex; flex-direction: column; }
@@ -144,16 +144,16 @@ export default function StudentMaterialsPage() {
         .card-top { padding: 1.25rem 1.5rem 0.5rem; display: flex; justify-content: space-between; align-items: flex-start; }
         .file-type { width: 44px; height: 52px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-family: 'Outfit', sans-serif; font-size: 0.7rem; font-weight: 800; }
         .file-type.pdf { color: #dc2626; border-color: #fecaca; }
-        .file-type.word { color: #2563eb; border-color: #bfdbfe; }
+        .file-type.word { color: #EA580C; border-color: #E6DDD4; }
 
         .category-badge { font-size: 0.65rem; font-weight: 800; color: #94a3b8; background: #f1f5f9; padding: 0.2rem 0.6rem; border-radius: 50px; text-transform: uppercase; }
 
         .card-body { padding: 1rem 1.5rem; flex: 1; }
-        .card-body h3 { font-family: 'Outfit', sans-serif; font-size: 1rem; color: #0a2a5e; margin: 0; font-weight: 700; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+        .card-body h3 { font-family: 'Outfit', sans-serif; font-size: 1rem; color: #2D180F; margin: 0; font-weight: 700; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
         .meta { display: flex; align-items: center; gap: 0.5rem; font-size: 0.7rem; color: #94a3b8; margin-top: 0.5rem; }
 
         .card-actions { padding: 1.25rem 1.5rem; background: #fafbfc; border-top: 1px solid #f1f5f9; display: flex; flex-direction: column; gap: 0.5rem; }
-        .btn-view { background: #0a2a5e; color: white; border: none; padding: 0.85rem; border-radius: 10px; font-size: 0.85rem; font-weight: 700; cursor: pointer; transition: 0.2s; }
+        .btn-view { background: #2D180F; color: white; border: none; padding: 0.85rem; border-radius: 10px; font-size: 0.85rem; font-weight: 700; cursor: pointer; transition: 0.2s; }
       `}</style>
     </div>
   );

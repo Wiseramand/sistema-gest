@@ -810,7 +810,7 @@ export default function MatriculationPage() {
 
                 .pay-badge { padding: 0.3rem 0.75rem; border-radius: 50px; font-size: 0.7rem; font-weight: 800; display: inline-block; }
                 .pay-paid { background: #ecfdf5; color: #059669; }
-                .pay-half { background: #fffbeb; color: #d97706; }
+                .pay-half { background: #F7ECE1; color: #9A3412; }
                 .pay-pending { background: #fef2f2; color: #dc2626; }
                 .debt-label { font-size: 0.75rem; color: #dc2626; font-weight: 700; }
 
@@ -820,7 +820,7 @@ export default function MatriculationPage() {
                 .pay-btn { background: var(--color-success-bg); color: var(--color-success-text); }
                 .pay-btn:hover { background: #d1fae5; transform: scale(1.1); }
                 .action-print { color: var(--color-primary-mid); background: var(--color-primary-light); }
-                .action-print:hover { background: #e0f2fe; transform: scale(1.1); }
+                .action-print:hover { background: #FDF2E9; transform: scale(1.1); }
                 .row-btn.delete { color: #dc2626; background: #fef2f2; }
                 .row-btn.delete:hover { background: #fee2e2; transform: scale(1.1); }
 
@@ -838,7 +838,7 @@ export default function MatriculationPage() {
                 .receipt-value { font-size: 0.9rem; font-weight: 600; color: var(--navy-deep); text-align: right; }
                 .receipt-value.mono { font-family: monospace; font-size: 0.78rem; color: #94a3b8; }
                 .receipt-body { margin-bottom: 1.5rem; }
-                .btn-print { padding: 0.85rem 2rem; border-radius: 12px; border: none; background: linear-gradient(135deg, #0074d9, #003d7a); color: white; font-weight: 700; font-size: 0.9rem; cursor: pointer; transition: 0.3s; box-shadow: 0 4px 12px rgba(0,116,217,0.3); }
+                .btn-print { padding: 0.85rem 2rem; border-radius: 12px; border: none; background: linear-gradient(135deg, #EA580C, #003d7a); color: white; font-weight: 700; font-size: 0.9rem; cursor: pointer; transition: 0.3s; box-shadow: 0 4px 12px rgba(0,116,217,0.3); }
                 .btn-print:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,116,217,0.4); }
 
                 /* Pagination */
@@ -870,12 +870,12 @@ export default function MatriculationPage() {
                 .search-hint { display: flex; align-items: center; gap: 0.75rem; padding: 1.5rem; background: #f8fafc; border-radius: 12px; color: #64748b; font-size: 0.9rem; border: 1px dashed #e2e8f0; }
 
                 /* Selected Student Banner */
-                .selected-banner { display: flex; align-items: center; gap: 1rem; background: #f0f9ff; border: 1.5px solid #bae6fd; border-radius: 12px; padding: 1rem 1.25rem; margin-bottom: 2rem; }
+                .selected-banner { display: flex; align-items: center; gap: 1rem; background: #FDF2E9; border: 1.5px solid #E6C5A8; border-radius: 12px; padding: 1rem 1.25rem; margin-bottom: 2rem; }
                 .sb-avatar { width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(135deg, var(--ocean-blue), var(--navy-deep)); color: white; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 1rem; flex-shrink: 0; }
                 .selected-banner strong { display: block; color: var(--navy-deep); font-weight: 800; }
                 .selected-banner small { display: block; color: #64748b; font-size: 0.78rem; }
-                .swap-btn { background: white; border: 1px solid #bae6fd; color: var(--ocean-blue); padding: 0.4rem 0.85rem; border-radius: 8px; font-size: 0.8rem; font-weight: 700; cursor: pointer; transition: 0.2s; margin-left: auto; }
-                .swap-btn:hover { background: #e0f2fe; }
+                .swap-btn { background: white; border: 1px solid #E6C5A8; color: var(--ocean-blue); padding: 0.4rem 0.85rem; border-radius: 8px; font-size: 0.8rem; font-weight: 700; cursor: pointer; transition: 0.2s; margin-left: auto; }
+                .swap-btn:hover { background: #FDF2E9; }
 
                 /* Form */
                 .modal-form { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
@@ -899,7 +899,7 @@ export default function MatriculationPage() {
                 .drill-desc { font-size: 0.95rem; color: #475569; line-height: 1.6; margin: 0; }
                 .drill-materials { display: flex; flex-direction: column; gap: 0.5rem; margin-top: 1rem; }
                 .mat-item { display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem 1rem; background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 12px; text-decoration: none; color: var(--navy-deep); font-weight: 600; font-size: 0.88rem; transition: 0.2s; }
-                .mat-item:hover { border-color: var(--ocean-blue); background: #f0f9ff; }
+                .mat-item:hover { border-color: var(--ocean-blue); background: #FDF2E9; }
                 .mat-icon { font-size: 1.1rem; }
                 .mat-dl { margin-left: auto; opacity: 0.4; }
                 .empty-mini { color: #94a3b8; font-size: 0.88rem; font-style: italic; }

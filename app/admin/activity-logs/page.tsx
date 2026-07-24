@@ -303,9 +303,9 @@ export default function ActivityLogsPage() {
                 }
 
                 .badge-create { background: #dcfce7; color: #166534; }
-                .badge-update { background: #fef9c3; color: #854d0e; }
+                .badge-update { background: #F7ECE1; color: #9A3412; }
                 .badge-delete { background: #fee2e2; color: #991b1b; }
-                .badge-approve { background: #e0f2fe; color: #075985; }
+                .badge-approve { background: #FDF2E9; color: #2D180F; }
                 .badge-feedback { background: #fdf2f8; color: #be185d; }
                 .badge-attendance { background: #ede9fe; color: #6d28d9; }
                 .badge-upload { background: #f0fdfa; color: #0f766e; }

@@ -180,7 +180,7 @@ export default function StudentFeedbackPage() {
                 .page-wrapper { padding: 1rem; max-width: 800px; margin: 0 auto; }
                 .feedback-container { background: white; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.05); overflow: hidden; }
                 
-                .header-section { background: linear-gradient(135deg, var(--navy-deep), #1e3a8a); color: white; padding: 2.5rem; text-align: center; }
+                .header-section { background: linear-gradient(135deg, var(--navy-deep), #2D180F); color: white; padding: 2.5rem; text-align: center; }
                 .header-section h1 { margin: 0; font-size: 2rem; font-weight: 800; letter-spacing: -0.5px; }
                 .header-section p { margin: 0.5rem 0 0; color: #93c5fd; font-size: 1.05rem; }
                 

@@ -120,11 +120,11 @@ export default function StudentChatPage() {
                 .message-wrapper.other { justify-content: flex-start; }
 
                 .message-bubble { max-width: 70%; padding: 1rem; border-radius: 15px; position: relative; }
-                .own .message-bubble { background: #3b82f6; color: white; border-bottom-right-radius: 2px; }
+                .own .message-bubble { background: #EA580C; color: white; border-bottom-right-radius: 2px; }
                 .other .message-bubble { background: white; color: #1e293b; border-bottom-left-radius: 2px; border: 1px solid #e2e8f0; }
 
                 .sender { font-size: 0.7rem; font-weight: 800; display: block; margin-bottom: 0.25rem; text-transform: uppercase; }
-                .other .sender { color: #3b82f6; }
+                .other .sender { color: #EA580C; }
                 .own .sender { color: rgba(255,255,255,0.7); }
 
                 .text { margin: 0; font-size: 0.95rem; line-height: 1.4; }
@@ -135,8 +135,8 @@ export default function StudentChatPage() {
 
                 .chat-input { padding: 1.5rem 2rem; border-top: 1px solid #e2e8f0; display: flex; gap: 1rem; }
                 .chat-input input { flex: 1; border: 1px solid #e2e8f0; border-radius: 12px; padding: 0.75rem 1.25rem; font-size: 0.95rem; }
-                .send-btn { background: #3b82f6; color: white; border: none; padding: 0 1.5rem; border-radius: 12px; font-weight: 700; cursor: pointer; transition: 0.2s; }
-                .send-btn:hover { background: #2563eb; transform: scale(1.02); }
+                .send-btn { background: #EA580C; color: white; border: none; padding: 0 1.5rem; border-radius: 12px; font-weight: 700; cursor: pointer; transition: 0.2s; }
+                .send-btn:hover { background: #EA580C; transform: scale(1.02); }
             `}</style>
         </div>
     );

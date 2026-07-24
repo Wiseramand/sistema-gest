@@ -93,7 +93,7 @@ export default function StudentCalendarPage() {
             <style jsx>{`
                 .calendar-page { padding: 1rem 0; }
                 .page-header { margin-bottom: 2.5rem; }
-                .page-header h1 { font-size: 1.8rem; color: #0a2a5e; margin-top: 0.5rem; }
+                .page-header h1 { font-size: 1.8rem; color: #2D180F; margin-top: 0.5rem; }
                 
                 .schedule-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 1rem; align-items: start; min-width: 1000px; }
                 .day-column { display: flex; flex-direction: column; gap: 1rem; height: 100%; }
@@ -102,10 +102,10 @@ export default function StudentCalendarPage() {
                 .day-header h3 { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 800; margin: 0; }
                 
                 .day-classes { display: flex; flex-direction: column; gap: 1rem; }
-                .class-card { padding: 1rem; border-left: 4px solid #3b82f6; display: flex; flex-direction: column; gap: 0.75rem; transition: 0.2s; cursor: pointer; background: white; }
-                .class-card:hover { transform: translateY(-3px); border-color: #0a2a5e; box-shadow: 0 10px 20px rgba(0,0,0,0.05); }
+                .class-card { padding: 1rem; border-left: 4px solid #EA580C; display: flex; flex-direction: column; gap: 0.75rem; transition: 0.2s; cursor: pointer; background: white; }
+                .class-card:hover { transform: translateY(-3px); border-color: #2D180F; box-shadow: 0 10px 20px rgba(0,0,0,0.05); }
                 
-                .time-badge { font-size: 0.75rem; font-weight: 800; color: #3b82f6; background: #eff6ff; padding: 0.2rem 0.6rem; border-radius: 4px; display: inline-block; width: fit-content; }
+                .time-badge { font-size: 0.75rem; font-weight: 800; color: #EA580C; background: #FDF2E9; padding: 0.2rem 0.6rem; border-radius: 4px; display: inline-block; width: fit-content; }
                 .class-info { display: flex; flex-direction: column; gap: 0.35rem; }
                 .course-name { font-size: 0.95rem; font-weight: 800; color: #0f172a; line-height: 1.3; }
                 .trainer-name, .room-name { font-size: 0.75rem; color: #64748b; font-weight: 600; }

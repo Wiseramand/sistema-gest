@@ -332,17 +332,17 @@ export default function MediaHubPage() {
             <style jsx>{`
                 .page-wrap { display: flex; flex-direction: column; gap: 1.5rem; }
                 
-                .page-header { background: #0a2a5e; padding: 2rem; border-radius: 16px; color: white; position: relative; overflow: hidden; }
-                .page-header h1 { font-family: 'Outfit', sans-serif; font-size: 1.8rem; margin: 0.5rem 0; color: #F5C518; }
+                .page-header { background: #2D180F; padding: 2rem; border-radius: 16px; color: white; position: relative; overflow: hidden; }
+                .page-header h1 { font-family: 'Outfit', sans-serif; font-size: 1.8rem; margin: 0.5rem 0; color: #E6C5A8; }
                 .page-header p { color: #cbd5e1; font-size: 0.95rem; margin: 0; }
                 
                 .breadcrumb-nav { display: flex; align-items: center; gap: 0.5rem; font-size: 0.75rem; color: #94a3b8; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
                 .bc-root, .bc-item span { cursor: pointer; transition: 0.2s; }
-                .bc-root:hover, .bc-item span:hover { color: #F5C518; }
+                .bc-root:hover, .bc-item span:hover { color: #E6C5A8; }
                 .bc-sep { color: #475569; }
 
                 .header-actions { display: flex; gap: 0.75rem; margin-top: 1.5rem; }
-                .btn-primary { background: #F5C518; color: #0a2a5e; border: none; padding: 0.6rem 1.2rem; border-radius: 8px; font-weight: 700; cursor: pointer; }
+                .btn-primary { background: #E6C5A8; color: #2D180F; border: none; padding: 0.6rem 1.2rem; border-radius: 8px; font-weight: 700; cursor: pointer; }
                 .btn-secondary { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: white; padding: 0.6rem 1.2rem; border-radius: 8px; font-weight: 600; cursor: pointer; }
 
                 .media-controls { display: flex; justify-content: space-between; align-items: center; padding: 1rem 1.5rem; }
@@ -353,17 +353,17 @@ export default function MediaHubPage() {
                 .media-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.25rem; }
                 .item-card { background: white; padding: 1.25rem; border-radius: 12px; border: 1px solid #e2e8f0; display: flex; gap: 1rem; cursor: pointer; transition: 0.2s; position: relative; min-height: 100px; }
                 .item-card:hover { transform: translateY(-3px); box-shadow: 0 8px 16px rgba(0,0,0,0.05); }
-                .item-card.folder { border-left: 4px solid #F5C518; }
+                .item-card.folder { border-left: 4px solid #E6C5A8; }
                 .item-card.back { background: #f8fafc; border-style: dashed; }
                 
                 .item-icon { width: 48px; height: 48px; min-width: 48px; background: #f1f5f9; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; }
                 .item-info { flex: 1; min-width: 0; }
-                .item-info h3 { margin: 0; font-size: 0.95rem; color: #0a2a5e; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+                .item-info h3 { margin: 0; font-size: 0.95rem; color: #2D180F; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
                 .item-info p { margin: 0.2rem 0 0.5rem; font-size: 0.75rem; color: #64748b; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
                 
                 .item-meta { display: flex; gap: 0.4rem; align-items: center; }
                 .tag { font-size: 0.65rem; font-weight: 800; padding: 0.1rem 0.4rem; border-radius: 4px; text-transform: uppercase; }
-                .tag.both { background: #e0f2fe; color: #0369a1; }
+                .tag.both { background: #FDF2E9; color: #EA580C; }
                 .tag.student { background: #ecfdf5; color: #059669; }
                 .tag.trainer { background: #fef2f2; color: #dc2626; }
                 .type-label { font-size: 0.65rem; background: #f1f5f9; color: #64748b; padding: 0.1rem 0.4rem; border-radius: 4px; font-weight: 700; }
@@ -382,7 +382,7 @@ export default function MediaHubPage() {
                 .modal-overlay { position: fixed; inset: 0; background: rgba(10,42,94,0.4); backdrop-filter: blur(4px); z-index: 1000; display: flex; align-items: center; justify-content: center; }
                 .modal-content { background: white; width: 100%; max-width: 500px; border-radius: 20px; padding: 2rem; box-shadow: 0 20px 50px rgba(0,0,0,0.2); }
                 .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; }
-                .modal-header h2 { font-family: 'Outfit', sans-serif; font-size: 1.3rem; margin: 0; color: #0a2a5e; }
+                .modal-header h2 { font-family: 'Outfit', sans-serif; font-size: 1.3rem; margin: 0; color: #2D180F; }
                 .close-btn { background: none; border: none; font-size: 1.5rem; cursor: pointer; color: #94a3b8; }
                 
                 .form-group { margin-bottom: 1.25rem; display: flex; flex-direction: column; gap: 0.5rem; }
@@ -392,15 +392,15 @@ export default function MediaHubPage() {
                 
                 .mode-toggle { display: flex; gap: 0.5rem; margin-bottom: 1.25rem; background: #f1f5f9; padding: 0.25rem; border-radius: 10px; }
                 .mode-toggle button { flex: 1; border: none; padding: 0.5rem; border-radius: 8px; font-size: 0.8rem; font-weight: 700; cursor: pointer; transition: 0.2s; color: #64748b; background: none; }
-                .mode-toggle button.active { background: white; color: #0a2a5e; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+                .mode-toggle button.active { background: white; color: #2D180F; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
 
                 .role-selector { display: flex; gap: 0.5rem; }
                 .role-btn { flex: 1; border: 1.5px solid #e2e8f0; background: white; padding: 0.5rem; border-radius: 8px; font-size: 0.8rem; font-weight: 700; color: #64748b; cursor: pointer; }
-                .role-btn.active { border-color: #0a2a5e; color: #0a2a5e; background: #e0f2fe; }
+                .role-btn.active { border-color: #2D180F; color: #2D180F; background: #FDF2E9; }
 
                 .modal-footer { display: flex; justify-content: flex-end; gap: 0.75rem; padding-top: 1rem; border-top: 1px solid #f1f5f9; }
                 .btn-cancel { padding: 0.6rem 1.2rem; background: none; border: none; font-weight: 600; cursor: pointer; color: #94a3b8; }
-                .btn-save { padding: 0.6rem 1.5rem; background: #0a2a5e; color: white; border: none; border-radius: 8px; font-weight: 700; cursor: pointer; transition: 0.2s; }
+                .btn-save { padding: 0.6rem 1.5rem; background: #2D180F; color: white; border: none; border-radius: 8px; font-weight: 700; cursor: pointer; transition: 0.2s; }
                 .btn-save:disabled { opacity: 0.5; cursor: not-allowed; }
             `}</style>
         </div>

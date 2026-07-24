@@ -172,12 +172,12 @@ export default function AdminChatPage() {
                 
                 .chat-item { display: flex; gap: 1rem; padding: 1.25rem 1.5rem; cursor: pointer; transition: 0.2s; border-bottom: 1px solid #f1f5f9; }
                 .chat-item:hover { background: #f8fafc; }
-                .chat-item.active { background: #eff6ff; border-left: 4px solid #3b82f6; }
+                .chat-item.active { background: #FDF2E9; border-left: 4px solid #EA580C; }
                 
-                .chat-avatar { width: 45px; height: 45px; border-radius: 50%; background: #3b82f6; color: white; display: flex; align-items: center; justify-content: center; font-weight: 700; flex-shrink: 0; }
+                .chat-avatar { width: 45px; height: 45px; border-radius: 50%; background: #EA580C; color: white; display: flex; align-items: center; justify-content: center; font-weight: 700; flex-shrink: 0; }
                 .chat-info { flex: 1; min-width: 0; }
                 .chat-name { display: block; font-weight: 700; font-size: 0.95rem; color: #1e293b; }
-                .chat-role { font-size: 0.65rem; color: #3b82f6; font-weight: 800; text-transform: uppercase; }
+                .chat-role { font-size: 0.65rem; color: #EA580C; font-weight: 800; text-transform: uppercase; }
                 .chat-last { margin: 0.25rem 0 0; font-size: 0.8rem; color: #64748b; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
                 .chat-window { flex: 1; display: flex; flex-direction: column; background: #f8fafc; }

@@ -226,14 +226,14 @@ export default function CalendarPage() {
                 .day-column { display: flex; flex-direction: column; gap: 1rem; height: 100%; border-right: 1px solid #e2e8f0; padding-right: 1rem; }
                 .day-column:last-child { border-right: none; padding-right: 0; }
                 
-                .day-header { padding: 1rem; border-radius: 12px; background: #0a2a5e; color: white; text-align: center; margin-bottom: 1rem; }
+                .day-header { padding: 1rem; border-radius: 12px; background: #2D180F; color: white; text-align: center; margin-bottom: 1rem; }
                 .day-header h3 { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 800; margin: 0; color: white; }
                 
                 .day-classes { display: flex; flex-direction: column; gap: 1rem; }
                 .class-card { padding: 1rem; border-left: 4px solid var(--sand-gold); display: flex; flex-direction: column; gap: 0.75rem; transition: 0.2s; cursor: pointer; }
                 .class-card:hover { transform: translateY(-3px); border-color: var(--ocean-blue); }
                 
-                .time-badge { font-size: 0.75rem; font-weight: 700; color: var(--ocean-blue); background: #f0f9ff; padding: 0.2rem 0.6rem; border-radius: 4px; display: inline-block; width: fit-content; }
+                .time-badge { font-size: 0.75rem; font-weight: 700; color: var(--ocean-blue); background: #FDF2E9; padding: 0.2rem 0.6rem; border-radius: 4px; display: inline-block; width: fit-content; }
                 .class-info { display: flex; flex-direction: column; gap: 0.25rem; }
                 .course-name { font-size: 0.9rem; font-weight: 700; color: var(--navy-deep); line-height: 1.3; }
                 .room-name { font-size: 0.75rem; color: #64748b; font-weight: 600; }

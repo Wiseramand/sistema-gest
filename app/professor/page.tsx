@@ -504,7 +504,7 @@ export default function ProfessorDashboard() {
         .course-list { display: flex; flex-direction: column; gap: 1rem; }
         .course-item { padding: 1.25rem; border: 1px solid #edf2f7; border-radius: 10px; cursor: pointer; transition: 0.2s; display: flex; flex-direction: column; gap: 0.25rem; }
         .course-item:hover { background-color: #f8fafc; border-color: var(--ocean-blue); }
-        .course-item.active { background-color: #f0f7ff; border-color: var(--ocean-blue); box-shadow: 0 4px 12px rgba(0,116,217,0.1); }
+        .course-item.active { background-color: #FDF2E9; border-color: var(--ocean-blue); box-shadow: 0 4px 12px rgba(0,116,217,0.1); }
         .course-item strong { color: var(--navy-deep); font-size: 1rem; }
         .course-item span { font-size: 0.85rem; color: var(--gray-medium); }
         
@@ -512,7 +512,7 @@ export default function ProfessorDashboard() {
         .detail-header { display: flex; justify-content: space-between; align-items: start; margin-bottom: 2rem; }
         .header-actions-inline { display: flex; align-items: center; gap: 1rem; }
         .detail-header h2 { font-size: 1.75rem; color: var(--navy-deep); }
-        .status-badge { background: #e0f2fe; color: #0369a1; padding: 0.4rem 1rem; border-radius: 50px; font-size: 0.75rem; font-weight: 800; }
+        .status-badge { background: #FDF2E9; color: #EA580C; padding: 0.4rem 1rem; border-radius: 50px; font-size: 0.75rem; font-weight: 800; }
         .btn-print-attendance { background: var(--sand-gold); color: var(--navy-deep); border: none; padding: 0.5rem 1rem; border-radius: 8px; font-weight: 700; cursor: pointer; transition: 0.2s; font-size: 0.85rem; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
         .btn-print-attendance:hover { brightness: 1.1; transform: translateY(-1px); }
         
