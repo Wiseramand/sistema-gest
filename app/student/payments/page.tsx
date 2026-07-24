@@ -17,6 +17,7 @@ interface PaymentRecord {
 export default function StudentPaymentsPage() {
     const { data: session } = useSession();
     const [payments, setPayments] = useState<PaymentRecord[]>([]);
+    const [actualPayments, setActualPayments] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -25,8 +26,16 @@ export default function StudentPaymentsPage() {
             setLoading(true);
             try {
                 const userId = (session.user as any).id;
-                const res = await fetch('/api/matriculations');
-                const data = await res.json();
+                const [resM, resP] = await Promise.all([
+                    fetch('/api/matriculations'),
+                    fetch(`/api/payments?studentId=${userId}`)
+                ]);
+                const data = await resM.json();
+                const pays = await resP.json();
+                
+                if (Array.isArray(pays)) {
+                    setActualPayments(pays);
+                }
                 
                 // Filter student's matriculations to show financial status
                 const myMatrics = data.filter((m: any) => m.studentId === userId);
@@ -111,6 +120,43 @@ export default function StudentPaymentsPage() {
                 </div>
             </div>
 
+            <div className="payments-table-card card shadow-sm" style={{ marginTop: '2rem' }}>
+                <h3>Recibos de Pagamento</h3>
+                <div className="table-wrapper">
+                    <table className="payments-table">
+                        <thead>
+                            <tr>
+                                <th>Nº Recibo</th>
+                                <th>Formação / Serviço</th>
+                                <th>Valor</th>
+                                <th>Método</th>
+                                <th>Data</th>
+                                <th>Estado</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {actualPayments.map(p => (
+                                <tr key={p.id}>
+                                    <td className="mono">{p.receiptNumber || p.id}</td>
+                                    <td className="course-name">{p.courseTitle}</td>
+                                    <td className="paid-val">€{Number(p.amount).toFixed(2)}</td>
+                                    <td>{p.method}</td>
+                                    <td>{p.date}</td>
+                                    <td>
+                                        <span className={`status-badge ${p.status === 'Processado' ? 'pagototal' : 'pendente'}`}>
+                                            {p.status}
+                                        </span>
+                                    </td>
+                                </tr>
+                            ))}
+                            {actualPayments.length === 0 && !loading && (
+                                <tr><td colSpan={6} className="empty-msg">Nenhum recibo de pagamento emitido.</td></tr>
+                            )}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
             <style jsx>{`
                 .payments-page { padding: 1rem 0; }
                 .page-header { margin-bottom: 2rem; }
@@ -132,6 +178,7 @@ export default function StudentPaymentsPage() {
                 .payments-table { width: 100%; border-collapse: collapse; min-width: 800px; }
                 .payments-table th { text-align: left; padding: 1rem; background: #f8fafc; border-bottom: 2px solid #edf2f7; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: #94a3b8; font-weight: 800; }
                 .payments-table td { padding: 1.25rem 1rem; border-bottom: 1px solid #f1f5f9; font-size: 0.9rem; font-weight: 600; color: #475569; }
+                .mono { font-family: monospace; font-size: 0.85rem; color: #64748b; }
                 
                 .course-name { color: #2D180F; font-weight: 800; }
                 .paid-val { color: #059669; }

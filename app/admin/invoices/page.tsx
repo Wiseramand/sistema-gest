@@ -1,12 +1,26 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 export default function InvoicesPage() {
-  const dummyInvoices = [
-    { nif: '504123456', client: 'Marítima Global Lda', type: 'Fatura Agrupada Empresa', amount: '€1,500.00', date: '06-04-2026', method: 'Transferência', status: 'Emitida' },
-    { nif: '210000000', client: 'Joaquim Silva', type: 'Proforma Individual', amount: '€150.00', date: '06-04-2026', method: 'Referência MB', status: 'Aguardando Pagamento' }
-  ];
+  const [invoices, setInvoices] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchInvoices();
+  }, []);
+
+  const fetchInvoices = async () => {
+    try {
+      const res = await fetch('/api/invoices');
+      const data = await res.json();
+      setInvoices(Array.isArray(data) ? data : []);
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const [selectedInvoice, setSelectedInvoice] = useState<any>(null);
   const [sendingEmail, setSendingEmail] = useState<string | null>(null);
@@ -19,9 +33,9 @@ export default function InvoicesPage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           studentEmail: 'aluno@exemplo.com', // In a real app, this comes from the invoice record
-          studentName: invoice.client,
+          studentName: invoice.studentName || invoice.client,
           amount: invoice.amount,
-          invoiceId: 'INV-2026-001'
+          invoiceId: invoice.invoiceNumber || invoice.id
         })
       });
       if (res.ok) alert('Fatura enviada com sucesso para ' + invoice.client);
@@ -55,9 +69,9 @@ export default function InvoicesPage() {
             </div>
             <div className="inv-to">
               <strong>Para:</strong>
-              <p>{invoice.client}</p>
-              <p>NIF: {invoice.nif}</p>
-              <p>Data: {invoice.date}</p>
+              <p>{invoice.studentName || invoice.client}</p>
+              <p>NIF: {invoice.nif || 'Consumidor Final'}</p>
+              <p>Data: {invoice.dueDate || invoice.date || 'N/A'}</p>
             </div>
           </div>
 
@@ -72,22 +86,22 @@ export default function InvoicesPage() {
             </thead>
             <tbody>
               <tr>
-                <td>{invoice.type} - Formação Profissional Marítima</td>
+                <td>{invoice.type || 'Serviços de Formação'} - Formação Profissional Marítima</td>
                 <td>1</td>
-                <td>{invoice.amount}</td>
-                <td>{invoice.amount}</td>
+                <td>{Number(invoice.amount).toFixed(2)}</td>
+                <td>{Number(invoice.amount).toFixed(2)}</td>
               </tr>
             </tbody>
           </table>
 
           <div className="inv-summary">
-            <div className="summary-row"><span>Subtotal:</span> <span>{invoice.amount}</span></div>
+            <div className="summary-row"><span>Subtotal:</span> <span>{Number(invoice.amount).toFixed(2)}</span></div>
             <div className="summary-row"><span>IVA (14%):</span> <span>Inc.</span></div>
-            <div className="summary-row total"><span>TOTAL A PAGAR:</span> <span>{invoice.amount}</span></div>
+            <div className="summary-row total"><span>TOTAL A PAGAR:</span> <span>{Number(invoice.amount).toFixed(2)}</span></div>
           </div>
 
           <div className="inv-footer">
-            <p>Método de Pagamento Predefinido: <strong>{invoice.method}</strong></p>
+            <p>Método de Pagamento Predefinido: <strong>{invoice.method || 'Transferência Bancária'}</strong></p>
             <p>Obrigado pela sua preferência. Bons Ventos!</p>
           </div>
         </div>
@@ -165,16 +179,16 @@ export default function InvoicesPage() {
             </tr>
           </thead>
           <tbody>
-            {dummyInvoices.map((p, i) => (
+            {invoices.map((p, i) => (
               <tr key={i}>
-                <td className="mono">{p.nif}</td>
-                <td className="bold">{p.client}</td>
-                <td>{p.type}</td>
-                <td style={{fontWeight: 700}}>{p.amount}</td>
-                <td>{p.date}</td>
-                <td>{p.method}</td>
+                <td className="mono">{p.nif || 'N/A'}</td>
+                <td className="bold">{p.studentName || p.client}</td>
+                <td>{p.type || 'Fatura Proforma'}</td>
+                <td style={{fontWeight: 700}}>€{Number(p.amount).toFixed(2)}</td>
+                <td>{p.dueDate || p.date || p.createdAt?.split('T')[0]}</td>
+                <td>{p.method || 'Transferência Bancária'}</td>
                 <td>
-                  <span className={`status-badge ${p.status === 'Emitida' ? 'success' : 'warning'}`}>
+                  <span className={`status-badge ${p.status === 'Emitida' || p.status === 'Paga' ? 'success' : 'warning'}`}>
                     {p.status}
                   </span>
                 </td>

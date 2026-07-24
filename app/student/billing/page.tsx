@@ -9,6 +9,7 @@ export default function StudentBillingPage() {
     const [loading, setLoading] = useState(true);
     const [uploading, setUploading] = useState(false);
     const [uploadedFile, setUploadedFile] = useState<string | null>(null);
+    const [invoices, setInvoices] = useState<any[]>([]);
 
     useEffect(() => {
         const fetchDue = async () => {
@@ -16,11 +17,20 @@ export default function StudentBillingPage() {
             setLoading(true);
             try {
                 const userId = (session.user as any).id;
-                const res = await fetch('/api/matriculations');
-                const data = await res.json();
+                const [resM, resI] = await Promise.all([
+                    fetch('/api/matriculations'),
+                    fetch(`/api/invoices?studentId=${userId}`)
+                ]);
+                const data = await resM.json();
+                const invData = await resI.json();
+                
                 const myMatrics = data.filter((m: any) => m.studentId === userId);
                 const due = myMatrics.reduce((acc: number, curr: any) => acc + (curr.amountDue || 0), 0);
                 setTotalDue(due);
+                
+                if (Array.isArray(invData)) {
+                    setInvoices(invData.filter(inv => inv.status !== 'Paga'));
+                }
             } catch (e) { console.error(e); }
             finally { setLoading(false); }
         };
@@ -65,10 +75,30 @@ export default function StudentBillingPage() {
             <div className="billing-layout">
                 <div className="billing-main">
                     <div className="due-card card shadow-sm">
-                        <span className="due-lbl">Total Base em Aberto</span>
+                        <span className="due-lbl">Total Base em Aberto (Cursos)</span>
                         <h2 className="due-val">{totalDue.toLocaleString('pt-MZ', { style: 'currency', currency: 'MZN' })}</h2>
-                        <p className="due-note">Este valor refere-se ao somatório de todas as propinas e taxas de exames pendentes.</p>
+                        <p className="due-note">Este valor refere-se ao somatório de todas as propinas e taxas de exames pendentes das suas matrículas.</p>
                     </div>
+
+                    {invoices.length > 0 && (
+                        <div className="invoices-card card shadow-sm">
+                            <h3>Faturas Pendentes</h3>
+                            <div className="invoices-list">
+                                {invoices.map(inv => (
+                                    <div key={inv.id} className="invoice-item">
+                                        <div className="inv-left">
+                                            <span className="inv-num">{inv.invoiceNumber || 'Nova Fatura'}</span>
+                                            <span className="inv-date">Vencimento: {inv.dueDate || inv.date || inv.createdAt.split('T')[0]}</span>
+                                        </div>
+                                        <div className="inv-right">
+                                            <span className="inv-amount">€{Number(inv.amount).toFixed(2)}</span>
+                                            <span className="inv-status">{inv.status}</span>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    )}
 
                     <div className="bank-info card shadow-sm">
                         <h3>🏦 Dados para Transferência Bancária</h3>
@@ -131,8 +161,19 @@ export default function StudentBillingPage() {
                 .due-card { padding: 2.5rem; background: linear-gradient(135deg, #2D180F 0%, #1a4fa0 100%); color: white; border: none; border-radius: 24px; position: relative; overflow: hidden; margin-bottom: 2rem; }
                 .due-card::after { content: '⚓'; position: absolute; right: -20px; top: -20px; font-size: 8rem; opacity: 0.1; transform: rotate(15deg); }
                 .due-lbl { font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.15em; font-weight: 700; color: #cbd5e1; display: block; margin-bottom: 0.5rem; }
-                .due-val { font-size: 2.5rem; font-weight: 900; family: 'Outfit', sans-serif; letter-spacing: -0.02em; margin: 0; }
+                .due-val { font-size: 2.5rem; font-weight: 900; font-family: 'Outfit', sans-serif; letter-spacing: -0.02em; margin: 0; }
                 .due-note { font-size: 0.85rem; color: #94a3b8; font-weight: 500; margin-top: 1.5rem; }
+                
+                .invoices-card { padding: 2.5rem; margin-bottom: 2rem; border-left: 6px solid #ef4444; }
+                .invoices-card h3 { margin-top: 0; margin-bottom: 1.5rem; color: #2D180F; }
+                .invoices-list { display: flex; flex-direction: column; gap: 1rem; }
+                .invoice-item { display: flex; justify-content: space-between; align-items: center; padding: 1rem; background: #f8fafc; border-radius: 8px; border: 1px solid #e2e8f0; }
+                .inv-left { display: flex; flex-direction: column; gap: 0.25rem; }
+                .inv-num { font-weight: 800; color: #0f172a; }
+                .inv-date { font-size: 0.8rem; color: #64748b; }
+                .inv-right { display: flex; flex-direction: column; align-items: flex-end; gap: 0.25rem; }
+                .inv-amount { font-weight: 800; color: #dc2626; }
+                .inv-status { font-size: 0.7rem; text-transform: uppercase; padding: 0.2rem 0.5rem; background: #fee2e2; color: #991b1b; border-radius: 4px; font-weight: 700; }
                 
                 .bank-info { padding: 2.5rem; border-left: 6px solid #E6C5A8; }
                 .bank-info h3 { margin-top: 0; color: #2D180F; font-size: 1.25rem; font-weight: 800; margin-bottom: 2rem; }

@@ -5,11 +5,24 @@ import { useState, useEffect } from 'react';
 export default function PaymentsPage() {
   const [selectedPayment, setSelectedPayment] = useState<any>(null);
   const [isManualModalOpen, setIsManualModalOpen] = useState(false);
-  const [payments, setPayments] = useState([
-    { id: 'PAY-001', student: 'Rui Silva', course: 'Segurança Básica (STCW)', amount: '150.00', method: 'MBWay', date: '06-04-2026', status: 'Processado' },
-    { id: 'PAY-002', student: 'Ana Pereira', course: 'Operador GMDSS', amount: '320.00', method: 'Multibanco', date: '05-04-2026', status: 'Processado' },
-    { id: 'PAY-003', student: 'Carlos Costa', course: 'Mergulho Profissional', amount: '500.00', method: 'Transferência Bancária', date: '04-04-2026', status: 'Aguardando Validação' }
-  ]);
+  const [payments, setPayments] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchPayments();
+  }, []);
+
+  const fetchPayments = async () => {
+    try {
+      const res = await fetch('/api/payments');
+      const data = await res.json();
+      setPayments(Array.isArray(data) ? data : []);
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const [formData, setFormData] = useState({
     student: '',
@@ -19,16 +32,35 @@ export default function PaymentsPage() {
     date: new Date().toISOString().split('T')[0]
   });
 
-  const handleManualSave = (e: React.FormEvent) => {
+  const [saving, setSaving] = useState(false);
+
+  const handleManualSave = async (e: React.FormEvent) => {
     e.preventDefault();
-    const newPay = {
-      id: `PAY-${Math.floor(1000 + Math.random() * 9000)}`,
-      status: 'Processado',
-      ...formData
-    };
-    setPayments([newPay, ...payments]);
-    setIsManualModalOpen(false);
-    setFormData({ student: '', course: '', amount: '', method: 'Dinheiro', date: new Date().toISOString().split('T')[0] });
+    setSaving(true);
+    try {
+      const newPay = {
+        studentName: formData.student,
+        courseTitle: formData.course,
+        amount: formData.amount,
+        method: formData.method,
+        date: formData.date,
+        status: 'Processado'
+      };
+      const res = await fetch('/api/payments', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(newPay)
+      });
+      if (res.ok) {
+        setIsManualModalOpen(false);
+        setFormData({ student: '', course: '', amount: '', method: 'Dinheiro', date: new Date().toISOString().split('T')[0] });
+        fetchPayments();
+      }
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setSaving(false);
+    }
   };
 
   const handlePrint = () => {
@@ -67,10 +99,10 @@ export default function PaymentsPage() {
           <tbody>
             {payments.map((p, i) => (
               <tr key={i}>
-                <td className="mono">{p.id}</td>
-                <td className="bold">{p.student}</td>
-                <td>{p.course}</td>
-                <td>€{p.amount}</td>
+                <td className="mono">{p.receiptNumber || p.id}</td>
+                <td className="bold">{p.studentName || p.student}</td>
+                <td>{p.courseTitle || p.course}</td>
+                <td>€{Number(p.amount).toFixed(2)}</td>
                 <td>
                   <span className="method-badge">{p.method}</span>
                 </td>
@@ -132,7 +164,9 @@ export default function PaymentsPage() {
 
               <div className="modal-footer">
                 <button type="button" className="btn btn-secondary" onClick={() => setIsManualModalOpen(false)}>Cancelar</button>
-                <button type="submit" className="btn btn-primary" style={{ margin: 0 }}>✓ Gravar Pagamento</button>
+                <button type="submit" className="btn btn-primary" style={{ margin: 0 }} disabled={saving}>
+                  {saving ? 'A gravar...' : '✓ Gravar Pagamento'}
+                </button>
               </div>
             </form>
           </div>
@@ -206,9 +240,9 @@ export default function PaymentsPage() {
             <h1>Marítimo Training Center</h1>
             <hr />
             <h2>RECIBO DE PAGAMENTO #{selectedPayment.id}</h2>
-            <p><strong>Cliente:</strong> {selectedPayment.student}</p>
-            <p><strong>Serviço:</strong> {selectedPayment.course}</p>
-            <p><strong>Valor:</strong> €{selectedPayment.amount}</p>
+                <div className="r-label">Nome:</div><div className="r-value">{selectedPayment.studentName || selectedPayment.student}</div>
+                <div className="r-label">Curso/Serviço:</div><div className="r-value">{selectedPayment.courseTitle || selectedPayment.course}</div>
+                <div className="r-label">Valor:</div><div className="r-value">€{Number(selectedPayment.amount).toFixed(2)}</div>
             <p><strong>Data:</strong> {selectedPayment.date}</p>
             <p><strong>Método:</strong> {selectedPayment.method}</p>
             <br />
