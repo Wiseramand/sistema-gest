@@ -56,6 +56,12 @@
 
   /* Transitions */
   --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* ── Legacy Variable Aliases ─────────────────────────────── */
+  /* Bridge for pages still referencing old variable names      */
+  --ocean-blue:   #EA580C;     /* maps to --color-accent       */
+  --navy-deep:    #2D180F;     /* maps to --color-primary      */
+  --sand-gold:    #E6C5A8;     /* maps to --color-sandstone    */
 }
 
 * {
@@ -480,4 +486,485 @@ h1, h2, h3, h4, h5, h6 {
   tr    { page-break-inside: avoid; page-break-after: auto; }
   thead { display: table-header-group; }
   tfoot { display: table-footer-group; }
+}
+
+/* ══════════════════════════════════════════════════════════════
+   UNIFIED ADMIN FORM SYSTEM
+   Global styles for all forms, fields, inputs, selects,
+   textareas, buttons and modals across the admin panel.
+   ══════════════════════════════════════════════════════════════ */
+
+/* ── Modal Form Layout ────────────────────────────────────── */
+.modal-form {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+}
+
+@media (max-width: 768px) {
+  .modal-form {
+    grid-template-columns: 1fr;
+  }
+  .modal-footer {
+    grid-column: span 1 !important;
+  }
+}
+
+.modal-footer {
+  grid-column: 1 / -1;
+}
+
+/* ── Form Columns ─────────────────────────────────────────── */
+.form-col {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+/* ── Section Labels ───────────────────────────────────────── */
+.section-label {
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: var(--color-accent);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 0.5rem;
+  padding-bottom: 0.6rem;
+  border-bottom: 2px solid var(--color-surface);
+}
+
+/* ── Field Wrapper ────────────────────────────────────────── */
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+/* ── Labels ───────────────────────────────────────────────── */
+.field label,
+.modal-form label,
+.form-col label {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--color-primary);
+  letter-spacing: 0.01em;
+}
+
+/* ── Inputs, Selects, Textareas ───────────────────────────── */
+.field input,
+.field select,
+.field textarea,
+.modal-form input,
+.modal-form select,
+.modal-form textarea,
+.form-col input,
+.form-col select,
+.form-col textarea {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  color: var(--color-text);
+  transition: var(--transition);
+  outline: none;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.field input::placeholder,
+.field textarea::placeholder,
+.modal-form input::placeholder,
+.modal-form textarea::placeholder {
+  color: var(--color-text-muted);
+  opacity: 0.7;
+}
+
+.field input:focus,
+.field select:focus,
+.field textarea:focus,
+.modal-form input:focus,
+.modal-form select:focus,
+.modal-form textarea:focus,
+.form-col input:focus,
+.form-col select:focus,
+.form-col textarea:focus {
+  background: var(--color-white);
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px rgba(234, 88, 12, 0.12);
+}
+
+/* Select arrow override */
+.field select,
+.modal-form select,
+.form-col select {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2378685E' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.85rem center;
+  background-size: 14px;
+  padding-right: 2.5rem;
+  cursor: pointer;
+}
+
+/* Textarea specific */
+.field textarea,
+.modal-form textarea {
+  min-height: 100px;
+  resize: vertical;
+  line-height: 1.5;
+}
+
+/* File inputs */
+.field input[type="file"],
+.modal-form input[type="file"],
+.form-col input[type="file"] {
+  padding: 0.6rem 0.75rem;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+/* Date inputs */
+.field input[type="date"],
+.modal-form input[type="date"],
+.form-col input[type="date"] {
+  cursor: pointer;
+}
+
+/* ── Upload Box ───────────────────────────────────────────── */
+.upload-box {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.upload-status {
+  font-size: 0.8rem;
+  color: var(--color-accent);
+  font-weight: 600;
+}
+
+.photo-ok {
+  font-size: 0.8rem;
+  color: var(--color-success-text);
+  font-weight: 600;
+}
+
+/* ── Row Action Buttons (table) ───────────────────────────── */
+.row-actions {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: flex-end;
+}
+
+.row-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 0.82rem;
+  padding: 0.35rem 0.65rem;
+  border-radius: var(--radius-sm);
+  transition: var(--transition);
+}
+
+.row-btn.edit {
+  color: var(--color-accent);
+}
+.row-btn.edit:hover {
+  background: var(--color-accent-light);
+}
+
+.row-btn.delete {
+  color: var(--color-danger-text);
+}
+.row-btn.delete:hover {
+  background: var(--color-danger-bg);
+}
+
+.row-btn.key {
+  font-size: 1rem;
+  color: var(--color-warning-text);
+}
+.row-btn.key:hover {
+  background: var(--color-warning-bg);
+}
+.row-btn.key.loading {
+  opacity: 0.5;
+  cursor: wait;
+  filter: grayscale(1);
+}
+
+.row-btn.access {
+  color: var(--color-accent);
+  font-size: 1.1rem;
+}
+.row-btn.access:hover {
+  background: var(--color-accent-light);
+}
+
+/* ── Print Button ─────────────────────────────────────────── */
+.print-btn {
+  background: var(--color-white);
+  color: var(--color-primary);
+  border: 1.5px solid var(--color-border);
+  padding: 0.85rem 1.5rem;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: var(--transition);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.print-btn:hover {
+  background: var(--color-surface);
+  border-color: var(--color-primary);
+}
+
+/* ── Save / Action Buttons ────────────────────────────────── */
+.btn-save {
+  background: var(--color-primary);
+  color: var(--color-white);
+  border: none;
+  padding: 0.85rem 2rem;
+  border-radius: var(--radius-md);
+  font-weight: 800;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: var(--transition);
+}
+.btn-save:hover {
+  background: var(--color-accent);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(234, 88, 12, 0.3);
+}
+
+.btn-cancel {
+  background: var(--color-surface);
+  color: var(--color-text-muted);
+  border: 1.5px solid var(--color-border);
+  padding: 0.85rem 2rem;
+  border-radius: var(--radius-md);
+  font-weight: 700;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: var(--transition);
+}
+.btn-cancel:hover {
+  background: var(--color-white);
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+/* ── Filter Bars ──────────────────────────────────────────── */
+.filter-bar,
+.filter-row {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.filter-item,
+.filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.filter-item label,
+.filter-group label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.filter-item input,
+.filter-item select,
+.filter-group input,
+.filter-group select,
+.filter-input,
+.filter-select,
+.search-input,
+.select-input {
+  padding: 0.65rem 0.9rem;
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface);
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  color: var(--color-text);
+  transition: var(--transition);
+  outline: none;
+}
+
+.filter-item input:focus,
+.filter-item select:focus,
+.filter-group input:focus,
+.filter-group select:focus,
+.filter-input:focus,
+.filter-select:focus,
+.search-input:focus,
+.select-input:focus {
+  background: var(--color-white);
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px rgba(234, 88, 12, 0.12);
+}
+
+/* ── Pagination ───────────────────────────────────────────── */
+.pagination {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.5rem;
+  border-top: 1px solid var(--color-border);
+  background: var(--color-surface);
+}
+
+.page-btn {
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--color-border);
+  background: var(--color-white);
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: var(--color-text);
+  cursor: pointer;
+  transition: var(--transition);
+}
+.page-btn:hover:not(:disabled) {
+  background: var(--color-surface);
+  color: var(--color-primary);
+  border-color: var(--color-primary);
+}
+.page-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.page-info {
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+  font-weight: 500;
+}
+
+/* ── Status Pills ─────────────────────────────────────────── */
+.status-pill {
+  padding: 0.3rem 0.75rem;
+  border-radius: 50px;
+  font-size: 0.7rem;
+  font-weight: 800;
+  display: inline-block;
+}
+.status-pill.active {
+  background: var(--color-success-bg);
+  color: var(--color-success-text);
+}
+.status-pill.inactive {
+  background: var(--color-danger-bg);
+  color: var(--color-danger-text);
+}
+
+/* ── Empty / Loading States ───────────────────────────────── */
+.loader {
+  text-align: center;
+  padding: 4rem 2rem;
+  color: var(--color-text-muted);
+  font-weight: 500;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 3rem;
+  color: var(--color-text-muted);
+  font-weight: 500;
+}
+
+/* ── Data Table ───────────────────────────────────────────── */
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.data-table th {
+  background: var(--color-surface);
+  padding: 1rem 1.5rem;
+  font-size: 0.72rem;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-weight: 700;
+  border-bottom: 1px solid var(--color-border);
+  text-align: left;
+}
+
+.data-table td {
+  padding: 1.1rem 1.5rem;
+  border-bottom: 1px solid var(--color-surface);
+  vertical-align: middle;
+  font-size: 0.9rem;
+}
+
+.data-table tr:last-child td {
+  border-bottom: none;
+}
+
+.data-table tr:hover td {
+  background: var(--color-primary-light);
+}
+
+/* ── Maritime Accent Bar ──────────────────────────────────── */
+.maritime-accent {
+  width: 48px;
+  height: 4px;
+  background: linear-gradient(90deg, var(--color-accent), var(--color-sandstone));
+  border-radius: 2px;
+  margin-bottom: 0.5rem;
+}
+
+/* ── Avatar Defaults ──────────────────────────────────────── */
+.avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--color-sandstone);
+  flex-shrink: 0;
+}
+
+.avatar-placeholder {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+
+/* ── Disabled State ───────────────────────────────────────── */
+.field input:disabled,
+.field select:disabled,
+.field textarea:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  background: var(--color-surface);
+}
+
+.btn:disabled,
+.btn-save:disabled,
+.new-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none !important;
 }

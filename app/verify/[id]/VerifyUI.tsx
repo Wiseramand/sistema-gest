@@ -622,11 +622,114 @@ export default function VerifyUI({ certificate, student, id }: VerifyUIProps) {
           .box-value.course-title { color: #d97706 !important; }
         }
 
-        @media (max-width: 640px) {
-          .verify-card { padding: 1.5rem 1.25rem; }
-          .student-profile-header { flex-direction: column; text-align: center; }
-          .proof-grid { grid-template-columns: 1fr; }
+        /* ── MOBILE (≤ 480px) ── */
+        @media (max-width: 480px) {
+          .verify-container {
+            padding: 1rem 0.75rem;
+            align-items: flex-start;
+          }
+          .verify-card {
+            padding: 1.25rem 1rem;
+            border-radius: 16px;
+          }
+
+          /* Brand */
+          .logo-badge { font-size: 1.75rem; padding: 0.5rem; }
+          .brand-name { font-size: 1.1rem; letter-spacing: 0.5px; }
+          .brand-tag { font-size: 0.7rem; }
+
+          /* Status Banner */
+          .status-banner {
+            flex-direction: column;
+            text-align: center;
+            gap: 0.5rem;
+            padding: 1rem;
+          }
+          .status-icon { font-size: 1.75rem; }
+          .status-title { font-size: 0.9rem; }
+          .status-sub { font-size: 0.78rem; }
+
+          /* Proof card */
+          .proof-card { padding: 1.1rem 0.9rem; border-radius: 14px; }
+
+          /* Student profile: stack vertically */
+          .student-profile-header {
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            gap: 0.9rem;
+          }
+          .avatar-wrapper { width: 72px; height: 72px; }
+          .avatar-placeholder { font-size: 1.75rem; }
+          .student-full-name {
+            font-size: 1.2rem;
+            word-break: break-word;
+          }
+          .section-badge { font-size: 0.68rem; }
+          .student-doc-tag { font-size: 0.78rem; }
+
+          /* Proof grid: 1 column */
+          .proof-grid { grid-template-columns: 1fr; gap: 0.75rem; }
+          .proof-box { padding: 0.9rem; border-radius: 12px; }
+          .box-label { font-size: 0.68rem; }
+          .box-value { font-size: 0.95rem; }
+          .box-value.course-title { font-size: 1.05rem; }
+          .box-value.code-value {
+            font-size: 0.72rem;
+            word-break: break-all;
+            white-space: normal;
+            width: 100%;
+          }
+
+          /* Flag badge */
+          .flag-badge-large { gap: 0.5rem; }
+          .flag-emoji { font-size: 1.75rem; }
+          .flag-country { font-size: 1rem; }
+          .flag-authority { font-size: 0.68rem; }
+
+          /* Validity */
+          .validity-date { font-size: 1rem; }
+
+          /* Stamp */
+          .stamp-box { padding: 0.85rem; }
+          .stamp-seal {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 0.5rem;
+          }
+          .seal-icon { font-size: 1.5rem; }
+          .seal-info strong { font-size: 0.82rem; }
+          .seal-info p { font-size: 0.75rem; }
+
+          /* Buttons */
+          .actions { grid-template-columns: 1fr; gap: 0.65rem; }
+          .btn-primary, .btn-secondary {
+            padding: 0.8rem 0.75rem;
+            font-size: 0.85rem;
+          }
+        }
+
+        /* ── SMALL TABLETS (481–640px) ── */
+        @media (min-width: 481px) and (max-width: 640px) {
+          .verify-container { padding: 1.5rem 1rem; }
+          .verify-card { padding: 1.5rem 1.25rem; border-radius: 18px; }
+
+          .status-banner { gap: 0.75rem; padding: 1rem 1.25rem; }
+          .status-title { font-size: 0.95rem; }
+
+          .student-profile-header {
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            gap: 1rem;
+          }
+          .student-full-name { font-size: 1.35rem; }
+
+          .proof-grid { grid-template-columns: 1fr; gap: 0.85rem; }
+          .box-value.code-value { font-size: 0.78rem; word-break: break-all; white-space: normal; }
+
           .actions { grid-template-columns: 1fr; }
+          .btn-primary, .btn-secondary { font-size: 0.9rem; }
         }
       `}</style>
     </div>
