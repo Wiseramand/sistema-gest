@@ -31,7 +31,7 @@ export default function FAQPage() {
         <main style={{ paddingTop: '80px' }}>
             <Navbar />
 
-            <div className="page-banner" style={{ backgroundImage: "linear-gradient(rgba(0, 31, 63, 0.7), rgba(0, 31, 63, 0.7)), url('/assets/hero/banner4.png')" }}>
+            <div className="page-banner">
                 <div className="container">
                     <h1>Perguntas Frequentes</h1>
                     <p>Tire suas dúvidas sobre nossos cursos, processos e certificações.</p>
@@ -59,30 +59,32 @@ export default function FAQPage() {
 
             <style jsx>{`
         .page-banner {
-          height: 300px;
+          height: 340px;
           background-size: cover;
           background-position: center;
+          background-image: linear-gradient(rgba(45, 24, 15, 0.78), rgba(45, 24, 15, 0.78)), url('/assets/hero/banner4.png');
           display: flex;
           align-items: center;
           color: white;
           text-align: center;
         }
+        .page-banner .container { width: 100%; }
         .page-banner h1 { color: white; font-size: 3rem; margin-bottom: 1rem; }
         .page-banner p { font-size: 1.2rem; opacity: 0.9; max-width: 600px; margin: 0 auto; }
 
         .faq-section { padding: 6rem 1.5rem; max-width: 900px; }
         .faq-list { display: flex; flex-direction: column; gap: 2rem; margin-bottom: 4rem; }
         
-        .faq-item { padding: 2.5rem; border-left: 6px solid var(--ocean-blue); transition: 0.3s; }
-        .faq-item:hover { transform: translateX(10px); background: #f0f7ff; }
-        .faq-item h3 { font-size: 1.3rem; margin-bottom: 1rem; color: var(--navy-deep); }
-        .faq-item p { color: #64748b; font-size: 1.1rem; line-height: 1.7; margin-bottom: 0; }
+        .faq-item { padding: 2.5rem; border-left: 6px solid var(--color-accent); transition: 0.3s; }
+        .faq-item:hover { transform: translateX(10px); background: var(--color-accent-light); }
+        .faq-item h3 { font-size: 1.3rem; margin-bottom: 1rem; color: var(--color-primary); }
+        .faq-item p { color: var(--color-text-muted); font-size: 1.1rem; line-height: 1.7; margin-bottom: 0; }
 
-        .faq-cta { text-align: center; padding: 4rem; background: var(--navy-deep); color: white; border-radius: 24px; }
-        .faq-cta h3 { color: var(--sand-gold); font-size: 2rem; margin-bottom: 1rem; }
-        .faq-cta p { font-size: 1.1rem; opacity: 0.8; margin-bottom: 2.5rem; }
+        .faq-cta { text-align: center; padding: 4rem; background: var(--color-primary); color: white; border-radius: 24px; }
+        .faq-cta h3 { color: var(--color-sandstone); font-size: 2rem; margin-bottom: 1rem; }
+        .faq-cta p { font-size: 1.1rem; opacity: 0.8; margin-bottom: 2.5rem; color: white; }
 
-        .shadow-premium { box-shadow: 0 30px 60px rgba(0, 31, 63, 0.2); }
+        .shadow-premium { box-shadow: 0 30px 60px rgba(45, 24, 15, 0.2); }
 
         @media (max-width: 768px) {
           .page-banner h1 { font-size: 2rem; }

@@ -8,7 +8,7 @@ export default function SobrePage() {
         <main style={{ paddingTop: '80px' }}>
             <Navbar />
 
-            <div className="page-banner" style={{ backgroundImage: "linear-gradient(rgba(0, 31, 63, 0.7), rgba(0, 31, 63, 0.7)), url('/assets/hero/banner2.png')" }}>
+            <div className="page-banner">
                 <div className="container">
                     <h1>Sobre a Instituição</h1>
                     <p>Liderança e tradição na formação de profissionais para a economia azul.</p>
@@ -44,32 +44,34 @@ export default function SobrePage() {
 
             <style jsx>{`
         .page-banner {
-          height: 300px;
+          height: 340px;
           background-size: cover;
           background-position: center;
+          background-image: linear-gradient(rgba(45, 24, 15, 0.78), rgba(45, 24, 15, 0.78)), url('/assets/hero/banner2.png');
           display: flex;
           align-items: center;
           color: white;
           text-align: center;
         }
+        .page-banner .container { width: 100%; }
         .page-banner h1 { color: white; font-size: 3rem; margin-bottom: 1rem; }
         .page-banner p { font-size: 1.2rem; opacity: 0.9; max-width: 600px; margin: 0 auto; }
 
         .about-section { padding: 6rem 1.5rem; }
         .about-grid { display: grid; grid-template-columns: 1.2fr 1fr; gap: 4rem; align-items: center; }
         
-        .about-text h2 { font-size: 2.25rem; margin-bottom: 1.5rem; }
-        .about-text p { font-size: 1.1rem; color: #64748b; line-height: 1.8; margin-bottom: 2rem; }
+        .about-text h2 { font-size: 2.25rem; margin-bottom: 1.5rem; color: var(--color-primary); }
+        .about-text p { font-size: 1.1rem; color: var(--color-text-muted); line-height: 1.8; margin-bottom: 2rem; }
 
         .values-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-top: 3rem; }
-        .value-card { background: #f8fafc; padding: 1.5rem; border-radius: 12px; }
+        .value-card { background: var(--color-primary-light); padding: 1.5rem; border-radius: 12px; border: 1px solid var(--color-border); }
         .value-card .icon { font-size: 2rem; display: block; margin-bottom: 1rem; }
-        .value-card h4 { margin-bottom: 0.5rem; color: var(--navy-deep); }
-        .value-card p { font-size: 0.9rem; margin-bottom: 0; line-height: 1.5; }
+        .value-card h4 { margin-bottom: 0.5rem; color: var(--color-primary); }
+        .value-card p { font-size: 0.9rem; margin-bottom: 0; line-height: 1.5; color: var(--color-text-muted); }
 
         .about-image { height: 500px; background-size: cover; background-position: center; border-radius: 20px; }
 
-        .shadow-premium { box-shadow: 0 20px 40px rgba(0,0,0,0.1); }
+        .shadow-premium { box-shadow: 0 20px 40px rgba(45, 24, 15, 0.12); }
 
         @media (max-width: 1024px) {
           .about-grid { grid-template-columns: 1fr; gap: 3rem; }

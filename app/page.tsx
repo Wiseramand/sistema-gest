@@ -66,7 +66,7 @@ export default function Home() {
       </section>
 
       {/* Partners & Clients Section */}
-      <section style={{ backgroundColor: '#f8fafc', padding: '1rem 0' }}>
+      <section style={{ backgroundColor: 'var(--color-surface)', padding: '2rem 0' }}>
         <CompanyMarquee title="Parceiros Institucionais" companies={partnersData} />
         <CompanyMarquee title="Clientes de Excelência" companies={clientsData} reverse={true} />
       </section>
@@ -149,9 +149,9 @@ export default function Home() {
         }
 
         .feature-card.highlighted h3 { color: white; }
-        .feature-card.highlighted p { opacity: 0.8; color: white; }
-        .feature-card.highlighted .card-badge { background: rgba(255, 255, 255, 0.1); color: white; border-color: rgba(255, 255, 255, 0.2); }
-        .feature-card.highlighted .card-badge.gold { background: var(--color-accent); color: var(--color-primary); }
+        .feature-card.highlighted p { opacity: 0.88; color: white; }
+        .feature-card.highlighted .card-badge { background: rgba(255, 255, 255, 0.12); color: white; border-color: rgba(255, 255, 255, 0.2); }
+        .feature-card.highlighted .card-badge.gold { background: var(--color-sandstone); color: var(--color-primary); }
 
         .card-top {
           display: flex;
@@ -174,7 +174,7 @@ export default function Home() {
           background: var(--color-primary-light);
           color: var(--color-primary);
           border-radius: 50px;
-          border: 1px solid rgba(10, 42, 94, 0.1);
+          border: 1px solid rgba(45, 24, 15, 0.1);
         }
 
         .feature-card h3 {
@@ -208,7 +208,9 @@ export default function Home() {
 
         /* CTA Banner */
         .cta-banner {
-          background: #0a2a5e;
+          background: var(--color-primary);
+          border-top: 2px solid var(--color-accent);
+          border-bottom: 2px solid var(--color-accent);
           padding: 5rem 1.5rem;
           color: white;
           margin: 4rem 0;
@@ -222,8 +224,9 @@ export default function Home() {
           right: -50px;
           bottom: -50px;
           font-size: 15rem;
-          opacity: 0.03;
+          opacity: 0.04;
           transform: rotate(-15deg);
+          color: var(--color-sandstone);
         }
 
         .cta-content {
@@ -245,7 +248,7 @@ export default function Home() {
 
         .cta-left p {
           font-size: 1.15rem;
-          opacity: 0.8;
+          opacity: 0.88;
           max-width: 600px;
         }
 
@@ -255,19 +258,19 @@ export default function Home() {
           gap: 1rem;
           padding: 1.25rem 2.5rem;
           background: var(--color-accent);
-          color: var(--color-primary);
+          color: #ffffff;
           border-radius: var(--radius-md);
           font-weight: 800;
           text-transform: uppercase;
           letter-spacing: 1px;
           transition: var(--transition);
-          box-shadow: 0 10px 20px rgba(245, 197, 24, 0.2);
+          box-shadow: 0 10px 20px rgba(234, 88, 12, 0.35);
         }
 
         .cta-btn:hover {
-          background: white;
+          background: var(--color-accent-hover);
           transform: translateY(-5px);
-          box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+          box-shadow: 0 15px 30px rgba(234, 88, 12, 0.45);
         }
 
         .cta-btn span { font-size: 1.2rem; }

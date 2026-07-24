@@ -55,12 +55,12 @@ export default function StudentLoginPage() {
             display: flex;
             align-items: center;
             justify-content: center;
-            background-color: #0a2a5e;
+            background-color: var(--color-primary);
             color: white;
-            font-family: 'Outfit', sans-serif;
+            font-family: var(--font-display);
           }
           .loader-inner { text-align: center; }
-          .spinner { font-size: 3rem; margin-bottom: 1rem; animation: pulse 2s infinite ease-in-out; }
+          .spinner { font-size: 3.5rem; margin-bottom: 1rem; animation: pulse 2s infinite ease-in-out; }
           @keyframes pulse {
             0% { transform: scale(1); opacity: 0.8; }
             50% { transform: scale(1.1); opacity: 1; }
@@ -126,9 +126,9 @@ export default function StudentLoginPage() {
           display: flex;
           align-items: center;
           justify-content: center;
-          background-color: #f4f7fb;
+          background-color: var(--color-surface);
           padding: 1.5rem;
-          font-family: 'DM Sans', sans-serif;
+          font-family: var(--font-body);
         }
 
         .login-card {
@@ -136,9 +136,9 @@ export default function StudentLoginPage() {
           max-width: 440px;
           background: #ffffff;
           padding: 3.5rem 2.5rem;
-          border-radius: 14px;
-          border: 1px solid #dce6f0;
-          box-shadow: 0 10px 25px rgba(10, 42, 94, 0.05);
+          border-radius: 16px;
+          border: 1px solid var(--color-border);
+          box-shadow: 0 12px 32px rgba(45, 24, 15, 0.08);
         }
 
         .login-header {
@@ -153,18 +153,18 @@ export default function StudentLoginPage() {
         }
 
         .login-header h1 {
-          font-family: 'Outfit', sans-serif;
+          font-family: var(--font-display);
           font-size: 2.2rem;
           margin-bottom: 2px;
-          color: #0a2a5e;
-          font-weight: 700;
+          color: var(--color-primary);
+          font-weight: 800;
           letter-spacing: -0.02em;
         }
 
         .login-header span {
-          font-family: 'Outfit', sans-serif;
+          font-family: var(--font-display);
           font-size: 0.85rem;
-          color: #6b7ea0;
+          color: var(--color-text-muted);
           text-transform: uppercase;
           letter-spacing: 1.5px;
           font-weight: 600;
@@ -172,8 +172,8 @@ export default function StudentLoginPage() {
 
         .brand-accent {
           width: 40px;
-          height: 3px;
-          background: #F5C518;
+          height: 4px;
+          background: var(--color-accent);
           margin: 1.25rem auto 0;
           border-radius: 2px;
         }
@@ -192,15 +192,15 @@ export default function StudentLoginPage() {
 
         .input-group label {
           font-weight: 600;
-          color: #0f1e35;
+          color: var(--color-text);
           font-size: 0.85rem;
         }
 
         .input-group input {
           padding: 0.85rem 1rem;
-          border: 1px solid #dce6f0;
+          border: 1px solid var(--color-border);
           border-radius: 10px;
-          font-family: 'DM Sans', sans-serif;
+          font-family: var(--font-body);
           font-size: 0.95rem;
           transition: all 0.25s ease;
           background: #ffffff;
@@ -208,24 +208,24 @@ export default function StudentLoginPage() {
 
         .input-group input:focus {
           outline: none;
-          border-color: #1a4fa0;
-          box-shadow: 0 0 0 4px rgba(26, 79, 160, 0.08);
+          border-color: var(--color-accent);
+          box-shadow: 0 0 0 4px rgba(234, 88, 12, 0.1);
         }
 
         .login-alert {
-          background-color: #fde8e8;
-          color: #991b1b;
+          background-color: var(--color-danger-bg);
+          color: var(--color-danger-text);
           padding: 0.85rem;
           border-radius: 10px;
           margin-bottom: 1.5rem;
           font-size: 0.85rem;
-          border: 1px solid rgba(153, 27, 27, 0.1);
+          border: 1px solid rgba(198, 40, 40, 0.2);
           text-align: center;
           font-weight: 500;
         }
 
         .login-submit {
-          background: #0a2a5e;
+          background: var(--color-accent);
           color: #ffffff;
           border: none;
           padding: 1rem;
@@ -235,12 +235,13 @@ export default function StudentLoginPage() {
           cursor: pointer;
           transition: all 0.25s ease;
           margin-top: 0.5rem;
+          box-shadow: 0 4px 14px rgba(234, 88, 12, 0.3);
         }
 
         .login-submit:hover {
-          background: #1a4fa0;
+          background: var(--color-accent-hover);
           transform: translateY(-1px);
-          box-shadow: 0 4px 12px rgba(10, 42, 94, 0.2);
+          box-shadow: 0 6px 18px rgba(234, 88, 12, 0.4);
         }
 
         .login-submit:disabled {
@@ -257,19 +258,19 @@ export default function StudentLoginPage() {
           display: inline-flex;
           align-items: center;
           gap: 0.75rem;
-          color: #0a2a5e;
+          color: var(--color-primary);
           text-decoration: none;
           font-weight: 700;
           font-size: 0.9rem;
           transition: all 0.25s ease;
           padding: 0.6rem 1.25rem;
           border-radius: 10px;
-          border: 1px solid #dce6f0;
+          border: 1px solid var(--color-border);
         }
 
         .btn-return:hover {
-          background: #e8f0fb;
-          border-color: #1a4fa0;
+          background: var(--color-primary-light);
+          border-color: var(--color-primary);
           transform: translateX(-5px);
         }
 

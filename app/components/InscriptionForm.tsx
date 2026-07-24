@@ -165,7 +165,7 @@ export default function InscriptionForm() {
           display: flex;
           flex-direction: column;
           gap: 1.5rem;
-          font-family: 'DM Sans', sans-serif;
+          font-family: var(--font-body);
         }
 
         .form-group {
@@ -182,31 +182,32 @@ export default function InscriptionForm() {
 
         label {
           font-weight: 600;
-          color: #0a2a5e;
+          color: var(--color-primary);
           font-size: 0.85rem;
           letter-spacing: 0.3px;
         }
 
         input, select, textarea {
           padding: 1rem;
-          border: 1px solid #dce6f0;
+          border: 1px solid var(--color-border);
           border-radius: 12px;
           font-family: inherit;
           font-size: 0.95rem;
           transition: all 0.25s ease;
           background: #fdfdfd;
-          color: #0f1e35;
+          color: var(--color-text);
         }
 
         input:focus, select:focus, textarea:focus {
           outline: none;
-          border-color: #0a2a5e;
+          border-color: var(--color-accent);
           background: white;
-          box-shadow: 0 0 0 4px rgba(10, 42, 94, 0.05);
+          box-shadow: 0 0 0 4px rgba(234, 88, 12, 0.12);
         }
 
         input::placeholder, textarea::placeholder {
-          color: #94a3b8;
+          color: var(--color-text-muted);
+          opacity: 0.7;
         }
 
         .alert {
@@ -224,21 +225,21 @@ export default function InscriptionForm() {
         .alert .icon { font-size: 1.25rem; }
 
         .alert.success {
-          background-color: #e0f2ea;
-          color: #0d6e3f;
-          border-color: #0d6e3f20;
+          background-color: var(--color-success-bg);
+          color: var(--color-success-text);
+          border-color: rgba(27, 94, 32, 0.2);
         }
 
         .alert.error {
-          background-color: #fde8e8;
-          color: #991b1b;
-          border-color: #991b1b20;
+          background-color: var(--color-danger-bg);
+          color: var(--color-danger-text);
+          border-color: rgba(198, 40, 40, 0.2);
         }
 
         .submit-btn {
           width: 100%;
           padding: 1.1rem;
-          background: #0a2a5e;
+          background: var(--color-accent);
           color: white;
           border: none;
           border-radius: 12px;
@@ -247,13 +248,13 @@ export default function InscriptionForm() {
           cursor: pointer;
           transition: all 0.3s ease;
           margin-top: 0.5rem;
-          box-shadow: 0 4px 12px rgba(10, 42, 94, 0.15);
+          box-shadow: 0 4px 14px rgba(234, 88, 12, 0.3);
         }
 
         .submit-btn:hover {
-          background: #1a4fa0;
+          background: var(--color-accent-hover);
           transform: translateY(-2px);
-          box-shadow: 0 8px 20px rgba(10, 42, 94, 0.2);
+          box-shadow: 0 8px 20px rgba(234, 88, 12, 0.4);
         }
 
         .submit-btn:disabled {

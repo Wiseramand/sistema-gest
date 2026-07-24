@@ -1,33 +1,42 @@
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
 
 :root {
-  /* ── Marítimo Training Center — Official Design Tokens ── */
+  /* ── Marítimo Training Center — Official Maritime Design Tokens ── */
 
-  /* Primary — Azul Naval */
-  --color-primary:        #0a2a5e;
-  --color-primary-mid:    #1a4fa0;
-  --color-primary-light:  #e8f0fb;
+  /* Primary — Castanho Ébano / Madeira Marítima */
+  --color-primary:        #2D180F;
+  --color-primary-mid:    #4E2A1B;
+  --color-primary-light:  #F6EFE9;
+  --color-primary-dark:   #1B0E09;
 
-  /* Accent — Âmbar */
-  --color-accent:         #F5C518;
-  --color-accent-light:   #fdf6d8;
+  /* Accent — Laranja Terracota / Segurança Marítima */
+  --color-accent:         #EA580C;
+  --color-accent-hover:   #C2410C;
+  --color-accent-light:   #FDF2E9;
+
+  /* Secondary Accent — Ferrugem Profundo */
+  --color-rust:           #9A3412;
+
+  /* Brand Badge — Areia Âncora */
+  --color-sandstone:       #E6C5A8;
+  --color-sandstone-light: #F7ECE1;
 
   /* Surfaces */
   --color-white:          #ffffff;
-  --color-surface:        #f4f7fb;
-  --color-border:         #dce6f0;
+  --color-surface:        #F8F4EF;
+  --color-border:         #E6DDD4;
 
   /* Text */
-  --color-text:           #0f1e35;
-  --color-text-muted:     #6b7ea0;
+  --color-text:           #241C18;
+  --color-text-muted:     #78685E;
 
   /* Status */
-  --color-success-bg:     #e0f2ea;
-  --color-success-text:   #0d6e3f;
-  --color-warning-bg:     #fdf6d8;
-  --color-warning-text:   #7a5800;
-  --color-danger-bg:      #fde8e8;
-  --color-danger-text:    #991b1b;
+  --color-success-bg:     #E8F5E9;
+  --color-success-text:   #1B5E20;
+  --color-warning-bg:     #FFF3E0;
+  --color-warning-text:   #E65100;
+  --color-danger-bg:      #FFEBEE;
+  --color-danger-text:    #C62828;
 
   /* Typography */
   --font-display:   'Outfit', sans-serif;
@@ -35,9 +44,9 @@
   --font-mono:      'JetBrains Mono', monospace;
 
   /* Shadows */
-  --shadow-sm: 0 1px 3px rgba(10, 42, 94, 0.06);
-  --shadow-md: 0 4px 12px rgba(10, 42, 94, 0.08);
-  --shadow-lg: 0 8px 24px rgba(10, 42, 94, 0.10);
+  --shadow-sm: 0 2px 5px rgba(45, 24, 15, 0.05);
+  --shadow-md: 0 6px 18px rgba(45, 24, 15, 0.08);
+  --shadow-lg: 0 12px 32px rgba(45, 24, 15, 0.12);
 
   /* Radii */
   --radius-sm:  6px;
@@ -46,7 +55,7 @@
   --radius-xl:  20px;
 
   /* Transitions */
-  --transition: all 0.25s ease;
+  --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 * {
@@ -97,15 +106,28 @@ h1, h2, h3, h4, h5, h6 {
 .btn-primary {
   background-color: var(--color-primary);
   color: var(--color-white);
-  box-shadow: 0 4px 12px rgba(10, 42, 94, 0.2);
+  box-shadow: 0 4px 14px rgba(45, 24, 15, 0.25);
   border: 1.5px solid transparent;
 }
 
 .btn-primary:hover {
   background-color: var(--color-primary-mid);
   transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(10, 42, 94, 0.3);
-  border-color: rgba(255, 255, 255, 0.2);
+  box-shadow: 0 6px 18px rgba(45, 24, 15, 0.35);
+  border-color: var(--color-sandstone);
+}
+
+.btn-accent {
+  background-color: var(--color-accent);
+  color: var(--color-white);
+  box-shadow: 0 4px 14px rgba(234, 88, 12, 0.3);
+  border: 1.5px solid transparent;
+}
+
+.btn-accent:hover {
+  background-color: var(--color-accent-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(234, 88, 12, 0.4);
 }
 
 .btn-danger {
@@ -260,7 +282,7 @@ h1, h2, h3, h4, h5, h6 {
   font-size: 0.95rem !important;
   cursor: pointer !important;
   border: 2px solid transparent !important;
-  box-shadow: 0 4px 15px rgba(10, 42, 94, 0.25) !important;
+  box-shadow: 0 4px 15px rgba(45, 24, 15, 0.25) !important;
   transition: all 0.25s ease !important;
   display: inline-flex !important;
   align-items: center !important;
@@ -268,10 +290,10 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .new-btn:hover {
-  background-color: var(--color-primary-mid) !important;
+  background-color: var(--color-accent) !important;
   transform: translateY(-3px) !important;
-  box-shadow: 0 8px 25px rgba(10, 42, 94, 0.35) !important;
-  border-color: var(--color-accent) !important;
+  box-shadow: 0 8px 25px rgba(234, 88, 12, 0.35) !important;
+  border-color: var(--color-sandstone) !important;
 }
 
 /* Modals Global Patterns */

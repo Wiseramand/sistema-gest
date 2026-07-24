@@ -43,7 +43,7 @@ export default function CursosPage() {
         <main style={{ paddingTop: '80px' }}>
             <Navbar />
 
-            <div className="page-banner" style={{ backgroundImage: "linear-gradient(rgba(0, 31, 63, 0.7), rgba(0, 31, 63, 0.7)), url('/assets/hero/cursos-banner.png')" }}>
+            <div className="page-banner">
                 <div className="container">
                     <h1>Nossos Cursos</h1>
                     <p>Explore as melhores oportunidades de formação marítima com certificação internacional.</p>
@@ -74,14 +74,16 @@ export default function CursosPage() {
 
             <style jsx>{`
         .page-banner {
-          height: 300px;
+          height: 340px;
           background-size: cover;
           background-position: center;
+          background-image: linear-gradient(rgba(45, 24, 15, 0.78), rgba(45, 24, 15, 0.78)), url('/assets/hero/cursos-banner.png');
           display: flex;
           align-items: center;
           color: white;
           text-align: center;
         }
+        .page-banner .container { width: 100%; }
         .page-banner h1 { color: white; font-size: 3rem; margin-bottom: 1rem; }
         .page-banner p { font-size: 1.2rem; opacity: 0.9; max-width: 600px; margin: 0 auto; }
 
@@ -94,7 +96,7 @@ export default function CursosPage() {
         .course-card {
            padding: 0;
            overflow: hidden;
-           border: 1px solid #e2e8f0;
+           border: 1px solid var(--color-border);
            display: flex;
            flex-direction: column;
         }
@@ -108,8 +110,8 @@ export default function CursosPage() {
           position: absolute;
           top: 1rem;
           right: 1rem;
-          background: var(--sand-gold);
-          color: var(--navy-deep);
+          background: var(--color-sandstone);
+          color: var(--color-primary);
           padding: 0.25rem 0.75rem;
           border-radius: 50px;
           font-size: 0.7rem;
@@ -117,9 +119,9 @@ export default function CursosPage() {
           text-transform: uppercase;
         }
         .course-info { padding: 1.5rem; flex: 1; display: flex; flex-direction: column; }
-        .course-info h3 { font-size: 1.25rem; margin-bottom: 0.5rem; color: var(--navy-deep); }
-        .duration { font-size: 0.85rem; color: var(--ocean-blue); font-weight: 700; margin-bottom: 1rem; }
-        .desc { font-size: 0.9rem; color: #64748b; line-height: 1.5; margin-bottom: 1.5rem; flex: 1; }
+        .course-info h3 { font-size: 1.25rem; margin-bottom: 0.5rem; color: var(--color-primary); }
+        .duration { font-size: 0.85rem; color: var(--color-accent); font-weight: 700; margin-bottom: 1rem; }
+        .desc { font-size: 0.9rem; color: var(--color-text-muted); line-height: 1.5; margin-bottom: 1.5rem; flex: 1; }
         
         .btn-sm { padding: 0.5rem 1rem; font-size: 0.85rem; }
 

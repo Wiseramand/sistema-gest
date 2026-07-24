@@ -32,7 +32,7 @@ export default function Navbar() {
       </div>
       <style jsx>{`
         .navbar {
-          background: #0a2a5e;
+          background: var(--color-primary);
           color: white;
           padding: 1rem 0;
           position: fixed;
@@ -40,7 +40,8 @@ export default function Navbar() {
           left: 0;
           width: 100%;
           z-index: 2000;
-          box-shadow: 0 2px 10px rgba(10, 42, 94, 0.15);
+          box-shadow: 0 4px 20px rgba(45, 24, 15, 0.25);
+          border-bottom: 1px solid rgba(230, 197, 168, 0.15);
           transition: 0.3s;
         }
         .nav-container {
@@ -56,14 +57,15 @@ export default function Navbar() {
         }
         .logo-icon {
           font-size: 1.5rem;
-          background: #F5C518;
-          color: #0a2a5e;
-          width: 38px;
-          height: 38px;
+          background: var(--color-accent);
+          color: #ffffff;
+          width: 40px;
+          height: 40px;
           display: flex;
           align-items: center;
           justify-content: center;
-          border-radius: 8px;
+          border-radius: 10px;
+          box-shadow: 0 4px 10px rgba(234, 88, 12, 0.3);
         }
         .logo-text {
           display: flex;
@@ -71,19 +73,19 @@ export default function Navbar() {
           line-height: 1.1;
         }
         .logo-text .main {
-          font-family: 'Outfit', sans-serif;
+          font-family: var(--font-display);
           font-weight: 800;
           letter-spacing: 1px;
           font-size: 1.15rem;
           color: #ffffff;
         }
         .logo-text .sub {
-          font-family: 'Outfit', sans-serif;
+          font-family: var(--font-display);
           font-size: 0.65rem;
           text-transform: uppercase;
-          opacity: 0.8;
+          opacity: 0.85;
           letter-spacing: 1.2px;
-          color: #ffffff;
+          color: var(--color-sandstone);
           margin-top: 1px;
         }
 
@@ -103,44 +105,52 @@ export default function Navbar() {
           gap: 1.5rem;
         }
         .nav-links a {
-          font-family: 'DM Sans', sans-serif;
+          font-family: var(--font-body);
           font-size: 0.95rem;
           font-weight: 600;
           transition: all 0.25s ease;
           color: #ffffff;
-          opacity: 0.85;
+          opacity: 0.88;
         }
         .nav-links a:hover {
           opacity: 1;
-          color: #F5C518;
+          color: var(--color-sandstone);
         }
         .nav-divider {
           width: 1px;
           height: 20px;
-          background: rgba(255, 255, 255, 0.2);
+          background: rgba(230, 197, 168, 0.25);
           margin: 0 0.5rem;
         }
         .btn-portal {
-          background: #ffffff;
-          color: #0a2a5e !important;
+          background: var(--color-accent);
+          color: #ffffff !important;
           padding: 0.6rem 1.25rem;
           font-size: 0.85rem;
           border-radius: 8px;
           opacity: 1 !important;
           font-weight: 700 !important;
+          box-shadow: 0 4px 12px rgba(234, 88, 12, 0.3);
+          transition: var(--transition);
         }
         .btn-portal:hover {
-          background: #F5C518 !important;
+          background: var(--color-accent-hover) !important;
           transform: translateY(-2px);
+          box-shadow: 0 6px 16px rgba(234, 88, 12, 0.4);
         }
         .btn-trainer {
-          background: rgba(255, 255, 255, 0.1);
-          color: #ffffff !important;
+          background: rgba(230, 197, 168, 0.12);
+          color: var(--color-sandstone) !important;
           padding: 0.6rem 1.25rem;
           font-size: 0.85rem;
           border-radius: 8px;
-          border: 1px solid rgba(255, 255, 255, 0.2);
+          border: 1px solid rgba(230, 197, 168, 0.3);
           opacity: 1 !important;
+          transition: var(--transition);
+        }
+        .btn-trainer:hover {
+          background: rgba(230, 197, 168, 0.25);
+          border-color: var(--color-sandstone);
         }
 
         @media (max-width: 992px) {
@@ -152,12 +162,12 @@ export default function Navbar() {
             right: -100%;
             width: 80%;
             height: 100vh;
-            background: #0a2a5e;
+            background: var(--color-primary);
             flex-direction: column;
             justify-content: center;
             padding: 2rem;
             transition: 0.3s ease-in-out;
-            box-shadow: -10px 0 30px rgba(0,0,0,0.3);
+            box-shadow: -10px 0 30px rgba(0,0,0,0.4);
             z-index: 2000;
           }
 

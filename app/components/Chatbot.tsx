@@ -116,14 +116,14 @@ export default function Chatbot() {
                 }
 
                 .chatbot-toggle {
-                    background: var(--color-primary);
+                    background: var(--color-accent);
                     color: white;
                     border: none;
                     border-radius: 50px;
                     padding: 1rem 1.5rem;
                     font-size: 1rem;
                     font-weight: 700;
-                    box-shadow: 0 10px 25px rgba(10, 42, 94, 0.3);
+                    box-shadow: 0 10px 25px rgba(234, 88, 12, 0.4);
                     cursor: pointer;
                     transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
                     display: flex;
@@ -133,7 +133,8 @@ export default function Chatbot() {
 
                 .chatbot-toggle:hover {
                     transform: scale(1.05) translateY(-5px);
-                    background: var(--color-primary-mid);
+                    background: var(--color-accent-hover);
+                    box-shadow: 0 15px 30px rgba(234, 88, 12, 0.5);
                 }
 
                 .chatbot-toggle.out {

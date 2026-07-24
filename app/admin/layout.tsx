@@ -76,10 +76,10 @@ function IconSettings() {
 function IconAnchor() {
   return (
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-      <circle cx="12" cy="5" r="2.5" stroke="#0a2a5e" strokeWidth="2"/>
-      <line x1="12" y1="7.5" x2="12" y2="19" stroke="#0a2a5e" strokeWidth="2" strokeLinecap="round"/>
-      <path d="M7 12H5a7 7 0 0014 0h-2" stroke="#0a2a5e" strokeWidth="2" strokeLinecap="round"/>
-      <line x1="8" y1="8.5" x2="16" y2="8.5" stroke="#0a2a5e" strokeWidth="2" strokeLinecap="round"/>
+      <circle cx="12" cy="5" r="2.5" stroke="var(--color-primary)" strokeWidth="2"/>
+      <line x1="12" y1="7.5" x2="12" y2="19" stroke="var(--color-primary)" strokeWidth="2" strokeLinecap="round"/>
+      <path d="M7 12H5a7 7 0 0014 0h-2" stroke="var(--color-primary)" strokeWidth="2" strokeLinecap="round"/>
+      <line x1="8" y1="8.5" x2="16" y2="8.5" stroke="var(--color-primary)" strokeWidth="2" strokeLinecap="round"/>
     </svg>
   );
 }
@@ -556,8 +556,8 @@ function AdminLayoutContent({ children }: { children: React.ReactNode }) {
           width: 38px;
           height: 38px;
           border-radius: 50%;
-          background: #F5C518;
-          color: #0a2a5e;
+          background: var(--color-accent);
+          color: white;
           display: flex;
           align-items: center;
           justify-content: center;
@@ -574,14 +574,16 @@ function AdminLayoutContent({ children }: { children: React.ReactNode }) {
         .user-name {
           font-size: 14px;
           font-weight: 700;
-          color: #0a2a5e;
+          color: var(--color-primary);
           line-height: 1.2;
         }
         .user-badge {
           font-size: 10px;
           font-weight: 800;
-          color: #64748b;
-          text-transform: uppercase;
+          color: var(--color-primary);
+          background: var(--color-sandstone);
+          padding: 2px 6px;
+          border-radius: 4px;
           letter-spacing: 0.05em;
         }
 
@@ -590,8 +592,8 @@ function AdminLayoutContent({ children }: { children: React.ReactNode }) {
           display: flex;
           height: 100vh;
           overflow: hidden;
-          background: #f4f7fb;
-          font-family: 'DM Sans', 'Inter', sans-serif;
+          background: var(--color-surface);
+          font-family: var(--font-body);
           padding: 1.25rem;
           gap: 0;
           transition: 0.3s;
@@ -604,15 +606,15 @@ function AdminLayoutContent({ children }: { children: React.ReactNode }) {
           left: 0.75rem;
           width: 42px;
           height: 42px;
-          background: #F5C518;
-          color: #0a2a5e;
+          background: var(--color-accent);
+          color: white;
           border: none;
           border-radius: 10px;
           font-size: 1.25rem;
           font-weight: 800;
           cursor: pointer;
           z-index: 20000;
-          box-shadow: 0 4px 15px rgba(245, 197, 24, 0.4);
+          box-shadow: 0 4px 15px rgba(234, 88, 12, 0.4);
           align-items: center;
           justify-content: center;
           transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
@@ -631,7 +633,7 @@ function AdminLayoutContent({ children }: { children: React.ReactNode }) {
             transform: translateX(-352px);
             transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             border-radius: 0;
-            background: #0a2a5e;
+            background: var(--color-primary);
           }
           .flyout {
             position: fixed;
@@ -664,7 +666,7 @@ function AdminLayoutContent({ children }: { children: React.ReactNode }) {
             filter: blur(2px);
             pointer-events: none;
           }
-          .content-hdr { padding: 0.5rem 0; margin-bottom: 2rem; border-bottom: 1px solid #e2e8f0; }
+          .content-hdr { padding: 0.5rem 0; margin-bottom: 2rem; border-bottom: 1px solid var(--color-border); }
           .mobile-toggle { display: none; }
           .user-info-text { display: none; }
           .hdr-user { gap: 0.5rem; }
@@ -672,7 +674,7 @@ function AdminLayoutContent({ children }: { children: React.ReactNode }) {
           .mobile-backdrop {
             position: fixed;
             inset: 0;
-            background: rgba(10, 42, 94, 0.4);
+            background: rgba(45, 24, 15, 0.45);
             backdrop-filter: blur(4px);
             z-index: 1000;
             animation: fadeIn 0.3s;
@@ -683,7 +685,7 @@ function AdminLayoutContent({ children }: { children: React.ReactNode }) {
         /* ── Rail (58px) ───────────────────────────────── */
         .rail {
           width: 72px;
-          background: #0a2a5e;
+          background: var(--color-primary);
           border-radius: 14px 0 0 14px;
           display: flex;
           flex-direction: column;
@@ -694,15 +696,17 @@ function AdminLayoutContent({ children }: { children: React.ReactNode }) {
         }
 
         .rail-logo {
-          width: 34px;
-          height: 34px;
-          background: #F5C518;
-          border-radius: 9px;
+          width: 38px;
+          height: 38px;
+          background: var(--color-accent);
+          color: white;
+          border-radius: 10px;
           display: flex;
           align-items: center;
           justify-content: center;
           margin-bottom: 20px;
           flex-shrink: 0;
+          box-shadow: 0 4px 12px rgba(234, 88, 12, 0.3);
         }
 
         .rail-modules {
@@ -731,7 +735,7 @@ function AdminLayoutContent({ children }: { children: React.ReactNode }) {
           background: transparent;
           border: none;
           cursor: pointer;
-          color: rgba(255, 255, 255, 0.6);
+          color: rgba(255, 255, 255, 0.65);
           transition: all 0.2s ease;
         }
 
@@ -741,33 +745,34 @@ function AdminLayoutContent({ children }: { children: React.ReactNode }) {
         }
 
         .rail-btn:hover {
-          background: rgba(255, 255, 255, 0.10);
-          color: rgba(255, 255, 255, 0.9);
+          background: rgba(255, 255, 255, 0.12);
+          color: rgba(255, 255, 255, 0.95);
         }
 
         .rail-btn.active {
-          background: #ffffff;
-          color: #0a2a5e;
+          background: var(--color-accent);
+          color: white;
+          box-shadow: 0 4px 12px rgba(234, 88, 12, 0.35);
         }
 
         .rail-btn.secondary {
-          color: rgba(255, 255, 255, 0.4);
+          color: rgba(255, 255, 255, 0.45);
         }
 
         .rail-btn.secondary:hover {
-          background: rgba(255, 255, 255, 0.07);
-          color: rgba(255, 255, 255, 0.7);
+          background: rgba(255, 255, 255, 0.08);
+          color: rgba(255, 255, 255, 0.8);
         }
 
         .rail-btn.secondary.active {
-          background: #ffffff;
-          color: #0a2a5e;
+          background: var(--color-sandstone);
+          color: var(--color-primary);
         }
 
         .rail-sep {
           width: 24px;
           height: 0.5px;
-          background: rgba(255, 255, 255, 0.12);
+          background: rgba(255, 255, 255, 0.15);
           margin: 8px 0;
           flex-shrink: 0;
         }
@@ -785,11 +790,11 @@ function AdminLayoutContent({ children }: { children: React.ReactNode }) {
           width: 30px;
           height: 30px;
           border-radius: 50%;
-          background: linear-gradient(135deg, #0ea5e9, #1a4fa0);
+          background: linear-gradient(135deg, var(--color-accent), var(--color-rust));
           color: #ffffff;
           font-size: 10px;
           font-weight: 600;
-          font-family: 'Outfit', sans-serif;
+          font-family: var(--font-display);
           display: flex;
           align-items: center;
           justify-content: center;
@@ -801,7 +806,7 @@ function AdminLayoutContent({ children }: { children: React.ReactNode }) {
         .flyout {
           width: 200px;
           background: #ffffff;
-          border-right: 0.5px solid rgba(0, 0, 0, 0.07);
+          border-right: 0.5px solid var(--color-border);
           display: flex;
           flex-direction: column;
           flex-shrink: 0;
@@ -811,7 +816,7 @@ function AdminLayoutContent({ children }: { children: React.ReactNode }) {
 
         .flyout-hdr {
           padding: 16px;
-          border-bottom: 0.5px solid rgba(0, 0, 0, 0.06);
+          border-bottom: 0.5px solid var(--color-border);
           flex-shrink: 0;
         }
 
@@ -820,17 +825,17 @@ function AdminLayoutContent({ children }: { children: React.ReactNode }) {
           font-size: 10px;
           text-transform: uppercase;
           letter-spacing: 0.12em;
-          color: #94a3b8;
+          color: var(--color-text-muted);
           margin-bottom: 4px;
           font-weight: 500;
         }
 
         .flyout-title {
           display: block;
-          font-family: 'Outfit', sans-serif;
+          font-family: var(--font-display);
           font-size: 16px;
-          font-weight: 600;
-          color: #0a2a5e;
+          font-weight: 700;
+          color: var(--color-primary);
           letter-spacing: -0.02em;
         }
 
@@ -852,7 +857,7 @@ function AdminLayoutContent({ children }: { children: React.ReactNode }) {
           font-size: 9.5px;
           text-transform: uppercase;
           letter-spacing: 0.10em;
-          color: #c0c8d4;
+          color: var(--color-text-muted);
           font-weight: 600;
           padding: 0 8px 6px;
         }
@@ -870,17 +875,17 @@ function AdminLayoutContent({ children }: { children: React.ReactNode }) {
           cursor: pointer;
         }
 
-        .flyout-item:hover { background: #f8fafc; }
+        .flyout-item:hover { background: var(--color-surface); }
 
-        .flyout-item.active { background: #e8f0fb; }
+        .flyout-item.active { background: var(--color-accent-light); }
 
         .flyout-item.active .flyout-label {
-          color: #0a2a5e;
-          font-weight: 500;
+          color: var(--color-accent);
+          font-weight: 700;
         }
 
         .flyout-item.active .flyout-icon {
-          background: #0a2a5e;
+          background: var(--color-accent);
           color: #ffffff;
         }
 
@@ -888,18 +893,18 @@ function AdminLayoutContent({ children }: { children: React.ReactNode }) {
           width: 24px;
           height: 24px;
           border-radius: 6px;
-          background: #f8fafc;
+          background: var(--color-surface);
           display: flex;
           align-items: center;
           justify-content: center;
-          color: #64748b;
+          color: var(--color-text-muted);
           flex-shrink: 0;
           transition: all 0.15s;
         }
 
         .flyout-label {
           font-size: 14px;
-          color: #0a2a5e;
+          color: var(--color-primary);
           font-weight: 500;
           flex: 1;
           white-space: nowrap;

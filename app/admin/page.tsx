@@ -103,10 +103,10 @@ export default function AdminDashboard() {
   }
 
   const statCards = [
-    { title: 'Inscritos', value: inscritos, icon: '📝', color: '#0074D9', label: 'Alunos Registados' },
-    { title: 'Matriculados', value: matriculados, icon: '🎓', color: '#2ECC40', label: 'Em Turmas' },
-    { title: 'Formados', value: formados, icon: '📜', color: '#B10DC9', label: 'Cursos Concluídos' },
-    { title: 'Formadores', value: Array.isArray(stats.trainers) ? stats.trainers.length : 0, icon: '👨‍🏫', color: '#FF851B', label: 'Especialistas Ativos' },
+    { title: 'Inscritos', value: inscritos, icon: '📝', color: '#EA580C', label: 'Alunos Registados' },
+    { title: 'Matriculados', value: matriculados, icon: '🎓', color: '#1B5E20', label: 'Em Turmas' },
+    { title: 'Formados', value: formados, icon: '📜', color: '#9A3412', label: 'Cursos Concluídos' },
+    { title: 'Formadores', value: Array.isArray(stats.trainers) ? stats.trainers.length : 0, icon: '👨‍🏫', color: '#2D180F', label: 'Especialistas Ativos' },
   ];
 
   // Filters State
@@ -124,10 +124,10 @@ export default function AdminDashboard() {
   ];
 
   const categoryData = [
-    { name: 'STCW Básico', value: 4500, color: '#0a2a5e' },
-    { name: 'GMDSS', value: 3200, color: '#173b7d' },
-    { name: 'Incêndios', value: 2100, color: '#1e40af' },
-    { name: 'Sobrevivência', value: 2800, color: '#F5C518' },
+    { name: 'STCW Básico', value: 4500, color: '#2D180F' },
+    { name: 'GMDSS', value: 3200, color: '#EA580C' },
+    { name: 'Incêndios', value: 2100, color: '#9A3412' },
+    { name: 'Sobrevivência', value: 2800, color: '#E6C5A8' },
   ];
 
   return (
@@ -386,14 +386,15 @@ export default function AdminDashboard() {
         }
 
         .welcome-banner {
-          background: linear-gradient(135deg, #0a2a5e 0%, #173b7d 100%);
+          background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-mid) 100%);
           padding: 3rem;
           border-radius: 16px;
           color: white;
           display: flex;
           justify-content: space-between;
           align-items: center;
-          box-shadow: 0 10px 30px rgba(10, 42, 94, 0.15);
+          box-shadow: 0 10px 30px rgba(45, 24, 15, 0.2);
+          border: 1px solid rgba(230, 197, 168, 0.15);
         }
 
         .alert-item {
@@ -401,7 +402,7 @@ export default function AdminDashboard() {
           justify-content: space-between;
           align-items: center;
           padding: 1rem 0;
-          border-bottom: 1px solid #e2e8f0;
+          border-bottom: 1px solid var(--color-border);
         }
 
         .alert-actions {
@@ -427,7 +428,7 @@ export default function AdminDashboard() {
         .wa-btn:hover { background: #128C7E; }
 
         .email-btn {
-          background: #0a2a5e;
+          background: var(--color-accent);
           color: white;
           padding: 0.5rem 1rem;
           border-radius: 8px;
@@ -438,15 +439,15 @@ export default function AdminDashboard() {
           transition: background 0.2s;
         }
 
-        .email-btn:hover { background: #173b7d; }
+        .email-btn:hover { background: var(--color-accent-hover); }
         .email-btn:disabled { opacity: 0.6; cursor: not-allowed; }
 
-        .banner-content h1 { font-family: 'Outfit', sans-serif; font-size: 2.2rem; margin-bottom: 0.5rem; color: #F5C518; letter-spacing: -0.02em; }
-        .banner-content p { font-size: 1.1rem; opacity: 0.9; color: #e2e8f0; }
+        .banner-content h1 { font-family: var(--font-display); font-size: 2.2rem; margin-bottom: 0.5rem; color: var(--color-sandstone); letter-spacing: -0.02em; }
+        .banner-content p { font-size: 1.1rem; opacity: 0.9; color: #f7ece1; }
         .maritime-illustration { font-size: 5rem; opacity: 0.2; }
 
         .student-name-link { text-decoration: none; color: inherit; transition: 0.2s; }
-        .student-name-link:hover { color: #F5C518; }
+        .student-name-link:hover { color: var(--color-accent); }
 
         .analytics-row {
           display: grid;

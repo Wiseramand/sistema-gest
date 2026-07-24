@@ -46,14 +46,14 @@ export default function PrivacidadePage() {
         .legal-content { padding: 6rem 1.5rem; max-width: 1000px; }
         .legal-wrapper { padding: 4rem; }
         
-        h1 { font-size: 3rem; margin-bottom: 1rem; color: var(--navy-deep); border-bottom: 2px solid #f1f5f9; padding-bottom: 1rem; }
-        .last-update { color: #94a3b8; font-size: 0.9rem; margin-bottom: 4rem; }
+        h1 { font-size: 3rem; margin-bottom: 1rem; color: var(--color-primary); border-bottom: 2px solid var(--color-border); padding-bottom: 1rem; }
+        .last-update { color: var(--color-text-muted); font-size: 0.9rem; margin-bottom: 4rem; }
         
         .legal-section { margin-bottom: 3rem; }
-        .legal-section h2 { font-size: 1.5rem; margin-bottom: 1.5rem; color: var(--navy-medium); }
-        .legal-section p { font-size: 1.1rem; color: #64748b; line-height: 1.8; }
+        .legal-section h2 { font-size: 1.5rem; margin-bottom: 1.5rem; color: var(--color-primary-mid); }
+        .legal-section p { font-size: 1.1rem; color: var(--color-text-muted); line-height: 1.8; }
 
-        .shadow-premium { box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
+        .shadow-premium { box-shadow: 0 10px 30px rgba(45, 24, 15, 0.06); }
 
         @media (max-width: 768px) {
           .legal-wrapper { padding: 2rem; }

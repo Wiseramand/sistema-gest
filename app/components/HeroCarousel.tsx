@@ -41,7 +41,7 @@ export default function HeroCarousel() {
         <div
           key={idx}
           className={`slide ${idx === current ? 'active' : ''}`}
-          style={{ backgroundImage: `linear-gradient(rgba(10, 42, 94, 0.7), rgba(10, 42, 94, 0.4)), url(${banner.image})` }}
+          style={{ backgroundImage: `linear-gradient(rgba(45, 24, 15, 0.82), rgba(45, 24, 15, 0.55)), url(${banner.image})` }}
         >
           <div className="container slide-content">
             <div className="brand-badge">⚓ Marítimo Training Center</div>
@@ -71,8 +71,8 @@ export default function HeroCarousel() {
           position: relative;
           height: 700px;
           overflow: hidden;
-          background: #0a2a5e;
-          font-family: 'DM Sans', sans-serif;
+          background: var(--color-primary);
+          font-family: var(--font-body);
         }
         .slide {
           position: absolute;
@@ -98,34 +98,34 @@ export default function HeroCarousel() {
           display: inline-flex;
           align-items: center;
           gap: 0.5rem;
-          background: #F5C518;
-          color: #0a2a5e;
-          padding: 0.4rem 1rem;
+          background: var(--color-sandstone);
+          color: var(--color-primary);
+          padding: 0.45rem 1.1rem;
           border-radius: 50px;
           font-size: 0.75rem;
           font-weight: 800;
           text-transform: uppercase;
-          letter-spacing: 1px;
+          letter-spacing: 1.2px;
           margin-bottom: 1.5rem;
-          box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+          box-shadow: 0 4px 15px rgba(0,0,0,0.25);
         }
         .slide-content h1 {
-          font-family: 'Outfit', sans-serif;
+          font-family: var(--font-display);
           color: white;
           font-size: 4rem;
           line-height: 1.1;
           margin-bottom: 1.5rem;
           font-weight: 800;
           letter-spacing: -0.03em;
-          text-shadow: 0 4px 15px rgba(0,0,0,0.2);
+          text-shadow: 0 4px 15px rgba(0,0,0,0.3);
         }
         .hero-subtitle {
           font-size: 1.35rem;
           margin-bottom: 3rem;
-          opacity: 0.9;
+          opacity: 0.92;
           max-width: 600px;
           line-height: 1.6;
-          text-shadow: 0 2px 5px rgba(0,0,0,0.2);
+          text-shadow: 0 2px 5px rgba(0,0,0,0.3);
         }
         .hero-actions {
           display: flex;
@@ -141,25 +141,26 @@ export default function HeroCarousel() {
           text-decoration: none;
         }
         .hero-btn.primary {
-          background: #F5C518;
-          color: #0a2a5e;
-          box-shadow: 0 10px 20px rgba(245, 197, 24, 0.2);
+          background: var(--color-accent);
+          color: #ffffff;
+          box-shadow: 0 10px 25px rgba(234, 88, 12, 0.4);
         }
         .hero-btn.primary:hover {
-          background: #ffffff;
+          background: var(--color-accent-hover);
           transform: translateY(-3px);
-          box-shadow: 0 15px 30px rgba(245, 197, 24, 0.3);
+          box-shadow: 0 15px 30px rgba(234, 88, 12, 0.5);
         }
         .hero-btn.secondary {
-          background: transparent;
-          border: 2px solid rgba(255, 255, 255, 0.4);
-          color: white;
+          background: rgba(230, 197, 168, 0.15);
+          border: 2px solid rgba(230, 197, 168, 0.4);
+          color: var(--color-sandstone);
           backdrop-filter: blur(5px);
         }
         .hero-btn.secondary:hover {
-          background: rgba(255, 255, 255, 0.1);
-          border-color: white;
+          background: rgba(230, 197, 168, 0.3);
+          border-color: var(--color-sandstone);
           transform: translateY(-3px);
+          color: white;
         }
 
         .carousel-dots {
@@ -175,15 +176,15 @@ export default function HeroCarousel() {
           width: 14px;
           height: 14px;
           border-radius: 50%;
-          background: rgba(255,255,255,0.2);
+          background: rgba(255,255,255,0.25);
           border: none;
           cursor: pointer;
           transition: all 0.4s ease;
         }
         .dot.active {
-          background: #F5C518;
+          background: var(--color-accent);
           transform: scale(1.4);
-          box-shadow: 0 0 15px rgba(245, 197, 24, 0.5);
+          box-shadow: 0 0 15px rgba(234, 88, 12, 0.6);
         }
 
         @media (max-width: 992px) {
