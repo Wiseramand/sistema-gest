@@ -174,127 +174,98 @@ interface FlyoutGroup {
 
 // ── Rail Module Data ─────────────────────────────────────────
 const TOP_MODULES = [
-  'dashboard', 'alunos', 'formadores', 'cursos', 'certificados', 'administracao'
+  'dashboard', 'academico', 'certificacao', 'pessoas', 'infraestrutura'
 ];
-const BOTTOM_MODULES = ['financeiro', 'relatorios'];
+const BOTTOM_MODULES = ['financeiro', 'administracao'];
 
 const MODULE_FLYOUTS: Record<string, { label: string; groups: FlyoutGroup[] }> = {
   dashboard: { label: 'Dashboard', groups: [] },
-  alunos: {
-    label: 'Alunos',
+  academico: {
+    label: 'Gestão Académica',
     groups: [
       {
-        label: 'GESTÃO',
+        label: 'FLUXO DO ALUNO',
         items: [
-          { name: 'Inscrições', href: '/admin/inscriptions', responsibility: 'inscriptions' },
-          { name: 'Lista de Alunos', href: '/admin/students', responsibility: 'students' },
+          { name: 'Candidaturas & Pré-Inscrições', href: '/admin/inscriptions', responsibility: 'inscriptions' },
           { name: 'Matrículas', href: '/admin/matriculations', responsibility: 'matriculations' },
-          { name: 'Frequência', href: '/admin/attendance', responsibility: 'matriculations' },
-          { name: 'Notas dos Alunos', href: '/admin/grades', responsibility: 'courses' },
-        ],
-      },
-      {
-        label: 'FINANCEIRO',
-        items: [
-          { name: 'Pagamentos Alunos', href: '/admin/payments', responsibility: 'matriculations' },
-          { name: 'Clientes / Empresas', href: '/admin/companies', responsibility: 'companies' },
+          { name: 'Turmas Ativas', href: '/admin/classes', responsibility: 'classes' },
+          { name: 'Calendário & Horários', href: '/admin/calendar', responsibility: 'courses' },
+          { name: 'Frequência & Presenças', href: '/admin/attendance', responsibility: 'matriculations' },
+          { name: 'Pauta de Notas', href: '/admin/grades', responsibility: 'courses' },
         ],
       },
     ],
   },
-  formadores: {
-    label: 'Formadores',
+  certificacao: {
+    label: 'Certificação Marítima',
     groups: [
       {
-        label: 'GESTÃO',
+        label: 'HOMOLOGAÇÃO & STCW',
         items: [
-          { name: 'Lista de Formadores', href: '/admin/trainers', responsibility: 'trainers' },
-          { name: 'Acessos ao Portal', href: '/admin/trainers?view=access', responsibility: 'trainers' },
+          { name: 'Emissão de Certificados', href: '/admin/certificates', responsibility: 'certificates' },
+          { name: 'Validar STCW / QR Code', href: '/admin/validations', responsibility: 'certificates' },
+          { name: 'Arquivo Histórico Digital', href: '/admin/archive', responsibility: 'certificates' },
         ],
       },
     ],
   },
-  cursos: {
-    label: 'Cursos',
+  pessoas: {
+    label: 'Pessoas & Entidades',
     groups: [
       {
-        label: 'GESTÃO',
+        label: 'REGISTOS BASE',
+        items: [
+          { name: 'Formandos (Base Geral)', href: '/admin/students', responsibility: 'students' },
+          { name: 'Formadores / Instrutores', href: '/admin/trainers', responsibility: 'trainers' },
+          { name: 'Empresas / Armadores', href: '/admin/companies', responsibility: 'companies' },
+        ],
+      },
+    ],
+  },
+  infraestrutura: {
+    label: 'Infraestrutura & Conteúdo',
+    groups: [
+      {
+        label: 'CATÁLOGO E RECURSOS',
         items: [
           { name: 'Catálogo de Cursos', href: '/admin/courses', responsibility: 'courses' },
-          { name: 'Turmas ativas', href: '/admin/classes', badge: '12', responsibility: 'classes' },
-          { name: 'Calendário', href: '/admin/calendar', responsibility: 'courses' },
           { name: 'Salas de Aula', href: '/admin/classrooms', responsibility: 'classrooms' },
-        ],
-      },
-      {
-        label: 'ALUNOS',
-        items: [
-          { name: 'Matrículas', href: '/admin/matriculations', badge: '47', responsibility: 'matriculations' },
-          { name: 'Frequência', href: '/admin/attendance', responsibility: 'matriculations' },
-          { name: 'Pendências', href: '/admin/inscriptions', badgeAlert: '3', responsibility: 'inscriptions' },
-        ],
-      },
-      {
-        label: 'INSTRUTORES',
-        items: [
-          { name: 'Formadores', href: '/admin/trainers', responsibility: 'trainers' },
-        ],
-      },
-    ],
-  },
-  certificados: {
-    label: 'Certificados',
-    groups: [
-      {
-        label: 'CERTIFICAÇÃO',
-        items: [
-          { name: 'Emitir certificado', href: '/admin/certificates', responsibility: 'certificates' },
-          { name: 'Validar STCW', href: '/admin/validations', responsibility: 'certificates' },
-          { name: 'Arquivo', href: '/admin/archive', responsibility: 'certificates' },
+          { name: 'Hub de Materiais Didáticos', href: '/admin/materials', responsibility: 'media' },
+          { name: 'Hub de Média', href: '/admin/media', responsibility: 'media' },
         ],
       },
     ],
   },
   financeiro: {
-    label: 'Financeiro',
+    label: 'Financeiro & Faturação',
     groups: [
       {
-        label: 'FINANCEIRO',
+        label: 'FATURAÇÃO E PAGAMENTOS',
         items: [
-          { name: 'Pagamentos', href: '/admin/payments', responsibility: 'matriculations' },
-          { name: 'Faturas', href: '/admin/invoices', responsibility: 'matriculations' },
-          { name: 'Pendentes', href: '/admin/pending', responsibility: 'inscriptions' },
-        ],
-      },
-    ],
-  },
-  relatorios: {
-    label: 'Relatórios',
-    groups: [
-      {
-        label: 'RELATÓRIOS',
-        items: [
-          { name: 'Desempenho', href: '/admin/reports', responsibility: 'reports' },
-          { name: 'Atividades', href: '/admin/activity-logs', superOnly: true },
+          { name: 'Pagamentos de Alunos', href: '/admin/payments', responsibility: 'matriculations' },
+          { name: 'Faturas & NIF', href: '/admin/invoices', responsibility: 'matriculations' },
+          { name: 'Pendências & Cobrança', href: '/admin/pending', responsibility: 'inscriptions' },
+          { name: 'Relatórios Financeiros', href: '/admin/reports', responsibility: 'reports' },
         ],
       },
     ],
   },
   administracao: {
-    label: 'Administração',
+    label: 'Administração & Sistema',
     groups: [
       {
-        label: 'EQUIPA',
+        label: 'EQUIPA E SEGURANÇA',
         items: [
           { name: 'Gestão de Utilizadores', href: '/admin/users', superOnly: true },
-          { name: 'Tarefas & Delegar', href: '/admin/users/tasks', superOnly: true },
+          { name: 'Tarefas & Delegação', href: '/admin/users/tasks', superOnly: true },
+          { name: 'Log de Atividades (Audit)', href: '/admin/activity-logs', superOnly: true },
         ],
       },
       {
-        label: 'CONTEÚDO',
+        label: 'SUPORTE E COMUNICAÇÕES',
         items: [
-          { name: 'Hub de Média', href: '/admin/media', responsibility: 'media' },
-          { name: 'Hub de Materiais', href: '/admin/materials', responsibility: 'media' },
+          { name: 'Feedbacks dos Cursos', href: '/admin/feedbacks' },
+          { name: 'Mensagens / Chat', href: '/admin/chat' },
         ],
       },
     ],
@@ -323,9 +294,25 @@ function AdminLayoutContent({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const router = useRouter();
   const { data: session, status } = useSession();
-  const [activeModule, setActiveModule] = useState('cursos');
+  const [activeModule, setActiveModule] = useState('academico');
   const [showMobileMenu, setShowMobileMenu] = useState(false);
   const [userData, setUserData] = useState<any>(null);
+
+  // Auto-sync active module with current URL pathname
+  useEffect(() => {
+    if (pathname === '/admin') {
+      setActiveModule('dashboard');
+      return;
+    }
+    for (const [modKey, modValue] of Object.entries(MODULE_FLYOUTS)) {
+      for (const grp of modValue.groups) {
+        if (grp.items.some(item => item.href === pathname || (item.href !== '/admin' && pathname.startsWith(item.href)))) {
+          setActiveModule(modKey);
+          return;
+        }
+      }
+    }
+  }, [pathname]);
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -362,7 +349,7 @@ function AdminLayoutContent({ children }: { children: React.ReactNode }) {
     return userResponsibilities.includes(item.responsibility);
   };
 
-  const currentFlyout = MODULE_FLYOUTS[activeModule] ?? MODULE_FLYOUTS['cursos'];
+  const currentFlyout = MODULE_FLYOUTS[activeModule] ?? MODULE_FLYOUTS['academico'];
   const flyoutGroups = currentFlyout.groups;
 
   // Breadcrumb: find active page name in flyouts
@@ -377,13 +364,12 @@ function AdminLayoutContent({ children }: { children: React.ReactNode }) {
 
   const railIconMap: Record<string, React.ReactNode> = {
     dashboard: <IconDashboard />,
-    alunos: <IconAlunos />,
-    formadores: <IconTrainers />,
-    cursos: <IconCursos />,
-    certificados: <IconCertificados />,
-    administracao: <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M17 21v-2a4 4 0 0 0-3-3.87"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>,
+    academico: <IconCursos />,
+    certificacao: <IconCertificados />,
+    pessoas: <IconAlunos />,
+    infraestrutura: <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>,
     financeiro: <IconFinanceiro />,
-    relatorios: <IconRelatorios />,
+    administracao: <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M17 21v-2a4 4 0 0 0-3-3.87"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>,
   };
   return (
     <div className={`admin-wrap ${showMobileMenu ? 'mobile-open' : ''}`}>
