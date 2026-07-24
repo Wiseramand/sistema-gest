@@ -14,6 +14,7 @@ interface StudentGrade {
     gradeId?: string;
     score: number | '';
     observations: string;
+    attPercent?: number;
 }
 
 export default function GradesPage() {
@@ -55,30 +56,54 @@ export default function GradesPage() {
             try {
                 const userId = (session?.user as any)?.id;
                 if (!userId) return;
-                const [resM, resG] = await Promise.all([
+                const [resM, resG, resAtt] = await Promise.all([
                     fetch('/api/matriculations'),
-                    fetch(`/api/grades?courseId=${selectedCourse.id}`)
+                    fetch(`/api/grades?courseId=${selectedCourse.id}`),
+                    fetch('/api/attendance')
                 ]);
                 const allMatrics = await resM.json();
                 const allGrades = await resG.json();
+                const allAtt = await resAtt.json();
+                const attendanceList = Array.isArray(allAtt) ? allAtt : [];
 
                 const courseMatrics = allMatrics.filter((m: any) => 
                     (m.courseId === selectedCourse.id || m.course === selectedCourse.title) &&
                     (m.trainerId === userId || m.trainer === session?.user?.name)
                 );
+                
+                const courseAtt = attendanceList.filter((a: any) => a.courseId === selectedCourse.title || a.courseId === selectedCourse.id);
 
                 const gradesMap: Record<string, any> = {};
                 if (Array.isArray(allGrades)) {
                     allGrades.forEach(g => { gradesMap[g.studentId] = g; });
                 }
 
-                const list = courseMatrics.map((m: any) => ({
-                    studentId: m.studentId,
-                    studentName: m.studentName,
-                    gradeId: gradesMap[m.studentId]?.id,
-                    score: gradesMap[m.studentId]?.score ?? '',
-                    observations: gradesMap[m.studentId]?.observations ?? ''
-                }));
+                const list = courseMatrics.map((m: any) => {
+                    let totalSessions = 0;
+                    let presentSessions = 0;
+                    courseAtt.forEach((a: any) => {
+                        totalSessions++;
+                        try {
+                            const records = typeof a.records === 'string' ? JSON.parse(a.records) : a.records;
+                            const myRecord = records?.find((r: any) => r.studentId === m.studentId || r.studentName === m.studentName);
+                            if (myRecord && (myRecord.status === 'PRESENTE' || myRecord.status === 'JUSTIFICADO' || myRecord.status === 'Presente' || myRecord.status === 'PRESENT')) {
+                                presentSessions++;
+                            }
+                        } catch (e) {
+                            presentSessions++;
+                        }
+                    });
+                    const attPercent = totalSessions > 0 ? Math.round((presentSessions / totalSessions) * 100) : 100;
+
+                    return {
+                        studentId: m.studentId,
+                        studentName: m.studentName,
+                        gradeId: gradesMap[m.studentId]?.id,
+                        score: gradesMap[m.studentId]?.score ?? '',
+                        observations: gradesMap[m.studentId]?.observations ?? '',
+                        attPercent
+                    };
+                });
 
                 setStudentGrades(list);
             } catch (e) { console.error(e); }
@@ -232,7 +257,23 @@ export default function GradesPage() {
                                 <tbody>
                                     {studentGrades.map(sg => (
                                         <tr key={sg.studentId}>
-                                            <td className="student-name">{sg.studentName}</td>
+                                            <td className="student-name">
+                                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                                                    <span>{sg.studentName}</span>
+                                                    {sg.attPercent !== undefined && sg.attPercent < 75 && (
+                                                        <span style={{ 
+                                                            fontSize: '0.7rem', 
+                                                            fontWeight: 800, 
+                                                            padding: '0.2rem 0.5rem', 
+                                                            background: 'var(--color-warning-bg)', 
+                                                            color: 'var(--color-warning-text)', 
+                                                            borderRadius: '20px',
+                                                            border: '1px solid currentColor',
+                                                            lineHeight: 1
+                                                        }}>⚠️ Risco STCW ({sg.attPercent}%)</span>
+                                                    )}
+                                                </div>
+                                            </td>
                                             <td>
                                                 <input 
                                                     type="number" 

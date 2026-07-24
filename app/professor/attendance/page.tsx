@@ -115,6 +115,77 @@ export default function TrainerAttendancePage() {
     }
   }
 
+  const handlePrintAttendancePDF = () => {
+    if (!selectedCourse) return;
+    const printWindow = window.open('', '_blank');
+    if (!printWindow) return alert('Por favor permita janelas popup para imprimir a pauta.');
+
+    const rowsHtml = enrollments.map((en, idx) => `
+      <tr>
+        <td style="text-align:center;">${idx + 1}</td>
+        <td><strong>${en.studentName || 'Formando'}</strong></td>
+        <td style="text-align:center;">${attendance[en.studentId] || 'Presente'}</td>
+        <td style="height: 35px; border-bottom: 1px solid #ccc;"></td>
+      </tr>
+    `).join('');
+
+    const html = `
+      <!DOCTYPE html>
+      <html lang="pt">
+      <head>
+        <meta charset="UTF-8">
+        <title>Pauta Oficial de Presenças - ${selectedCourse.title}</title>
+        <style>
+          body { font-family: 'Arial', sans-serif; padding: 30px; color: #2D180F; }
+          .hdr { text-align: center; border-bottom: 2.5px solid #2D180F; padding-bottom: 15px; margin-bottom: 25px; }
+          .hdr h1 { margin: 0; font-size: 1.4rem; color: #2D180F; text-transform: uppercase; }
+          .hdr p { margin: 4px 0 0; color: #EA580C; font-weight: bold; font-size: 0.85rem; }
+          .meta { display: flex; justify-content: space-between; margin-bottom: 20px; font-size: 0.9rem; background: #F8F4EF; padding: 12px; border-radius: 8px; border: 1px solid #E6DDD4; }
+          table { width: 100%; border-collapse: collapse; margin-bottom: 30px; }
+          th { background: #2D180F; color: white; padding: 10px; font-size: 0.8rem; text-transform: uppercase; }
+          td { border: 1px solid #ccc; padding: 8px 12px; font-size: 0.85rem; }
+          .sig-container { display: flex; justify-content: space-between; margin-top: 50px; }
+          .sig-box { width: 45%; text-align: center; border-top: 1px solid #000; padding-top: 8px; font-size: 0.85rem; }
+          @media print { body { padding: 10px; } }
+        </style>
+      </head>
+      <body>
+        <div class="hdr">
+          <h1>⚓ MARÍTIMO TRAINING CENTER</h1>
+          <p>FOLHA OFICIAL DE ASSIDUIDADE E FREQUÊNCIA — AUDITORIA STCW</p>
+        </div>
+        <div class="meta">
+          <div><strong>CURSO:</strong> ${selectedCourse.title}</div>
+          <div><strong>DATA:</strong> ${new Date(today).toLocaleDateString('pt-PT')}</div>
+          <div><strong>FORMADOR:</strong> ${session?.user?.name || 'Instrutor MTC'}</div>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th style="width:5%;">#</th>
+              <th>NOME DO FORMANDO</th>
+              <th style="width:20%;">ESTADO DA SESSÃO</th>
+              <th style="width:30%;">ASSINATURA DO FORMANDO</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${rowsHtml}
+          </tbody>
+        </table>
+        <div class="sig-container">
+          <div class="sig-box">Assinatura do Instrutor Responsável</div>
+          <div class="sig-box">Visto do Controlo Académico MTC</div>
+        </div>
+        <script>window.onload = function() { window.print(); }</script>
+      </body>
+      </html>
+    `;
+
+    printWindow.document.open();
+    printWindow.document.write(html);
+    printWindow.document.close();
+  };
+
   const pagedCourses = courses.slice((coursePage - 1) * PER_PAGE, coursePage * PER_PAGE);
   const pagedStudents = enrollments.slice((studentPage - 1) * PER_PAGE, studentPage * PER_PAGE);
 
@@ -163,7 +234,10 @@ export default function TrainerAttendancePage() {
             <span className="badge-present">✅ {presentCount} Presentes</span>
             <span className="badge-absent">❌ {absentCount} Ausentes</span>
           </div>
-          <button className="btn-back" onClick={() => setSelectedCourse(null)}>← Voltar aos Cursos</button>
+          <div className="success-actions" style={{ display: 'flex', gap: '1rem', justifyContent: 'center' }}>
+            <button className="btn-print-pdf" onClick={handlePrintAttendancePDF}>🖨️ Imprimir Pauta Oficial em PDF</button>
+            <button className="btn-back" onClick={() => setSelectedCourse(null)}>← Voltar aos Cursos</button>
+          </div>
         </div>
       ) : (
         <form onSubmit={handleSubmit}>
@@ -173,7 +247,10 @@ export default function TrainerAttendancePage() {
                 <h2>{selectedCourse.title}</h2>
                 <span className="date-badge">📅 {new Date(today).toLocaleDateString('pt-PT')}</span>
               </div>
-              <button type="button" className="btn-back-sm" onClick={() => setSelectedCourse(null)}>← Mudar Curso</button>
+              <div style={{ display: 'flex', gap: '0.5rem' }}>
+                <button type="button" className="btn-print-pdf-sm" onClick={handlePrintAttendancePDF}>🖨️ Pauta PDF</button>
+                <button type="button" className="btn-back-sm" onClick={() => setSelectedCourse(null)}>← Mudar Curso</button>
+              </div>
             </div>
 
             {loadingStudents ? (
@@ -242,7 +319,7 @@ export default function TrainerAttendancePage() {
 
       <style jsx>{`
         .attendance-wrap { display: flex; flex-direction: column; gap: 1.5rem; max-width: 1000px; margin: 0 auto; }
-        .header { background: linear-gradient(135deg, #2D180F 0%, #173b7d 100%); padding: 2rem; border-radius: 16px; color: white; }
+        .header { background: radial-gradient(circle at top, #2D180F 0%, #1C0F0A 100%); padding: 2rem; border-radius: 16px; color: white; border: 1px solid var(--color-accent); }
         .header h1 { font-family: 'Outfit', sans-serif; font-size: 1.8rem; margin-bottom: 0.5rem; color: #E6C5A8; }
         .header p { color: #cbd5e1; margin-bottom: 0.5rem; }
         .header-date { background: rgba(255,255,255,0.1); display: inline-block; padding: 0.35rem 0.85rem; border-radius: 20px; font-size: 0.85rem; color: white; font-weight: 600; margin-top: 0.5rem; }
@@ -252,7 +329,7 @@ export default function TrainerAttendancePage() {
 
         .courses-grid { display: flex; flex-direction: column; gap: 0.75rem; }
         .course-card { display: flex; align-items: center; gap: 1rem; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.25rem 1.5rem; cursor: pointer; transition: 0.2s; text-align: left; }
-        .course-card:hover { border-color: #2D180F; background: #FDF2E9; transform: translateX(4px); }
+        .course-card:hover { border-color: #EA580C; background: #FDF2E9; transform: translateX(4px); }
         .course-card h3 { color: #2D180F; font-family: 'Outfit', sans-serif; margin: 0 0 0.25rem; }
         .course-card span { font-size: 0.8rem; color: #64748b; }
         .course-icon { font-size: 1.5rem; }
@@ -286,8 +363,13 @@ export default function TrainerAttendancePage() {
         .confirm-check { display: flex; align-items: flex-start; gap: 0.75rem; font-size: 0.9rem; color: #475569; cursor: pointer; line-height: 1.5; }
         .confirm-check input { margin-top: 3px; width: 16px; height: 16px; cursor: pointer; flex-shrink: 0; }
         .btn-submit { background: #2D180F; color: white; border: none; padding: 1.1rem 2rem; border-radius: 10px; font-weight: 800; font-size: 1rem; cursor: pointer; transition: 0.2s; font-family: 'Outfit', sans-serif; }
-        .btn-submit:hover:not(:disabled) { background: #173b7d; transform: translateY(-2px); }
+        .btn-submit:hover:not(:disabled) { background: #EA580C; transform: translateY(-2px); }
         .btn-submit:disabled { opacity: 0.6; cursor: not-allowed; }
+
+        .btn-print-pdf { background: #EA580C; color: white; border: none; padding: 0.85rem 1.75rem; border-radius: 10px; font-weight: 800; cursor: pointer; margin-top: 1rem; }
+        .btn-print-pdf:hover { background: #C2410C; }
+        .btn-print-pdf-sm { background: #EA580C; color: white; border: none; padding: 0.5rem 1rem; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 0.85rem; }
+        .btn-print-pdf-sm:hover { background: #C2410C; }
 
         .btn-back { background: #2D180F; color: white; border: none; padding: 0.85rem 1.75rem; border-radius: 10px; font-weight: 700; cursor: pointer; margin-top: 1rem; }
         .btn-back-sm { background: white; border: 1px solid #e2e8f0; color: #64748b; padding: 0.5rem 1rem; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 0.85rem; }

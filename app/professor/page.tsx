@@ -16,7 +16,7 @@ interface Course {
     duration: string;
     status: string;
     materials: { name: string, url: string, category?: string }[];
-    studentsList?: Student[];
+    studentsList?: (Student & { attPercent?: number })[];
     startDate?: string;
     schedule?: string;
 }
@@ -90,13 +90,16 @@ export default function ProfessorDashboard() {
                 const userId = (session?.user as any)?.id;
                 const userName = session?.user?.name;
 
-                const [resC, resM] = await Promise.all([
+                const [resC, resM, resAtt] = await Promise.all([
                     fetch('/api/courses'),
-                    fetch('/api/matriculations')
+                    fetch('/api/matriculations'),
+                    fetch('/api/attendance')
                 ]);
 
                 const allCourses = await resC.json();
                 const allMatriculations = await resM.json();
+                const allAtt = await resAtt.json();
+                const attendanceList = Array.isArray(allAtt) ? allAtt : [];
 
                 // 2. Find courses where trainer is assigned in Matriculations
                 const matriculationCourseTitles = new Set(
@@ -112,16 +115,37 @@ export default function ProfessorDashboard() {
                     matriculationCourseTitles.has(c.title)
                 );
 
-                // 4. Enrich courses with student lists
+                // 4. Enrich courses with student lists and attendance
                 const enrichedCourses = profCourses.map((c: Course) => {
                     const courseMatrics = allMatriculations.filter((m: any) => 
                         (m.courseId === c.id || m.course === c.title) &&
                         (m.trainerId === userId || m.trainer === userName)
                     );
                     
+                    const courseAtt = attendanceList.filter((a: any) => a.courseId === c.title || a.courseId === c.id);
+                    
+                    const studentsWithAtt = courseMatrics.map((m: any) => {
+                        let totalSessions = 0;
+                        let presentSessions = 0;
+                        courseAtt.forEach((a: any) => {
+                            totalSessions++;
+                            try {
+                                const records = typeof a.records === 'string' ? JSON.parse(a.records) : a.records;
+                                const myRecord = records?.find((r: any) => r.studentId === m.studentId || r.studentName === m.studentName);
+                                if (myRecord && (myRecord.status === 'PRESENTE' || myRecord.status === 'JUSTIFICADO' || myRecord.status === 'Presente' || myRecord.status === 'PRESENT')) {
+                                    presentSessions++;
+                                }
+                            } catch (e) {
+                                presentSessions++;
+                            }
+                        });
+                        const attPercent = totalSessions > 0 ? Math.round((presentSessions / totalSessions) * 100) : 100;
+                        return { id: m.studentId, name: m.studentName, attPercent };
+                    });
+
                     return {
                         ...c,
-                        studentsList: courseMatrics.map((m: any) => ({ id: m.studentId, name: m.studentName })),
+                        studentsList: studentsWithAtt,
                         startDate: courseMatrics[0]?.startDate || c.startDate || 'A definir',
                         schedule: courseMatrics[0]?.schedule || 'A definir'
                     };
@@ -386,7 +410,32 @@ export default function ProfessorDashboard() {
                                         <tbody>
                                             {selectedCourse.studentsList?.map(s => (
                                                 <tr key={s.id}>
-                                                    <td>{s.name}</td>
+                                                    <td>
+                                                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                                                            <span style={{ fontWeight: 600 }}>{s.name}</span>
+                                                            {s.attPercent !== undefined && s.attPercent < 75 && (
+                                                                <span style={{ 
+                                                                    fontSize: '0.7rem', 
+                                                                    fontWeight: 800, 
+                                                                    padding: '0.2rem 0.5rem', 
+                                                                    background: 'var(--color-warning-bg)', 
+                                                                    color: 'var(--color-warning-text)', 
+                                                                    borderRadius: '20px',
+                                                                    border: '1px solid currentColor'
+                                                                }}>⚠️ Risco STCW ({s.attPercent}%)</span>
+                                                            )}
+                                                            {s.attPercent !== undefined && s.attPercent >= 75 && (
+                                                                <span style={{ 
+                                                                    fontSize: '0.7rem', 
+                                                                    fontWeight: 800, 
+                                                                    padding: '0.2rem 0.5rem', 
+                                                                    background: '#dcfce7', 
+                                                                    color: '#166534', 
+                                                                    borderRadius: '20px'
+                                                                }}>✓ Regular ({s.attPercent}%)</span>
+                                                            )}
+                                                        </div>
+                                                    </td>
                                                     <td><button className="btn-link">Ver Perfil</button></td>
                                                 </tr>
                                             ))}
