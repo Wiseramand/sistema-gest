@@ -53,6 +53,19 @@
   --radius-md:  10px;
   --radius-lg:  14px;
   --radius-xl:  20px;
+  --radius-full: 9999px;
+
+  /* Modern Naval & Elevation Tokens */
+  --color-brand-900:  #110805;
+  --color-brand-800:  #2D180F;
+  --color-brand-700:  #3D2010;
+  --color-brand-600:  #4E2A14;
+  --color-navy-900:   #0F2235;
+  --color-navy-800:   #152E48;
+  --color-navy-700:   #1E3A5F;
+  --color-navy-100:   #E8F0F9;
+  --shadow-xl:        0 16px 48px rgba(45,24,15,0.18);
+  --shadow-glow:      0 0 0 3px rgba(234,88,12,0.20);
 
   /* Transitions */
   --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
