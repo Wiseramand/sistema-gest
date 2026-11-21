@@ -8,6 +8,15 @@ interface Course {
   status: string;
 }
 
+const defaultCourses: Course[] = [
+  { id: 'c1', title: 'Segurança Básica (STCW) — Regra VI/1', status: 'Inscrições Abertas' },
+  { id: 'c2', title: 'BOSIET — Sobrevivência Offshore', status: 'Inscrições Abertas' },
+  { id: 'c3', title: 'Código ISPS — Proteção do Navio e Instalações Portuárias', status: 'Inscrições Abertas' },
+  { id: 'c4', title: 'Revalidação Quinquenal STCW', status: 'Inscrições Abertas' },
+  { id: 'c5', title: 'Liderança e Gestão de Recursos (MRM)', status: 'Inscrições Abertas' },
+  { id: 'c6', title: 'Primeiros Socorros Avançados a Bordo', status: 'Inscrições Abertas' },
+];
+
 export default function InscriptionForm() {
   const [formData, setFormData] = useState({
     name: '',
@@ -16,15 +25,20 @@ export default function InscriptionForm() {
     course: '',
     message: ''
   });
-  const [courses, setCourses] = useState<Course[]>([]);
+  const [courses, setCourses] = useState<Course[]>(defaultCourses);
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
 
   useEffect(() => {
     const fetchCourses = async () => {
       try {
         const res = await fetch('/api/courses');
-        const data = await res.json();
-        setCourses(data.filter((c: Course) => c.status === 'Inscrições Abertas'));
+        if (res.ok) {
+          const data = await res.json();
+          if (Array.isArray(data) && data.length > 0) {
+            const open = data.filter((c: Course) => !c.status || c.status === 'Inscrições Abertas' || c.status === 'Ativo');
+            setCourses(open.length > 0 ? open : data);
+          }
+        }
       } catch (error) {
         console.error('Error fetching courses:', error);
       }

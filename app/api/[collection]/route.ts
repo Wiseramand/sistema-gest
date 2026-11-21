@@ -15,16 +15,25 @@ export async function GET(
         const { collection } = await params;
         collectionName = collection;
 
-        // ✅ CORRECÇÃO: Verificar autenticação usando helper multi-portal (Admin, Professor, Aluno)
-        const session = await getAnySession();
-        if (!session) {
-            return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+        // Verificar autenticação (coleções públicas dispensam sessão para leitura)
+        const publicGetCollections = ['courses'];
+        let session = null;
+        if (!publicGetCollections.includes(collection)) {
+            session = await getAnySession();
+            if (!session) {
+                return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+            }
+        } else {
+            session = await getAnySession().catch(() => null);
         }
 
-        // ✅ Verificar role para colecções sensíveis
+        // Verificar permissões para colecções sensíveis
         const sensitiveCollections = ['adminusers', 'activity-logs'];
         if (sensitiveCollections.includes(collection)) {
-            const role = (session.user as any).role;
+            if (!session) {
+                return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+            }
+            const role = (session.user as any)?.role;
             if (role !== 'SUPER_ADMIN' && role !== 'ADMIN') {
                 return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
             }
