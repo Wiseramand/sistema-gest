@@ -35,31 +35,48 @@ export default function Home() {
         <div className="features-grid">
           <div className="feature-card">
             <div className="card-top">
-              <span className="card-icon">⚓</span>
-              <span className="card-badge">Certificado</span>
+              <span className="card-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                  <circle cx="12" cy="5" r="3"/>
+                  <line x1="12" y1="8" x2="12" y2="21"/>
+                  <path d="M5 12H2a10 10 0 0 0 20 0h-3"/>
+                  <line x1="9" y1="12" x2="15" y2="12"/>
+                </svg>
+              </span>
+              <span className="card-badge">Certificado IMO</span>
             </div>
             <h3>Formação Marítima STCW</h3>
-            <p>Programas de formação teórica e prática em conformidade com as normas internacionais da IMO.</p>
+            <p>Programas de formação teórica e prática em rigorosa conformidade com as normas internacionais da IMO e convenção STCW 2010.</p>
             <div className="card-accent"></div>
           </div>
           
           <div className="feature-card highlighted">
             <div className="card-top">
-              <span className="card-icon">👨‍🏫</span>
-              <span className="card-badge gold">Elite</span>
+              <span className="card-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/>
+                </svg>
+              </span>
+              <span className="card-badge gold">Corpo Docente</span>
             </div>
-            <h3>Instrutores Qualificados</h3>
-            <p>Corpo docente constituído por oficiais e marinheiros com vasta experiência em operações reais.</p>
+            <h3>Oficiais e Instrutores de Elite</h3>
+            <p>Formadores com certificação pedagógica internacional e vasta experiência em comando de embarcações mercantes e plataformas offshore.</p>
             <div className="card-accent"></div>
           </div>
           
           <div className="feature-card">
             <div className="card-top">
-              <span className="card-icon">🏛️</span>
-              <span className="card-badge">Especializado</span>
+              <span className="card-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                  <rect x="2" y="3" width="20" height="14" rx="2"/>
+                  <line x1="8" y1="21" x2="16" y2="21"/>
+                  <line x1="12" y1="17" x2="12" y2="21"/>
+                </svg>
+              </span>
+              <span className="card-badge">Simulação</span>
             </div>
-            <h3>Infraestrutura de Ponta</h3>
-            <p>Salas equipadas com tecnologia de simulação náutica avançada para um aprendizado imersivo.</p>
+            <h3>Simuladores de Alta Tecnologia</h3>
+            <p>Passadiço virtual e laboratórios equipados com tecnologia de ponta para simulação imersiva de manobra, radar ARPA e emergências marítimas.</p>
             <div className="card-accent"></div>
           </div>
         </div>
@@ -161,8 +178,22 @@ export default function Home() {
         }
 
         .card-icon {
-          font-size: 2.2rem;
-          display: block;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 48px;
+          height: 48px;
+          border-radius: 12px;
+          background: rgba(234, 88, 12, 0.12);
+          color: var(--color-accent);
+          transition: transform 0.2s ease;
+        }
+        .feature-card:hover .card-icon {
+          transform: scale(1.08);
+        }
+        .feature-card.highlighted .card-icon {
+          background: rgba(230, 197, 168, 0.2);
+          color: var(--color-sandstone);
         }
 
         .card-badge {
